@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-03T08:18:13+09:00",
+ "updated": "2026-07-03T08:26:27+09:00",
  "kospi": {
   "price": 7648.09,
   "ma200": 5382.48,
@@ -9,7 +9,7 @@
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-03T08:18:13+09:00"
+  "updated": "2026-07-03T08:26:27+09:00"
  },
  "holdings": [
   {
@@ -22,10 +22,10 @@
    "last_price": 113700.0,
    "peak_price": 113700.0,
    "return_pct": 0.0,
-   "days_held": 1,
+   "days_held": 0,
    "stage_now": 3,
    "confidence_now": 95,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-02",
    "signals_at_entry": [
     "MTT 통과",
     "전고점 돌파! 거래량 6.35x",
@@ -43,10 +43,10 @@
    "last_price": 58600.0,
    "peak_price": 58600.0,
    "return_pct": 0.0,
-   "days_held": 1,
+   "days_held": 0,
    "stage_now": 3,
    "confidence_now": 95,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-02",
    "signals_at_entry": [
     "MTT 통과",
     "RS 88 — 상위 강세",
