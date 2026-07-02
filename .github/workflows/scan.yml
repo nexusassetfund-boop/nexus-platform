@@ -1,0 +1,48 @@
+name: 스테이지 스캔
+
+on:
+  schedule:
+    # KST 10:00 / 12:00 / 14:00 (UTC+9) — 평일만. Actions 사정에 따라 몇 분 지연될 수 있음
+    - cron: "0 1,3,5 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 스캔 실행
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+        run: python scanner/run_scan.py
+
+      - name: 결과 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "scan: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')"
+            git pull --rebase origin ${GITHUB_REF_NAME}
+            git push
+          fi

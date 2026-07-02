@@ -1,0 +1,25 @@
+{
+  "watchlist": [
+    "005930", "000660", "035420", "035720", "068270",
+    "006400", "051910", "028260", "105560", "003670",
+    "055550", "034730", "032830", "011200", "066570",
+    "012330", "009540", "010130", "096770", "003490"
+  ],
+  "params": {
+    "rs_min": 70,
+    "stop_loss_pct": -8,
+    "profit_target_pct": 21,
+    "trailing_stop_trigger_pct": 14,
+    "volume_surge_ratio": 2.0,
+    "volume_dry_ratio": 0.5,
+    "vcp_contractions_min": 2,
+    "vcp_contraction_threshold": 0.15,
+    "stage1_rise_min_pct": 50,
+    "ma_periods": [5, 20, 60, 120, 150, 200],
+    "climax_volume_ratio": 3.0,
+    "climax_drop_pct": -10
+  },
+  "kis": {
+    "base_url": "https://openapi.koreainvestment.com:9443"
+  }
+}

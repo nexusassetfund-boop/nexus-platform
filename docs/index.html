@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>깡토 스테이지 브리핑</title>
+<meta name="description" content="깡토 추세추종 스테이지 감지 — 평일 10시·12시·14시 자동 갱신" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;900&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --paper: #f7f4ee;
+  --paper-warm: #f1ece2;
+  --card: #fffdf9;
+  --ink: #1c2230;
+  --ink-soft: #4a5265;
+  --ink-faint: #8a90a0;
+  --rule: #d8d2c4;
+  --rule-strong: #1c2230;
+  --up: #c0392b;          /* 한국 관례: 상승 = 적색 */
+  --up-bg: #fbeeec;
+  --down: #1f5bb5;        /* 하락 = 청색 */
+  --down-bg: #eaf1fb;
+  --hold: #8a6d1f;
+  --hold-bg: #f7f0dc;
+  --stage3: #c0392b;
+  --stage2: #8a6d1f;
+  --stage1: #2d6a4f;
+  --stage1-bg: #e8f2ec;
+  --serif: "Noto Serif KR", serif;
+  --sans: "Pretendard Variable", Pretendard, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background:
+    radial-gradient(1200px 500px at 80% -10%, #efe7d5 0%, transparent 60%),
+    var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 96px; }
+
+/* ── 마스트헤드 ───────────────────────── */
+header.masthead {
+  padding: 40px 0 18px;
+  border-bottom: 3px double var(--rule-strong);
+  animation: rise .5s ease both;
+}
+.masthead .kicker {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; letter-spacing: .14em; color: var(--ink-soft);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.masthead h1 {
+  font-family: var(--serif); font-weight: 900;
+  font-size: clamp(30px, 5.4vw, 46px); letter-spacing: -0.01em; line-height: 1.15;
+}
+.masthead h1 .thin { color: var(--ink-faint); font-weight: 600; }
+.masthead .sub {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+  margin-top: 12px; padding: 10px 0 2px; font-size: 13.5px; color: var(--ink-soft);
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 11px; border-radius: 999px; font-weight: 700; font-size: 12.5px;
+  border: 1.5px solid currentColor;
+}
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.chip.ok   { color: #2d6a4f; background: var(--stage1-bg); }
+.chip.warn { color: var(--hold); background: var(--hold-bg); }
+.chip.bad  { color: var(--up); background: var(--up-bg); }
+.stale-note { color: var(--hold); font-weight: 600; }
+
+/* ── 요약 스탯 ───────────────────────── */
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border-bottom: 1px solid var(--rule);
+  animation: rise .5s .06s ease both;
+}
+.stat { padding: 18px 18px 16px 0; border-right: 1px solid var(--rule); }
+.stat:last-child { border-right: 0; }
+.stat + .stat { padding-left: 18px; }
+.stat .label { font-size: 12px; letter-spacing: .08em; color: var(--ink-faint); }
+.stat .value { font-family: var(--serif); font-weight: 900; font-size: 30px; line-height: 1.25; }
+.stat .value small { font-size: 15px; font-weight: 600; color: var(--ink-faint); }
+.stat .value.up { color: var(--up); } .stat .value.down { color: var(--down); }
+
+/* ── 섹션 ───────────────────────── */
+section { margin-top: 44px; animation: rise .55s .1s ease both; }
+.sec-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid var(--rule-strong); padding-bottom: 8px; margin-bottom: 0;
+}
+.sec-head h2 { font-family: var(--serif); font-weight: 900; font-size: 21px; }
+.sec-head h2 .count { color: var(--ink-faint); font-weight: 600; font-size: 15px; margin-left: 6px; }
+.sec-head .note { font-size: 12.5px; color: var(--ink-faint); }
+
+/* ── 테이블 ───────────────────────── */
+.tbl-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; background: transparent; }
+thead th {
+  text-align: right; font-size: 11.5px; letter-spacing: .08em; font-weight: 600;
+  color: var(--ink-faint); padding: 10px 12px 7px; border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+thead th.l, td.l { text-align: left; }
+tbody td { padding: 11px 12px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+tbody tr { transition: background .15s; }
+tbody tr:hover { background: rgba(28,34,48,.035); }
+td.sector-cell {
+  text-align: left; font-weight: 700; font-size: 13px; color: var(--ink-soft);
+  vertical-align: top; padding-top: 14px; border-right: 1px solid var(--rule);
+  width: 130px; max-width: 150px; white-space: normal;
+}
+.name { font-weight: 700; font-size: 14.5px; }
+.name .code { font-weight: 400; font-size: 12px; color: var(--ink-faint); margin-left: 6px; letter-spacing: .03em; }
+.ret { font-weight: 800; }
+.ret.up { color: var(--up); } .ret.down { color: var(--down); } .ret.flat { color: var(--ink-faint); }
+.badge {
+  display: inline-block; padding: 2.5px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; line-height: 1.5;
+}
+.badge.days  { background: var(--stage1-bg); color: #2d6a4f; }
+.badge.fresh { background: var(--down-bg); color: var(--down); }
+.badge.reason { background: var(--paper-warm); color: var(--ink-soft); font-weight: 600; }
+.empty {
+  padding: 34px 12px; text-align: center; color: var(--ink-faint); font-size: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── 스캔 결과 스테이지 그룹 ───────────── */
+.stage-block { margin-top: 26px; }
+.stage-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--serif); font-weight: 900; font-size: 16.5px; margin-bottom: 2px;
+}
+.stage-title .tag {
+  font-family: var(--sans); font-size: 11px; font-weight: 800; letter-spacing: .1em;
+  padding: 2px 9px; border-radius: 3px; color: #fff;
+}
+.tag.s3 { background: var(--stage3); } .tag.s2 { background: var(--hold); } .tag.s1 { background: var(--stage1); }
+.stage-title .desc { font-family: var(--sans); font-weight: 400; font-size: 12.5px; color: var(--ink-faint); }
+.conf-bar {
+  display: inline-block; width: 64px; height: 6px; border-radius: 3px;
+  background: var(--paper-warm); vertical-align: middle; margin-right: 7px; overflow: hidden;
+}
+.conf-bar i { display: block; height: 100%; border-radius: 3px; background: var(--ink-soft); }
+tr.s3-row .conf-bar i { background: var(--stage3); }
+tr.s2-row .conf-bar i { background: var(--hold); }
+tr.s1-row .conf-bar i { background: var(--stage1); }
+.signals { max-width: 360px; white-space: normal; text-align: left; }
+.sig {
+  display: inline-block; margin: 1.5px 3px 1.5px 0; padding: 1.5px 8px;
+  font-size: 11.5px; font-weight: 600; border-radius: 3px;
+  background: var(--paper-warm); color: var(--ink-soft); border: 1px solid var(--rule);
+}
+.sig.hot { background: var(--up-bg); color: var(--up); border-color: transparent; }
+.sig.warn { background: var(--hold-bg); color: var(--hold); border-color: transparent; }
+.more-btn {
+  margin: 14px auto 0; display: block; padding: 8px 26px;
+  font: 700 13px var(--sans); color: var(--ink-soft);
+  background: transparent; border: 1.5px solid var(--rule); border-radius: 999px; cursor: pointer;
+  transition: all .15s;
+}
+.more-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── 규칙 각주 ───────────────────────── */
+.rules {
+  margin-top: 56px; padding: 22px 26px; background: var(--card);
+  border: 1px solid var(--rule); border-left: 4px solid var(--rule-strong);
+  font-size: 13px; color: var(--ink-soft);
+}
+.rules h3 { font-family: var(--serif); font-size: 15px; color: var(--ink); margin-bottom: 8px; }
+.rules ul { list-style: none; }
+.rules li { padding: 3px 0 3px 16px; position: relative; }
+.rules li::before { content: "—"; position: absolute; left: 0; color: var(--ink-faint); }
+footer {
+  margin-top: 36px; padding-top: 14px; border-top: 3px double var(--rule-strong);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  font-size: 12px; color: var(--ink-faint);
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) {
+  .stat .value { font-size: 24px; }
+  td.sector-cell { width: 84px; font-size: 12px; }
+  tbody td, thead th { padding-left: 8px; padding-right: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="kicker">
+    <span>KANGTO TREND-FOLLOWING</span>
+    <span id="editionDate">—</span>
+  </div>
+  <h1>깡토 스테이지 브리핑 <span class="thin">Stage Briefing</span></h1>
+  <div class="sub">
+    <span id="kospiChip" class="chip warn">시장 상태 로딩…</span>
+    <span>마지막 스캔 <b id="scanTime">—</b></span>
+    <span id="staleNote"></span>
+    <span style="color:var(--ink-faint)">평일 10:00 · 12:00 · 14:00 자동 갱신</span>
+  </div>
+</header>
+
+<div class="stats" id="statRow"></div>
+
+<section id="holdingsSec">
+  <div class="sec-head">
+    <h2>보유 종목<span class="count" id="holdCount"></span></h2>
+    <span class="note">Stage 3 돌파 시 편입 · 이탈 조건 전까지 유지</span>
+  </div>
+  <div class="tbl-scroll"><table id="holdTable">
+    <thead><tr>
+      <th class="l">섹터</th><th class="l">종목명</th><th>편입일</th><th>매수가</th>
+      <th>현재가</th><th>보유일</th><th>수익률</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
+<section id="exitedSec">
+  <div class="sec-head">
+    <h2>이탈 종목<span class="count" id="exitCount"></span></h2>
+    <span class="note">최근 180일</span>
+  </div>
+  <div class="tbl-scroll"><table id="exitTable">
+    <thead><tr>
+      <th class="l">종목명</th><th>편입일</th><th>이탈일</th><th>매수가</th>
+      <th>매도가</th><th>보유일</th><th class="l">이탈 사유</th><th>수익률</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
+<section id="scanSec">
+  <div class="sec-head">
+    <h2>스테이지 스캔<span class="count" id="scanCount"></span></h2>
+    <span class="note">코스피200 + 코스닥150 + 관심종목</span>
+  </div>
+  <div id="stageBlocks"></div>
+</section>
+
+<div class="rules">
+  <h3>편입 · 이탈 규칙</h3>
+  <ul>
+    <li><b>편입</b> — Stage 3 돌파(전고점 + 거래량 2배↑) · 신뢰도 70 이상 · KOSPI가 MA200 위 · 클라이맥스 경고 없음</li>
+    <li><b>유지</b> — 편입 후 스테이지가 바뀌어도 이탈 조건 충족 전까지 보유 유지 (보유일 연속 집계)</li>
+    <li><b>이탈</b> — 손절 −8% · 목표 +21% · 최고수익 +14% 후 고점 대비 −8% · 종가 MA60 하회 · KOSPI 청산 신호</li>
+    <li>모든 판단은 시뮬레이션이며 투자 권유가 아닙니다. 가격은 스캔 시점 기준입니다.</li>
+  </ul>
+</div>
+
+<footer>
+  <span>깡토 추세추종 스테이지 감지 — 자동 생성 브리핑</span>
+  <span>데이터: KRX · 한국투자증권 Open API</span>
+</footer>
+
+</div>
+
+<script>
+const fmt = n => n == null ? "—" : Number(n).toLocaleString("ko-KR");
+const pct = (n, sign = true) => n == null ? "—" : (sign && n > 0 ? "+" : "") + Number(n).toFixed(2) + "%";
+const retCls = n => n > 0.005 ? "up" : n < -0.005 ? "down" : "flat";
+const dstr = s => { if (!s) return "—"; const d = new Date(s); return isNaN(d) ? s.slice(5, 10).replace("-", "/") : `${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`; };
+
+async function load() {
+  let scan = null, tracking = null;
+  try { scan = await (await fetch("./data/scan.json?t=" + Date.now())).json(); } catch (e) {}
+  try { tracking = await (await fetch("./data/tracking.json?t=" + Date.now())).json(); } catch (e) {}
+  renderHeader(scan, tracking);
+  renderStats(scan, tracking);
+  renderHoldings(tracking);
+  renderExited(tracking);
+  renderScan(scan);
+}
+
+function renderHeader(scan, tracking) {
+  const t = scan?.scan_time || tracking?.updated;
+  const now = new Date();
+  document.getElementById("editionDate").textContent =
+    now.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric", weekday: "long" });
+  if (t) {
+    const d = new Date(t);
+    document.getElementById("scanTime").textContent =
+      d.toLocaleString("ko-KR", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    const ageH = (now - d) / 36e5;
+    if (ageH > 30) document.getElementById("staleNote").innerHTML =
+      `<span class="stale-note">⚠ ${Math.floor(ageH)}시간 전 데이터</span>`;
+  }
+  const k = scan?.kospi || tracking?.kospi || {};
+  const chip = document.getElementById("kospiChip");
+  if (k.exit_signal) { chip.className = "chip bad"; chip.textContent = "KOSPI 청산 신호 — 신규 편입 중단"; }
+  else if (k.entry_allowed === false) { chip.className = "chip warn"; chip.textContent = "KOSPI MA200 아래 — 편입 보류"; }
+  else if (k.entry_allowed) { chip.className = "chip ok"; chip.textContent = `KOSPI ${fmt(k.price)} · 진입 허용`; }
+  else { chip.className = "chip warn"; chip.textContent = "시장 상태 미확인"; }
+}
+
+function renderStats(scan, tracking) {
+  const s = tracking?.stats || {};
+  const results = scan?.results || [];
+  const cnt = st => results.filter(r => r.stage === st).length;
+  const avg = s.avg_return ?? 0;
+  document.getElementById("statRow").innerHTML = `
+    <div class="stat"><div class="label">보유 종목</div><div class="value">${s.holding_count ?? 0}<small>개</small></div></div>
+    <div class="stat"><div class="label">보유 평균 수익률</div><div class="value ${retCls(avg)}">${pct(avg)}</div></div>
+    <div class="stat"><div class="label">이탈 승률</div><div class="value">${s.exited_count ? s.win_rate + "<small>%</small>" : "—"}</div></div>
+    <div class="stat"><div class="label">Stage 3 돌파</div><div class="value">${cnt(3)}<small>개</small></div></div>
+    <div class="stat"><div class="label">Stage 2 베이스</div><div class="value">${cnt(2)}<small>개</small></div></div>
+    <div class="stat"><div class="label">Stage 1 상승</div><div class="value">${cnt(1)}<small>개</small></div></div>`;
+}
+
+function renderHoldings(tracking) {
+  const tbody = document.querySelector("#holdTable tbody");
+  const holdings = tracking?.holdings || [];
+  document.getElementById("holdCount").textContent = ` (${holdings.length}개)`;
+  if (!holdings.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty">현재 보유(편입) 종목이 없습니다 — Stage 3 돌파 신호를 기다리는 중</td></tr>`;
+    return;
+  }
+  // 섹터별 그룹핑 (편입일 오름차순 유지)
+  const groups = new Map();
+  for (const h of holdings) {
+    const key = h.sector || "기타";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(h);
+  }
+  let html = "";
+  for (const [sector, rows] of groups) {
+    rows.forEach((h, i) => {
+      const daysBadge = h.days_held === 0
+        ? `<span class="badge fresh">진입</span>`
+        : `<span class="badge days">${h.days_held}일</span>`;
+      html += `<tr>
+        ${i === 0 ? `<td class="sector-cell" rowspan="${rows.length}">${sector}</td>` : ""}
+        <td class="l name">${h.name}<span class="code">${h.ticker}</span></td>
+        <td>${dstr(h.entry_date)}</td>
+        <td>${fmt(h.entry_price)}</td>
+        <td>${fmt(h.last_price)}</td>
+        <td>${daysBadge}</td>
+        <td class="ret ${retCls(h.return_pct)}">${pct(h.return_pct)}</td>
+      </tr>`;
+    });
+  }
+  tbody.innerHTML = html;
+}
+
+function renderExited(tracking) {
+  const tbody = document.querySelector("#exitTable tbody");
+  const exited = tracking?.exited || [];
+  document.getElementById("exitCount").textContent = ` (${exited.length}개)`;
+  if (!exited.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="empty">이탈 기록이 없습니다</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = exited.map(e => `<tr>
+    <td class="l name">${e.name}<span class="code">${e.ticker}</span></td>
+    <td>${dstr(e.entry_date)}</td>
+    <td>${dstr(e.exit_date)}</td>
+    <td>${fmt(e.entry_price)}</td>
+    <td>${fmt(e.exit_price)}</td>
+    <td><span class="badge days">${e.days_held}일</span></td>
+    <td class="l"><span class="badge reason">${e.exit_reason || "—"}</span></td>
+    <td class="ret ${retCls(e.return_pct)}">${pct(e.return_pct)}</td>
+  </tr>`).join("");
+}
+
+const STAGE_META = {
+  3: { tag: "STAGE 3", cls: "s3", title: "돌파 재상승", desc: "전고점 돌파 + 거래량 폭증 — 매수 타점" },
+  2: { tag: "STAGE 2", cls: "s2", title: "조정 베이스", desc: "VCP 변동성 축소 — 돌파 대기" },
+  1: { tag: "STAGE 1", cls: "s1", title: "1차 상승", desc: "MA 정배열 + 저점 대비 상승" },
+};
+
+function sigTag(s) {
+  const hot = /돌파|폭증|신고점|갭상승/.test(s);
+  const warn = /경고|클라이맥스/.test(s);
+  return `<span class="sig ${hot ? "hot" : warn ? "warn" : ""}">${s}</span>`;
+}
+
+function renderScan(scan) {
+  const results = scan?.results || [];
+  const el = document.getElementById("stageBlocks");
+  document.getElementById("scanCount").textContent =
+    scan ? ` (${scan.scanned}/${scan.universe_size} 종목)` : "";
+  if (!results.length) {
+    el.innerHTML = `<div class="empty">스캔 데이터가 아직 없습니다 — 첫 스캔 후 표시됩니다</div>`;
+    return;
+  }
+  let html = "";
+  for (const st of [3, 2, 1]) {
+    const meta = STAGE_META[st];
+    const rows = results.filter(r => r.stage === st);
+    if (!rows.length) continue;
+    const LIMIT = st === 1 ? 15 : 40;
+    const body = rows.map((r, idx) => `
+      <tr class="${meta.cls}-row" ${idx >= LIMIT ? 'data-extra="1" style="display:none"' : ""}>
+        <td class="l name">${r.name}<span class="code">${r.ticker}</span></td>
+        <td class="l" style="color:var(--ink-faint);font-size:12.5px">${r.sector || ""}</td>
+        <td><span class="conf-bar"><i style="width:${Math.min(r.confidence, 100)}%"></i></span>${Math.round(r.confidence)}</td>
+        <td>${r.rs_rank != null ? Math.round(r.rs_rank) : "—"}${r.rs_new_high ? " ★" : ""}</td>
+        <td>${fmt(r.current_price)}</td>
+        <td class="ret ${retCls(r.change_pct)}">${pct(r.change_pct)}</td>
+        <td>${r.days_in_stage ?? 0}일</td>
+        <td class="signals">${(r.signals || []).slice(0, 4).map(sigTag).join("")}</td>
+      </tr>`).join("");
+    html += `
+    <div class="stage-block">
+      <div class="stage-title">
+        <span class="tag ${meta.cls}">${meta.tag}</span>${meta.title}
+        <span class="desc">${meta.desc} · ${rows.length}종목</span>
+      </div>
+      <div class="tbl-scroll"><table>
+        <thead><tr>
+          <th class="l">종목명</th><th class="l">섹터</th><th>신뢰도</th><th>RS</th>
+          <th>현재가</th><th>등락</th><th>체류</th><th class="l">시그널</th>
+        </tr></thead>
+        <tbody>${body}</tbody>
+      </table></div>
+      ${rows.length > LIMIT ? `<button class="more-btn" onclick="showExtra(this)">+ ${rows.length - LIMIT}종목 더 보기</button>` : ""}
+    </div>`;
+  }
+  el.innerHTML = html || `<div class="empty">현재 스테이지 조건을 충족한 종목이 없습니다</div>`;
+}
+
+function showExtra(btn) {
+  btn.previousElementSibling.querySelectorAll('tr[data-extra]').forEach(tr => tr.style.display = "");
+  btn.remove();
+}
+
+load();
+</script>
+</body>
+</html>
