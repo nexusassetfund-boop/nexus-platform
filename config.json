@@ -24,8 +24,8 @@
   "params": {
     "rs_min": 70,
     "stop_loss_pct": -8,
-    "trail_stop_pct": -8,
-    "exit_ma_period": 20,
+    "trail_stop_pct": -10,
+    "exit_ma_period": 60,
     "stage3_entry_confidence": 70,
     "stage1_entry_confidence": 75,
     "stage_entry_max_age_days": 2,
