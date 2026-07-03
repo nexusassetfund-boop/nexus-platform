@@ -268,6 +268,11 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
         (3, params.get("stage3_entry_confidence", 70)),
         (1, params.get("stage1_entry_confidence", 60)),
     ]
+    # 편입 빈도 스로틀 — 스탁이지 실측(주당 4~6건, 동시 보유 15~17종목)에 맞춤
+    entry_max_age = params.get("stage_entry_max_age_days", 2)      # 스테이지 진입 후 N일 이내만 편입 (상태→이벤트)
+    reentry_cooldown = params.get("reentry_cooldown_days", 5)      # 이탈 후 N일간 같은 트랙 재편입 금지
+    max_per_track = params.get("max_holdings_per_track", 10)       # 트랙당 동시 보유 상한
+    max_daily = params.get("max_daily_entries_per_track", 3)       # 트랙당 하루 신규 편입 상한 (conf 상위 우선)
 
     scan_map = {r["ticker"]: r for r in results if r.get("ticker")}
     holdings = ledger.get("holdings", [])
@@ -318,37 +323,55 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
 
     # 신규 편입 — 시장 청산 신호는 전량 매도 대신 신규 편입 차단으로만 사용
     if kospi.get("entry_allowed", True) and not kospi.get("exit_signal"):
-        for r in results:
-            ticker = r.get("ticker")
-            if not ticker or r.get("climax_warning"):
+        # 재편입 쿨다운: 트랙별 가장 최근 이탈일
+        last_exit = {}
+        for e in exited:
+            key = (e["ticker"], e.get("entry_stage", 3))
+            if e.get("exit_date", "") > last_exit.get(key, ""):
+                last_exit[key] = e["exit_date"]
+        cooldown_cut = (today - dt.timedelta(days=reentry_cooldown)).isoformat()
+
+        for entry_stage, min_conf in entry_tracks:
+            track_count = sum(1 for h in new_holdings if h.get("entry_stage", 3) == entry_stage)
+            slots = min(max_per_track - track_count, max_daily)
+            if slots <= 0:
                 continue
-            price = float(r.get("current_price") or 0)
-            if price <= 0:
-                continue
-            for entry_stage, min_conf in entry_tracks:
-                if (ticker, entry_stage) in held_keys:
-                    continue
-                if r.get("stage") == entry_stage and r.get("confidence", 0) >= min_conf:
-                    new_holdings.append({
-                        "ticker": ticker,
-                        "name": r.get("name", ticker),
-                        "sector": r.get("sector", ""),
-                        "entry_stage": entry_stage,
-                        "entry_date": today_str,
-                        "entry_price": round(price, 0),
-                        "entry_confidence": r.get("confidence", 0),
-                        "last_price": round(price, 0),
-                        "peak_price": round(price, 0),
-                        "return_pct": 0.0,
-                        "days_held": 0,
-                        "stage_now": r.get("stage"),
-                        "confidence_now": r.get("confidence", 0),
-                        "last_updated": today_str,
-                        "signals_at_entry": r.get("signals", [])[:4],
-                    })
-                    held_keys.add((ticker, entry_stage))
-                    logger.info("편입[S%d]: %s %s @ %.0f (conf=%d)",
-                                entry_stage, ticker, r.get("name"), price, r.get("confidence", 0))
+            cands = [
+                r for r in results
+                if r.get("ticker")
+                and not r.get("climax_warning")
+                and r.get("stage") == entry_stage
+                and r.get("confidence", 0) >= min_conf
+                and r.get("days_in_stage", 0) <= entry_max_age      # 신규 신호만 (상태 아님)
+                and (r["ticker"], entry_stage) not in held_keys
+                and last_exit.get((r["ticker"], entry_stage), "") < cooldown_cut
+                and float(r.get("current_price") or 0) > 0
+            ]
+            cands.sort(key=lambda r: -r.get("confidence", 0))
+            for r in cands[:slots]:
+                ticker = r["ticker"]
+                price = float(r["current_price"])
+                new_holdings.append({
+                    "ticker": ticker,
+                    "name": r.get("name", ticker),
+                    "sector": r.get("sector", ""),
+                    "entry_stage": entry_stage,
+                    "entry_date": today_str,
+                    "entry_price": round(price, 0),
+                    "entry_confidence": r.get("confidence", 0),
+                    "last_price": round(price, 0),
+                    "peak_price": round(price, 0),
+                    "return_pct": 0.0,
+                    "days_held": 0,
+                    "stage_now": r.get("stage"),
+                    "confidence_now": r.get("confidence", 0),
+                    "last_updated": today_str,
+                    "signals_at_entry": r.get("signals", [])[:4],
+                })
+                held_keys.add((ticker, entry_stage))
+                logger.info("편입[S%d]: %s %s @ %.0f (conf=%d, 신호 %d일차)",
+                            entry_stage, ticker, r.get("name"), price,
+                            r.get("confidence", 0), r.get("days_in_stage", 0))
 
     # 이탈 종목은 180일 / 최근 200건만 유지
     cutoff = (today - dt.timedelta(days=180)).isoformat()
