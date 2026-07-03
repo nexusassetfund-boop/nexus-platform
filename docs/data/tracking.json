@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-03T14:30:55+09:00",
+ "updated": "2026-07-03T20:54:25+09:00",
  "kospi": {
-  "price": 7767.38,
-  "ma200": 5405.31,
-  "ma50": 7851.17,
+  "price": 8030.7,
+  "ma200": 5406.63,
+  "ma50": 7856.44,
   "above_ma200": true,
-  "above_ma50": false,
+  "above_ma50": true,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-03T14:30:55+09:00"
+  "updated": "2026-07-03T20:54:25+09:00"
  },
  "holdings": [
   {
@@ -19,12 +19,12 @@
    "entry_date": "2026-07-02",
    "entry_price": 113700.0,
    "entry_confidence": 95,
-   "last_price": 115800.0,
-   "peak_price": 116900.0,
-   "return_pct": 1.85,
+   "last_price": 117800.0,
+   "peak_price": 117800.0,
+   "return_pct": 3.61,
    "days_held": 1,
    "stage_now": 3,
-   "confidence_now": 90,
+   "confidence_now": 95,
    "last_updated": "2026-07-03",
    "signals_at_entry": [
     "MTT 통과",
@@ -35,6 +35,28 @@
    "entry_stage": 3
   },
   {
+   "ticker": "064290",
+   "name": "인텍플러스",
+   "sector": "특수 목적용 기계 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-07-03",
+   "entry_price": 51800.0,
+   "entry_confidence": 100,
+   "last_price": 51800.0,
+   "peak_price": 51800.0,
+   "return_pct": 0.0,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-07-03",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 95 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 2.08x"
+   ]
+  },
+  {
    "ticker": "420770",
    "name": "기가비스",
    "sector": "특수 목적용 기계 제조업",
@@ -42,9 +64,9 @@
    "entry_date": "2026-07-03",
    "entry_price": 168900.0,
    "entry_confidence": 90,
-   "last_price": 168900.0,
+   "last_price": 167000.0,
    "peak_price": 168900.0,
-   "return_pct": 0.0,
+   "return_pct": -1.12,
    "days_held": 0,
    "stage_now": 1,
    "confidence_now": 90,
@@ -57,28 +79,6 @@
    ]
   },
   {
-   "ticker": "000660",
-   "name": "SK하이닉스",
-   "sector": "반도체 제조업",
-   "entry_stage": 1,
-   "entry_date": "2026-07-03",
-   "entry_price": 2430000.0,
-   "entry_confidence": 85,
-   "last_price": 2430000.0,
-   "peak_price": 2430000.0,
-   "return_pct": 0.0,
-   "days_held": 0,
-   "stage_now": 1,
-   "confidence_now": 85,
-   "last_updated": "2026-07-03",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 98 — 최상위 강세",
-    "60일 저점 대비 +165.3% 상승",
-    "MA 정배열 확인"
-   ]
-  },
-  {
    "ticker": "402340",
    "name": "SK스퀘어",
    "sector": "기타 금융업",
@@ -86,9 +86,9 @@
    "entry_date": "2026-07-03",
    "entry_price": 1582000.0,
    "entry_confidence": 85,
-   "last_price": 1582000.0,
-   "peak_price": 1582000.0,
-   "return_pct": 0.0,
+   "last_price": 1589000.0,
+   "peak_price": 1589000.0,
+   "return_pct": 0.44,
    "days_held": 0,
    "stage_now": 1,
    "confidence_now": 85,
@@ -99,9 +99,100 @@
     "RS 신고점",
     "60일 저점 대비 +217.0% 상승"
    ]
+  },
+  {
+   "ticker": "009150",
+   "name": "삼성전기",
+   "sector": "전자부품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 1989000.0,
+   "entry_confidence": 85,
+   "last_price": 1989000.0,
+   "peak_price": 1989000.0,
+   "return_pct": 0.0,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 85,
+   "last_updated": "2026-07-03",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 99 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +335.2% 상승"
+   ]
+  },
+  {
+   "ticker": "034730",
+   "name": "SK",
+   "sector": "기타 금융업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 690000.0,
+   "entry_confidence": 85,
+   "last_price": 690000.0,
+   "peak_price": 690000.0,
+   "return_pct": 0.0,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 85,
+   "last_updated": "2026-07-03",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 93 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +120.8% 상승"
+   ]
+  },
+  {
+   "ticker": "004170",
+   "name": "신세계",
+   "sector": "종합 소매업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 706000.0,
+   "entry_confidence": 85,
+   "last_price": 706000.0,
+   "peak_price": 706000.0,
+   "return_pct": 0.0,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 85,
+   "last_updated": "2026-07-03",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 95 — 최상위 강세",
+    "60일 저점 대비 +127.0% 상승",
+    "MA 정배열 확인"
+   ]
   }
  ],
  "exited": [
+  {
+   "ticker": "000660",
+   "name": "SK하이닉스",
+   "sector": "반도체 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 2430000.0,
+   "entry_confidence": 85,
+   "last_price": 2425000.0,
+   "peak_price": 2430000.0,
+   "return_pct": -0.21,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 85,
+   "last_updated": "2026-07-03",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 98 — 최상위 강세",
+    "60일 저점 대비 +165.3% 상승",
+    "MA 정배열 확인"
+   ],
+   "exit_date": "2026-07-03",
+   "exit_price": 2425000.0,
+   "exit_reason": "추세 이탈 (MA20 하회)"
+  },
   {
    "ticker": "041830",
    "name": "인바디",
@@ -128,9 +219,9 @@
   }
  ],
  "stats": {
-  "holding_count": 4,
-  "exited_count": 1,
-  "avg_return": 0.46,
+  "holding_count": 7,
+  "exited_count": 2,
+  "avg_return": 0.42,
   "win_rate": 0.0
  }
 }
