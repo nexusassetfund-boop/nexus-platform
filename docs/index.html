@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>시장 스캐너 | Market Architect</title>
+  <title>Nexus Platform | 스테이지 스캐너</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap"
     rel="stylesheet" />
@@ -16,41 +16,44 @@
       theme: {
         extend: {
           colors: {
-            "surface-variant": "#dae2fd",
+            "surface-variant": "#dcd2b9",
             "outline-variant": "#c4c6cf",
             "primary-container": "#002147",
             "on-primary-fixed": "#001b3d",
             "surface-container-lowest": "#ffffff",
-            "on-background": "#131b2e",
-            "surface-container-high": "#e2e7ff",
+            "on-background": "#241f14",
+            "surface-container-high": "#e4dcc8",
             "outline": "#74777f",
-            "background": "#faf8ff",
+            "background": "#faf8f2",
             "on-surface-variant": "#44474e",
-            "inverse-on-surface": "#eef0ff",
+            "inverse-on-surface": "#f3efe4",
             "on-error": "#ffffff",
-            "on-surface": "#131b2e",
+            "on-surface": "#241f14",
             "on-secondary": "#ffffff",
-            "surface-container-highest": "#dae2fd",
-            "surface-container-low": "#f2f3ff",
-            "surface-container": "#eaedff",
-            "surface-bright": "#faf8ff",
+            "surface-container-highest": "#dcd2b9",
+            "surface-container-low": "#f4f0e6",
+            "surface-container": "#ece6d6",
+            "surface-bright": "#faf8f2",
             "on-primary-container": "#708ab5",
             "on-error-container": "#93000a",
-            "surface": "#faf8ff",
+            "surface": "#faf8f2",
             "error": "#ba1a1a",
-            "secondary": "#006c49",
+            "secondary": "#9d8449",
             "on-tertiary": "#ffffff",
-            "primary": "#000a1e",
-            "secondary-container": "#6cf8bb",
+            "primary": "#231c0e",
+            "secondary-container": "#e9dfc3",
             "on-primary": "#ffffff",
             "error-container": "#ffdad6",
-            "surface-dim": "#d2d9f4",
+            "surface-dim": "#d9d2c0",
             "amber": "#b45309",
             "amber-bg": "#fef3c7",
             "amber-border": "#fbbf24",
             "blue-accent": "#2d476f",
             "on-primary-fixed-variant": "#2d476f",
             "tertiary-amber": "#bf7a00",
+            "nexus": "#9d8449",
+            "nexus-ink": "#39301c",
+            "nexus-bg": "#f5efe0",
           },
           fontFamily: {
             "headline": ["Manrope", "sans-serif"],
@@ -95,8 +98,8 @@
       display: inline-block;
       width: 28px;
       height: 28px;
-      border: 3px solid #e2e7ff;
-      border-top-color: #006c49;
+      border: 3px solid #e8e1cd;
+      border-top-color: #9d8449;
       border-radius: 50%;
       animation: spin 0.9s linear infinite;
     }
@@ -118,8 +121,8 @@
     /* Light modal inner */
     .modal-inner {
       background: #ffffff;
-      color: #131b2e;
-      border: 1px solid #dde3f4;
+      color: #241f14;
+      border: 1px solid #e3dcc8;
       border-radius: 16px;
       width: 92%;
       max-width: 820px;
@@ -139,7 +142,7 @@
       justify-content: space-between;
       font-size: 12px;
       padding: 4px 0;
-      border-bottom: 1px solid #eef1fa;
+      border-bottom: 1px solid #f0ebdd;
     }
 
     .modal-inner .metric-row:last-child {
@@ -152,14 +155,14 @@
 
     .modal-inner .v {
       font-weight: 500;
-      color: #131b2e;
+      color: #241f14;
     }
 
     .modal-inner .section {
-      background: #f6f8ff;
+      background: #f8f4e9;
       border-radius: 10px;
       padding: 14px;
-      border: 1px solid #eef1fa;
+      border: 1px solid #f0ebdd;
     }
 
     .modal-inner .section h3 {
@@ -171,11 +174,11 @@
     }
 
     .modal-inner .chart-wrap {
-      background: #f6f8ff;
+      background: #f8f4e9;
       border-radius: 10px;
       padding: 8px;
       margin: 14px 0;
-      border: 1px solid #eef1fa;
+      border: 1px solid #f0ebdd;
     }
 
     .modal-inner .signal-line {
@@ -186,7 +189,7 @@
 
     .modal-inner .signal-line::before {
       content: '→ ';
-      color: #10b981;
+      color: #8a7238;
     }
 
     .modal-inner .badge {
@@ -208,8 +211,8 @@
     }
 
     .modal-inner .badge-s3 {
-      background: rgba(16, 185, 129, .15);
-      color: #10b981;
+      background: rgba(157, 132, 73, .18);
+      color: #8a7238;
     }
 
     .modal-inner .badge-climax {
@@ -238,7 +241,7 @@
     /* Watchlist / Criteria panel */
     .panel-box {
       background: #fff;
-      border: 1px solid #e2e7ff;
+      border: 1px solid #e6dfcd;
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 20px;
@@ -252,10 +255,10 @@
     .panel-box textarea {
       width: 100%;
       height: 72px;
-      background: #f2f3ff;
-      border: 1px solid #e2e7ff;
+      background: #f4f0e6;
+      border: 1px solid #e6dfcd;
       border-radius: 8px;
-      color: #131b2e;
+      color: #241f14;
       padding: 10px;
       font-size: 13px;
       resize: vertical;
@@ -268,7 +271,7 @@
       gap: 10px;
       align-items: center;
       padding: 8px 0;
-      border-bottom: 1px solid #e2e7ff;
+      border-bottom: 1px solid #e6dfcd;
       font-size: 13px;
     }
 
@@ -278,7 +281,7 @@
 
     .sector-bar-bg {
       height: 7px;
-      background: #e2e7ff;
+      background: #e6dfcd;
       border-radius: 4px;
       overflow: hidden;
     }
@@ -301,23 +304,23 @@
 
   <!-- ── Top Nav ── -->
   <nav
-    class="sticky top-0 z-50 flex justify-between items-center px-6 py-3.5 w-full bg-white border-b border-slate-100 shadow-sm">
+    class="sticky top-0 z-50 flex justify-between items-center px-6 py-3.5 w-full bg-white border-b border-[#eae5d8] shadow-sm">
     <div class="flex items-center gap-8">
-      <span class="text-xl font-extrabold tracking-tight text-blue-950 font-headline">Market Architect</span>
+      <span class="text-xl font-extrabold tracking-tight text-nexus-ink font-headline"><span class="text-[#9d8449]">NEXUS</span> <span class="font-semibold text-nexus-ink">Platform</span></span>
       <div class="hidden md:flex gap-5 items-center">
         <a href="#" id="navDashboard" onclick="showView('dashboard');return false"
-          class="text-sm font-bold text-blue-950 border-b-2 border-blue-950 pb-0.5">Stage 스캐너</a>
+          class="text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5">Stage 스캐너</a>
         <a href="#" id="navTracking" onclick="showView('tracking');return false"
           class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">트래킹</a>
       </div>
     </div>
     <div class="flex items-center gap-3">
       <span id="scanBadge"
-        class="px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-secondary border border-secondary/20 items-center gap-1.5 hidden sm:flex">
+        class="px-3 py-1 rounded-full text-xs font-bold bg-nexus-bg text-secondary border border-secondary/20 items-center gap-1.5 hidden sm:flex">
         <span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span>
         <span id="scanBadgeLabel">스캔 대기</span>
       </span>
-      <button onclick="toggleCriteria()" class="p-2 hover:bg-slate-50 rounded-full transition-all" title="조건 안내">
+      <button onclick="toggleCriteria()" class="p-2 hover:bg-[#f6f3ea] rounded-full transition-all" title="조건 안내">
         <span class="material-symbols-outlined text-slate-500">info</span>
       </button>
     </div>
@@ -396,7 +399,7 @@
           <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tight mb-1">전체 스캔</p>
           <p id="statTotal" class="text-3xl font-extrabold text-primary font-headline">-</p>
         </div>
-        <div class="bg-green-50 px-5 py-4 rounded-2xl shadow-sm border border-secondary/10 min-w-[120px]">
+        <div class="bg-nexus-bg px-5 py-4 rounded-2xl shadow-sm border border-secondary/10 min-w-[120px]">
           <p class="text-[10px] font-bold text-secondary uppercase tracking-tight mb-1">스테이지 3</p>
           <p id="statS3" class="text-3xl font-extrabold text-secondary font-headline">-</p>
         </div>
@@ -458,7 +461,7 @@
   </main>
 
   <!-- ── Tracking View ── -->
-  <section id="trackingView" class="hidden w-full flex-1 bg-slate-50 min-h-screen">
+  <section id="trackingView" class="hidden w-full flex-1 bg-[#f6f3ea] min-h-screen">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
 
       <!-- 헤더 -->
@@ -466,7 +469,7 @@
         <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-5">
           <div>
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">깡토 추세추종</p>
-            <h1 class="text-3xl font-extrabold text-blue-950 font-headline leading-tight">편입 트래킹</h1>
+            <h1 class="text-3xl font-extrabold text-nexus-ink font-headline leading-tight">편입 트래킹</h1>
             <p class="text-sm text-slate-500 mt-1.5">Stage 3 돌파 시 편입 — 이탈 조건 전까지 유지되며 보유일이 리셋되지 않습니다</p>
           </div>
           <div id="pipelineHeaderStats" class="flex gap-3 flex-wrap md:justify-end"></div>
@@ -475,9 +478,9 @@
       </div>
 
       <!-- 탭 -->
-      <div class="flex border-b border-slate-200 mb-6 bg-transparent">
+      <div class="flex border-b border-[#ded7c4] mb-6 bg-transparent">
         <button id="pl-tab-btn-holdings" onclick="switchPipelineTab('holdings')"
-          class="px-5 py-3 text-sm font-bold text-blue-950 border-b-2 border-blue-950 -mb-px">보유 종목</button>
+          class="px-5 py-3 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px">보유 종목</button>
         <button id="pl-tab-btn-exited" onclick="switchPipelineTab('exited')"
           class="px-5 py-3 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors">이탈 종목</button>
       </div>
@@ -487,7 +490,7 @@
       <div id="pl-tab-exited" class="hidden"><div id="ledgerExited"></div></div>
 
       <!-- 면책조항 -->
-      <div class="mt-10 p-5 bg-white rounded-2xl border border-slate-100 text-xs text-slate-400 space-y-1.5">
+      <div class="mt-10 p-5 bg-white rounded-2xl border border-[#eae5d8] text-xs text-slate-400 space-y-1.5">
         <p class="font-semibold text-slate-500 mb-2">면책조항</p>
         <p>• 본 파이프라인은 투자 참고 자료이며, 특정 종목의 매수·매도를 권유하지 않습니다.</p>
         <p>• 과거 신호가 미래 수익을 보장하지 않으므로, 본 파이프라인에 기반한 투자 손실에 대해 책임을 지지 않습니다.</p>
@@ -499,9 +502,9 @@
 
   <!-- ── Footer ── -->
   <footer
-    class="w-full px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 border-t border-slate-200">
+    class="w-full px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-[#f6f3ea] border-t border-[#ded7c4]">
     <div>
-      <span class="text-base font-bold text-slate-900 font-headline">Market Architect</span>
+      <span class="text-base font-bold text-slate-900 font-headline"><span class="text-[#9d8449]">NEXUS</span> <span class="font-semibold text-nexus-ink">Platform</span></span>
     </div>
     <div class="flex gap-5">
       <a href="#" class="text-xs text-slate-400 hover:text-blue-600 transition-colors">법적 고지</a>
@@ -599,12 +602,12 @@
       const colors = {
         badge: isClimax
           ? 'bg-red-50 text-error border-error/20'
-          : s === 3 ? 'bg-green-50 text-secondary border-secondary/20'
+          : s === 3 ? 'bg-nexus-bg text-secondary border-secondary/20'
             : s === 2 ? 'bg-amber-50 text-amber-600 border-amber-400/20'
               : s === 1 ? 'bg-blue-50 text-blue-accent border-blue-accent/20'
                 : 'bg-surface-container text-on-surface-variant border-outline-variant/20',
         rsBar: isClimax ? '#ba1a1a'
-          : s === 3 ? '#006c49'
+          : s === 3 ? '#9d8449'
             : s === 2 ? '#b45309'
               : s === 1 ? '#2d476f'
                 : '#74777f',
@@ -772,7 +775,7 @@
     <div class="detail-2col">
       <div class="section">
         <h3>MTT 필터</h3>
-        ${row('MTT 통과', d.mtt_pass ? '<span style="color:#10b981">YES</span>' : '<span style="color:#ef4444">NO</span>')}
+        ${row('MTT 통과', d.mtt_pass ? '<span style="color:#8a7238">YES</span>' : '<span style="color:#ef4444">NO</span>')}
         ${row('가격 > MA150', d.price_above_ma150)}
         ${row('가격 > MA200', d.price_above_ma200)}
         ${row('MA150 > MA200', d.ma150_above_ma200)}
@@ -786,7 +789,7 @@
         ${row('126일 RS', d.rs_detail?.q2?.toFixed(0) || '-')}
         ${row('189일 RS', d.rs_detail?.q3?.toFixed(0) || '-')}
         ${row('252일 RS', d.rs_detail?.q4?.toFixed(0) || '-')}
-        ${row('RS 모멘텀', (d.rs_momentum > 0 ? `<span style="color:#10b981">+${d.rs_momentum?.toFixed(1)}</span>` : `<span style="color:#ef4444">${d.rs_momentum?.toFixed(1)}</span>`) || '0')}
+        ${row('RS 모멘텀', (d.rs_momentum > 0 ? `<span style="color:#8a7238">+${d.rs_momentum?.toFixed(1)}</span>` : `<span style="color:#ef4444">${d.rs_momentum?.toFixed(1)}</span>`) || '0')}
         ${row('RS 신고점', d.rs_new_high ? 'YES ★' : '-')}
         ${row('업종', d.sector || '-')}
       </div>
@@ -794,15 +797,15 @@
         <h3>이동평균</h3>
         ${row('MA5', fmt(d.ma5))} ${row('MA20', fmt(d.ma20))} ${row('MA60', fmt(d.ma60))}
         ${row('MA120', fmt(d.ma120))} ${row('MA150', fmt(d.ma150))} ${row('MA200', fmt(d.ma200))}
-        ${row('정배열', d.ma_aligned ? '<span style="color:#10b981">O</span>' : 'X')}
+        ${row('정배열', d.ma_aligned ? '<span style="color:#8a7238">O</span>' : 'X')}
       </div>
       <div class="section">
         <h3>VCP / 돌파</h3>
-        ${row('VCP 감지', d.vcp_detected ? '<span style="color:#10b981">YES</span>' : 'NO')}
+        ${row('VCP 감지', d.vcp_detected ? '<span style="color:#8a7238">YES</span>' : 'NO')}
         ${row('축소 횟수', (d.contractions || 0) + '회')}
         ${row('변동폭 축소', (d.range_contraction_pct || 0) + '%')}
         ${row('거래량 마름', d.vol_drying ? 'YES' : 'NO')}
-        ${row('돌파 감지', d.breakout_detected ? '<span style="color:#10b981">YES!</span>' : 'NO')}
+        ${row('돌파 감지', d.breakout_detected ? '<span style="color:#8a7238">YES!</span>' : 'NO')}
         ${row('거래량 배수', (d.volume_surge_ratio || 0) + 'x')}
         ${row('갭상승', d.gap_up ? 'YES' : 'NO')}
       </div>
@@ -825,7 +828,7 @@
     }
 
     function row(k, v) {
-      const disp = typeof v === 'boolean' ? (v ? '<span style="color:#10b981">O</span>' : 'X') : (v ?? '-');
+      const disp = typeof v === 'boolean' ? (v ? '<span style="color:#8a7238">O</span>' : 'X') : (v ?? '-');
       return `<div class="metric-row"><span class="k">${k}</span><span class="v">${disp}</span></div>`;
     }
     function fmt(v) { return v ? Math.round(v).toLocaleString() : '-'; }
@@ -845,7 +848,7 @@
       _currentView = view;
       document.getElementById('trackingView').classList.toggle('hidden', view !== 'tracking');
       document.querySelector('main').classList.toggle('hidden', view === 'tracking');
-      const activeClass = 'text-sm font-bold text-blue-950 border-b-2 border-blue-950 pb-0.5';
+      const activeClass = 'text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5';
       const inactiveClass = 'text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors';
       document.getElementById('navDashboard').className = view === 'dashboard' ? activeClass : inactiveClass;
       document.getElementById('navTracking').className = view === 'tracking' ? activeClass : inactiveClass;
@@ -862,7 +865,7 @@
         document.getElementById(`pl-tab-${t}`).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById(`pl-tab-btn-${t}`);
         btn.className = t === tab
-          ? 'px-5 py-3 text-sm font-bold text-blue-950 border-b-2 border-blue-950 -mb-px'
+          ? 'px-5 py-3 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px'
           : 'px-5 py-3 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors';
       });
     }
@@ -914,7 +917,7 @@
       const avg = stats.avg_return ?? 0;
       const avgColor = avg > 0 ? 'text-red-500' : avg < 0 ? 'text-blue-600' : 'text-slate-500';
       const items = [
-        { label: '보유',     value: stats.holding_count ?? 0,  color: 'text-green-600' },
+        { label: '보유',     value: stats.holding_count ?? 0,  color: 'text-nexus' },
         { label: '평균 수익률', value: `${avg > 0 ? '+' : ''}${avg}%`, color: avgColor },
         { label: '이탈',     value: stats.exited_count ?? 0,   color: 'text-slate-500' },
         { label: '승률',     value: stats.exited_count ? `${stats.win_rate}%` : '-', color: 'text-amber-600' },
@@ -922,7 +925,7 @@
       document.getElementById('pipelineHeaderStats').innerHTML = `
         <div class="flex items-start gap-3 flex-wrap">
           ${items.map(i => `
-          <div class="bg-white rounded-2xl px-4 py-3 border border-slate-100 shadow-sm min-w-[80px]">
+          <div class="bg-white rounded-2xl px-4 py-3 border border-[#eae5d8] shadow-sm min-w-[80px]">
             <div class="text-[10px] text-slate-400 font-medium mb-0.5">${i.label}</div>
             <div class="text-xl font-extrabold ${i.color} font-headline">${i.value}</div>
           </div>`).join('')}
@@ -937,12 +940,12 @@
 
     function _renderHoldingRow(h) {
       const daysBadge = h.days_held > 0
-        ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-50 text-green-600 border border-green-200">${h.days_held}일 보유</span>`
+        ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-nexus-bg text-nexus border border-nexus/40">${h.days_held}일 보유</span>`
         : '<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-50 text-blue-600 border border-blue-200">신규 진입</span>';
       const stageNow = h.stage_now
-        ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-slate-500 border border-slate-200">현재 S${h.stage_now}</span>` : '';
+        ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#f6f3ea] text-slate-500 border border-[#ded7c4]">현재 S${h.stage_now}</span>` : '';
       return `
-      <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors cursor-pointer"
+      <div class="flex items-center gap-4 px-5 py-4 border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] transition-colors cursor-pointer"
            onclick="openDetail('${h.ticker}')">
         <div class="flex flex-col items-center min-w-[72px] shrink-0">
           <span class="text-lg font-extrabold ${_retCls(h.return_pct)} font-headline leading-tight">${_retTxt(h.return_pct)}</span>
@@ -950,9 +953,9 @@
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="font-bold text-blue-950 text-sm">${h.name}</span>
+            <span class="font-bold text-nexus-ink text-sm">${h.name}</span>
             <span class="text-[10px] text-slate-400">${h.ticker}</span>
-            ${h.sector ? `<span class="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">${h.sector}</span>` : ''}
+            ${h.sector ? `<span class="text-[10px] text-slate-400 bg-[#efeadd] px-1.5 py-0.5 rounded">${h.sector}</span>` : ''}
           </div>
           <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
             ${daysBadge}${stageNow}
@@ -969,17 +972,17 @@
     function renderHoldings(list) {
       const el = document.getElementById('ledgerHoldings');
       if (!list.length) {
-        el.innerHTML = '<div class="bg-white rounded-2xl border border-slate-100 py-12 text-center text-slate-400 text-sm">현재 보유(편입) 종목이 없습니다 — Stage 3 돌파 시 자동 편입됩니다</div>';
+        el.innerHTML = '<div class="bg-white rounded-2xl border border-[#eae5d8] py-12 text-center text-slate-400 text-sm">현재 보유(편입) 종목이 없습니다 — Stage 3 돌파 시 자동 편입됩니다</div>';
         return;
       }
       el.innerHTML = `
       <div class="flex items-center gap-2 mb-3">
-        <span class="inline-block w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
-        <h2 class="text-base font-extrabold text-blue-950">보유 종목</h2>
+        <span class="inline-block w-2 h-2 rounded-full bg-nexus shrink-0"></span>
+        <h2 class="text-base font-extrabold text-nexus-ink">보유 종목</h2>
         <span class="text-sm text-slate-400">Stage 3 돌파 편입 — 이탈 조건 전까지 유지</span>
         <span class="ml-auto text-sm text-slate-400 shrink-0">${list.length}개</span>
       </div>
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div class="bg-white rounded-2xl border border-[#eae5d8] shadow-sm overflow-hidden">
         ${list.map(_renderHoldingRow).join('')}
       </div>`;
     }
@@ -987,17 +990,17 @@
     function renderExited(list) {
       const el = document.getElementById('ledgerExited');
       if (!list.length) {
-        el.innerHTML = '<div class="bg-white rounded-2xl border border-slate-100 py-12 text-center text-slate-400 text-sm">이탈 기록이 없습니다</div>';
+        el.innerHTML = '<div class="bg-white rounded-2xl border border-[#eae5d8] py-12 text-center text-slate-400 text-sm">이탈 기록이 없습니다</div>';
         return;
       }
       el.innerHTML = `
       <div class="flex items-center gap-2 mb-3">
-        <h2 class="text-base font-extrabold text-blue-950">이탈 종목</h2>
+        <h2 class="text-base font-extrabold text-nexus-ink">이탈 종목</h2>
         <span class="text-sm text-slate-400">최근 180일 · ${list.length}건</span>
       </div>
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div class="bg-white rounded-2xl border border-[#eae5d8] shadow-sm overflow-hidden">
         ${list.map(e => `
-        <div class="flex items-center gap-4 px-5 py-3.5 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors cursor-pointer"
+        <div class="flex items-center gap-4 px-5 py-3.5 border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] transition-colors cursor-pointer"
              onclick="openDetail('${e.ticker}')">
           <div class="flex flex-col items-center min-w-[72px] shrink-0">
             <span class="text-base font-extrabold ${_retCls(e.return_pct)} font-headline leading-tight">${_retTxt(e.return_pct)}</span>
@@ -1005,9 +1008,9 @@
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="font-bold text-blue-950 text-sm">${e.name}</span>
+              <span class="font-bold text-nexus-ink text-sm">${e.name}</span>
               <span class="text-[10px] text-slate-400">${e.ticker}</span>
-              ${e.sector ? `<span class="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">${e.sector}</span>` : ''}
+              ${e.sector ? `<span class="text-[10px] text-slate-400 bg-[#efeadd] px-1.5 py-0.5 rounded">${e.sector}</span>` : ''}
             </div>
             <div class="flex items-center gap-1.5 mt-1 flex-wrap">
               <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-50 text-red-500 border border-red-200">${e.exit_reason || '이탈'}</span>
