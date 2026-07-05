@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-03T20:54:25+09:00",
+ "updated": "2026-07-06T08:47:35+09:00",
  "kospi": {
-  "price": 8030.7,
-  "ma200": 5406.63,
-  "ma50": 7856.44,
+  "price": 8088.34,
+  "ma200": 5406.92,
+  "ma50": 7857.59,
   "above_ma200": true,
   "above_ma50": true,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-03T20:54:25+09:00"
+  "updated": "2026-07-06T08:47:35+09:00"
  },
  "holdings": [
   {
@@ -22,10 +22,10 @@
    "last_price": 117800.0,
    "peak_price": 117800.0,
    "return_pct": 3.61,
-   "days_held": 1,
+   "days_held": 3,
    "stage_now": 3,
    "confidence_now": 95,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "전고점 돌파! 거래량 6.35x",
@@ -45,10 +45,10 @@
    "last_price": 51800.0,
    "peak_price": 51800.0,
    "return_pct": 0.0,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 3,
    "confidence_now": 100,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 95 — 최상위 강세",
@@ -67,10 +67,10 @@
    "last_price": 167000.0,
    "peak_price": 168900.0,
    "return_pct": -1.12,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 90,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -89,10 +89,10 @@
    "last_price": 1589000.0,
    "peak_price": 1589000.0,
    "return_pct": 0.44,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 98 — 최상위 강세",
@@ -111,10 +111,10 @@
    "last_price": 1989000.0,
    "peak_price": 1989000.0,
    "return_pct": 0.0,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 99 — 최상위 강세",
@@ -133,10 +133,10 @@
    "last_price": 690000.0,
    "peak_price": 690000.0,
    "return_pct": 0.0,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
@@ -155,15 +155,37 @@
    "last_price": 706000.0,
    "peak_price": 706000.0,
    "return_pct": 0.0,
-   "days_held": 0,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-07-03",
+   "last_updated": "2026-07-05",
    "signals_at_entry": [
     "MTT 통과",
     "RS 95 — 최상위 강세",
     "60일 저점 대비 +127.0% 상승",
     "MA 정배열 확인"
+   ]
+  },
+  {
+   "ticker": "170920",
+   "name": "엘티씨",
+   "sector": "기초 화학물질 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-05",
+   "entry_price": 54100.0,
+   "entry_confidence": 80,
+   "last_price": 54100.0,
+   "peak_price": 54100.0,
+   "return_pct": 0.0,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 80,
+   "last_updated": "2026-07-05",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 93 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +97.1% 상승"
    ]
   }
  ],
@@ -219,9 +241,9 @@
   }
  ],
  "stats": {
-  "holding_count": 7,
+  "holding_count": 8,
   "exited_count": 2,
-  "avg_return": 0.42,
+  "avg_return": 0.37,
   "win_rate": 0.0
  }
 }
