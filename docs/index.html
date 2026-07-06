@@ -315,6 +315,8 @@
           class="text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5">스테이지 감지기</a>
         <a href="#" id="navPortfolio" onclick="showView('portfolio');return false"
           class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">모델 포트폴리오</a>
+        <a href="#" id="navValue" onclick="showView('value');return false"
+          class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">가치투자</a>
       </div>
     </div>
     <div class="flex items-center gap-3">
@@ -625,6 +627,29 @@
       <div id="pf-tab-universe" class="hidden"><div id="pfUniverse"></div></div>
       <div id="pf-tab-transactions" class="hidden"><div id="pfTransactions"></div></div>
       <div id="pf-tab-nav" class="hidden"><div id="pfNav"></div></div>
+    </div>
+  </section>
+
+  <!-- ── 가치투자 (DART 재무 연동) ── -->
+  <section id="valueView" class="hidden w-full flex-1 bg-[#f6f3ea] min-h-screen">
+    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+      <div class="mb-6 flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-nexus-ink font-headline leading-tight">가치투자</h1>
+          <p class="text-sm text-slate-500 mt-1.5">저평가 우량주 발굴 · 퀄리티(F-Score식)·재무 5년 추이·배당 — DART 재무 연동</p>
+        </div>
+        <div id="valUpdated" class="flex items-end text-[11px] text-slate-400 font-medium"></div>
+      </div>
+
+      <div class="flex flex-wrap border-b border-[#ded7c4] mb-6">
+        <button id="val-tab-btn-universe" onclick="switchValTab('universe')" class="px-5 py-3 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px">밸류 유니버스</button>
+        <button id="val-tab-btn-portfolio" onclick="switchValTab('portfolio')" class="px-5 py-3 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors">포트폴리오</button>
+        <button id="val-tab-btn-financials" onclick="switchValTab('financials')" class="px-5 py-3 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors">재무 추이</button>
+      </div>
+
+      <div id="val-tab-universe"><div id="valUniverse"></div></div>
+      <div id="val-tab-portfolio" class="hidden"><div id="valPortfolio"></div></div>
+      <div id="val-tab-financials" class="hidden"><div id="valFinancials"></div></div>
     </div>
   </section>
 
@@ -948,20 +973,149 @@
     function showView(view) {
       // 하위호환: 'tracking' → 감지기 그룹의 전략 포트폴리오 하위탭
       if (view === 'tracking') { _currentView = 'dashboard'; _detectorTab = 'ledger'; }
-      else _currentView = (view === 'portfolio') ? 'portfolio' : 'dashboard';
+      else _currentView = ['portfolio', 'value'].includes(view) ? view : 'dashboard';
       const inDetector = _currentView === 'dashboard';
       document.querySelector('main').classList.toggle('hidden', !(inDetector && _detectorTab === 'scan'));
       document.getElementById('trackingView').classList.toggle('hidden', !(inDetector && _detectorTab === 'ledger'));
       document.getElementById('portfolioView').classList.toggle('hidden', _currentView !== 'portfolio');
+      document.getElementById('valueView').classList.toggle('hidden', _currentView !== 'value');
       document.getElementById('detectorSubnav').classList.toggle('hidden', !inDetector);
       document.getElementById('navDashboard').className = inDetector ? _navActive : _navIdle;
       document.getElementById('navPortfolio').className = _currentView === 'portfolio' ? _navActive : _navIdle;
+      document.getElementById('navValue').className = _currentView === 'value' ? _navActive : _navIdle;
       document.getElementById('subScan').className = _detectorTab === 'scan' ? _subActive : _subIdle;
       document.getElementById('subLedger').className = _detectorTab === 'ledger' ? _subActive : _subIdle;
       if (_currentView === 'portfolio') loadPortfolio();
+      else if (_currentView === 'value') loadValue();
       else if (_detectorTab === 'ledger') loadTracking();
     }
     function showDetectorTab(tab) { _detectorTab = tab; showView('dashboard'); }
+
+    // ── 가치투자 (DART 재무 연동) ───────────────────────────
+    let _valData = null, _valTab = 'universe';
+    const _mNum = (v, suf = '') => v == null ? '-' : `${v}${suf}`;
+    const _mPct = v => v == null ? '-' : `${v > 0 ? '+' : ''}${v}%`;
+    const _mCls = v => v > 0.005 ? 'text-red-500' : v < -0.005 ? 'text-blue-600' : 'text-slate-500';
+    const _valEmpty = msg => `<div class="bg-white rounded-2xl border border-[#eae5d8] py-12 text-center text-slate-400 text-sm">${msg}</div>`;
+    const _qBadge = q => q == null
+      ? '<span class="text-slate-300 text-xs">-</span>'
+      : `<span class="inline-block px-2 py-0.5 rounded text-[12px] font-extrabold ${q >= 70 ? 'bg-red-50 text-red-600 border border-red-200' : q >= 40 ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-blue-50 text-blue-600 border border-blue-200'}">${q}</span>`;
+
+    function _valTable(headers, rowsHtml, align) {
+      const th = headers.map((h, i) => `<th class="px-3 py-2.5 font-medium ${align[i] === 1 ? 'text-right' : align[i] === 2 ? 'text-center' : 'text-left'} ${i === 0 ? 'pl-4' : ''} ${i === headers.length - 1 ? 'pr-4' : ''}">${h}</th>`).join('');
+      return `<div class="bg-white rounded-2xl border border-[#eae5d8] shadow-sm overflow-hidden"><div class="overflow-x-auto">
+        <table class="w-full text-sm whitespace-nowrap"><thead><tr class="text-[11px] text-slate-400 border-b border-[#f0ece0] bg-[#faf8f2]">${th}</tr></thead>
+        <tbody>${rowsHtml}</tbody></table></div></div>`;
+    }
+
+    async function loadValue() {
+      try {
+        const resp = await fetch(`${DATA}/value.json?t=${Date.now()}`);
+        const d = await resp.json();
+        _valData = d;
+        const upd = d.updated ? new Date(d.updated) : null;
+        document.getElementById('valUpdated').textContent =
+          (upd ? `${String(upd.getMonth() + 1).padStart(2, '0')}/${String(upd.getDate()).padStart(2, '0')} 재무 기준` : '') + (d.dart ? '' : ' · DART 미연동');
+        renderValUniverse(d.universe || []);
+        renderValPortfolio(d.portfolio || []);
+        renderValFinancials(d.universe || []);
+      } catch (e) {
+        document.getElementById('valUniverse').innerHTML =
+          `<div class="text-center py-20 text-slate-400 text-sm">가치투자 데이터 로드 실패: ${e.message}</div>`;
+      }
+    }
+
+    function switchValTab(tab) {
+      _valTab = tab;
+      ['universe', 'portfolio', 'financials'].forEach(t => {
+        document.getElementById(`val-tab-${t}`).classList.toggle('hidden', t !== tab);
+        document.getElementById(`val-tab-btn-${t}`).className = t === tab
+          ? 'px-5 py-3 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px'
+          : 'px-5 py-3 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors';
+      });
+    }
+
+    function renderValUniverse(list) {
+      const el = document.getElementById('valUniverse');
+      if (!list.length) { el.innerHTML = _valEmpty('유니버스가 비어있습니다 — value_universe.json에 추가하세요'); return; }
+      const rows = [...list].sort((a, b) => (b.quality_score ?? -1) - (a.quality_score ?? -1)).map(u => {
+        const m = u.metrics || {};
+        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] align-top">
+          <td class="px-4 py-3.5 text-center">${_qBadge(u.quality_score)}</td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${u.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${u.code}</span><div class="text-[11px] text-slate-400">${u.sector || ''}</div></td>
+          <td class="px-3 py-3.5 text-right ${m.roe >= 15 ? 'text-red-500 font-semibold' : 'text-slate-700'}">${_mNum(m.roe, '%')}</td>
+          <td class="px-3 py-3.5 text-right text-slate-700">${_mNum(m.op_margin, '%')}</td>
+          <td class="px-3 py-3.5 text-right ${m.debt_ratio > 150 ? 'text-blue-600' : 'text-slate-600'}">${_mNum(m.debt_ratio, '%')}</td>
+          <td class="px-3 py-3.5 text-right ${_mCls(m.rev_growth)}">${_mPct(m.rev_growth)}</td>
+          <td class="px-3 py-3.5 text-right text-slate-600">${u.target_price ? u.target_price.toLocaleString() : '-'}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-500 whitespace-normal max-w-[280px]"><div>${u.point || ''}</div>${u.risk ? `<div class="text-red-400 mt-0.5">⚠ ${u.risk}</div>` : ''}</td>
+        </tr>`;
+      }).join('');
+      el.innerHTML = _valTable(['퀄리티', '종목', 'ROE', '영업이익률', '부채비율', '매출성장', '목표가', '투자포인트 / 리스크'], rows, [2, 0, 1, 1, 1, 1, 1, 0]);
+    }
+
+    function renderValPortfolio(list) {
+      const el = document.getElementById('valPortfolio');
+      if (!list.length) { el.innerHTML = _valEmpty('보유 종목이 없습니다'); return; }
+      const rows = list.map(p => {
+        const m = p.metrics || {};
+        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea]">
+          <td class="px-4 py-3.5 text-center">${_qBadge(p.quality_score)}</td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${p.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${p.code}</span></td>
+          <td class="px-3 py-3.5 text-slate-500 text-xs">${p.buy_date || '-'}</td>
+          <td class="px-3 py-3.5 text-right text-slate-600">${p.buy_price ? p.buy_price.toLocaleString() : '-'}</td>
+          <td class="px-3 py-3.5 text-right text-slate-600">${p.qty ?? '-'}</td>
+          <td class="px-3 py-3.5 text-right text-slate-600">${p.target_price ? p.target_price.toLocaleString() : '-'}</td>
+          <td class="px-3 py-3.5 text-right ${m.roe >= 15 ? 'text-red-500' : 'text-slate-600'}">${_mNum(m.roe, '%')}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-400">${p.memo || ''}</td>
+        </tr>`;
+      }).join('');
+      el.innerHTML = _valTable(['퀄리티', '종목', '매수일', '매수가', '수량', '목표가', 'ROE', '메모'], rows, [2, 0, 0, 1, 1, 1, 1, 0]);
+    }
+
+    function renderValFinancials(list) {
+      const el = document.getElementById('valFinancials');
+      const withFin = list.filter(u => (u.financials || []).length);
+      if (!withFin.length) { el.innerHTML = _valEmpty('재무 데이터가 없습니다 (DART 연동 시 채워집니다)'); return; }
+      el.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">${withFin.map(_finCard).join('')}</div>`;
+    }
+
+    function _finCard(u) {
+      const m = u.metrics || {};
+      return `<div class="bg-white rounded-2xl border border-[#eae5d8] shadow-sm p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="font-bold text-nexus-ink">${u.name}</span><span class="text-[10px] text-slate-400">${u.code}</span>
+          ${u.quality_score != null ? `<span class="ml-auto">${_qBadge(u.quality_score)}</span>` : ''}
+        </div>
+        <div class="flex gap-4 text-[11px] text-slate-500 mb-2 flex-wrap">
+          <span>ROE <b class="text-nexus-ink">${_mNum(m.roe, '%')}</b></span>
+          <span>영업이익률 <b class="text-nexus-ink">${_mNum(m.op_margin, '%')}</b></span>
+          <span>부채비율 <b class="text-nexus-ink">${_mNum(m.debt_ratio, '%')}</b></span>
+          <span>매출성장 <b class="${_mCls(m.rev_growth)}">${_mPct(m.rev_growth)}</b></span>
+        </div>
+        ${_finBarChart(u.financials || [])}
+      </div>`;
+    }
+
+    function _finBarChart(tr) {
+      if (!tr.length) return '';
+      const W = 380, H = 150, P = { l: 8, r: 8, t: 10, b: 18 };
+      const keys = [['revenue', '매출', '#9d8449'], ['op', '영업이익', '#3b82f6'], ['ni', '순이익', '#22c55e']];
+      const vals = tr.flatMap(t => keys.map(([k]) => t[k]).filter(v => v != null));
+      const max = Math.max(...vals, 0), min = Math.min(...vals, 0), rng = (max - min) || 1;
+      const n = tr.length, gw = (W - P.l - P.r) / n, bw = gw / (keys.length + 1);
+      const y0 = P.t + (H - P.t - P.b) * (max / rng);
+      const Y = v => P.t + (H - P.t - P.b) * ((max - v) / rng);
+      const bars = tr.map((t, i) => keys.map(([k, , c], j) => {
+        const v = t[k]; if (v == null) return '';
+        const x = P.l + gw * i + bw * (j + 0.5), y = Y(v), h = Math.abs(y - y0);
+        return `<rect x="${x.toFixed(1)}" y="${Math.min(y, y0).toFixed(1)}" width="${(bw * 0.8).toFixed(1)}" height="${Math.max(h, 0.5).toFixed(1)}" fill="${c}" rx="1"/>`;
+      }).join('')).join('');
+      const xlab = tr.map((t, i) => `<text x="${(P.l + gw * i + gw / 2).toFixed(1)}" y="${H - 5}" font-size="9" fill="#94a3b8" text-anchor="middle">'${String(t.year).slice(2)}</text>`).join('');
+      const legend = keys.map(([, lbl, c]) => `<span class="flex items-center gap-1"><span style="width:10px;height:3px;background:${c};display:inline-block"></span>${lbl}</span>`).join('');
+      return `<div class="flex gap-3 text-[10px] text-slate-500 mb-1 flex-wrap">${legend}<span class="ml-auto text-slate-400">최근 ${n}년</span></div>
+        <div class="overflow-x-auto"><svg viewBox="0 0 ${W} ${H}" class="w-full" style="min-width:300px"><line x1="${P.l}" y1="${y0.toFixed(1)}" x2="${W - P.r}" y2="${y0.toFixed(1)}" stroke="#e5e0d0"/>${bars}${xlab}</svg></div>`;
+    }
 
     // ── 모델 포트폴리오 (구글 시트 미러) ───────────────────────
     let _pfData = null, _pfTab = 'holdings';
