@@ -1,0 +1,15 @@
+{
+  "_readme": "가치투자 전용 입력 파일. GitHub 웹에서 직접 편집하세요. 현재가·재무·퀄리티 지표는 스캐너가 자동으로 채웁니다. 여기엔 '내가 정하는 것'만 넣습니다.",
+  "universe": [
+    { "name": "SK하이닉스", "code": "000660", "sector": "반도체", "since": "2026-01-16", "target_price": 2987000, "fair_value": null, "point": "HBM 사이클 수혜, 메모리 업턴", "risk": "메모리 다운사이클 진입 시 실적 급락", "note": "" },
+    { "name": "신세계", "code": "004170", "sector": "유통", "since": "2026-07-01", "target_price": 684000, "fair_value": null, "point": "백화점 저평가, 자산가치", "risk": "소비 둔화", "note": "" },
+    { "name": "달바글로벌", "code": "483650", "sector": "K-뷰티", "since": "2026-07-01", "target_price": null, "fair_value": null, "point": "브랜드 성장", "risk": "경쟁 심화", "note": "" },
+    { "name": "SK스퀘어", "code": "402340", "sector": "지주", "since": "2026-07-03", "target_price": null, "fair_value": null, "point": "지주 저평가, NAV 할인", "risk": "자회사 실적 변동", "note": "" }
+  ],
+  "portfolio": [
+    { "name": "SK하이닉스", "code": "000660", "buy_date": "2026-07-01", "buy_price": 2650000, "qty": 21, "target_price": 2987000, "memo": "" },
+    { "name": "신세계", "code": "004170", "buy_date": "2026-07-01", "buy_price": 755000, "qty": 26, "target_price": 684000, "memo": "" },
+    { "name": "달바글로벌", "code": "483650", "buy_date": "2026-07-01", "buy_price": 223700, "qty": 35, "target_price": null, "memo": "" },
+    { "name": "SK스퀘어", "code": "402340", "buy_date": "2026-07-03", "buy_price": 1599000, "qty": 6, "target_price": null, "memo": "" }
+  ]
+}

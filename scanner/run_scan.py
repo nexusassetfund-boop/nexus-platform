@@ -17,6 +17,7 @@ import datetime as dt
 import json
 import logging
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -528,6 +529,17 @@ async def main():
                     len(pf.get("holdings", [])), len(pf.get("universe", [])))
     except Exception as e:
         logger.warning("모델 포트폴리오 미러 실패(무시): %s", e)
+
+    # 가치투자 재무 스캔 — DART 키가 있을 때만 (없으면 기존 value.json 유지)
+    if os.environ.get("DART_API_KEY", "").strip():
+        try:
+            import fetch_value
+            vv = fetch_value.build()
+            _save_json(fetch_value.OUT_PATH, vv)
+            logger.info("value.json 갱신 (유니버스 %d, 포트폴리오 %d)",
+                        len(vv.get("universe", [])), len(vv.get("portfolio", [])))
+        except Exception as e:
+            logger.warning("가치투자 스캔 실패(무시): %s", e)
 
 
 if __name__ == "__main__":
