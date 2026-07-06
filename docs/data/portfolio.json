@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06T16:20:20+09:00",
+  "updated": "2026-07-06T16:26:48+09:00",
   "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
   "kpi": {
     "portfolio_value": 140344068.0,
@@ -387,38 +387,39 @@
     "value": [
       {
         "date": "2026-7-6",
+        "portfolio_value": 140344068.04,
         "total_value": 93512200.0,
         "eval_pnl": -9220900.0
       },
       {
-        "date": "2026-7-1",
-        "total_value": 91400000.0,
-        "eval_pnl": -1117500.0
+        "date": "2026-7-5",
+        "portfolio_value": 143084568.04,
+        "total_value": 96252700.0,
+        "eval_pnl": -6480400.0
       },
       {
-        "date": "2026-7-2",
-        "total_value": 79276800.0,
-        "eval_pnl": -10894300.0
+        "date": "2026-7-4",
+        "portfolio_value": 143084568.0,
+        "total_value": 96252700.0,
+        "eval_pnl": -6480400.0
       },
       {
         "date": "2026-7-3",
+        "portfolio_value": 143713507.0,
         "total_value": 85978000.0,
         "eval_pnl": -5852900.0
       },
       {
-        "date": "2026-7-4",
-        "total_value": 96252700.0,
-        "eval_pnl": -6480400.0
+        "date": "2026-7-2",
+        "portfolio_value": 138672552.0,
+        "total_value": 79276800.0,
+        "eval_pnl": -10894300.0
       },
       {
-        "date": "2026-7-5",
-        "total_value": 96252700.0,
-        "eval_pnl": -6480400.0
-      },
-      {
-        "date": "2026-7-6",
-        "total_value": 93512200.0,
-        "eval_pnl": -9220900.0
+        "date": "2026-7-1",
+        "portfolio_value": 148880122.0,
+        "total_value": 91400000.0,
+        "eval_pnl": -1117500.0
       }
     ]
   }

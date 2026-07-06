@@ -1112,12 +1112,13 @@
             </svg></div>
           </div>`;
       }
-      const tbl = valueRows.length ? _pfTableWrap(['날짜', '총 평가금액', '평가손익'],
+      const tbl = valueRows.length ? _pfTableWrap(['날짜', '포트폴리오 가치', '총 평가금액', '평가손익'],
         valueRows.map(v => `<tr class="border-b border-[#f0ece0] last:border-0">
           <td class="px-4 py-3 text-slate-500 text-xs">${v.date}</td>
-          <td class="px-3 py-3 text-right text-slate-800">${_won(v.total_value)}</td>
+          <td class="px-3 py-3 text-right font-bold text-nexus-ink">${_won(v.portfolio_value)}</td>
+          <td class="px-3 py-3 text-right text-slate-600">${_won(v.total_value)}</td>
           <td class="px-4 py-3 text-right font-semibold ${_pfCls(v.eval_pnl)}">${_signWon(v.eval_pnl)}</td></tr>`).join(''),
-        [0, 1, 1]) : '';
+        [0, 1, 1, 1]) : '';
       el.innerHTML = chart + tbl;
     }
 

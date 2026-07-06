@@ -237,11 +237,17 @@ def parse_transactions(rows) -> list[dict]:
 
 
 def parse_nav(rows) -> dict:
-    """오른쪽 블록(기준가/KOSPI/KOSDAQ, base 1000 정규화)을 시계열로."""
+    """차트(indexed): 오른쪽 블록 '기준가'(base 1,000, 기준가/KOSPI/KOSDAQ).
+    내역 표(value): 왼쪽 블록 '포트폴리오 가치'(전체 계좌 가치) + 총평가·평가손익."""
+    def _dkey(d):
+        try:
+            return tuple(int(p) for p in d.replace(".", "-").split("-")[:3])
+        except ValueError:
+            return (0, 0, 0)
+
+    # ── 차트용: 오른쪽 블록 '기준가' ──
     series = []
-    # 오른쪽 블록 헤더('기준가')를 찾는다
-    hcol = None
-    hrow = None
+    hcol = hrow = None
     for i, r in enumerate(rows):
         for k, cell in enumerate(r):
             if cell.strip() == "기준가":
@@ -258,24 +264,29 @@ def parse_nav(rows) -> dict:
             if not date or nav in (None, 0):
                 continue
             series.append({"date": date.replace(" ", ""), "nav": nav, "kospi": kospi, "kosdaq": kosdaq})
-    # 왼쪽 블록(실제 평가금액)
-    value_series = []
+
+    # ── 내역 표용: 왼쪽 블록 '포트폴리오 가치' (날짜 중복제거 + 최신순) ──
+    raw = {}
     hi = _find_header_row(rows, ["총 평가 금액", "포트폴리오가치"])
     if hi is not None:
         hdr = [h.strip() for h in rows[hi]]
         col = {name: k for k, name in enumerate(hdr)}
+        def g(r, name):
+            k = col.get(name)
+            return r[k].strip() if k is not None and k < len(r) else ""
         for r in rows[hi + 1:]:
-            date = r[col["날짜"]].strip() if "날짜" in col and col["날짜"] < len(r) else ""
-            if not date:
+            date = g(r, "날짜")
+            pv = _num(g(r, "포트폴리오가치"))
+            if not date or pv in (None, 0):
                 continue
-            tv = _num(r[col["총 평가 금액"]]) if col.get("총 평가 금액", 99) < len(r) else None
-            if tv is None:
-                continue
-            value_series.append({
-                "date": date.replace(" ", ""),
-                "total_value": tv,
-                "eval_pnl": _num(r[col["평가손익"]]) if col.get("평가손익", 99) < len(r) else None,
-            })
+            d = date.replace(" ", "")
+            raw[d] = {
+                "date": d,
+                "portfolio_value": pv,
+                "total_value": _num(g(r, "총 평가 금액")),
+                "eval_pnl": _num(g(r, "평가손익")),
+            }
+    value_series = sorted(raw.values(), key=lambda s: _dkey(s["date"]), reverse=True)
     return {"indexed": series, "value": value_series}
 
 
