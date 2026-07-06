@@ -895,23 +895,9 @@
       const upd = _ledgerUpdated
         ? `${String(_ledgerUpdated.getMonth()+1).padStart(2,'0')}/${String(_ledgerUpdated.getDate()).padStart(2,'0')}`
         : '-';
-      const avg = stats.avg_return ?? 0;
-      const avgColor = avg > 0 ? 'text-red-500' : avg < 0 ? 'text-blue-600' : 'text-slate-500';
-      const items = [
-        { label: '보유',     value: stats.holding_count ?? 0,  color: 'text-nexus' },
-        { label: '평균 수익률', value: `${avg > 0 ? '+' : ''}${avg}%`, color: avgColor },
-        { label: '이탈',     value: stats.exited_count ?? 0,   color: 'text-slate-500' },
-        { label: '승률',     value: stats.exited_count ? `${stats.win_rate}%` : '-', color: 'text-amber-600' },
-      ];
+      // 우상단 통계 카드(보유·평균수익률·이탈·승률)는 제거. 갱신 기준일만 표기.
       document.getElementById('pipelineHeaderStats').innerHTML = `
-        <div class="flex items-start gap-3 flex-wrap">
-          ${items.map(i => `
-          <div class="bg-white rounded-2xl px-4 py-3 border border-[#eae5d8] shadow-sm min-w-[80px]">
-            <div class="text-[10px] text-slate-400 font-medium mb-0.5">${i.label}</div>
-            <div class="text-xl font-extrabold ${i.color} font-headline">${i.value}</div>
-          </div>`).join('')}
-          <div class="flex items-end pb-3 text-[11px] text-slate-400 font-medium">updated ${upd}</div>
-        </div>`;
+        <div class="flex items-end text-[11px] text-slate-400 font-medium">${upd} 장마감 기준</div>`;
     }
 
     // 한국 관례: 수익 = 빨강, 손실 = 파랑

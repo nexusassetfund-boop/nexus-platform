@@ -470,9 +470,18 @@ async def main():
     # 5) KOSPI 상태 + 히스토리 + 원장
     kospi = await fetch_kospi_status()
     _update_stage_history(state.setdefault("stage_history", {}), results)
-    ledger = _update_ledger(state.get("ledger", {"holdings": [], "exited": []}),
-                            results, kospi, params)
-    state["ledger"] = ledger
+
+    # 전략 포트폴리오(원장)는 장마감(15:30 KST) 이후 실행에서만 하루 1회 갱신한다.
+    # 장중 스캔은 감지기(scan.json)만 새로고침하고 원장은 직전 마감 상태를 그대로 유지.
+    now = dt.datetime.now(tz=KST)
+    is_close_run = (now.hour, now.minute) >= (15, 30)
+    ledger = state.get("ledger", {"holdings": [], "exited": []})
+    if is_close_run:
+        ledger = _update_ledger(ledger, results, kospi, params)
+        state["ledger"] = ledger
+        logger.info("장마감 이후 실행 — 전략 포트폴리오 갱신")
+    else:
+        logger.info("장중 실행 — 전략 포트폴리오는 직전 마감 상태 유지 (감지기만 갱신)")
 
     # RS 히스토리 스냅샷 (스캔 대상만, 최대 8개)
     snap_rs = {t: round(rs_map.get(t, 0)) for t, _ in scan_targets if t in rs_map}
@@ -491,18 +500,21 @@ async def main():
         "kospi": kospi,
         "results": results,
     })
-    _save_json(TRACKING_PATH, {
-        "updated": now_str,
-        "kospi": kospi,
-        "holdings": ledger["holdings"],
-        "exited": ledger["exited"],
-        "stats": {
-            "holding_count": len(ledger["holdings"]),
-            "exited_count": len(ledger["exited"]),
-            "avg_return": round(sum(h["return_pct"] for h in ledger["holdings"]) / len(ledger["holdings"]), 2) if ledger["holdings"] else 0,
-            "win_rate": round(sum(1 for e in ledger["exited"] if e.get("return_pct", 0) > 0) / len(ledger["exited"]) * 100, 1) if ledger["exited"] else 0,
-        },
-    })
+    # 전략 포트폴리오는 장마감 실행에서만 tracking.json을 새로 쓴다.
+    # 장중 실행은 기존 tracking.json(직전 마감본)을 건드리지 않아 하루 1회만 변경된다.
+    if is_close_run:
+        _save_json(TRACKING_PATH, {
+            "updated": now_str,
+            "kospi": kospi,
+            "holdings": ledger["holdings"],
+            "exited": ledger["exited"],
+            "stats": {
+                "holding_count": len(ledger["holdings"]),
+                "exited_count": len(ledger["exited"]),
+                "avg_return": round(sum(h["return_pct"] for h in ledger["holdings"]) / len(ledger["holdings"]), 2) if ledger["holdings"] else 0,
+                "win_rate": round(sum(1 for e in ledger["exited"] if e.get("return_pct", 0) > 0) / len(ledger["exited"]) * 100, 1) if ledger["exited"] else 0,
+            },
+        })
     _save_json(STATE_PATH, state)
     logger.info("저장 완료: scan.json / tracking.json / state.json (보유 %d, 이탈 %d)",
                 len(ledger["holdings"]), len(ledger["exited"]))
