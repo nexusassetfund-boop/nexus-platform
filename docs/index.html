@@ -311,10 +311,8 @@
         <span class="text-[11px] font-bold tracking-widest uppercase text-nexus-ink/60 border-l border-[#ded7c4] pl-2.5 pt-0.5">Platform</span>
       </span>
       <div class="hidden md:flex gap-5 items-center">
-        <a href="#" id="navDashboard" onclick="showView('dashboard');return false"
+        <a href="#" id="navDashboard" onclick="showDetectorTab('scan');return false"
           class="text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5">스테이지 감지기</a>
-        <a href="#" id="navTracking" onclick="showView('tracking');return false"
-          class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">전략 포트폴리오</a>
         <a href="#" id="navPortfolio" onclick="showView('portfolio');return false"
           class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">모델 포트폴리오</a>
       </div>
@@ -330,6 +328,16 @@
       </button>
     </div>
   </nav>
+
+  <!-- 스테이지 감지기 하위 탭 (감지기 · 전략 포트폴리오) -->
+  <div id="detectorSubnav" class="w-full bg-white border-b border-[#eae5d8] px-6">
+    <div class="flex gap-1 max-w-[1600px] mx-auto">
+      <button id="subScan" onclick="showDetectorTab('scan');return false"
+        class="px-4 py-2.5 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px">감지기</button>
+      <button id="subLedger" onclick="showDetectorTab('ledger');return false"
+        class="px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors">전략 포트폴리오</button>
+    </div>
+  </div>
 
   <main class="flex-grow px-4 sm:px-6 py-8 max-w-[1600px] mx-auto w-full">
 
@@ -898,26 +906,33 @@
       if (e.target === e.currentTarget) closeModal();
     });
 
-    // ── 뷰 전환 (N개 뷰 지원 라우터) ─────────────────────────
+    // ── 뷰 전환 ──────────────────────────────────────────
+    // 상단: 'dashboard'(스테이지 감지기 그룹) | 'portfolio'(모델 포트폴리오)
+    // 감지기 그룹 하위탭: 'scan'(감지기) | 'ledger'(전략 포트폴리오)
     let _currentView = 'dashboard';
-    // 뷰 등록: name → { el(선택자/id), nav(네비 id), onShow(진입 시 로더) }
-    const VIEWS = {
-      dashboard: { el: () => document.querySelector('main'),               nav: 'navDashboard', onShow: null },
-      tracking:  { el: () => document.getElementById('trackingView'),      nav: 'navTracking',  onShow: () => loadTracking() },
-      portfolio: { el: () => document.getElementById('portfolioView'),     nav: 'navPortfolio', onShow: () => loadPortfolio() },
-    };
+    let _detectorTab = 'scan';
+    const _navActive = 'text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5';
+    const _navIdle = 'text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors';
+    const _subActive = 'px-4 py-2.5 text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink -mb-px';
+    const _subIdle = 'px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-blue-800 border-b-2 border-transparent -mb-px transition-colors';
+
     function showView(view) {
-      if (!VIEWS[view]) view = 'dashboard';
-      _currentView = view;
-      const activeClass = 'text-sm font-bold text-nexus-ink border-b-2 border-nexus-ink pb-0.5';
-      const inactiveClass = 'text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors';
-      Object.entries(VIEWS).forEach(([name, cfg]) => {
-        const el = cfg.el(); if (el) el.classList.toggle('hidden', name !== view);
-        const nav = document.getElementById(cfg.nav); if (nav) nav.className = name === view ? activeClass : inactiveClass;
-      });
-      const cfg = VIEWS[view];
-      if (cfg && cfg.onShow) cfg.onShow();
+      // 하위호환: 'tracking' → 감지기 그룹의 전략 포트폴리오 하위탭
+      if (view === 'tracking') { _currentView = 'dashboard'; _detectorTab = 'ledger'; }
+      else _currentView = (view === 'portfolio') ? 'portfolio' : 'dashboard';
+      const inDetector = _currentView === 'dashboard';
+      document.querySelector('main').classList.toggle('hidden', !(inDetector && _detectorTab === 'scan'));
+      document.getElementById('trackingView').classList.toggle('hidden', !(inDetector && _detectorTab === 'ledger'));
+      document.getElementById('portfolioView').classList.toggle('hidden', _currentView !== 'portfolio');
+      document.getElementById('detectorSubnav').classList.toggle('hidden', !inDetector);
+      document.getElementById('navDashboard').className = inDetector ? _navActive : _navIdle;
+      document.getElementById('navPortfolio').className = _currentView === 'portfolio' ? _navActive : _navIdle;
+      document.getElementById('subScan').className = _detectorTab === 'scan' ? _subActive : _subIdle;
+      document.getElementById('subLedger').className = _detectorTab === 'ledger' ? _subActive : _subIdle;
+      if (_currentView === 'portfolio') loadPortfolio();
+      else if (_detectorTab === 'ledger') loadTracking();
     }
+    function showDetectorTab(tab) { _detectorTab = tab; showView('dashboard'); }
 
     // ── 모델 포트폴리오 (구글 시트 미러) ───────────────────────
     let _pfData = null, _pfTab = 'holdings';
