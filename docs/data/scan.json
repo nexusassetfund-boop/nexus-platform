@@ -1,5 +1,5 @@
 {
- "scan_time": "2026-07-07T20:35:04+09:00",
+ "scan_time": "2026-07-07T21:18:38+09:00",
  "universe_size": 350,
  "scanned": 350,
  "kospi": {
@@ -11,7 +11,7 @@
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-07T20:35:04+09:00"
+  "updated": "2026-07-07T21:18:38+09:00"
  },
  "results": [
   {
