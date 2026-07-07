@@ -1056,8 +1056,11 @@
         <tbody>${rowsHtml}</tbody></table></div></div>`;
     }
 
+    let _valPrice = {};  // value_price.json items — 장마감 시세/저평가 워치 (ticker → {price,upside,margin,near_low,watch,...})
     async function loadValue() {
       try {
+        _valPrice = await fetch(`${DATA}/value_price.json?t=${Date.now()}`)
+          .then(r => r.ok ? r.json() : { items: {} }).then(j => j.items || {}).catch(() => ({}));
         const resp = await fetch(`${DATA}/value.json?t=${Date.now()}`);
         const d = await resp.json();
         _valData = d;
@@ -1093,19 +1096,21 @@
       const el = document.getElementById('valUniverse');
       if (!list.length) { el.innerHTML = _valEmpty('유니버스가 비어있습니다 — value_universe.json에 추가하세요'); return; }
       const rows = [...list].sort((a, b) => ((b.f_score && b.f_score.score) ?? -1) - ((a.f_score && a.f_score.score) ?? -1)).map(u => {
-        const m = u.metrics || {};
+        const m = u.metrics || {}, vp = _valPrice[u.code] || {};
+        const watchChip = (vp.watch && vp.watch.length) ? '<span class="ml-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200 align-middle">저평가</span>' : '';
         return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] align-top cursor-pointer" onclick="openValueDetail('${_esc(u.code)}')">
           <td class="px-4 py-3.5 text-center">${_fBadge(u.f_score)}</td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${_esc(u.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(u.code)}</span><div class="text-[11px] text-slate-400">${_esc(u.sector)}</div></td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${_esc(u.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(u.code)}</span>${watchChip}<div class="text-[11px] text-slate-400">${_esc(u.sector)}</div></td>
           <td class="px-3 py-3.5 text-right ${m.roe >= 15 ? 'text-red-500 font-semibold' : 'text-slate-700'}">${_mNum(m.roe, '%')}</td>
           <td class="px-3 py-3.5 text-right text-slate-700">${_mNum(m.op_margin, '%')}</td>
           <td class="px-3 py-3.5 text-right ${m.debt_ratio > 150 ? 'text-blue-600' : 'text-slate-600'}">${_mNum(m.debt_ratio, '%')}</td>
-          <td class="px-3 py-3.5 text-right ${_mCls(m.rev_growth)}">${_mPct(m.rev_growth)}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${u.target_price ? u.target_price.toLocaleString() : '-'}</td>
-          <td class="px-4 py-3.5 text-[11px] text-slate-500 whitespace-normal max-w-[280px]"><div>${_esc(u.point)}</div>${u.risk ? `<div class="text-red-400 mt-0.5">⚠ ${_esc(u.risk)}</div>` : ''}</td>
+          <td class="px-3 py-3.5 text-right font-semibold text-slate-800">${vp.price ? vp.price.toLocaleString() : '-'}</td>
+          <td class="px-3 py-3.5 text-right font-bold ${_mCls(vp.upside)}">${vp.upside != null ? (vp.upside > 0 ? '+' : '') + vp.upside + '%' : '-'}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-500 whitespace-normal max-w-[260px]"><div>${_esc(u.point)}</div>${u.risk ? `<div class="text-red-400 mt-0.5">⚠ ${_esc(u.risk)}</div>` : ''}</td>
         </tr>`;
       }).join('');
-      el.innerHTML = _valTable(['F-Score', '종목', 'ROE', '영업이익률', '부채비율', '매출성장', '목표가', '투자포인트 / 리스크'], rows, [2, 0, 1, 1, 1, 1, 1, 0]);
+      el.innerHTML = _valTable(['F-Score', '종목', 'ROE', '영업이익률', '부채비율', '목표가', '현재가', '상승여력', '투자포인트 / 리스크'], rows, [2, 0, 1, 1, 1, 1, 1, 1, 0]);
     }
 
     function renderValPortfolio(list) {
@@ -1135,7 +1140,7 @@
         || (_valData?.portfolio || []).find(x => x.code === code);
       modal.classList.add('open');
       if (!rec) { content.innerHTML = '<p style="padding:24px;color:#8b8fa3;font-size:13px">데이터가 없습니다.</p>'; return; }
-      const c = rec.company || {}, m = rec.metrics || {}, bs = rec.biz_summary || {};
+      const c = rec.company || {}, m = rec.metrics || {}, bs = rec.biz_summary || {}, vp = _valPrice[rec.code] || {};
       const esc = s => (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const row = (k, v) => v ? `<div class="metric-row"><span class="k">${k}</span><span class="v">${v}</span></div>` : '';
       const hp = c.homepage ? `<a href="https://${esc(c.homepage.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none">${esc(c.homepage)}</a>` : '';
@@ -1155,7 +1160,10 @@
             ${row('유동비율', m.current_ratio != null ? m.current_ratio + '%' : '')}${row('매출성장', m.rev_growth != null ? (m.rev_growth > 0 ? '+' : '') + m.rev_growth + '%' : '')}
           </div>
           <div class="section"><h3>밸류에이션 / 논리</h3>
-            ${row('목표가', rec.target_price ? rec.target_price.toLocaleString() + '원' : '')}${row('적정가', rec.fair_value ? rec.fair_value.toLocaleString() + '원' : '')}
+            ${row('현재가', vp.price ? vp.price.toLocaleString() + '원' : '')}${row('목표가', rec.target_price ? rec.target_price.toLocaleString() + '원' : '')}
+            ${row('상승여력', vp.upside != null ? (vp.upside > 0 ? '+' : '') + vp.upside + '%' : '')}${row('적정가', rec.fair_value ? rec.fair_value.toLocaleString() + '원' : '')}
+            ${row('안전마진', vp.margin != null ? vp.margin + '%' : '')}${row('52주 저~고', (vp.low52 && vp.high52) ? vp.low52.toLocaleString() + ' ~ ' + vp.high52.toLocaleString() : '')}
+            ${(vp.watch && vp.watch.length) ? `<div class="metric-row"><span class="k">저평가 신호</span><span class="v" style="color:#059669;font-weight:700">${vp.watch.map(esc).join(' · ')}</span></div>` : ''}
             ${row('산출근거', esc(rec.note))}${row('투자포인트', esc(rec.point))}${row('리스크', esc(rec.risk))}
           </div>
         </div>

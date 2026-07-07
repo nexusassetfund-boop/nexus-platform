@@ -382,6 +382,58 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
     return {"holdings": new_holdings, "exited": exited}
 
 
+# ── 가치투자 시세/저평가 워치 (장마감 스냅샷) ──────────────────
+async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
+    """value_universe.json 종목의 현재가·52주·상승여력·안전마진·저평가 워치를
+    장마감 시점 시세로 계산해 value_price.json에 저장 (프론트가 value.json과 병합)."""
+    vpath = ROOT / "value_universe.json"
+    if not vpath.exists():
+        return
+    vdata = json.loads(vpath.read_text(encoding="utf-8"))
+    meta: dict = {}
+    for r in vdata.get("universe", []) + vdata.get("portfolio", []):
+        code = r.get("code")
+        if not code:
+            continue
+        m = meta.setdefault(code, {"target": None, "fair": None})
+        if r.get("target_price") is not None:
+            m["target"] = r["target_price"]
+        if r.get("fair_value") is not None:
+            m["fair"] = r["fair_value"]
+    items: dict = {}
+    for code, m in meta.items():
+        df = ohlcv_map.get(code)
+        if df is None:
+            try:
+                df = await fetch_ohlcv(code, days=400)
+            except Exception:
+                df = None
+        if df is None or df.empty:
+            continue
+        price = realtime.get(code) or float(df.iloc[-1]["close"])
+        tail = df.tail(250)
+        high52 = float(tail["high"].max())
+        low52 = float(tail["low"].min())
+        target, fair = m["target"], m["fair"]
+        upside = round((target / price - 1) * 100, 1) if (target and price) else None
+        margin = round((fair - price) / fair * 100, 1) if (fair and price) else None
+        near_low = bool(low52 and price <= low52 * 1.1)
+        watch = []
+        if upside is not None and upside >= 20:
+            watch.append("목표가 대비 저평가")
+        if margin is not None and margin >= 20:
+            watch.append("안전마진 충분")
+        if near_low:
+            watch.append("52주 저점 근접")
+        items[code] = {
+            "price": round(price), "high52": round(high52), "low52": round(low52),
+            "upside": upside, "margin": margin, "near_low": near_low, "watch": watch,
+        }
+    _save_json(DATA_DIR / "value_price.json",
+               {"updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"), "items": items})
+    logger.info("value_price.json 갱신 (%d 종목)", len(items))
+
+
 # ── 메인 ─────────────────────────────────────────────────
 async def main():
     cfg = load_config()
@@ -525,6 +577,14 @@ async def main():
             },
         })
     _save_json(STATE_PATH, state)
+
+    # 가치투자 시세/저평가 워치 — 장마감 실행에서만 (매일 1회, 전략 포트폴리오와 동일 캐이던스)
+    if is_close_run:
+        try:
+            await _build_value_price(ohlcv_map, realtime)
+        except Exception as e:
+            logger.warning("가치투자 시세 갱신 실패(무시): %s", e)
+
     logger.info("저장 완료: scan.json / tracking.json / state.json (보유 %d, 이탈 %d)",
                 len(ledger["holdings"]), len(ledger["exited"]))
 
