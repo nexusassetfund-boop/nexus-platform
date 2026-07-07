@@ -67,7 +67,7 @@ class StageResult:
     climax_warning: bool = False
 
     # 포지션 사이징 (2% 룰)
-    suggested_stop_pct: float = -8.0
+    suggested_stop_pct: float = -10.0
     position_size_pct: float = 0.0       # 총 자산 대비 비중
 
     # 메타

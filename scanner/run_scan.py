@@ -255,19 +255,19 @@ def _update_stage_history(stage_history: dict, results: list[dict]):
 # 규칙 (config.json params 사용):
 #   편입: 스테이지별 독립 트랙 (스탁이지의 1호/2호 전략실 방식)
 #     - Stage 3 트랙: 돌파 + 신뢰도 stage3_entry_confidence(70)↑ — 피크 Easy식
-#     - Stage 1 트랙: 초기 추세 + 신뢰도 stage1_entry_confidence(60)↑ — 모멘텀 Easy식
+#     - Stage 1 트랙: 초기 추세 + 신뢰도 stage1_entry_confidence(75)↑ — 모멘텀 Easy식
 #     공통: KOSPI 진입 허용 + 클라이맥스 경고 없음. 같은 종목이 두 트랙에 각각 편입 가능.
 #   유지: 편입 후 스테이지가 흔들려도 원장에 유지 — 보유일은 리셋되지 않음
-#   이탈(트랙 공통): ① 고점 대비 trail_stop_pct 하락 (기본 -8%, 진입 직후엔 손절 겸용)
-#                    ② 추세 이탈: 종가 < exit_ma_period 이동평균 (기본 20일선)
+#   이탈(트랙 공통): ① 고점 대비 trail_stop_pct 하락 (기본 -10%, 진입 직후엔 손절 겸용)
+#                    ② 추세 이탈: 종가 < exit_ma_period 이동평균 (기본 60일선)
 def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict) -> dict:
     today = dt.date.today()
     today_str = today.isoformat()
-    trail_stop = float(params.get("trail_stop_pct", -8.0))  # 고점 대비 허용 하락폭 (%)
-    exit_ma_key = f"ma{params.get('exit_ma_period', 20)}"   # 추세 이탈 기준 이동평균
+    trail_stop = float(params.get("trail_stop_pct", -10.0))  # 고점 대비 허용 하락폭 (%)
+    exit_ma_key = f"ma{params.get('exit_ma_period', 60)}"   # 추세 이탈 기준 이동평균
     entry_tracks = [  # (편입 스테이지, 최소 신뢰도)
         (3, params.get("stage3_entry_confidence", 70)),
-        (1, params.get("stage1_entry_confidence", 60)),
+        (1, params.get("stage1_entry_confidence", 75)),
     ]
     # 편입 빈도 스로틀 — 스탁이지 실측(주당 4~6건, 동시 보유 15~17종목)에 맞춤
     entry_max_age = params.get("stage_entry_max_age_days", 2)      # 스테이지 진입 후 N일 이내만 편입 (상태→이벤트)

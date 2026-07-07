@@ -573,6 +573,9 @@
         </details>
       </div>
 
+      <!-- KOSPI 위험 경고 (전량청산 신호 / 신규편입 차단 시에만 표시) -->
+      <div id="kospi-status-banner"></div>
+
       <!-- 탭 -->
       <div class="flex border-b border-[#ded7c4] mb-6 bg-transparent">
         <button id="pl-tab-btn-holdings" onclick="switchPipelineTab('holdings')"
@@ -1013,8 +1016,12 @@
         const d = await resp.json();
         _valData = d;
         const upd = d.updated ? new Date(d.updated) : null;
-        document.getElementById('valUpdated').textContent =
-          (upd ? `${String(upd.getMonth() + 1).padStart(2, '0')}/${String(upd.getDate()).padStart(2, '0')} 재무 기준` : '') + (d.dart ? '' : ' · DART 미연동');
+        const ageDays = upd ? Math.floor((Date.now() - upd.getTime()) / 86400000) : null;
+        const stale = ageDays != null && ageDays > 4;
+        document.getElementById('valUpdated').innerHTML =
+          (upd ? `${String(upd.getMonth() + 1).padStart(2, '0')}/${String(upd.getDate()).padStart(2, '0')} 재무 기준` : '')
+          + (d.dart ? '' : ' · DART 미연동')
+          + (stale ? ` <span style="color:#c0392b;font-weight:700">· ${ageDays}일 전(오래됨)</span>` : '');
         renderValUniverse(d.universe || []);
         renderValPortfolio(d.portfolio || []);
       } catch (e) {
@@ -1033,20 +1040,23 @@
       });
     }
 
+    // 외부(시트·DART·FnGuide) 텍스트를 innerHTML에 넣기 전 이스케이프 (XSS 방지)
+    const _esc = s => (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
     function renderValUniverse(list) {
       const el = document.getElementById('valUniverse');
       if (!list.length) { el.innerHTML = _valEmpty('유니버스가 비어있습니다 — value_universe.json에 추가하세요'); return; }
       const rows = [...list].sort((a, b) => (b.quality_score ?? -1) - (a.quality_score ?? -1)).map(u => {
         const m = u.metrics || {};
-        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] align-top cursor-pointer" onclick="openValueDetail('${u.code}')">
+        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] align-top cursor-pointer" onclick="openValueDetail('${_esc(u.code)}')">
           <td class="px-4 py-3.5 text-center">${_qBadge(u.quality_score)}</td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${u.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${u.code}</span><div class="text-[11px] text-slate-400">${u.sector || ''}</div></td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${_esc(u.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(u.code)}</span><div class="text-[11px] text-slate-400">${_esc(u.sector)}</div></td>
           <td class="px-3 py-3.5 text-right ${m.roe >= 15 ? 'text-red-500 font-semibold' : 'text-slate-700'}">${_mNum(m.roe, '%')}</td>
           <td class="px-3 py-3.5 text-right text-slate-700">${_mNum(m.op_margin, '%')}</td>
           <td class="px-3 py-3.5 text-right ${m.debt_ratio > 150 ? 'text-blue-600' : 'text-slate-600'}">${_mNum(m.debt_ratio, '%')}</td>
           <td class="px-3 py-3.5 text-right ${_mCls(m.rev_growth)}">${_mPct(m.rev_growth)}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${u.target_price ? u.target_price.toLocaleString() : '-'}</td>
-          <td class="px-4 py-3.5 text-[11px] text-slate-500 whitespace-normal max-w-[280px]"><div>${u.point || ''}</div>${u.risk ? `<div class="text-red-400 mt-0.5">⚠ ${u.risk}</div>` : ''}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-500 whitespace-normal max-w-[280px]"><div>${_esc(u.point)}</div>${u.risk ? `<div class="text-red-400 mt-0.5">⚠ ${_esc(u.risk)}</div>` : ''}</td>
         </tr>`;
       }).join('');
       el.innerHTML = _valTable(['퀄리티', '종목', 'ROE', '영업이익률', '부채비율', '매출성장', '목표가', '투자포인트 / 리스크'], rows, [2, 0, 1, 1, 1, 1, 1, 0]);
@@ -1057,15 +1067,15 @@
       if (!list.length) { el.innerHTML = _valEmpty('보유 종목이 없습니다'); return; }
       const rows = list.map(p => {
         const m = p.metrics || {};
-        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] cursor-pointer" onclick="openValueDetail('${p.code}')">
+        return `<tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea] cursor-pointer" onclick="openValueDetail('${_esc(p.code)}')">
           <td class="px-4 py-3.5 text-center">${_qBadge(p.quality_score)}</td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${p.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${p.code}</span></td>
-          <td class="px-3 py-3.5 text-slate-500 text-xs">${p.buy_date || '-'}</td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink hover:text-blue-700">${_esc(p.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(p.code)}</span></td>
+          <td class="px-3 py-3.5 text-slate-500 text-xs">${_esc(p.buy_date) || '-'}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${p.buy_price ? p.buy_price.toLocaleString() : '-'}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${p.qty ?? '-'}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${p.target_price ? p.target_price.toLocaleString() : '-'}</td>
           <td class="px-3 py-3.5 text-right ${m.roe >= 15 ? 'text-red-500' : 'text-slate-600'}">${_mNum(m.roe, '%')}</td>
-          <td class="px-4 py-3.5 text-[11px] text-slate-400">${p.memo || ''}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-400">${_esc(p.memo)}</td>
         </tr>`;
       }).join('');
       el.innerHTML = _valTable(['퀄리티', '종목', '매수일', '매수가', '수량', '목표가', 'ROE', '메모'], rows, [2, 0, 0, 1, 1, 1, 1, 0]);
@@ -1206,14 +1216,14 @@
       if (!list.length) { el.innerHTML = '<div class="bg-white rounded-2xl border border-[#eae5d8] py-12 text-center text-slate-400 text-sm">보유 종목이 없습니다</div>'; return; }
       const rows = list.map(h => `
         <tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea]">
-          <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full ${_pfStratDot(h.strategy)}"></span>${h.strategy || '-'}</span></td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${h.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${h.code}</span></td>
+          <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full ${_pfStratDot(h.strategy)}"></span>${_esc(h.strategy) || '-'}</span></td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${_esc(h.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(h.code)}</span></td>
           <td class="px-3 py-3.5 text-right text-slate-800">${_plain(h.price)}</td>
           <td class="px-3 py-3.5 text-right ${_pfCls(h.change_pct)}">${_pfPct(h.change_pct)}</td>
           <td class="px-3 py-3.5 text-right text-slate-500">${_plain(h.avg_price)}</td>
           <td class="px-3 py-3.5 text-right font-semibold ${_pfCls(h.eval_pnl)}">${_signWon(h.eval_pnl)}</td>
           <td class="px-3 py-3.5 text-right font-extrabold ${_pfCls(h.return_pct)}">${_pfPct(h.return_pct)}</td>
-          <td class="px-4 py-3.5 text-right text-slate-600">${h.weight || '-'}</td>
+          <td class="px-4 py-3.5 text-right text-slate-600">${_esc(h.weight) || '-'}</td>
         </tr>`).join('');
       el.innerHTML = _pfTableWrap(['전략', '종목', '현재가', '등락률', '평균매입가', '평가손익', '수익률', '비중'], rows, [0, 0, 1, 1, 1, 1, 1, 1]);
     }
@@ -1223,13 +1233,13 @@
       if (!list.length) { el.innerHTML = '<div class="bg-white rounded-2xl border border-[#eae5d8] py-12 text-center text-slate-400 text-sm">유니버스 종목이 없습니다</div>'; return; }
       const rows = list.map(u => `
         <tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea]">
-          <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full ${_pfStratDot(u.strategy)}"></span>${u.strategy || '-'}</span></td>
-          <td class="px-3 py-3.5 text-[11px] text-slate-500">${u.sector || '-'}${u.subclass ? ` · ${u.subclass}` : ''}</td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${u.name}</span><span class="text-[10px] text-slate-400 ml-1.5">${u.code}</span></td>
+          <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="inline-block w-1.5 h-1.5 rounded-full ${_pfStratDot(u.strategy)}"></span>${_esc(u.strategy) || '-'}</span></td>
+          <td class="px-3 py-3.5 text-[11px] text-slate-500">${_esc(u.sector) || '-'}${u.subclass ? ` · ${_esc(u.subclass)}` : ''}</td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${_esc(u.name)}</span><span class="text-[10px] text-slate-400 ml-1.5">${_esc(u.code)}</span></td>
           <td class="px-3 py-3.5 text-right text-slate-800">${_plain(u.price)}</td>
           <td class="px-3 py-3.5 text-right ${_pfCls(u.change_pct)}">${_pfPct(u.change_pct)}</td>
-          <td class="px-3 py-3.5 text-right text-slate-600">${u.per || '-'}</td>
-          <td class="px-3 py-3.5 text-right text-slate-500 text-xs">${u.mktcap || '-'}</td>
+          <td class="px-3 py-3.5 text-right text-slate-600">${_esc(u.per) || '-'}</td>
+          <td class="px-3 py-3.5 text-right text-slate-500 text-xs">${_esc(u.mktcap) || '-'}</td>
           <td class="px-4 py-3.5 text-right text-slate-400 text-xs">${_plain(u.low52)}~${_plain(u.high52)}</td>
         </tr>`).join('');
       el.innerHTML = _pfTableWrap(['전략', '섹터/소분류', '종목', '현재가', '등락률', 'PER', '시총', '52주 저~고'], rows, [0, 0, 0, 1, 1, 1, 1, 1]);
@@ -1243,15 +1253,15 @@
         : '<span class="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-200">매도</span>';
       const rows = list.map(t => `
         <tr class="border-b border-[#f0ece0] last:border-0 hover:bg-[#f6f3ea]">
-          <td class="px-4 py-3.5 text-slate-500 text-xs whitespace-nowrap">${t.date}</td>
-          <td class="px-3 py-3.5 text-[11px] text-slate-500">${t.strategy || '-'}</td>
-          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${t.name}</span></td>
+          <td class="px-4 py-3.5 text-slate-500 text-xs whitespace-nowrap">${_esc(t.date)}</td>
+          <td class="px-3 py-3.5 text-[11px] text-slate-500">${_esc(t.strategy) || '-'}</td>
+          <td class="px-3 py-3.5"><span class="font-bold text-nexus-ink">${_esc(t.name)}</span></td>
           <td class="px-3 py-3.5 text-center">${sideBadge(t.side)}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${_plain(t.qty)}</td>
           <td class="px-3 py-3.5 text-right text-slate-600">${_plain(t.unit_price)}</td>
           <td class="px-3 py-3.5 text-right text-slate-700">${_plain(t.amount)}</td>
           <td class="px-3 py-3.5 text-right font-semibold ${t.realized_pnl != null ? _pfCls(t.realized_pnl) : 'text-slate-300'}">${t.realized_pnl != null ? _signWon(t.realized_pnl) : '-'}</td>
-          <td class="px-4 py-3.5 text-[11px] text-slate-400 max-w-[220px] truncate" title="${(t.memo || '').replace(/"/g, '&quot;')}">${t.memo || ''}</td>
+          <td class="px-4 py-3.5 text-[11px] text-slate-400 max-w-[220px] truncate" title="${_esc(t.memo)}">${_esc(t.memo)}</td>
         </tr>`).join('');
       el.innerHTML = _pfTableWrap(['날짜', '전략', '종목', '구분', '수량', '단가', '거래금액', '실현손익', '메모'], rows, [0, 0, 0, 2, 1, 1, 1, 1, 0]);
     }
@@ -1330,6 +1340,7 @@
         const data = await resp.json();
         _ledgerUpdated = data.updated ? new Date(data.updated) : new Date();
         renderLedgerHeaderStats(data.stats || {});
+        renderKospiStatusBanner(data.kospi || {});
         renderHoldings(data.holdings || []);
         renderExited(data.exited || []);
       } catch (e) {
@@ -1342,6 +1353,7 @@
       const el = document.getElementById('kospi-status-banner');
       if (!el) return;
       if (!ks || ks.error) { el.innerHTML = ''; return; }
+      // 위험 상태(전량청산 신호 / 신규편입 차단)일 때만 경고 배너 표시. 정상(진입 허용)이면 숨김.
       let bgClass, dotClass, label, sub;
       if (ks.exit_signal) {
         bgClass = 'bg-red-50 border-red-200'; dotClass = 'bg-red-500';
@@ -1352,11 +1364,9 @@
         label = 'KOSPI 진입 주의';
         sub = `KOSPI(${(ks.price||0).toLocaleString()}) < MA200(${(ks.ma200||0).toLocaleString()}) — 신규 편입 차단`;
       } else {
-        bgClass = 'bg-green-50 border-green-200'; dotClass = 'bg-green-500';
-        label = 'KOSPI 진입 허용';
-        sub = `KOSPI(${(ks.price||0).toLocaleString()}) > MA200(${(ks.ma200||0).toLocaleString()})`;
+        el.innerHTML = ''; return;  // 정상: 배너 미표시(클러터 방지)
       }
-      el.innerHTML = `<div class="flex items-center gap-3 px-4 py-2.5 rounded-xl border ${bgClass} text-sm mb-1">
+      el.innerHTML = `<div class="flex items-center gap-3 px-4 py-2.5 rounded-xl border ${bgClass} text-sm mb-4">
         <span class="w-2 h-2 rounded-full ${dotClass} flex-shrink-0"></span>
         <span class="font-bold text-slate-700">${label}</span>
         <span class="text-slate-500 text-xs">${sub}</span>
@@ -1493,7 +1503,7 @@
     // 초기 로드
     loadScan();
     setInterval(loadScan, 5 * 60 * 1000);
-    setInterval(() => { if (_currentView === 'tracking') loadTracking(); }, 5 * 60 * 1000);
+    setInterval(() => { if (_currentView === 'dashboard' && _detectorTab === 'ledger') loadTracking(); }, 5 * 60 * 1000);
   </script>
 </body>
 
