@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-08T01:12:36+09:00",
+ "updated": "2026-07-08T01:14:27+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 135243533.0,
@@ -149,7 +149,7 @@
    "change_pct": -6.06,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "15,686,575억",
+   "mktcap": "15,686,582억",
    "per": "20.8x",
    "eps": "105,627원",
    "high52": 2987000.0,
@@ -185,7 +185,7 @@
    "change_pct": -9.3,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "1,789,356억",
+   "mktcap": "1,789,355억",
    "per": "11.5x",
    "eps": "117,817원",
    "high52": 2189000.0,
