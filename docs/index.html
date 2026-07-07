@@ -641,7 +641,14 @@
           <h1 class="text-3xl font-extrabold text-nexus-ink font-headline leading-tight">가치투자</h1>
           <p class="text-sm text-slate-500 mt-1.5">저평가 우량주 발굴 · 퀄리티(F-Score식)·재무 5년 추이·배당 — DART 재무 연동</p>
         </div>
-        <div id="valUpdated" class="flex items-end text-[11px] text-slate-400 font-medium"></div>
+        <div class="flex flex-col items-start md:items-end gap-2">
+          <a href="https://github.com/nexusassetfund-boop/nexus-platform/actions/workflows/update-value.yml" target="_blank" rel="noopener"
+             title="분기보고서가 올라온 뒤 'Run workflow'를 누르면 DART 재무를 다시 계산해 반영합니다"
+             class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-nexus text-white text-sm font-bold hover:bg-[#8a7238] transition-colors shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">sync</span>재무 갱신
+          </a>
+          <span id="valUpdated" class="text-[11px] text-slate-400 font-medium"></span>
+        </div>
       </div>
 
       <div class="flex flex-wrap border-b border-[#ded7c4] mb-6">
