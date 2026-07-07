@@ -864,8 +864,41 @@
       modal.classList.add('open');
       // 정적 배포: 스캔 결과에 포함된 데이터로 상세를 렌더링 (추가 API 없음)
       const d = allResults.find(r => r.ticker === ticker);
-      if (d) renderDetail(d, content);
-      else content.innerHTML = '<p style="color:#8b8fa3;font-size:13px;padding:24px">이 종목의 스캔 데이터가 없습니다.</p>';
+      if (d) { renderDetail(d, content); return; }
+      // 폴백: 오늘 스캔 유니버스에 없는 보유/이탈 종목은 원장에 저장된 값으로 요약 표시
+      const h = _ledgerRecords.find(x => x.ticker === ticker);
+      if (h) { renderLedgerDetail(h, content); return; }
+      content.innerHTML = '<p style="color:#8b8fa3;font-size:13px;padding:24px">이 종목의 데이터가 없습니다.</p>';
+    }
+
+    let _ledgerRecords = [];
+    function renderLedgerDetail(h, content) {
+      const row = (k, v) => v || v === 0 ? `<div class="metric-row"><span class="k">${k}</span><span class="v">${v}</span></div>` : '';
+      const rCls = h.return_pct > 0.005 ? 'badge-s3' : h.return_pct < -0.005 ? 'badge-s1' : 'badge-none';
+      const sig = (h.signals_at_entry || []).map(s => `<div class="signal-line">${_esc(s)}</div>`).join('');
+      content.innerHTML = `
+        <h2>${_esc(h.name)} <span style="color:#8b8fa3;font-size:14px">${_esc(h.ticker)}</span>
+          ${h.entry_stage ? `<span class="badge ${rCls}">S${h.entry_stage} 편입 · ${(h.return_pct > 0 ? '+' : '') + (h.return_pct ?? 0).toFixed(2)}%</span>` : ''}
+        </h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="font-size:26px;font-weight:700">${(h.last_price || 0).toLocaleString()}원</div>
+          <div style="display:flex;gap:8px">
+            <a href="https://wcomp.fnguide.com/CompanyInfo/Snapshot?c_id=AA&amp;menu_type=01&amp;cmp_cd=${_esc(h.ticker)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:#0b5cab;color:#fff;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none">기업개요</a>
+            <a href="https://www.tradingview.com/chart/?symbol=KRX%3A${_esc(h.ticker)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:#1a1a2e;color:#fff;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none">TradingView</a>
+          </div>
+        </div>
+        <div style="border:1px solid #eef1fa;border-radius:8px;overflow:hidden;margin-bottom:12px;background:#fff;text-align:center">
+          <img src="https://ssl.pstatic.net/imgfinance/chart/item/candle/day/${_esc(h.ticker)}.png?t=${Date.now()}" alt="${_esc(h.name)} 일봉" style="max-width:100%;height:auto" loading="lazy" />
+        </div>
+        <div class="section"><h3>편입 정보</h3>
+          ${row('섹터', _esc(h.sector))}${row('편입일', _esc(h.entry_date))}${row('매수가', (h.entry_price || 0).toLocaleString() + '원')}
+          ${row('현재가', (h.last_price || 0).toLocaleString() + '원')}${row('고점', (h.peak_price || 0).toLocaleString() + '원')}
+          ${row('수익률', ((h.return_pct > 0 ? '+' : '') + (h.return_pct ?? 0).toFixed(2)) + '%')}${row('보유일', (h.days_held ?? 0) + '일')}
+          ${row('편입 신뢰도', h.entry_confidence != null ? h.entry_confidence : '')}${row('현재 스테이지', h.stage_now != null ? 'S' + h.stage_now : '')}
+          ${h.exit_date ? row('이탈일', _esc(h.exit_date)) + row('이탈사유', _esc(h.exit_reason)) : ''}
+        </div>
+        ${sig ? `<div class="section" style="margin-top:12px"><h3>편입 시그널</h3>${sig}</div>` : ''}
+        <p style="font-size:11px;color:#94a3b8;margin-top:12px">※ 오늘 감지기 스캔 유니버스에 없어 원장 저장값으로 요약만 표시합니다.</p>`;
     }
 
     function renderDetail(d, container) {
@@ -1346,6 +1379,7 @@
         const resp = await fetch(`${DATA}/tracking.json?t=${Date.now()}`);
         const data = await resp.json();
         _ledgerUpdated = data.updated ? new Date(data.updated) : new Date();
+        _ledgerRecords = [...(data.holdings || []), ...(data.exited || [])];
         renderLedgerHeaderStats(data.stats || {});
         renderKospiStatusBanner(data.kospi || {});
         renderHoldings(data.holdings || []);

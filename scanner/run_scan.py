@@ -467,6 +467,14 @@ async def main():
     if len(results) < len(scan_targets) * 0.3:
         logger.error("성공률 30%% 미만 — 데이터 소스 장애로 판단, 결과를 저장하지 않고 종료")
         sys.exit(1)
+    # 열화 스캔 가드: 지수 유니버스 수집 실패(관심종목만 남음) 또는 종목명이 대부분 코드로 미해결
+    # → FDR/KRX 일시 장애로 판단, 기존 scan.json(정상본)을 덮어쓰지 않고 종료(워크플로 실패로 신호).
+    watch_n = len(cfg.get("watchlist", []))
+    names_ok = sum(1 for r in results if r.get("name") and r.get("name") != r.get("ticker"))
+    if len(scan_targets) <= watch_n + 5 or (results and names_ok < len(results) * 0.5):
+        logger.error("열화 스캔(유니버스 %d≈관심 %d, 종목명해결 %d/%d) — scan.json 미갱신, 기존 데이터 보존",
+                     len(scan_targets), watch_n, names_ok, len(results))
+        sys.exit(1)
 
     # 5) KOSPI 상태 + 히스토리 + 원장
     kospi = await fetch_kospi_status()
