@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-07T21:18:38+09:00",
+ "updated": "2026-07-08T18:59:08+09:00",
  "kospi": {
-  "price": 7656.31,
-  "ma200": 5453.33,
-  "ma50": 7915.61,
+  "price": 7246.79,
+  "ma200": 5473.27,
+  "ma50": 7931.03,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-07T21:18:38+09:00"
+  "updated": "2026-07-08T18:59:08+09:00"
  },
  "holdings": [
   {
@@ -19,64 +19,26 @@
    "entry_date": "2026-07-02",
    "entry_price": 113700.0,
    "entry_confidence": 95,
-   "last_price": 115100.0,
+   "last_price": 112100.0,
    "peak_price": 117800.0,
-   "return_pct": 1.23,
-   "days_held": 5,
-   "stage_now": 1,
-   "confidence_now": 60,
-   "last_updated": "2026-07-07",
+   "return_pct": -1.41,
+   "days_held": 6,
+   "stage_now": 3,
+   "confidence_now": 95,
+   "last_updated": "2026-07-08",
    "signals_at_entry": [
     "MTT 통과",
     "전고점 돌파! 거래량 6.35x",
     "갭상승 동반",
     "MA 정배열"
    ],
-   "entry_stage": 3
-  },
-  {
-   "ticker": "034730",
-   "name": "SK",
-   "sector": "기타 금융업",
-   "entry_stage": 1,
-   "entry_date": "2026-07-03",
-   "entry_price": 690000.0,
-   "entry_confidence": 85,
-   "last_price": 626000.0,
-   "peak_price": 690000.0,
-   "return_pct": -9.28,
-   "days_held": 4,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-07",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 93 — 최상위 강세",
-    "RS 신고점",
-    "60일 저점 대비 +120.8% 상승"
-   ]
-  },
-  {
-   "ticker": "004170",
-   "name": "신세계",
-   "sector": "종합 소매업",
-   "entry_stage": 1,
-   "entry_date": "2026-07-03",
-   "entry_price": 706000.0,
-   "entry_confidence": 85,
-   "last_price": 680000.0,
-   "peak_price": 706000.0,
-   "return_pct": -3.68,
-   "days_held": 4,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-07",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 95 — 최상위 강세",
-    "60일 저점 대비 +127.0% 상승",
-    "MA 정배열 확인"
-   ]
+   "entry_stage": 3,
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -1.41
   },
   {
    "ticker": "170920",
@@ -89,16 +51,22 @@
    "last_price": 54100.0,
    "peak_price": 54100.0,
    "return_pct": 0.0,
-   "days_held": 2,
+   "days_held": 3,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-07-07",
+   "last_updated": "2026-07-08",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
     "RS 신고점",
     "60일 저점 대비 +97.1% 상승"
-   ]
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": 0.0
   },
   {
    "ticker": "041830",
@@ -108,19 +76,25 @@
    "entry_date": "2026-07-06",
    "entry_price": 59500.0,
    "entry_confidence": 85,
-   "last_price": 56000.0,
+   "last_price": 54200.0,
    "peak_price": 59500.0,
-   "return_pct": -5.88,
-   "days_held": 1,
+   "return_pct": -8.91,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 80,
-   "last_updated": "2026-07-07",
+   "last_updated": "2026-07-08",
    "signals_at_entry": [
     "MTT 통과",
     "RS 90 — 최상위 강세",
     "RS 신고점",
     "60일 저점 대비 +110.2% 상승"
-   ]
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -8.91
   },
   {
    "ticker": "064290",
@@ -133,17 +107,82 @@
    "last_price": 46350.0,
    "peak_price": 50300.0,
    "return_pct": -7.85,
-   "days_held": 1,
-   "stage_now": 1,
-   "confidence_now": 85,
-   "last_updated": "2026-07-07",
+   "days_held": 2,
+   "stage_now": null,
+   "confidence_now": 0,
+   "last_updated": "2026-07-08",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
     "RS 신고점",
     "60일 저점 대비 +124.1% 상승"
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -7.85
+  },
+  {
+   "ticker": "010950",
+   "name": "S-Oil",
+   "sector": "석유 정제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-08",
+   "entry_price": 131600.0,
+   "entry_confidence": 88,
+   "init_stop_pct": -5.6,
+   "last_price": 131600.0,
+   "peak_price": 131600.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 88,
+   "last_updated": "2026-07-08",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 88 — 상위 강세"
    ]
   },
+  {
+   "ticker": "161890",
+   "name": "한국콜마",
+   "sector": "기타 화학제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-08",
+   "entry_price": 112100.0,
+   "entry_confidence": 80,
+   "init_stop_pct": -4.1,
+   "last_price": 112100.0,
+   "peak_price": 112100.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 80,
+   "last_updated": "2026-07-08",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.05x",
+    "반전 확장 후 저점 상승",
+    "RS 83 — 상위 강세"
+   ]
+  }
+ ],
+ "exited": [
   {
    "ticker": "222800",
    "name": "심텍",
@@ -152,22 +191,91 @@
    "entry_date": "2026-07-07",
    "entry_price": 108400.0,
    "entry_confidence": 75,
-   "last_price": 108400.0,
+   "last_price": 104600.0,
    "peak_price": 108400.0,
-   "return_pct": 0.0,
-   "days_held": 0,
-   "stage_now": 1,
-   "confidence_now": 75,
-   "last_updated": "2026-07-07",
+   "return_pct": -3.51,
+   "days_held": 1,
+   "stage_now": null,
+   "confidence_now": 15,
+   "last_updated": "2026-07-08",
    "signals_at_entry": [
     "MTT 통과",
     "RS 94 — 최상위 강세",
     "60일 저점 대비 +63.5% 상승",
     "MA 정배열 확인"
-   ]
-  }
- ],
- "exited": [
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -3.51,
+   "exit_date": "2026-07-08",
+   "exit_price": 104600.0,
+   "exit_reason": "추세 이탈 (MA60 하회)"
+  },
+  {
+   "ticker": "004170",
+   "name": "신세계",
+   "sector": "종합 소매업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 706000.0,
+   "entry_confidence": 85,
+   "last_price": 625000.0,
+   "peak_price": 706000.0,
+   "return_pct": -11.47,
+   "days_held": 5,
+   "stage_now": null,
+   "confidence_now": 15,
+   "last_updated": "2026-07-08",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 95 — 최상위 강세",
+    "60일 저점 대비 +127.0% 상승",
+    "MA 정배열 확인"
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -11.47,
+   "exit_date": "2026-07-08",
+   "exit_price": 625000.0,
+   "exit_reason": "손절 (-11.47%)"
+  },
+  {
+   "ticker": "034730",
+   "name": "SK",
+   "sector": "기타 금융업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-03",
+   "entry_price": 690000.0,
+   "entry_confidence": 85,
+   "last_price": 596000.0,
+   "peak_price": 690000.0,
+   "return_pct": -13.62,
+   "days_held": 5,
+   "stage_now": null,
+   "confidence_now": 15,
+   "last_updated": "2026-07-08",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 93 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +120.8% 상승"
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -13.62,
+   "exit_date": "2026-07-08",
+   "exit_price": 596000.0,
+   "exit_reason": "손절 (-13.62%)"
+  },
   {
    "ticker": "009150",
    "name": "삼성전기",
@@ -318,10 +426,40 @@
    "exit_reason": "손절 (-8%)"
   }
  ],
+ "track_history": {
+  "3": [
+   {
+    "date": "2026-07-03",
+    "cum": -8.7
+   },
+   {
+    "date": "2026-07-07",
+    "cum": -19.22
+   },
+   {
+    "date": "2026-07-08",
+    "cum": -20.63
+   }
+  ],
+  "1": [
+   {
+    "date": "2026-07-03",
+    "cum": -0.21
+   },
+   {
+    "date": "2026-07-07",
+    "cum": -48.75
+   },
+   {
+    "date": "2026-07-08",
+    "cum": -94.11
+   }
+  ]
+ },
  "stats": {
-  "holding_count": 7,
-  "exited_count": 6,
-  "avg_return": -3.64,
+  "holding_count": 6,
+  "exited_count": 9,
+  "avg_return": -3.03,
   "win_rate": 0.0
  }
 }

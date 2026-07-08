@@ -1,14 +1,14 @@
 {
- "updated": "2026-07-07T21:18:38+09:00",
+ "updated": "2026-07-08T18:59:08+09:00",
  "items": {
   "000660": {
-   "price": 2201000,
-   "change_pct": -6.06,
+   "price": 2076000,
+   "change_pct": -5.68,
    "per": null,
    "mktcap": null,
    "high52": 2987000,
    "low52": 245000,
-   "upside": 35.7,
+   "upside": 43.9,
    "margin": null,
    "near_low": false,
    "watch": [
@@ -16,20 +16,20 @@
    ]
   },
   "004170": {
-   "price": 680000,
-   "change_pct": -1.45,
+   "price": 625000,
+   "change_pct": -8.09,
    "per": null,
    "mktcap": null,
    "high52": 792000,
    "low52": 160800,
-   "upside": 0.6,
+   "upside": 9.4,
    "margin": null,
    "near_low": false,
    "watch": []
   },
   "483650": {
-   "price": 230000,
-   "change_pct": 5.5,
+   "price": 217500,
+   "change_pct": -5.43,
    "per": null,
    "mktcap": null,
    "high52": 274500,
