@@ -1,0 +1,43 @@
+{
+ "updated": "2026-07-07T21:18:38+09:00",
+ "items": {
+  "000660": {
+   "price": 2201000,
+   "change_pct": -6.06,
+   "per": null,
+   "mktcap": null,
+   "high52": 2987000,
+   "low52": 245000,
+   "upside": 35.7,
+   "margin": null,
+   "near_low": false,
+   "watch": [
+    "목표가 대비 저평가"
+   ]
+  },
+  "004170": {
+   "price": 680000,
+   "change_pct": -1.45,
+   "per": null,
+   "mktcap": null,
+   "high52": 792000,
+   "low52": 160800,
+   "upside": 0.6,
+   "margin": null,
+   "near_low": false,
+   "watch": []
+  },
+  "483650": {
+   "price": 230000,
+   "change_pct": 5.5,
+   "per": null,
+   "mktcap": null,
+   "high52": 274500,
+   "low52": 116200,
+   "upside": null,
+   "margin": null,
+   "near_low": false,
+   "watch": []
+  }
+ }
+}
