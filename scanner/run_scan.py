@@ -253,9 +253,10 @@ def _update_stage_history(stage_history: dict, results: list[dict]):
 #   - 익절 규칙 없음 — 승자는 추세선이 깨질 때까지 보유 (+244%, +277% 사례)
 #   - 시장 급락일에도 전량 청산 없음 — 시장 신호는 신규 편입 차단 전용
 # 규칙 (config.json params 사용):
-#   편입: 스테이지별 독립 트랙 (스탁이지의 1호/2호 전략실 방식)
-#     - Stage 3 트랙: 돌파 + 신뢰도 stage3_entry_confidence(70)↑ — 피크 Easy식
-#     - Stage 1 트랙: 웨지 팝(10·20 EMA 동시 탈환 + 거래량 2~3x) + 신뢰도 stage1_entry_confidence(75)↑
+#   편입: 독립 트랙 (스탁이지의 1호/2호 전략실 방식)
+#     - 돌파(신고가) 트랙[id=3]: 감지기 Stage 3 돌파 + 신뢰도 stage3_entry_confidence(70)↑
+#     - 모멘텀(웨지 팝) 트랙[id=1]: 웨지 팝 신호(10·20 EMA 동시 탈환 + 거래량 2~3x, 스테이지와 독립)
+#       + RS≥70 + 웨지 신뢰도 stage1_entry_confidence(75)↑
 #     공통: KOSPI 진입 허용 + 클라이맥스 경고 없음. 같은 종목이 두 트랙에 각각 편입 가능.
 #   유지: 편입 후 스테이지가 흔들려도 원장에 유지 — 보유일은 리셋되지 않음
 #   이탈(트랙 공통): ① 고점 대비 trail_stop_pct 하락 (기본 -10%, 진입 직후엔 손절 겸용)
@@ -266,9 +267,32 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
     today_str = today.isoformat()
     trail_stop = float(params.get("trail_stop_pct", -10.0))  # 고점 대비 허용 하락폭 (%)
     exit_ma_key = f"ma{params.get('exit_ma_period', 60)}"   # 추세 이탈 기준 이동평균
-    entry_tracks = [  # (편입 스테이지, 최소 신뢰도)
-        (3, params.get("stage3_entry_confidence", 70)),
-        (1, params.get("stage1_entry_confidence", 75)),
+    rs_min = params.get("rs_min", 70)
+    # 편입 트랙 — track_id는 원장 저장/트랙 그룹 키(3=돌파, 1=모멘텀)로 유지하되,
+    # 모멘텀 트랙은 감지기 스테이지가 아니라 웨지 팝(wedge_pop) 신호에 직접 물린다.
+    entry_tracks = [
+        {  # 돌파(신고가) — 감지기 Stage 3
+            "id": 3, "label": "돌파(신고가)",
+            "min_conf": params.get("stage3_entry_confidence", 70),
+            "cand": lambda r, mc: (
+                r.get("stage") == 3
+                and r.get("confidence", 0) >= mc
+                and r.get("days_in_stage", 0) <= entry_max_age   # 신규 신호만 (상태 아님)
+            ),
+            "conf": lambda r: r.get("confidence", 0),
+            "signals": lambda r: r.get("signals", [])[:4],
+        },
+        {  # 모멘텀(웨지 팝) — 스테이지와 독립인 웨지 팝 신호 (Oliver Kell)
+            "id": 1, "label": "모멘텀(웨지 팝)",
+            "min_conf": params.get("stage1_entry_confidence", 75),
+            "cand": lambda r, mc: (
+                r.get("wedge_pop")                                # 당일 2~3x 거래량 폭증이 필수 → 이벤트성
+                and r.get("rs_rank", 0) >= rs_min                 # 주도주만
+                and r.get("wedge_confidence", 0) >= mc
+            ),
+            "conf": lambda r: r.get("wedge_confidence", 0),
+            "signals": lambda r: r.get("wedge_signals", [])[:4],
+        },
     ]
     # 편입 빈도 스로틀 — 스탁이지 실측(주당 4~6건, 동시 보유 15~17종목)에 맞춤
     entry_max_age = params.get("stage_entry_max_age_days", 2)      # 스테이지 진입 후 N일 이내만 편입 (상태→이벤트)
@@ -336,8 +360,9 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
                 last_exit[key] = e["exit_date"]
         cooldown_cut = (today - dt.timedelta(days=reentry_cooldown)).isoformat()
 
-        for entry_stage, min_conf in entry_tracks:
-            track_count = sum(1 for h in new_holdings if h.get("entry_stage", 3) == entry_stage)
+        for track in entry_tracks:
+            tid, min_conf = track["id"], track["min_conf"]
+            track_count = sum(1 for h in new_holdings if h.get("entry_stage", 3) == tid)
             slots = min(max_per_track - track_count, max_daily)
             if slots <= 0:
                 continue
@@ -345,38 +370,36 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
                 r for r in results
                 if r.get("ticker")
                 and not r.get("climax_warning")
-                and r.get("stage") == entry_stage
-                and r.get("confidence", 0) >= min_conf
-                and r.get("days_in_stage", 0) <= entry_max_age      # 신규 신호만 (상태 아님)
-                and (r["ticker"], entry_stage) not in held_keys
-                and last_exit.get((r["ticker"], entry_stage), "") < cooldown_cut
+                and track["cand"](r, min_conf)
+                and (r["ticker"], tid) not in held_keys
+                and last_exit.get((r["ticker"], tid), "") < cooldown_cut
                 and float(r.get("current_price") or 0) > 0
             ]
-            cands.sort(key=lambda r: -r.get("confidence", 0))
+            cands.sort(key=lambda r: -track["conf"](r))
             for r in cands[:slots]:
                 ticker = r["ticker"]
                 price = float(r["current_price"])
+                conf_v = track["conf"](r)
                 new_holdings.append({
                     "ticker": ticker,
                     "name": r.get("name", ticker),
                     "sector": r.get("sector", ""),
-                    "entry_stage": entry_stage,
+                    "entry_stage": tid,
                     "entry_date": today_str,
                     "entry_price": round(price, 0),
-                    "entry_confidence": r.get("confidence", 0),
+                    "entry_confidence": conf_v,
                     "last_price": round(price, 0),
                     "peak_price": round(price, 0),
                     "return_pct": 0.0,
                     "days_held": 0,
                     "stage_now": r.get("stage"),
-                    "confidence_now": r.get("confidence", 0),
+                    "confidence_now": conf_v,
                     "last_updated": today_str,
-                    "signals_at_entry": r.get("signals", [])[:4],
+                    "signals_at_entry": track["signals"](r),
                 })
-                held_keys.add((ticker, entry_stage))
-                logger.info("편입[S%d]: %s %s @ %.0f (conf=%d, 신호 %d일차)",
-                            entry_stage, ticker, r.get("name"), price,
-                            r.get("confidence", 0), r.get("days_in_stage", 0))
+                held_keys.add((ticker, tid))
+                logger.info("편입[%s]: %s %s @ %.0f (conf=%d)",
+                            track["label"], ticker, r.get("name"), price, conf_v)
 
     # 이탈 종목은 180일 / 최근 200건만 유지
     cutoff = (today - dt.timedelta(days=180)).isoformat()
