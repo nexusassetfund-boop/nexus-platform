@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-10T01:18:05+09:00",
+ "updated": "2026-07-10T02:10:08+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 142324106.0,
@@ -25,20 +25,20 @@
     "change": 9.0
    },
    "dow": {
-    "value": 52532.2,
-    "change": 183.8
+    "value": 52508.1,
+    "change": 159.7
    },
    "nasdaq": {
-    "value": 26095.9,
-    "change": 225.3
+    "value": 26147.9,
+    "change": 277.3
    },
    "sp500": {
-    "value": 7531.9,
-    "change": 49.2
+    "value": 7539.0,
+    "change": 56.3
    },
    "usdkrw": {
-    "value": 1508.8,
-    "change": 3.98
+    "value": 1509.2,
+    "change": 4.36
    }
   }
  },
@@ -92,7 +92,7 @@
    "change_pct": 5.3,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "15,579,674억",
+   "mktcap": "15,579,672억",
    "per": "20.7x",
    "eps": "105,627원",
    "high52": 2987000.0,
