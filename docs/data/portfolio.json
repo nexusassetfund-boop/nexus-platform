@@ -1,456 +1,468 @@
 {
- "updated": "2026-07-09T01:08:54+09:00",
- "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
- "kpi": {
-  "portfolio_value": 142940106.0,
-  "cash": 135453096.0,
-  "eval_pnl": -217000.0,
-  "eval_pnl_pct": -2.77,
-  "cum_pnl": -7059894.0,
-  "cum_pnl_pct": -4.71,
-  "day_change": null,
-  "day_change_pct": null,
-  "realized_pnl": 6717404.0,
-  "nav_index": 952.93,
-  "n_stocks": 1.0,
-  "n_win": 1.0,
-  "n_loss": 0.0,
-  "indices": {
-   "kospi": {
-    "value": 7246.8,
-    "change": -409.5
-   },
-   "kosdaq": {
-    "value": 785.0,
-    "change": 46.2
-   },
-   "dow": {
-    "value": 52170.3,
-    "change": -754.9
-   },
-   "nasdaq": {
-    "value": 25603.9,
-    "change": -214.8
-   },
-   "sp500": {
-    "value": 7440.4,
-    "change": -63.4
-   },
-   "usdkrw": {
-    "value": 1511.6,
-    "change": -2.3
-   }
-  }
- },
- "holdings": [
-  {
-   "strategy": "가치투자",
-   "code": "483650",
-   "name": "달바글로벌",
-   "qty": 35.0,
-   "price": 217500.0,
-   "change_pct": -5.43,
-   "avg_price": 223700.0,
-   "eval_pnl": -217000.0,
-   "return_pct": -2.77,
-   "contrib_pct": -0.22,
-   "eval_amount": 7612500.0,
-   "buy_amount": 7829500.0,
-   "target_price": null,
-   "buy_date": "2026-07-01",
-   "hold_days": 8.0,
-   "weight": "100.0%",
-   "memo": ""
-  }
- ],
- "universe": [
-  {
-   "strategy": "추세추종 (Stage1)",
-   "sector": "K-뷰티",
-   "code": "161890",
-   "subclass": "화장품 OEM/ODM",
-   "name": "한국콜마",
-   "price": 112100.0,
-   "change_pct": -2.61,
-   "target_price": null,
-   "upside_pct": -100.0,
-   "mktcap": "26,461억",
-   "per": "16.9x",
-   "eps": "6,652원",
-   "high52": 123000.0,
-   "low52": 60600.0,
-   "point": "",
-   "risk": ""
+  "updated": "2026-07-09T09:38:03+09:00",
+  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
+  "kpi": {
+    "portfolio_value": 143010106.0,
+    "cash": 135453096.0,
+    "eval_pnl": -147000.0,
+    "eval_pnl_pct": -1.88,
+    "cum_pnl": -6989894.0,
+    "cum_pnl_pct": -4.66,
+    "day_change": 70000.0,
+    "day_change_pct": 0.05,
+    "realized_pnl": 6717404.0,
+    "nav_index": 953.4,
+    "n_stocks": 1.0,
+    "n_win": 1.0,
+    "n_loss": 0.0,
+    "indices": {
+      "kospi": {
+        "value": 7512.6,
+        "change": 265.9
+      },
+      "kosdaq": {
+        "value": 785.0,
+        "change": 0.0
+      },
+      "dow": {
+        "value": 52348.4,
+        "change": -576.8
+      },
+      "nasdaq": {
+        "value": 25870.7,
+        "change": 52.0
+      },
+      "sp500": {
+        "value": 7482.7,
+        "change": -21.1
+      },
+      "usdkrw": {
+        "value": 1505.8,
+        "change": 0.95
+      }
+    }
   },
-  {
-   "strategy": "가치투자",
-   "sector": "반도체",
-   "code": "000660",
-   "subclass": "HBM",
-   "name": "SK하이닉스",
-   "price": 2076000.0,
-   "change_pct": -5.68,
-   "target_price": null,
-   "upside_pct": -100.0,
-   "mktcap": "14,795,702억",
-   "per": "19.7x",
-   "eps": "105,627원",
-   "high52": 2987000.0,
-   "low52": 245000.0,
-   "point": "",
-   "risk": ""
-  },
-  {
-   "strategy": "가치투자",
-   "sector": "K-뷰티",
-   "code": "483650",
-   "subclass": "브랜드",
-   "name": "달바글로벌",
-   "price": 217500.0,
-   "change_pct": -5.43,
-   "target_price": 300000.0,
-   "upside_pct": 37.93,
-   "mktcap": "27,154억",
-   "per": "30.6x",
-   "eps": "7,116원",
-   "high52": 274500.0,
-   "low52": 116200.0,
-   "point": "",
-   "risk": ""
-  },
-  {
-   "strategy": "가치투자",
-   "sector": "반도체",
-   "code": "402340",
-   "subclass": "지주",
-   "name": "SK스퀘어",
-   "price": 1270000.0,
-   "change_pct": -6.34,
-   "target_price": null,
-   "upside_pct": -100.0,
-   "mktcap": "1,675,872억",
-   "per": "10.8x",
-   "eps": "117,817원",
-   "high52": 2189000.0,
-   "low52": 130900.0,
-   "point": "",
-   "risk": ""
-  },
-  {
-   "strategy": "가치투자",
-   "sector": "유통",
-   "code": "004170",
-   "subclass": "백화점",
-   "name": "신세계",
-   "price": 625000.0,
-   "change_pct": -8.09,
-   "target_price": 680000.0,
-   "upside_pct": 8.8,
-   "mktcap": "59,032억",
-   "per": "71.5x",
-   "eps": "8,737원",
-   "high52": 792000.0,
-   "low52": 160800.0,
-   "point": "",
-   "risk": ""
-  },
-  {
-   "strategy": "가치투자",
-   "sector": "엔터",
-   "code": "352820",
-   "subclass": "기획사",
-   "name": "하이브",
-   "price": 230000.0,
-   "change_pct": -0.86,
-   "target_price": null,
-   "upside_pct": -100.0,
-   "mktcap": "99,135억",
-   "per": "",
-   "eps": "-10,767원",
-   "high52": 405500.0,
-   "low52": 174600.0,
-   "point": "",
-   "risk": ""
-  }
- ],
- "transactions": [
-  {
-   "strategy": "이벤트",
-   "date": "2026-07-01",
-   "code": "017670",
-   "name": "SK텔레콤",
-   "side": "매수",
-   "qty": 140.0,
-   "unit_price": 88400.0,
-   "amount": 12376000.0,
-   "realized_pnl": null,
-   "fee": 1856.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-01",
-   "code": "004170",
-   "name": "신세계",
-   "side": "매수",
-   "qty": 26.0,
-   "unit_price": 755000.0,
-   "amount": 19630000.0,
-   "realized_pnl": null,
-   "fee": 2945.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-01",
-   "code": "483650",
-   "name": "달바글로벌",
-   "side": "매수",
-   "qty": 21.0,
-   "unit_price": 231500.0,
-   "amount": 4861500.0,
-   "realized_pnl": null,
-   "fee": 729.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "이벤트",
-   "date": "2026-07-02",
-   "code": "017670",
-   "name": "SK텔레콤",
-   "side": "매도",
-   "qty": 140.0,
-   "unit_price": 85600.0,
-   "amount": 11984000.0,
-   "realized_pnl": -392000.0,
-   "fee": 1798.0,
-   "tax": 23968.0,
-   "memo": "포트폴리오 리셋으로 전량 매도"
-  },
-  {
-   "strategy": "52주신고가",
-   "date": "2026-07-02",
-   "code": "161890",
-   "name": "한국콜마",
-   "side": "매수",
-   "qty": 84.0,
-   "unit_price": 119400.0,
-   "amount": 10029600.0,
-   "realized_pnl": null,
-   "fee": 1504.0,
-   "tax": null,
-   "memo": "52주신고가 + CUP with HANDLE 패턴"
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-03",
-   "code": "483650",
-   "name": "달바글로벌",
-   "side": "매수",
-   "qty": 14.0,
-   "unit_price": 212000.0,
-   "amount": 2968000.0,
-   "realized_pnl": null,
-   "fee": 445.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-03",
-   "code": "402340",
-   "name": "SK스퀘어",
-   "side": "매수",
-   "qty": 6.0,
-   "unit_price": 1599000.0,
-   "amount": 9594000.0,
-   "realized_pnl": null,
-   "fee": 1439.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-07",
-   "code": "402340",
-   "name": "SK스퀘어",
-   "side": "매수",
-   "qty": 6.0,
-   "unit_price": 1450000.0,
-   "amount": 8700000.0,
-   "realized_pnl": null,
-   "fee": 1305.0,
-   "tax": null,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-07",
-   "code": "402340",
-   "name": "SK스퀘어",
-   "side": "매도",
-   "qty": 6.0,
-   "unit_price": 1303000.0,
-   "amount": 7818000.0,
-   "realized_pnl": -1329000.0,
-   "fee": 1173.0,
-   "tax": 15636.0,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-07",
-   "code": "004170",
-   "name": "신세계",
-   "side": "매도",
-   "qty": 13.0,
-   "unit_price": 656000.0,
-   "amount": 8528000.0,
-   "realized_pnl": -1287000.0,
-   "fee": 1279.0,
-   "tax": 17056.0,
-   "memo": "고점대비 -17%(-13% 절반 손절)"
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-07",
-   "code": "402340",
-   "name": "SK스퀘어",
-   "side": "매도",
-   "qty": 6.0,
-   "unit_price": 1340000.0,
-   "amount": 8040000.0,
-   "realized_pnl": -1107000.0,
-   "fee": 1206.0,
-   "tax": 16080.0,
-   "memo": ""
-  },
-  {
-   "strategy": "가치투자",
-   "date": "2026-07-08",
-   "code": "004170",
-   "name": "신세계",
-   "side": "매도",
-   "qty": 13.0,
-   "unit_price": 621692.0,
-   "amount": 8081996.0,
-   "realized_pnl": -1733004.0,
-   "fee": 1212.0,
-   "tax": 16164.0,
-   "memo": ""
-  },
-  {
-   "strategy": "52주신고가",
-   "date": "2026-07-08",
-   "code": "161890",
-   "name": "한국콜마",
-   "side": "매도",
-   "qty": 84.0,
-   "unit_price": 109050.0,
-   "amount": 9160200.0,
-   "realized_pnl": -869400.0,
-   "fee": 1374.0,
-   "tax": 18320.0,
-   "memo": ""
-  }
- ],
- "nav": {
-  "indexed": [
-   {
-    "date": "2026.7.1",
-    "nav": 1000.0,
-    "kospi": 1000.0,
-    "kosdaq": 1000.0
-   },
-   {
-    "date": "2026.7.2",
-    "nav": 924.48,
-    "kospi": 918.89,
-    "kosdaq": 933.04
-   },
-   {
-    "date": "2026.7.3",
-    "nav": 958.09,
-    "kospi": 974.32,
-    "kosdaq": 922.54
-   },
-   {
-    "date": "2026.7.4",
-    "nav": 953.9,
-    "kospi": 971.78,
-    "kosdaq": 934.86
-   },
-   {
-    "date": "2026.7.5",
-    "nav": 953.9,
-    "kospi": 971.78,
-    "kosdaq": 934.86
-   },
-   {
-    "date": "2026.7.6",
-    "nav": 935.63,
-    "kospi": 967.34,
-    "kosdaq": 911.89
-   },
-   {
-    "date": "2026.7.7",
-    "nav": 901.62,
-    "kospi": 919.88,
-    "kosdaq": 894.83
-   }
+  "holdings": [
+    {
+      "strategy": "가치투자",
+      "code": "483650",
+      "name": "달바글로벌",
+      "qty": 35.0,
+      "price": 219500.0,
+      "change_pct": 1.15,
+      "avg_price": 223700.0,
+      "eval_pnl": -147000.0,
+      "return_pct": -1.88,
+      "contrib_pct": -0.15,
+      "eval_amount": 7682500.0,
+      "buy_amount": 7829500.0,
+      "target_price": null,
+      "buy_date": "2026-07-01",
+      "hold_days": 8.0,
+      "weight": "100.0%",
+      "memo": ""
+    }
   ],
-  "value": [
-   {
-    "date": "2026-7-9",
-    "portfolio_value": 142940106.0,
-    "total_value": 7612500.0,
-    "eval_pnl": -217000.0
-   },
-   {
-    "date": "2026-7-7",
-    "portfolio_value": 135243533.0,
-    "total_value": 72779400.0,
-    "eval_pnl": -10544700.0
-   },
-   {
-    "date": "2026-7-6",
-    "portfolio_value": 140344068.04,
-    "total_value": 93512200.0,
-    "eval_pnl": -9220900.0
-   },
-   {
-    "date": "2026-7-5",
-    "portfolio_value": 143084568.04,
-    "total_value": 96252700.0,
-    "eval_pnl": -6480400.0
-   },
-   {
-    "date": "2026-7-4",
-    "portfolio_value": 143084568.0,
-    "total_value": 96252700.0,
-    "eval_pnl": -6480400.0
-   },
-   {
-    "date": "2026-7-3",
-    "portfolio_value": 143713507.0,
-    "total_value": 85978000.0,
-    "eval_pnl": -5852900.0
-   },
-   {
-    "date": "2026-7-2",
-    "portfolio_value": 138672552.0,
-    "total_value": 79276800.0,
-    "eval_pnl": -10894300.0
-   },
-   {
-    "date": "2026-7-1",
-    "portfolio_value": 148880122.0,
-    "total_value": 91400000.0,
-    "eval_pnl": -1117500.0
-   }
-  ]
- }
+  "universe": [
+    {
+      "strategy": "추세추종 (Stage1)",
+      "sector": "K-뷰티",
+      "code": "161890",
+      "subclass": "화장품 OEM/ODM",
+      "name": "한국콜마",
+      "price": 103400.0,
+      "change_pct": -7.76,
+      "target_price": null,
+      "upside_pct": -100.0,
+      "mktcap": "24,951억",
+      "per": "15.5x",
+      "eps": "6,652원",
+      "high52": 124600.0,
+      "low52": 60600.0,
+      "point": "",
+      "risk": ""
+    },
+    {
+      "strategy": "가치투자",
+      "sector": "반도체",
+      "code": "000660",
+      "subclass": "HBM",
+      "name": "SK하이닉스",
+      "price": 2256000.0,
+      "change_pct": 8.67,
+      "target_price": null,
+      "upside_pct": -100.0,
+      "mktcap": "15,821,993억",
+      "per": "21.4x",
+      "eps": "105,627원",
+      "high52": 2987000.0,
+      "low52": 245000.0,
+      "point": "",
+      "risk": ""
+    },
+    {
+      "strategy": "가치투자",
+      "sector": "K-뷰티",
+      "code": "483650",
+      "subclass": "브랜드",
+      "name": "달바글로벌",
+      "price": 219500.0,
+      "change_pct": 1.15,
+      "target_price": 300000.0,
+      "upside_pct": 36.67,
+      "mktcap": "27,654억",
+      "per": "30.7x",
+      "eps": "7,116원",
+      "high52": 274500.0,
+      "low52": 116200.0,
+      "point": "",
+      "risk": ""
+    },
+    {
+      "strategy": "가치투자",
+      "sector": "반도체",
+      "code": "402340",
+      "subclass": "지주",
+      "name": "SK스퀘어",
+      "price": 1365000.0,
+      "change_pct": 7.48,
+      "target_price": null,
+      "upside_pct": -100.0,
+      "mktcap": "1,793,315억",
+      "per": "11.6x",
+      "eps": "117,817원",
+      "high52": 2189000.0,
+      "low52": 130900.0,
+      "point": "",
+      "risk": ""
+    },
+    {
+      "strategy": "가치투자",
+      "sector": "유통",
+      "code": "004170",
+      "subclass": "백화점",
+      "name": "신세계",
+      "price": 636000.0,
+      "change_pct": 1.76,
+      "target_price": 680000.0,
+      "upside_pct": 6.92,
+      "mktcap": "59,032억",
+      "per": "73.1x",
+      "eps": "8,737원",
+      "high52": 792000.0,
+      "low52": 160800.0,
+      "point": "",
+      "risk": ""
+    },
+    {
+      "strategy": "가치투자",
+      "sector": "엔터",
+      "code": "352820",
+      "subclass": "기획사",
+      "name": "하이브",
+      "price": 219500.0,
+      "change_pct": -1.74,
+      "target_price": null,
+      "upside_pct": -100.0,
+      "mktcap": "99,135억",
+      "per": "",
+      "eps": "-10,767원",
+      "high52": 405500.0,
+      "low52": 174600.0,
+      "point": "",
+      "risk": ""
+    }
+  ],
+  "transactions": [
+    {
+      "strategy": "이벤트",
+      "date": "2026-07-01",
+      "code": "017670",
+      "name": "SK텔레콤",
+      "side": "매수",
+      "qty": 140.0,
+      "unit_price": 88400.0,
+      "amount": 12376000.0,
+      "realized_pnl": null,
+      "fee": 1856.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-01",
+      "code": "004170",
+      "name": "신세계",
+      "side": "매수",
+      "qty": 26.0,
+      "unit_price": 755000.0,
+      "amount": 19630000.0,
+      "realized_pnl": null,
+      "fee": 2945.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-01",
+      "code": "483650",
+      "name": "달바글로벌",
+      "side": "매수",
+      "qty": 21.0,
+      "unit_price": 231500.0,
+      "amount": 4861500.0,
+      "realized_pnl": null,
+      "fee": 729.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "이벤트",
+      "date": "2026-07-02",
+      "code": "017670",
+      "name": "SK텔레콤",
+      "side": "매도",
+      "qty": 140.0,
+      "unit_price": 85600.0,
+      "amount": 11984000.0,
+      "realized_pnl": -392000.0,
+      "fee": 1798.0,
+      "tax": 23968.0,
+      "memo": "포트폴리오 리셋으로 전량 매도"
+    },
+    {
+      "strategy": "52주신고가",
+      "date": "2026-07-02",
+      "code": "161890",
+      "name": "한국콜마",
+      "side": "매수",
+      "qty": 84.0,
+      "unit_price": 119400.0,
+      "amount": 10029600.0,
+      "realized_pnl": null,
+      "fee": 1504.0,
+      "tax": null,
+      "memo": "52주신고가 + CUP with HANDLE 패턴"
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-03",
+      "code": "483650",
+      "name": "달바글로벌",
+      "side": "매수",
+      "qty": 14.0,
+      "unit_price": 212000.0,
+      "amount": 2968000.0,
+      "realized_pnl": null,
+      "fee": 445.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-03",
+      "code": "402340",
+      "name": "SK스퀘어",
+      "side": "매수",
+      "qty": 6.0,
+      "unit_price": 1599000.0,
+      "amount": 9594000.0,
+      "realized_pnl": null,
+      "fee": 1439.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-07",
+      "code": "402340",
+      "name": "SK스퀘어",
+      "side": "매수",
+      "qty": 6.0,
+      "unit_price": 1450000.0,
+      "amount": 8700000.0,
+      "realized_pnl": null,
+      "fee": 1305.0,
+      "tax": null,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-07",
+      "code": "402340",
+      "name": "SK스퀘어",
+      "side": "매도",
+      "qty": 6.0,
+      "unit_price": 1303000.0,
+      "amount": 7818000.0,
+      "realized_pnl": -1329000.0,
+      "fee": 1173.0,
+      "tax": 15636.0,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-07",
+      "code": "004170",
+      "name": "신세계",
+      "side": "매도",
+      "qty": 13.0,
+      "unit_price": 656000.0,
+      "amount": 8528000.0,
+      "realized_pnl": -1287000.0,
+      "fee": 1279.0,
+      "tax": 17056.0,
+      "memo": "고점대비 -17%(-13% 절반 손절)"
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-07",
+      "code": "402340",
+      "name": "SK스퀘어",
+      "side": "매도",
+      "qty": 6.0,
+      "unit_price": 1340000.0,
+      "amount": 8040000.0,
+      "realized_pnl": -1107000.0,
+      "fee": 1206.0,
+      "tax": 16080.0,
+      "memo": ""
+    },
+    {
+      "strategy": "가치투자",
+      "date": "2026-07-08",
+      "code": "004170",
+      "name": "신세계",
+      "side": "매도",
+      "qty": 13.0,
+      "unit_price": 621692.0,
+      "amount": 8081996.0,
+      "realized_pnl": -1733004.0,
+      "fee": 1212.0,
+      "tax": 16164.0,
+      "memo": ""
+    },
+    {
+      "strategy": "52주신고가",
+      "date": "2026-07-08",
+      "code": "161890",
+      "name": "한국콜마",
+      "side": "매도",
+      "qty": 84.0,
+      "unit_price": 109050.0,
+      "amount": 9160200.0,
+      "realized_pnl": -869400.0,
+      "fee": 1374.0,
+      "tax": 18320.0,
+      "memo": ""
+    }
+  ],
+  "nav": {
+    "indexed": [
+      {
+        "date": "2026.7.1",
+        "nav": 1000.0,
+        "kospi": 1000.0,
+        "kosdaq": 1000.0
+      },
+      {
+        "date": "2026.7.2",
+        "nav": 924.48,
+        "kospi": 918.89,
+        "kosdaq": 933.04
+      },
+      {
+        "date": "2026.7.3",
+        "nav": 958.09,
+        "kospi": 974.32,
+        "kosdaq": 922.54
+      },
+      {
+        "date": "2026.7.4",
+        "nav": 953.9,
+        "kospi": 971.78,
+        "kosdaq": 934.86
+      },
+      {
+        "date": "2026.7.5",
+        "nav": 953.9,
+        "kospi": 971.78,
+        "kosdaq": 934.86
+      },
+      {
+        "date": "2026.7.6",
+        "nav": 935.63,
+        "kospi": 967.34,
+        "kosdaq": 911.89
+      },
+      {
+        "date": "2026.7.7",
+        "nav": 901.62,
+        "kospi": 919.88,
+        "kosdaq": 894.83
+      },
+      {
+        "date": "2026.7.8",
+        "nav": 952.93,
+        "kospi": 870.67,
+        "kosdaq": 845.07
+      }
+    ],
+    "value": [
+      {
+        "date": "2026-7-9",
+        "portfolio_value": 143010106.0,
+        "total_value": 7682500.0,
+        "eval_pnl": -147000.0
+      },
+      {
+        "date": "2026-7-8",
+        "portfolio_value": 142940106.0,
+        "total_value": 7665000.0,
+        "eval_pnl": -217000.0
+      },
+      {
+        "date": "2026-7-7",
+        "portfolio_value": 135243533.0,
+        "total_value": 72779400.0,
+        "eval_pnl": -10544700.0
+      },
+      {
+        "date": "2026-7-6",
+        "portfolio_value": 140344068.04,
+        "total_value": 93512200.0,
+        "eval_pnl": -9220900.0
+      },
+      {
+        "date": "2026-7-5",
+        "portfolio_value": 143084568.04,
+        "total_value": 96252700.0,
+        "eval_pnl": -6480400.0
+      },
+      {
+        "date": "2026-7-4",
+        "portfolio_value": 143084568.0,
+        "total_value": 96252700.0,
+        "eval_pnl": -6480400.0
+      },
+      {
+        "date": "2026-7-3",
+        "portfolio_value": 143713507.0,
+        "total_value": 85978000.0,
+        "eval_pnl": -5852900.0
+      },
+      {
+        "date": "2026-7-2",
+        "portfolio_value": 138672552.0,
+        "total_value": 79276800.0,
+        "eval_pnl": -10894300.0
+      },
+      {
+        "date": "2026-7-1",
+        "portfolio_value": 148880122.0,
+        "total_value": 91400000.0,
+        "eval_pnl": -1117500.0
+      }
+    ]
+  }
 }
