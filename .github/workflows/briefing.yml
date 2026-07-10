@@ -31,8 +31,6 @@ jobs:
           cache: pip
 
       - name: 의존성 설치
-
-      - name: 의존성 설치
         run: pip install -r requirements.txt requests lxml
 
       - name: 모드 결정
