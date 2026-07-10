@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-10T15:36:20+09:00",
+ "updated": "2026-07-10T21:11:01+09:00",
  "kospi": {
-  "price": 7580.82,
-  "ma200": 5514.34,
-  "ma50": 7966.67,
+  "price": 7475.94,
+  "ma200": 5513.81,
+  "ma50": 7964.58,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-10T15:36:20+09:00"
+  "updated": "2026-07-10T21:11:01+09:00"
  },
  "holdings": [
   {
@@ -25,11 +25,19 @@
    "peak_price": 7800.0,
    "return_pct": 0.0,
    "total_return_pct": 0.0,
-   "qty_frac": 1.0,
+   "qty_frac": 0.5,
    "realized_pct": 0.0,
-   "partials": [],
+   "partials": [
+    {
+     "date": "2026-07-10",
+     "price": 7800.0,
+     "frac": 0.5,
+     "ret_pct": 0.0,
+     "reason": "소진 확장 익절 (10 EMA +20% 이격)"
+    }
+   ],
    "tp_3r_done": false,
-   "was_extended": false,
+   "was_extended": true,
    "days_held": 0,
    "stage_now": 3,
    "confidence_now": 100,
@@ -39,7 +47,8 @@
     "RS 83 — 상위 강세",
     "RS 가속 상승 (+18)",
     "전고점 돌파! 거래량 7.18x"
-   ]
+   ],
+   "last_action": "2026-07-10 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
   },
   {
    "ticker": "170920",
@@ -139,22 +148,33 @@
    "peak_price": 7800.0,
    "return_pct": 0.0,
    "total_return_pct": 0.0,
-   "qty_frac": 1.0,
+   "qty_frac": 0.5,
    "realized_pct": 0.0,
-   "partials": [],
+   "partials": [
+    {
+     "date": "2026-07-10",
+     "price": 7800.0,
+     "frac": 0.5,
+     "ret_pct": 0.0,
+     "reason": "소진 확장 익절 (10 EMA +20% 이격)"
+    }
+   ],
    "tp_3r_done": false,
-   "was_extended": false,
+   "was_extended": true,
    "days_held": 0,
    "stage_now": 3,
-   "confidence_now": 93,
+   "confidence_now": 100,
    "last_updated": "2026-07-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.13x",
     "불 스노트 — 거래량 폭증 4.13x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
-  },
+   ],
+   "last_action": "2026-07-10 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
+  }
+ ],
+ "exited": [
   {
    "ticker": "006360",
    "name": "GS건설",
@@ -175,16 +195,17 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": null,
-   "confidence_now": 78,
+   "confidence_now": 15,
    "last_updated": "2026-07-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.06x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
-  }
- ],
- "exited": [
+   ],
+   "exit_date": "2026-07-10",
+   "exit_price": 31850.0,
+   "exit_reason": "추세 이탈 (MA60 하회)"
+  },
   {
    "ticker": "064290",
    "name": "인텍플러스",
@@ -635,9 +656,9 @@
  },
  "nav_base": "2026-07-01",
  "stats": {
-  "holding_count": 6,
-  "exited_count": 12,
-  "avg_return": -0.77,
+  "holding_count": 5,
+  "exited_count": 13,
+  "avg_return": -0.92,
   "win_rate": 0.0
  }
 }
