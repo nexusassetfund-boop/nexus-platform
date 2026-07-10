@@ -1,0 +1,35 @@
+# 시세·데이터 갱신 백업 트리거 — Cloudflare 크론이 침묵할 때의 안전망
+# Worker의 /api/quotes/refresh 가 크론과 동일한 파이프라인을 수행한다
+# (감지기 시세 → 포트폴리오 시세 → GitHub 동기화 → Post IPO 시세, close=1이면 장마감 작업까지)
+
+name: 시세 갱신 백업
+
+on:
+  schedule:
+    - cron: "4,24,44 0-6 * * 1-5"   # KST 09:04~15:44 20분 주기 (Worker 크론 10분 주기의 백업)
+    - cron: "50 6 * * 1-5"          # KST 15:50 장마감 백업 (자산추이·백업·마일스톤)
+  workflow_dispatch: {}
+
+permissions: {}
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Worker 갱신 호출
+        env:
+          TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: |
+          if [ "${{ github.event.schedule }}" = "50 6 * * 1-5" ]; then
+            URL="https://nexus-platform.nexusassetfund.workers.dev/api/quotes/refresh?close=1"
+          else
+            URL="https://nexus-platform.nexusassetfund.workers.dev/api/quotes/refresh"
+          fi
+          code=$(curl -s -o /tmp/r.json -w "%{http_code}" -X POST "$URL" -H "authorization: Bearer $TOKEN")
+          cat /tmp/r.json
+          [ "$code" = "200" ]
