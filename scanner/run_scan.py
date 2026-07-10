@@ -595,6 +595,90 @@ def _update_track_history(state: dict, ledger: dict):
         meta[key] = {"mode": "avg", "last_date": today_str}
 
 
+TRACK_NAV_BASE = "2026-07-01"  # 기준가 1000 기점
+
+
+def _update_track_nav(state: dict, ledger: dict, ohlcv_map: dict):
+    """트랙별 기준가(NAV) 곡선 — 7/1=1000, 일별 동일가중 리밸런스 포트폴리오.
+
+    매 마감 실행마다 원장(보유+이탈)과 OHLCV로 전 구간을 재계산한다(증분 누적 드리프트 방지).
+    트레이드의 일간 수익률: 진입일 = 종가/진입가, 보유중 = 종가/전일종가, 청산일 = 청산가/전일종가.
+    OHLCV가 없는 이탈 종목은 청산일에 트레이드 수익률을 일괄 반영(근사).
+    """
+    # 거래일 캘린더 — 가장 긴 OHLCV의 날짜 인덱스 사용
+    cal = None
+    for df in ohlcv_map.values():
+        if df is not None and len(df) and (cal is None or len(df) > len(cal)):
+            cal = df
+    if cal is None:
+        return
+    dates = [d.strftime("%Y-%m-%d") if hasattr(d, "strftime") else str(d)[:10] for d in cal.index]
+    dates = [d for d in dates if d >= TRACK_NAV_BASE]
+    if not dates:
+        return
+    # 종목별 종가 맵 {ticker: {date: close}}
+    closes: dict = {}
+
+    def close_map(ticker):
+        if ticker in closes:
+            return closes[ticker]
+        df = ohlcv_map.get(ticker)
+        m = {}
+        if df is not None and len(df):
+            for idx, c in zip(df.index, df["close"]):
+                ds = idx.strftime("%Y-%m-%d") if hasattr(idx, "strftime") else str(idx)[:10]
+                m[ds] = float(c)
+        closes[ticker] = m
+        return m
+
+    nav_out = {}
+    for tid in (3, 1):
+        trades = []
+        for e in ledger.get("exited", []):
+            if e.get("entry_stage", 3) == tid and e.get("entry_date") and e.get("exit_date"):
+                trades.append({"ticker": e.get("ticker"), "entry": e["entry_date"], "exit": e["exit_date"],
+                               "entry_price": float(e.get("entry_price") or 0), "exit_price": float(e.get("exit_price") or 0),
+                               "ret": float(e.get("return_pct") or 0)})
+        for h in ledger.get("holdings", []):
+            if h.get("entry_stage", 3) == tid and h.get("entry_date"):
+                trades.append({"ticker": h.get("ticker"), "entry": h["entry_date"], "exit": None,
+                               "entry_price": float(h.get("entry_price") or 0), "exit_price": None, "ret": None})
+        nav = 1000.0
+        series = [{"date": TRACK_NAV_BASE, "nav": 1000.0}]
+        prev_date = None
+        for d in dates:
+            rets = []
+            for t in trades:
+                if d < t["entry"] or (t["exit"] and d > t["exit"]):
+                    continue
+                cm = close_map(t["ticker"])
+                if not cm:
+                    # OHLCV 없음 — 청산일에 총수익률 일괄 반영
+                    if t["exit"] == d and t["ret"] is not None:
+                        rets.append(t["ret"] / 100)
+                    continue
+                if d == t["entry"]:
+                    if t["entry_price"] > 0 and d in cm:
+                        rets.append(cm[d] / t["entry_price"] - 1)
+                elif t["exit"] == d:
+                    pc = cm.get(prev_date)
+                    if pc and t["exit_price"]:
+                        rets.append(t["exit_price"] / pc - 1)
+                else:
+                    pc, cc = cm.get(prev_date), cm.get(d)
+                    if pc and cc:
+                        rets.append(cc / pc - 1)
+            if rets:
+                nav *= 1 + sum(rets) / len(rets)
+            if not series or series[-1]["date"] != d:
+                series.append({"date": d, "nav": round(nav, 2)})
+            else:
+                series[-1] = {"date": d, "nav": round(nav, 2)}
+            prev_date = d
+        nav_out[str(tid)] = series[-260:]
+    state["track_nav"] = nav_out
+
+
 # ── 가치투자 시세/저평가 워치 (장마감 스냅샷) ──────────────────
 async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
     """value_universe.json 종목의 현재가·52주·상승여력·안전마진·저평가 워치를
@@ -805,6 +889,7 @@ async def main():
         ledger = _update_ledger(ledger, results, kospi, params)
         state["ledger"] = ledger
         _update_track_history(state, ledger)
+        _update_track_nav(state, ledger, ohlcv_map)  # 기준가(7/1=1000) 곡선
         logger.info("장마감 이후 실행 — 전략 포트폴리오 갱신")
     else:
         logger.info("장중 실행 — 전략 포트폴리오는 직전 마감 상태 유지 (감지기만 갱신)")
@@ -836,6 +921,8 @@ async def main():
             "holdings": ledger["holdings"],
             "exited": ledger["exited"],
             "track_history": state.get("track_history", {}),
+            "track_nav": state.get("track_nav", {}),
+            "nav_base": TRACK_NAV_BASE,
             "stats": {
                 "holding_count": len(ledger["holdings"]),
                 "exited_count": len(ledger["exited"]),
