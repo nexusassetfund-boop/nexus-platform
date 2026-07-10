@@ -1,17 +1,46 @@
 {
- "updated": "2026-07-09T21:23:37+09:00",
+ "updated": "2026-07-10T15:36:20+09:00",
  "kospi": {
-  "price": 7291.91,
-  "ma200": 5493.15,
-  "ma50": 7947.36,
+  "price": 7580.82,
+  "ma200": 5514.34,
+  "ma50": 7966.67,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-09T21:23:37+09:00"
+  "updated": "2026-07-10T15:36:20+09:00"
  },
  "holdings": [
+  {
+   "ticker": "073240",
+   "name": "금호타이어",
+   "sector": "고무제품 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-07-10",
+   "entry_price": 7800.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 7800.0,
+   "peak_price": 7800.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-07-10",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 83 — 상위 강세",
+    "RS 가속 상승 (+18)",
+    "전고점 돌파! 거래량 7.18x"
+   ]
+  },
   {
    "ticker": "170920",
    "name": "엘티씨",
@@ -23,10 +52,10 @@
    "last_price": 54100.0,
    "peak_price": 54100.0,
    "return_pct": 0.0,
-   "days_held": 4,
+   "days_held": 5,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-07-09",
+   "last_updated": "2026-07-10",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
@@ -41,62 +70,6 @@
    "total_return_pct": 0.0
   },
   {
-   "ticker": "041830",
-   "name": "인바디",
-   "sector": "의료용 기기 제조업",
-   "entry_stage": 1,
-   "entry_date": "2026-07-06",
-   "entry_price": 59500.0,
-   "entry_confidence": 85,
-   "last_price": 55500.0,
-   "peak_price": 59500.0,
-   "return_pct": -6.72,
-   "days_held": 3,
-   "stage_now": 1,
-   "confidence_now": 80,
-   "last_updated": "2026-07-09",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 90 — 최상위 강세",
-    "RS 신고점",
-    "60일 저점 대비 +110.2% 상승"
-   ],
-   "qty_frac": 1.0,
-   "partials": [],
-   "realized_pct": 0.0,
-   "tp_3r_done": false,
-   "was_extended": false,
-   "total_return_pct": -6.72
-  },
-  {
-   "ticker": "064290",
-   "name": "인텍플러스",
-   "sector": "특수 목적용 기계 제조업",
-   "entry_stage": 1,
-   "entry_date": "2026-07-06",
-   "entry_price": 50300.0,
-   "entry_confidence": 85,
-   "last_price": 46350.0,
-   "peak_price": 50300.0,
-   "return_pct": -7.85,
-   "days_held": 3,
-   "stage_now": null,
-   "confidence_now": 0,
-   "last_updated": "2026-07-09",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 96 — 최상위 강세",
-    "RS 신고점",
-    "60일 저점 대비 +124.1% 상승"
-   ],
-   "qty_frac": 1.0,
-   "partials": [],
-   "realized_pct": 0.0,
-   "tp_3r_done": false,
-   "was_extended": false,
-   "total_return_pct": -7.85
-  },
-  {
    "ticker": "010950",
    "name": "S-Oil",
    "sector": "석유 정제품 제조업",
@@ -105,19 +78,19 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 133500.0,
+   "last_price": 132100.0,
    "peak_price": 133500.0,
-   "return_pct": 1.44,
-   "total_return_pct": 1.44,
+   "return_pct": 0.38,
+   "total_return_pct": 0.38,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 1,
+   "days_held": 2,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-07-09",
+   "last_updated": "2026-07-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -134,27 +107,146 @@
    "entry_price": 112100.0,
    "entry_confidence": 80,
    "init_stop_pct": -4.1,
-   "last_price": 102800.0,
+   "last_price": 106500.0,
    "peak_price": 112100.0,
-   "return_pct": -8.3,
-   "total_return_pct": -8.3,
+   "return_pct": -5.0,
+   "total_return_pct": -5.0,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 1,
+   "days_held": 2,
    "stage_now": 1,
    "confidence_now": 50,
-   "last_updated": "2026-07-09",
+   "last_updated": "2026-07-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.05x",
     "반전 확장 후 저점 상승",
     "RS 83 — 상위 강세"
    ]
+  },
+  {
+   "ticker": "073240",
+   "name": "금호타이어",
+   "sector": "고무제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-10",
+   "entry_price": 7800.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -12.0,
+   "last_price": 7800.0,
+   "peak_price": 7800.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 93,
+   "last_updated": "2026-07-10",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.13x",
+    "불 스노트 — 거래량 폭증 4.13x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
+  },
+  {
+   "ticker": "006360",
+   "name": "GS건설",
+   "sector": "건물 건설업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-10",
+   "entry_price": 31850.0,
+   "entry_confidence": 78,
+   "init_stop_pct": -8.8,
+   "last_price": 31850.0,
+   "peak_price": 31850.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 78,
+   "last_updated": "2026-07-10",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.06x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
   }
  ],
  "exited": [
+  {
+   "ticker": "064290",
+   "name": "인텍플러스",
+   "sector": "특수 목적용 기계 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-06",
+   "entry_price": 50300.0,
+   "entry_confidence": 85,
+   "last_price": 45000.0,
+   "peak_price": 50300.0,
+   "return_pct": -10.54,
+   "days_held": 4,
+   "stage_now": null,
+   "confidence_now": 15,
+   "last_updated": "2026-07-10",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 96 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +124.1% 상승"
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -10.54,
+   "exit_date": "2026-07-10",
+   "exit_price": 45000.0,
+   "exit_reason": "손절 (-10.54%)"
+  },
+  {
+   "ticker": "041830",
+   "name": "인바디",
+   "sector": "의료용 기기 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-06",
+   "entry_price": 59500.0,
+   "entry_confidence": 85,
+   "last_price": 52500.0,
+   "peak_price": 59500.0,
+   "return_pct": -11.76,
+   "days_held": 4,
+   "stage_now": 1,
+   "confidence_now": 75,
+   "last_updated": "2026-07-10",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 90 — 최상위 강세",
+    "RS 신고점",
+    "60일 저점 대비 +110.2% 상승"
+   ],
+   "qty_frac": 1.0,
+   "partials": [],
+   "realized_pct": 0.0,
+   "tp_3r_done": false,
+   "was_extended": false,
+   "total_return_pct": -11.76,
+   "exit_date": "2026-07-10",
+   "exit_price": 52500.0,
+   "exit_reason": "손절 (-11.76%)"
+  },
   {
    "ticker": "161890",
    "name": "한국콜마",
@@ -442,6 +534,10 @@
    {
     "date": "2026-07-09",
     "cum": -9.6
+   },
+   {
+    "date": "2026-07-10",
+    "cum": -7.2
    }
   ],
   "1": [
@@ -460,13 +556,88 @@
    {
     "date": "2026-07-09",
     "cum": -8.23
+   },
+   {
+    "date": "2026-07-10",
+    "cum": -7.45
    }
   ]
  },
+ "track_nav": {
+  "3": [
+   {
+    "date": "2026-07-01",
+    "nav": 1000.0
+   },
+   {
+    "date": "2026-07-02",
+    "nav": 1000.0
+   },
+   {
+    "date": "2026-07-03",
+    "nav": 983.01
+   },
+   {
+    "date": "2026-07-06",
+    "nav": 943.07
+   },
+   {
+    "date": "2026-07-07",
+    "nav": 919.63
+   },
+   {
+    "date": "2026-07-08",
+    "nav": 895.66
+   },
+   {
+    "date": "2026-07-09",
+    "nav": 821.36
+   },
+   {
+    "date": "2026-07-10",
+    "nav": 821.36
+   }
+  ],
+  "1": [
+   {
+    "date": "2026-07-01",
+    "nav": 1000.0
+   },
+   {
+    "date": "2026-07-02",
+    "nav": 1000.0
+   },
+   {
+    "date": "2026-07-03",
+    "nav": 998.52
+   },
+   {
+    "date": "2026-07-06",
+    "nav": 948.38
+   },
+   {
+    "date": "2026-07-07",
+    "nav": 898.53
+   },
+   {
+    "date": "2026-07-08",
+    "nav": 855.78
+   },
+   {
+    "date": "2026-07-09",
+    "nav": 838.77
+   },
+   {
+    "date": "2026-07-10",
+    "nav": 857.95
+   }
+  ]
+ },
+ "nav_base": "2026-07-01",
  "stats": {
-  "holding_count": 5,
-  "exited_count": 10,
-  "avg_return": -4.29,
+  "holding_count": 6,
+  "exited_count": 12,
+  "avg_return": -0.77,
   "win_rate": 0.0
  }
 }
