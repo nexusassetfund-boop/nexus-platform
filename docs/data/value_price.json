@@ -1,76 +1,180 @@
 {
- "updated": "2026-07-13T21:24:33+09:00",
- "items": {
-  "000660": {
-   "price": 1845000,
-   "change_pct": -15.37,
-   "per": null,
-   "mktcap": null,
-   "high52": 2987000,
-   "low52": 245000,
-   "upside": 61.9,
-   "margin": null,
-   "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
-   "ma20": 2463850,
-   "ma60": 1995450,
-   "gap20": -25.1,
-   "gap60": -7.5,
-   "off_high": -38.2,
-   "rsi14": 33.7,
-   "pullback": {
-    "trend": "flat",
-    "zone": null,
-    "ready": false
-   }
-  },
-  "004170": {
-   "price": 591000,
-   "change_pct": -6.04,
-   "per": null,
-   "mktcap": null,
-   "high52": 792000,
-   "low52": 160800,
-   "upside": 15.7,
-   "margin": null,
-   "near_low": false,
-   "watch": [],
-   "ma20": 701900,
-   "ma60": 565175,
-   "gap20": -15.8,
-   "gap60": 4.6,
-   "off_high": -25.4,
-   "rsi14": 38.7,
-   "pullback": {
-    "trend": "up",
-    "zone": "MA20~60 조정대",
-    "ready": true
-   }
-  },
-  "483650": {
-   "price": 199500,
-   "change_pct": 0.81,
-   "per": null,
-   "mktcap": null,
-   "high52": 274500,
-   "low52": 116200,
-   "upside": null,
-   "margin": null,
-   "near_low": false,
-   "watch": [],
-   "ma20": 216440,
-   "ma60": 214720,
-   "gap20": -7.8,
-   "gap60": -7.1,
-   "off_high": -27.3,
-   "rsi14": 46.7,
-   "pullback": {
-    "trend": "flat",
-    "zone": null,
-    "ready": false
-   }
-  }
- }
+    "updated":  "2026-07-14T08:15:32+09:00",
+    "items":  {
+                  "000660":  {
+                                 "price":  1845000,
+                                 "change_pct":  -15.37,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  2987000,
+                                 "low52":  245000,
+                                 "upside":  61.9,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+                                               "목표가 대비 저평가"
+                                           ],
+                                 "ma20":  2463850,
+                                 "ma60":  1995450,
+                                 "gap20":  -25.1,
+                                 "gap60":  -7.5,
+                                 "off_high":  -38.2,
+                                 "rsi14":  33.7,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "004170":  {
+                                 "price":  591000,
+                                 "change_pct":  -6.04,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  792000,
+                                 "low52":  160800,
+                                 "upside":  15.7,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+
+                                           ],
+                                 "ma20":  701900,
+                                 "ma60":  565175,
+                                 "gap20":  -15.8,
+                                 "gap60":  4.6,
+                                 "off_high":  -25.4,
+                                 "rsi14":  38.7,
+                                 "pullback":  {
+                                                  "trend":  "up",
+                                                  "zone":  "MA20~60 조정대",
+                                                  "ready":  true
+                                              }
+                             },
+                  "483650":  {
+                                 "price":  199500,
+                                 "change_pct":  0.81,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  274500,
+                                 "low52":  116200,
+                                 "upside":  null,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+
+                                           ],
+                                 "ma20":  216440,
+                                 "ma60":  214720,
+                                 "gap20":  -7.8,
+                                 "gap60":  -7.1,
+                                 "off_high":  -27.3,
+                                 "rsi14":  46.7,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "000270":  {
+                                 "price":  143500,
+                                 "change_pct":  -2.71,
+                                 "per":  "8.1x",
+                                 "mktcap":  null,
+                                 "high52":  212500,
+                                 "low52":  97400,
+                                 "upside":  61.7,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+                                               "목표가 대비 저평가"
+                                           ],
+                                 "ma20":  148850,
+                                 "ma60":  157425,
+                                 "gap20":  -3.6,
+                                 "gap60":  -8.8,
+                                 "off_high":  -32.5,
+                                 "rsi14":  54.6,
+                                 "pullback":  {
+                                                  "trend":  "down",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "105560":  {
+                                 "price":  186200,
+                                 "change_pct":  0.98,
+                                 "per":  "11.8x",
+                                 "mktcap":  null,
+                                 "high52":  194500,
+                                 "low52":  105800,
+                                 "upside":  17.6,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+
+                                           ],
+                                 "ma20":  164225,
+                                 "ma60":  159768,
+                                 "gap20":  13.4,
+                                 "gap60":  16.5,
+                                 "off_high":  -4.3,
+                                 "rsi14":  84.6,
+                                 "pullback":  {
+                                                  "trend":  "up",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "033780":  {
+                                 "price":  174300,
+                                 "change_pct":  0.46,
+                                 "per":  "17.2x",
+                                 "mktcap":  null,
+                                 "high52":  192400,
+                                 "low52":  128100,
+                                 "upside":  32.5,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+                                               "목표가 대비 저평가"
+                                           ],
+                                 "ma20":  175435,
+                                 "ma60":  178037,
+                                 "gap20":  -0.6,
+                                 "gap60":  -2.1,
+                                 "off_high":  -9.4,
+                                 "rsi14":  51.6,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "028260":  {
+                                 "price":  361000,
+                                 "change_pct":  -7.79,
+                                 "per":  "24.2x",
+                                 "mktcap":  null,
+                                 "high52":  565000,
+                                 "low52":  155300,
+                                 "upside":  62.0,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+                                               "목표가 대비 저평가"
+                                           ],
+                                 "ma20":  452375,
+                                 "ma60":  409425,
+                                 "gap20":  -20.2,
+                                 "gap60":  -11.8,
+                                 "off_high":  -36.1,
+                                 "rsi14":  35.9,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             }
+              }
 }
