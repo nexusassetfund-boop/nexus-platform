@@ -754,6 +754,34 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
         tail = df.tail(250)
         high52 = float(tail["high"].max())
         low52 = float(tail["low"].min())
+        # 기술적 위치 (눌림목 매매 준비) — MA·이격도·고점대비·RSI
+        closes = df["close"].astype(float)
+        ma20 = round(float(closes.tail(20).mean())) if len(closes) >= 20 else None
+        ma60 = round(float(closes.tail(60).mean())) if len(closes) >= 60 else None
+        ma60_prev = float(closes.iloc[-70:-10].mean()) if len(closes) >= 70 else None
+        gap20 = round((price / ma20 - 1) * 100, 1) if ma20 else None
+        gap60 = round((price / ma60 - 1) * 100, 1) if ma60 else None
+        off_high = round((price / high52 - 1) * 100, 1) if high52 else None
+        rsi14 = None
+        if len(closes) >= 15:
+            delta = closes.diff().tail(14)
+            up_avg = float(delta.clip(lower=0).mean())
+            dn_avg = float((-delta.clip(upper=0)).mean())
+            rsi14 = round(100 - 100 / (1 + up_avg / dn_avg), 1) if dn_avg else 100.0
+        # 눌림목 판정: 상승추세(MA60 위 + MA60 상승) 속 MA20 부근/MA20~60 사이 조정
+        trend = "flat"
+        if ma60 and ma60_prev:
+            if price > ma60 and ma60 > ma60_prev:
+                trend = "up"
+            elif price < ma60 and ma60 < ma60_prev:
+                trend = "down"
+        zone = None
+        if trend == "up" and gap20 is not None:
+            if -3 <= gap20 <= 2:
+                zone = "MA20 눌림"
+            elif gap20 < -3 and gap60 is not None and gap60 >= 0:
+                zone = "MA20~60 조정대"
+        pullback = {"trend": trend, "zone": zone, "ready": bool(zone)}
         target, fair = m["target"], m["fair"]
         upside = round((target / price - 1) * 100, 1) if (target and price) else None
         margin = round((fair - price) / fair * 100, 1) if (fair and price) else None
@@ -769,6 +797,8 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
             "price": round(price), "change_pct": change_pct, "per": per_str, "mktcap": mktcap_str,
             "high52": round(high52), "low52": round(low52),
             "upside": upside, "margin": margin, "near_low": near_low, "watch": watch,
+            "ma20": ma20, "ma60": ma60, "gap20": gap20, "gap60": gap60,
+            "off_high": off_high, "rsi14": rsi14, "pullback": pullback,
         }
     _save_json(DATA_DIR / "value_price.json",
                {"updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"), "items": items})

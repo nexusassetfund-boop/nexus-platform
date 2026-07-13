@@ -1,43 +1,80 @@
 {
- "updated": "2026-07-13T15:36:47+09:00",
- "items": {
-  "000660": {
-   "price": 1845000,
-   "change_pct": -15.37,
-   "per": null,
-   "mktcap": null,
-   "high52": 2987000,
-   "low52": 245000,
-   "upside": 61.9,
-   "margin": null,
-   "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ]
-  },
-  "004170": {
-   "price": 591000,
-   "change_pct": -6.04,
-   "per": null,
-   "mktcap": null,
-   "high52": 792000,
-   "low52": 160800,
-   "upside": 15.7,
-   "margin": null,
-   "near_low": false,
-   "watch": []
-  },
-  "483650": {
-   "price": 199500,
-   "change_pct": 0.81,
-   "per": null,
-   "mktcap": null,
-   "high52": 274500,
-   "low52": 116200,
-   "upside": null,
-   "margin": null,
-   "near_low": false,
-   "watch": []
-  }
- }
+    "updated":  "2026-07-13T17:36:58+09:00",
+    "items":  {
+                  "000660":  {
+                                 "price":  1845000,
+                                 "change_pct":  -15.37,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  2987000,
+                                 "low52":  245000,
+                                 "upside":  61.9,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+                                               "목표가 대비 저평가"
+                                           ],
+                                 "ma20":  2463850,
+                                 "ma60":  1995450,
+                                 "gap20":  -25.1,
+                                 "gap60":  -7.5,
+                                 "off_high":  -38.2,
+                                 "rsi14":  33.7,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             },
+                  "004170":  {
+                                 "price":  591000,
+                                 "change_pct":  -6.04,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  792000,
+                                 "low52":  160800,
+                                 "upside":  15.7,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+
+                                           ],
+                                 "ma20":  701900,
+                                 "ma60":  565175,
+                                 "gap20":  -15.8,
+                                 "gap60":  4.6,
+                                 "off_high":  -25.4,
+                                 "rsi14":  38.7,
+                                 "pullback":  {
+                                                  "trend":  "up",
+                                                  "zone":  "MA20~60 조정대",
+                                                  "ready":  true
+                                              }
+                             },
+                  "483650":  {
+                                 "price":  199500,
+                                 "change_pct":  0.81,
+                                 "per":  null,
+                                 "mktcap":  null,
+                                 "high52":  274500,
+                                 "low52":  116200,
+                                 "upside":  null,
+                                 "margin":  null,
+                                 "near_low":  false,
+                                 "watch":  [
+
+                                           ],
+                                 "ma20":  216440,
+                                 "ma60":  214720,
+                                 "gap20":  -7.8,
+                                 "gap60":  -7.1,
+                                 "off_high":  -27.3,
+                                 "rsi14":  46.7,
+                                 "pullback":  {
+                                                  "trend":  "flat",
+                                                  "zone":  null,
+                                                  "ready":  false
+                                              }
+                             }
+              }
 }
