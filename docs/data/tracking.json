@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-10T22:47:39+09:00",
+ "updated": "2026-07-13T15:36:47+09:00",
  "kospi": {
-  "price": 7475.94,
-  "ma200": 5513.81,
-  "ma50": 7964.58,
+  "price": 7244.49,
+  "ma200": 5533.06,
+  "ma50": 7976.65,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-10T22:47:39+09:00"
+  "updated": "2026-07-13T15:36:47+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7800.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 7800.0,
+   "last_price": 7160.0,
    "peak_price": 7800.0,
-   "return_pct": 0.0,
-   "total_return_pct": 0.0,
+   "return_pct": -8.21,
+   "total_return_pct": -4.1,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -37,11 +37,11 @@
     }
    ],
    "tp_3r_done": false,
-   "was_extended": true,
-   "days_held": 0,
+   "was_extended": false,
+   "days_held": 3,
    "stage_now": 3,
-   "confidence_now": 100,
-   "last_updated": "2026-07-10",
+   "confidence_now": 80,
+   "last_updated": "2026-07-13",
    "signals_at_entry": [
     "MTT 통과",
     "RS 83 — 상위 강세",
@@ -51,6 +51,35 @@
    "last_action": "2026-07-10 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
   },
   {
+   "ticker": "010950",
+   "name": "S-Oil",
+   "sector": "석유 정제품 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-07-13",
+   "entry_price": 139500.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 139500.0,
+   "peak_price": 139500.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-07-13",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 87 — 상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 2.25x"
+   ]
+  },
+  {
    "ticker": "170920",
    "name": "엘티씨",
    "sector": "기초 화학물질 제조업",
@@ -58,13 +87,13 @@
    "entry_date": "2026-07-05",
    "entry_price": 54100.0,
    "entry_confidence": 80,
-   "last_price": 54100.0,
+   "last_price": 52300.0,
    "peak_price": 54100.0,
-   "return_pct": 0.0,
-   "days_held": 5,
+   "return_pct": -3.33,
+   "days_held": 8,
    "stage_now": null,
-   "confidence_now": 0,
-   "last_updated": "2026-07-10",
+   "confidence_now": 15,
+   "last_updated": "2026-07-13",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
@@ -76,7 +105,7 @@
    "realized_pct": 0.0,
    "tp_3r_done": false,
    "was_extended": false,
-   "total_return_pct": 0.0
+   "total_return_pct": -3.33
   },
   {
    "ticker": "010950",
@@ -87,19 +116,19 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 132100.0,
-   "peak_price": 133500.0,
-   "return_pct": 0.38,
-   "total_return_pct": 0.38,
+   "last_price": 139500.0,
+   "peak_price": 139500.0,
+   "return_pct": 6.0,
+   "total_return_pct": 6.0,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 2,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-10",
+   "days_held": 5,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-07-13",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -116,19 +145,19 @@
    "entry_price": 112100.0,
    "entry_confidence": 80,
    "init_stop_pct": -4.1,
-   "last_price": 106500.0,
-   "peak_price": 112100.0,
-   "return_pct": -5.0,
-   "total_return_pct": -5.0,
+   "last_price": 115800.0,
+   "peak_price": 115800.0,
+   "return_pct": 3.3,
+   "total_return_pct": 3.3,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 2,
+   "days_held": 5,
    "stage_now": 1,
-   "confidence_now": 50,
-   "last_updated": "2026-07-10",
+   "confidence_now": 60,
+   "last_updated": "2026-07-13",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.05x",
     "반전 확장 후 저점 상승",
@@ -144,10 +173,10 @@
    "entry_price": 7800.0,
    "entry_confidence": 93,
    "init_stop_pct": -12.0,
-   "last_price": 7800.0,
+   "last_price": 7160.0,
    "peak_price": 7800.0,
-   "return_pct": 0.0,
-   "total_return_pct": 0.0,
+   "return_pct": -8.21,
+   "total_return_pct": -4.1,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -160,11 +189,11 @@
     }
    ],
    "tp_3r_done": false,
-   "was_extended": true,
-   "days_held": 0,
+   "was_extended": false,
+   "days_held": 3,
    "stage_now": 3,
-   "confidence_now": 100,
-   "last_updated": "2026-07-10",
+   "confidence_now": 80,
+   "last_updated": "2026-07-13",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.13x",
     "불 스노트 — 거래량 폭증 4.13x",
@@ -172,6 +201,35 @@
     "반전 확장 후 저점 상승"
    ],
    "last_action": "2026-07-10 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
+  },
+  {
+   "ticker": "045100",
+   "name": "한양이엔지",
+   "sector": "건축기술, 엔지니어링 및 관련 기술 서비스업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-13",
+   "entry_price": 33750.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -3.7,
+   "last_price": 33750.0,
+   "peak_price": 33750.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 93,
+   "last_updated": "2026-07-13",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.46x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "베이스 거래량 마름 후 폭증",
+    "반전 확장 후 저점 상승"
+   ]
   }
  ],
  "exited": [
@@ -559,6 +617,10 @@
    {
     "date": "2026-07-10",
     "cum": -7.2
+   },
+   {
+    "date": "2026-07-13",
+    "cum": -6.58
    }
   ],
   "1": [
@@ -581,6 +643,10 @@
    {
     "date": "2026-07-10",
     "cum": -7.45
+   },
+   {
+    "date": "2026-07-13",
+    "cum": -6.52
    }
   ]
  },
@@ -617,6 +683,10 @@
    {
     "date": "2026-07-10",
     "nav": 821.36
+   },
+   {
+    "date": "2026-07-13",
+    "nav": 787.66
    }
   ],
   "1": [
@@ -634,31 +704,35 @@
    },
    {
     "date": "2026-07-06",
-    "nav": 948.38
+    "nav": 943.22
    },
    {
     "date": "2026-07-07",
-    "nav": 898.53
+    "nav": 889.45
    },
    {
     "date": "2026-07-08",
-    "nav": 855.78
+    "nav": 839.59
    },
    {
     "date": "2026-07-09",
-    "nav": 838.77
+    "nav": 840.07
    },
    {
     "date": "2026-07-10",
-    "nav": 857.95
+    "nav": 877.9
+   },
+   {
+    "date": "2026-07-13",
+    "nav": 895.64
    }
   ]
  },
  "nav_base": "2026-07-01",
  "stats": {
-  "holding_count": 5,
+  "holding_count": 7,
   "exited_count": 13,
-  "avg_return": -0.92,
+  "avg_return": -0.32,
   "win_rate": 0.0
  }
 }
