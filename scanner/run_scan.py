@@ -700,6 +700,34 @@ def _update_track_nav(state: dict, ledger: dict, ohlcv_map: dict):
 
 
 # ── 가치투자 시세/저평가 워치 (장마감 스냅샷) ──────────────────
+def _fnum(x, allow_zero: bool = False):
+    """pykrx 셀 값 → float. NaN·결측·(기본) 0 이하이면 None (비율 지표 결측 처리)."""
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return None
+    if v != v:  # NaN
+        return None
+    if not allow_zero and v <= 0:
+        return None
+    return v
+
+
+def _calc_fair_value(eps, bps, roe_pct, ke: float = 9.0, roe_cap: float = 25.0):
+    """자체 적정가 — RIM(잔여이익 영구환원)과 Graham Number 중 보수적(낮은) 값.
+    RIM은 경기순환 이익 과대평가를 막기 위해 ROE를 roe_cap%로 상한.
+    반환: (fair, rim, graham) — 계산 불가 항목은 None."""
+    rim = graham = None
+    if bps and roe_pct and roe_pct > 0:
+        rim = round(bps * (1 + (min(roe_pct, roe_cap) - ke) / ke))
+        if rim <= 0:
+            rim = None
+    if eps and bps and eps > 0:
+        graham = round((22.5 * eps * bps) ** 0.5)
+    cands = [v for v in (rim, graham) if v]
+    return (min(cands) if cands else None), rim, graham
+
+
 async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
     """value_universe.json 종목의 현재가·52주·상승여력·안전마진·저평가 워치를
     장마감 시점 시세로 계산해 value_price.json에 저장 (프론트가 value.json과 병합)."""
@@ -717,15 +745,22 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
             m["target"] = r["target_price"]
         if r.get("fair_value") is not None:
             m["fair"] = r["fair_value"]
-    # PER·시총 (pykrx, 최근 영업일) — 실패해도 나머지는 진행
-    per_map, cap_map = {}, {}
+    # 밸류 지표(PER·PBR·EPS·BPS·배당)·시총 (pykrx, 최근 영업일) — 실패해도 나머지는 진행
+    fund_map, cap_map = {}, {}
     try:
         from pykrx import stock as _pykrx
         for back in range(0, 6):
             d = (dt.datetime.now(tz=KST).date() - dt.timedelta(days=back)).strftime("%Y%m%d")
             fdf = _pykrx.get_market_fundamental_by_ticker(d)
             if fdf is not None and len(fdf):
-                per_map = {str(t).zfill(6): fdf.loc[t, "PER"] for t in fdf.index}
+                for t in fdf.index:
+                    fund_map[str(t).zfill(6)] = {
+                        "per": _fnum(fdf.loc[t, "PER"]),
+                        "pbr": _fnum(fdf.loc[t, "PBR"]),
+                        "eps": _fnum(fdf.loc[t, "EPS"]),
+                        "bps": _fnum(fdf.loc[t, "BPS"]),
+                        "div": _fnum(fdf.loc[t, "DIV"], allow_zero=True),
+                    }
                 try:
                     cdf = _pykrx.get_market_cap_by_ticker(d)
                     cap_map = {str(t).zfill(6): cdf.loc[t, "시가총액"] for t in cdf.index}
@@ -734,6 +769,17 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
                 break
     except Exception as e:
         logger.warning("pykrx 밸류 지표 실패(무시): %s", e)
+
+    # DART 확정 ROE (value.json metrics) — RIM 적정가 입력. 없으면 EPS/BPS로 근사.
+    roe_map: dict = {}
+    try:
+        vj = json.loads((DATA_DIR / "value.json").read_text(encoding="utf-8"))
+        for r in vj.get("universe", []) + vj.get("portfolio", []):
+            roe = (r.get("metrics") or {}).get("roe")
+            if r.get("code") and isinstance(roe, (int, float)):
+                roe_map[r["code"]] = float(roe)
+    except Exception:
+        pass
 
     items: dict = {}
     for code, m in meta.items():
@@ -747,8 +793,12 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
             continue
         price = realtime.get(code) or float(df.iloc[-1]["close"])
         change_pct = round((float(df.iloc[-1]["close"]) / float(df.iloc[-2]["close"]) - 1) * 100, 2) if len(df) >= 2 and float(df.iloc[-2]["close"]) else None
-        per_v = per_map.get(code)
-        per_str = f"{round(float(per_v), 1)}x" if (per_v and float(per_v) > 0) else None
+        f = fund_map.get(code, {})
+        eps, bps, div_v = f.get("eps"), f.get("bps"), f.get("div")
+        # PER·PBR: pykrx 우선, 결측 시 가격/EPS·BPS 역산 (신규 상장 등 KRX 결측 보완)
+        per_v = f.get("per") or (round(price / eps, 1) if eps else None)
+        per_str = f"{round(per_v, 1)}x" if per_v else None
+        pbr_v = f.get("pbr") or (round(price / bps, 2) if bps else None)
         cap_v = cap_map.get(code)
         mktcap_str = f"{round(cap_v / 1e8):,}억" if cap_v else None
         tail = df.tail(250)
@@ -782,8 +832,13 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
             elif gap20 < -3 and gap60 is not None and gap60 >= 0:
                 zone = "MA20~60 조정대"
         pullback = {"trend": trend, "zone": zone, "ready": bool(zone)}
-        target, fair = m["target"], m["fair"]
+        target = m["target"]
         upside = round((target / price - 1) * 100, 1) if (target and price) else None
+        # 안전마진 — 수동 적정가 우선, 없으면 자체 적정가(RIM·Graham 보수값)로 계산
+        roe = roe_map.get(code) or (round(eps / bps * 100, 1) if (eps and bps) else None)
+        fair_calc, fair_rim, fair_graham = _calc_fair_value(eps, bps, roe)
+        fair = m["fair"] or fair_calc
+        fair_src = "manual" if m["fair"] else ("calc" if fair else None)
         margin = round((fair - price) / fair * 100, 1) if (fair and price) else None
         near_low = bool(low52 and price <= low52 * 1.1)
         watch = []
@@ -795,6 +850,8 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
             watch.append("52주 저점 근접")
         items[code] = {
             "price": round(price), "change_pct": change_pct, "per": per_str, "mktcap": mktcap_str,
+            "pbr": pbr_v, "div": div_v, "eps": eps, "bps": bps, "roe": roe,
+            "fair": fair, "fair_src": fair_src, "fair_rim": fair_rim, "fair_graham": fair_graham,
             "high52": round(high52), "low52": round(low52),
             "upside": upside, "margin": margin, "near_low": near_low, "watch": watch,
             "ma20": ma20, "ma60": ma60, "gap20": gap20, "gap60": gap60,

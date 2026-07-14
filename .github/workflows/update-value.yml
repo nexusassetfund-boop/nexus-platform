@@ -23,3 +23,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/data/value.json
           git diff --cached --quiet || (git commit -m "value: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" && git pull --rebase origin main && git push)
+      - name: KV 즉시 반영 (value 단독 커밋은 스캔 동기화를 타지 않으므로 직접 push)
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: |
+          test -f docs/data/value.json || exit 0
+          python -c "import json; print(json.dumps({'files': {'value.json': json.load(open('docs/data/value.json'))}}))" > /tmp/push.json
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
+            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/push.json || echo "KV push 실패 — 다음 스캔 동기화 때 자동 반영됨"

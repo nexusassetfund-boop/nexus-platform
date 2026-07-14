@@ -1,0 +1,39 @@
+name: 가치투자 자동 스크리닝
+on:
+  schedule:
+    - cron: "10 7 * * 1"    # 매주 월 16:10 KST (장마감 후) — 재무는 주 1회면 충분
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: value-screen, cancel-in-progress: false }
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      - name: 스크리닝 실행
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python scanner/value_screen.py
+      - name: 결과 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/value_screen.json
+          git diff --cached --quiet || (git commit -m "value-screen: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" && git pull --rebase origin main && git push)
+      - name: KV 즉시 반영 (다음 스캔 동기화 대기 없이)
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: |
+          test -f docs/data/value_screen.json || exit 0
+          python -c "import json; print(json.dumps({'files': {'value_screen.json': json.load(open('docs/data/value_screen.json'))}}))" > /tmp/push.json
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
+            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/push.json || echo "KV push 실패 — 다음 스캔 동기화 때 자동 반영됨"
