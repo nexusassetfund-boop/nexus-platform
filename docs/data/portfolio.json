@@ -1,16 +1,17 @@
 {
- "updated": "2026-07-14T21:04:04+09:00",
+ "updated": "2026-07-14T21:53:23+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": null,
+  "portfolio_value": 141131068.0,
   "cash": 115203096.0,
   "eval_pnl": -2023000.0,
   "eval_pnl_pct": -7.2,
-  "cum_pnl": null,
-  "cum_pnl_pct": null,
-  "day_change": null,
-  "day_change_pct": null,
-  "nav_index": null,
+  "cum_pnl": -8868932.0,
+  "cum_pnl_pct": -5.91,
+  "day_change": 624000.0,
+  "day_change_pct": 0.44,
+  "realized_pnl": 6717404.0,
+  "nav_index": 940.87,
   "n_stocks": 2.0,
   "n_win": 2.0,
   "n_loss": 0.0,
@@ -25,7 +26,7 @@
    },
    "dow": {
     "value": 52498.6,
-    "change": -138.4
+    "change": 0.0
    },
    "nasdaq": {
     "value": 25873.2,
@@ -36,8 +37,8 @@
     "change": -60.1
    },
    "usdkrw": {
-    "value": 1495.9,
-    "change": -1.6
+    "value": 1487.8,
+    "change": -9.7
    }
   }
  },
@@ -279,7 +280,7 @@
    "qty": 140.0,
    "unit_price": 85600.0,
    "amount": 11984000.0,
-   "realized_pnl": null,
+   "realized_pnl": -392000.0,
    "fee": 1798.0,
    "tax": 23968.0,
    "memo": "포트폴리오 리셋으로 전량 매도"
@@ -349,7 +350,7 @@
    "qty": 6.0,
    "unit_price": 1303000.0,
    "amount": 7818000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1329000.0,
    "fee": 1173.0,
    "tax": 15636.0,
    "memo": ""
@@ -363,7 +364,7 @@
    "qty": 13.0,
    "unit_price": 656000.0,
    "amount": 8528000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1287000.0,
    "fee": 1279.0,
    "tax": 17056.0,
    "memo": "고점대비 -17%(-13% 절반 손절)"
@@ -377,7 +378,7 @@
    "qty": 6.0,
    "unit_price": 1340000.0,
    "amount": 8040000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1107000.0,
    "fee": 1206.0,
    "tax": 16080.0,
    "memo": ""
@@ -391,7 +392,7 @@
    "qty": 13.0,
    "unit_price": 621692.0,
    "amount": 8081996.0,
-   "realized_pnl": null,
+   "realized_pnl": -1733004.0,
    "fee": 1212.0,
    "tax": 16164.0,
    "memo": ""
@@ -405,7 +406,7 @@
    "qty": 84.0,
    "unit_price": 109050.0,
    "amount": 9160200.0,
-   "realized_pnl": null,
+   "realized_pnl": -869400.0,
    "fee": 1374.0,
    "tax": 18320.0,
    "memo": ""
