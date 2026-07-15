@@ -1,44 +1,44 @@
 {
- "updated": "2026-07-14T21:53:23+09:00",
+ "updated": "2026-07-15T10:09:45+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": 141131068.0,
+  "portfolio_value": 143333068.0,
   "cash": 115203096.0,
-  "eval_pnl": -2023000.0,
-  "eval_pnl_pct": -7.2,
-  "cum_pnl": -8868932.0,
-  "cum_pnl_pct": -5.91,
-  "day_change": 624000.0,
-  "day_change_pct": 0.44,
+  "eval_pnl": 179000.0,
+  "eval_pnl_pct": 0.64,
+  "cum_pnl": -6666932.0,
+  "cum_pnl_pct": -4.44,
+  "day_change": 2202000.0,
+  "day_change_pct": 1.56,
   "realized_pnl": 6717404.0,
-  "nav_index": 940.87,
+  "nav_index": 955.55,
   "n_stocks": 2.0,
   "n_win": 2.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6856.8,
-    "change": 49.9
+    "value": 7325.8,
+    "change": 468.9
    },
    "kosdaq": {
-    "value": 784.0,
-    "change": 15.4
+    "value": 820.1,
+    "change": 36.1
    },
    "dow": {
-    "value": 52498.6,
-    "change": 0.0
+    "value": 52508.3,
+    "change": 9.6
    },
    "nasdaq": {
-    "value": 25873.2,
-    "change": -408.4
+    "value": 26107.0,
+    "change": 233.8
    },
    "sp500": {
-    "value": 7515.3,
-    "change": -60.1
+    "value": 7543.6,
+    "change": 28.3
    },
    "usdkrw": {
-    "value": 1487.8,
-    "change": -9.7
+    "value": 1489.2,
+    "change": 0.09
    }
   }
  },
@@ -48,17 +48,17 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 35.0,
-   "price": 197900.0,
-   "change_pct": -0.8,
+   "price": 199100.0,
+   "change_pct": 0.61,
    "avg_price": 223700.0,
-   "eval_pnl": -903000.0,
-   "return_pct": -11.53,
-   "contrib_pct": -0.9,
-   "eval_amount": 6926500.0,
+   "eval_pnl": -861000.0,
+   "return_pct": -11.0,
+   "contrib_pct": -0.86,
+   "eval_amount": 6968500.0,
    "buy_amount": 7829500.0,
    "target_price": null,
    "buy_date": "2026-07-01",
-   "hold_days": 13.0,
+   "hold_days": 14.0,
    "weight": "27.9%",
    "memo": ""
   },
@@ -67,17 +67,17 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 10.0,
-   "price": 1913000.0,
-   "change_pct": 3.69,
+   "price": 2129000.0,
+   "change_pct": 11.29,
    "avg_price": 2025000.0,
-   "eval_pnl": -1120000.0,
-   "return_pct": -5.53,
-   "contrib_pct": -1.12,
-   "eval_amount": 19130000.0,
+   "eval_pnl": 1040000.0,
+   "return_pct": 5.14,
+   "contrib_pct": 1.04,
+   "eval_amount": 21290000.0,
    "buy_amount": 20250000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
-   "hold_days": 6.0,
+   "hold_days": 7.0,
    "weight": "72.1%",
    "memo": ""
   }
@@ -111,7 +111,7 @@
    "change_pct": 3.69,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "13,633,993억",
+   "mktcap": "13,633,997억",
    "per": "18.1x",
    "eps": "105,627원",
    "high52": 2987000.0,
@@ -147,7 +147,7 @@
    "change_pct": 2.5,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "1,570,305억",
+   "mktcap": "1,570,304억",
    "per": "10.1x",
    "eps": "117,817원",
    "high52": 2189000.0,
@@ -514,6 +514,12 @@
    }
   ],
   "value": [
+   {
+    "date": "2026-7-15",
+    "portfolio_value": 143333068.0,
+    "total_value": 28258500.0,
+    "eval_pnl": 179000.0
+   },
    {
     "date": "2026-7-14",
     "portfolio_value": 141131068.41,
