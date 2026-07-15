@@ -35,6 +35,7 @@ from data_provider import (
     load_config,
 )
 from stage_detector import analyze_stock
+from drawdown_metrics import derive_drawdown_metrics
 
 logger = logging.getLogger("run_scan")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -955,6 +956,15 @@ async def main():
                 out["change_pct"] = round((float(df.iloc[-1]["close"]) / float(prev) - 1) * 100, 2) if prev else 0.0
             else:
                 out["change_pct"] = 0.0
+            # 낙폭 스크리너용 파생 (추가 API 호출 없음 — 조회해둔 df 재사용)
+            try:
+                out.update(derive_drawdown_metrics(
+                    df["high"].tolist() if "high" in df else [],
+                    df["low"].tolist() if "low" in df else [],
+                    df["close"].tolist(),
+                ))
+            except Exception as e:
+                logger.warning("낙폭 파생 실패 %s: %s", ticker, e)
             results.append(out)
         except Exception as e:
             logger.warning("분석 실패 %s: %s", ticker, e)
