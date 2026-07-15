@@ -88,17 +88,6 @@
   ],
   "portfolio": [
     {
-      "name": "신세계",
-      "code": "004170",
-      "buy_date": "2026-07-01",
-      "buy_price": 755000,
-      "qty": 26,
-      "target_price": 684000,
-      "stop_loss": null,
-      "thesis": null,
-      "memo": ""
-    },
-    {
       "name": "달바글로벌",
       "code": "483650",
       "buy_date": "2026-07-01",
