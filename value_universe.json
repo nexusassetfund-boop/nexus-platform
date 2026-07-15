@@ -6,9 +6,9 @@
       "code": "000660",
       "sector": "반도체",
       "since": "2026-01-16",
-      "target_price": 2987000,
+      "target_price": 2988000,
       "fair_value": null,
-      "point": "HBM 사이클 수혜, 메모리 업턴",
+      "point": "HBM 사이클 수혜, 메모리 업턴 [편집테스트]",
       "risk": "메모리 다운사이클 진입 시 실적 급락",
       "note": "",
       "business": "메모리 반도체(DRAM·NAND) 제조·판매. AI 서버용 고대역폭메모리(HBM)에서 글로벌 선두권."
@@ -87,17 +87,6 @@
     }
   ],
   "portfolio": [
-    {
-      "name": "SK하이닉스",
-      "code": "000660",
-      "buy_date": "2026-07-01",
-      "buy_price": 2650000,
-      "qty": 21,
-      "target_price": 2987000,
-      "stop_loss": null,
-      "thesis": null,
-      "memo": "리뷰 예정 (넥서스 편집기 테스트 2026-07-14)"
-    },
     {
       "name": "신세계",
       "code": "004170",
