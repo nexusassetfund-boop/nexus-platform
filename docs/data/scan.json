@@ -1,5 +1,5 @@
 {
- "scan_time": "2026-07-17T20:57:28+09:00",
+ "scan_time": "2026-07-17T21:46:18+09:00",
  "universe_size": 350,
  "scanned": 350,
  "kospi": {
@@ -11,7 +11,7 @@
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-17T20:57:28+09:00"
+  "updated": "2026-07-17T21:46:18+09:00"
  },
  "sector_etf_rs": {
   "semiconductor": {
