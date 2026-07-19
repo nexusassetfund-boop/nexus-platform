@@ -161,6 +161,28 @@ def get_prices_krx(ticker: str, frm: str, to: str) -> list[dict] | None:
         return None
 
 
+def get_mcaps(ticker: str, disc_date: str) -> tuple[int | None, int | None]:
+    """발표일(d0)·다음 거래일(d1) 종가 기준 시가총액 (억원) — KRX 일별 시총.
+
+    일봉은 수정주가라 '주식수×종가'로 역산하면 권리락 보정만큼 틀어지므로,
+    KRX가 제공하는 실제(명목) 일별 시가총액을 그대로 사용한다.
+    """
+    try:
+        from pykrx import stock as krx
+        frm = disc_date.replace("-", "")
+        to = (datetime.strptime(disc_date, "%Y-%m-%d") + timedelta(days=14)).strftime("%Y%m%d")
+        df = krx.get_market_cap(frm, to, ticker)
+        if df is None or df.empty:
+            return None, None
+        caps = [int(v) for v in df["시가총액"].tolist() if v and int(v) > 0]
+        d0 = round(caps[0] / 1e8) if len(caps) >= 1 else None
+        d1 = round(caps[1] / 1e8) if len(caps) >= 2 else None
+        return d0, d1
+    except Exception as e:
+        print(f"    시총 오류 {ticker}: {e}")
+        return None, None
+
+
 def get_prices_fdr(ticker: str, frm: str, to: str) -> list[dict] | None:
     try:
         import FinanceDataReader as fdr
@@ -201,9 +223,10 @@ def main():
     print("\n[2/3] fricDecsn 상세 (배정비율·기준일)...")
     details = fetch_details({r["corp_code"] for r in rows})
 
-    print(f"\n[3/3] 일봉 수집 ({len(rows)}건)...")
+    print(f"\n[3/3] 일봉·시가총액 수집 ({len(rows)}건)...")
     today = datetime.now().strftime("%Y-%m-%d")
     price_cache: dict[str, list[dict]] = {}  # ticker → 전체 구간 일봉 (동일종목 복수 이벤트 공유)
+    mcap_cache: dict[tuple[str, str], tuple[int | None, int | None]] = {}
     events: list[dict] = []
 
     # 종목별 필요 구간: 가장 이른 공시 2주 전 ~ 오늘
@@ -238,6 +261,12 @@ def main():
             continue
         prices = all_prices[max(0, idx0 - PRE_BARS): idx0 + MAX_BARS_AFTER]
 
+        mc_key = (ticker, disc_date)
+        if mc_key not in mcap_cache:
+            mcap_cache[mc_key] = get_mcaps(ticker, disc_date)
+            time.sleep(0.2)
+        mcap_d0, mcap_d1 = mcap_cache[mc_key]
+
         det = details.get(r["rcept_no"], {})
         events.append({
             "ticker": ticker,
@@ -247,6 +276,8 @@ def main():
             "ratio": det.get("ratio"),
             "record_date": det.get("record_date"),
             "listing_date": det.get("listing_date"),
+            "mcap_d0": mcap_d0,  # 발표일 종가 기준 시가총액(억원)
+            "mcap_d1": mcap_d1,  # 다음거래일 종가 기준 시가총액(억원)
             "prices": prices,
         })
         ratio_txt = f"1주당 {det['ratio']:g}주" if det.get("ratio") else "비율 ?"
