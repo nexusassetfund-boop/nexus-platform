@@ -130,6 +130,8 @@ def fetch_details(corp_codes: set[str]) -> dict[str, dict]:
                 "ratio": ratio,
                 "record_date": _date_iso(row.get("nstk_asstd")),
                 "listing_date": _date_iso(row.get("nstk_lstprd")),
+                "new_shares": new_shares,      # 신주 보통주식수
+                "base_shares": base_shares,    # 증자 전 발행주식총수(보통)
             }
         if i % 50 == 0:
             print(f"  fricDecsn {i}/{len(corp_codes)}")
@@ -161,26 +163,21 @@ def get_prices_krx(ticker: str, frm: str, to: str) -> list[dict] | None:
         return None
 
 
-def get_mcaps(ticker: str, disc_date: str) -> tuple[int | None, int | None]:
-    """발표일(d0)·다음 거래일(d1) 종가 기준 시가총액 (억원) — KRX 일별 시총.
+def calc_mcaps(all_prices: list[dict], idx0: int, det: dict) -> tuple[int | None, int | None]:
+    """발표일(d0)·다음 거래일(d1) 종가 기준 시가총액 (억원).
 
-    일봉은 수정주가라 '주식수×종가'로 역산하면 권리락 보정만큼 틀어지므로,
-    KRX가 제공하는 실제(명목) 일별 시가총액을 그대로 사용한다.
+    KRX 일별 시총 API는 로그인(KRX_ID/PW)이 필요해 CI에서 못 쓴다. 대신
+    공시상 '증자 전 발행주식총수 + 신주 수' × 매수일 수정주가 종가로 계산한다.
+    수정주가는 권리락 배율(구주/(구주+신주))로 나눠져 있어, 증자 후 주식수를
+    곱하면 명목 시총과 정확히 일치한다 (이후 추가 감자·분할 시에만 오차).
     """
-    try:
-        from pykrx import stock as krx
-        frm = disc_date.replace("-", "")
-        to = (datetime.strptime(disc_date, "%Y-%m-%d") + timedelta(days=14)).strftime("%Y%m%d")
-        df = krx.get_market_cap(frm, to, ticker)
-        if df is None or df.empty:
-            return None, None
-        caps = [int(v) for v in df["시가총액"].tolist() if v and int(v) > 0]
-        d0 = round(caps[0] / 1e8) if len(caps) >= 1 else None
-        d1 = round(caps[1] / 1e8) if len(caps) >= 2 else None
-        return d0, d1
-    except Exception as e:
-        print(f"    시총 오류 {ticker}: {e}")
+    base, new = det.get("base_shares"), det.get("new_shares")
+    if not base or new is None:
         return None, None
+    shares_after = base + new
+    d0 = round(shares_after * all_prices[idx0]["c"] / 1e8) if idx0 < len(all_prices) else None
+    d1 = round(shares_after * all_prices[idx0 + 1]["c"] / 1e8) if idx0 + 1 < len(all_prices) else None
+    return d0, d1
 
 
 def get_prices_fdr(ticker: str, frm: str, to: str) -> list[dict] | None:
@@ -226,7 +223,6 @@ def main():
     print(f"\n[3/3] 일봉·시가총액 수집 ({len(rows)}건)...")
     today = datetime.now().strftime("%Y-%m-%d")
     price_cache: dict[str, list[dict]] = {}  # ticker → 전체 구간 일봉 (동일종목 복수 이벤트 공유)
-    mcap_cache: dict[tuple[str, str], tuple[int | None, int | None]] = {}
     events: list[dict] = []
 
     # 종목별 필요 구간: 가장 이른 공시 2주 전 ~ 오늘
@@ -246,7 +242,8 @@ def main():
 
         if ticker not in price_cache:
             frm = (datetime.strptime(earliest[ticker], "%Y-%m-%d") - timedelta(days=14)).strftime("%Y-%m-%d")
-            prices = get_prices_krx(ticker, frm, today) or get_prices_fdr(ticker, frm, today)
+            # FDR(네이버 일봉·KRX 정규장) 우선 — pykrx는 KRX 로그인 요구로 CI에서 실패함
+            prices = get_prices_fdr(ticker, frm, today) or get_prices_krx(ticker, frm, today)
             price_cache[ticker] = prices or []
             time.sleep(0.3)
         all_prices = price_cache[ticker]
@@ -261,13 +258,8 @@ def main():
             continue
         prices = all_prices[max(0, idx0 - PRE_BARS): idx0 + MAX_BARS_AFTER]
 
-        mc_key = (ticker, disc_date)
-        if mc_key not in mcap_cache:
-            mcap_cache[mc_key] = get_mcaps(ticker, disc_date)
-            time.sleep(0.2)
-        mcap_d0, mcap_d1 = mcap_cache[mc_key]
-
         det = details.get(r["rcept_no"], {})
+        mcap_d0, mcap_d1 = calc_mcaps(all_prices, idx0, det)
         events.append({
             "ticker": ticker,
             "name": name,
