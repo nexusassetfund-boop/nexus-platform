@@ -1,0 +1,37 @@
+name: 무상증자 백테스터 데이터
+# 이벤트드리븐 > 무상증자 탭용. DART 공시 + pykrx(KRX) 일봉.
+# 산출물은 repo에 커밋하지 않고 Worker KV(bonus_backtest.json)로만 게시한다.
+on:
+  schedule:
+    - cron: "20 23 * * *"   # 매일 KST 08:20 — 전일 종가까지 반영 (ipo-backtest와 시차)
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency: { group: bonus-backtest, cancel-in-progress: false }
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      TZ: Asia/Seoul
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      - name: 기존 KV 데이터 확보 (시가총액 보존용 — 매수일 시총은 최초 확정값 유지)
+        run: |
+          mkdir -p docs/data
+          curl -sf --max-time 60 "https://nexus-platform.nexusassetfund.workers.dev/data/bonus_backtest.json" \
+            -o docs/data/bonus_backtest.json || echo "기존 데이터 없음 — 신규 수집"
+      - name: 무상증자 데이터 수집
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python scanner/bonus_fetcher.py
+      - name: Worker KV 게시
+        env:
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python scanner/post_bonus_backtest.py

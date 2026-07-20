@@ -35,6 +35,7 @@ from data_provider import (
     load_config,
 )
 from stage_detector import analyze_stock
+from drawdown_metrics import derive_drawdown_metrics
 
 logger = logging.getLogger("run_scan")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -857,12 +858,17 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
         margin = round((fair - price) / fair * 100, 1) if (fair and price) else None
         near_low = bool(low52 and price <= low52 * 1.1)
         watch = []
-        if upside is not None and upside >= 20:
-            watch.append("목표가 대비 저평가")
-        if margin is not None and margin >= 20:
-            watch.append("안전마진 충분")
-        if near_low:
-            watch.append("52주 저점 근접")
+        # 자체 적정가(RIM·Graham)가 현재가보다 낮으면(안전마진 음수) 내재가치 기준 고평가다.
+        # 이때 목표가(수동, 낙관적일 수 있음)·52주저점 신호로 "저평가"를 붙이면 적정가와
+        # 모순 → 배지를 붙이지 않는다. (수동 적정가면 margin이 그 기준이므로 fair_src로 구분)
+        overvalued = fair_src == "calc" and margin is not None and margin < 0
+        if not overvalued:
+            if upside is not None and upside >= 20:
+                watch.append("목표가 대비 저평가")
+            if margin is not None and margin >= 20:
+                watch.append("안전마진 충분")
+            if near_low:
+                watch.append("52주 저점 근접")
         items[code] = {
             "price": round(price), "change_pct": change_pct, "per": per_str, "mktcap": mktcap_str,
             "pbr": pbr_v, "div": div_v, "eps": eps, "bps": bps, "roe": roe,
@@ -955,6 +961,15 @@ async def main():
                 out["change_pct"] = round((float(df.iloc[-1]["close"]) / float(prev) - 1) * 100, 2) if prev else 0.0
             else:
                 out["change_pct"] = 0.0
+            # 낙폭 스크리너용 파생 (추가 API 호출 없음 — 조회해둔 df 재사용)
+            try:
+                out.update(derive_drawdown_metrics(
+                    df["high"].tolist() if "high" in df else [],
+                    df["low"].tolist() if "low" in df else [],
+                    df["close"].tolist(),
+                ))
+            except Exception as e:
+                logger.warning("낙폭 파생 실패 %s: %s", ticker, e)
             results.append(out)
         except Exception as e:
             logger.warning("분석 실패 %s: %s", ticker, e)

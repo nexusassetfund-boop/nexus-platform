@@ -37,6 +37,9 @@ jobs:
         env:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+          # KIS 토큰 24h 공유(Worker KV) 인증 — 없으면 러너마다 재발급(분당 1회 제한 위험).
+          # value-screen.yml과 동일 패턴. data_provider._kis_token_remote_get/put이 사용.
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
         run: python scanner/run_scan.py
 
       - name: 결과 커밋

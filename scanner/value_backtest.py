@@ -279,6 +279,23 @@ def screen_at(sig_date, universe, fund, cap, p, fstore: FScoreStore | None, mom=
         survivors = _apply_fscore_cut(sig_date, ranked[:p["top_fscore"]], p, fstore)
         return survivors[:p["top"]], len(prelim)
 
+    if p["sort"] == "qvm":
+        # 복합 랭크 — 밸류(안전마진)·퀄리티(F-Score)·모멘텀(12-1) 백분위 평균. 컷 없음, 결측은 중립(0.5).
+        assert mom is not None, "qvm 정렬에는 mom 조회 함수 필요"
+        for rec in prelim:
+            rec["mom"] = mom(rec["code"])
+        pool = [r for r in prelim if r["mom"] is not None]
+        pool = _apply_fscore_cut(sig_date, pool, {**p, "fscore_min": -10}, fstore)  # 점수 부여만
+        def _pct(key):
+            vals = sorted(r[key] for r in pool if r[key] is not None)
+            n = len(vals)
+            return lambda r: 0.5 if r[key] is None or n < 2 else vals.index(r[key]) / (n - 1)
+        pm, pf, pmo = _pct("margin"), _pct("f_score"), _pct("mom")
+        for r in pool:
+            r["qvm"] = round((pm(r) + pf(r) + pmo(r)) / 3, 4)
+        pool.sort(key=lambda r: r["qvm"], reverse=True)
+        return pool[:p["top"]], len(prelim)
+
     prelim.sort(key=lambda x: x["margin"], reverse=True)
     survivors = _apply_fscore_cut(sig_date, prelim[:p["top_fscore"]], p, fstore)
     if p["sort"] != "margin":  # margin: F-Score는 컷 전용, 마진 순 유지
@@ -296,7 +313,7 @@ def run_screens(rebals, p, fstore, mom_closes: pd.DataFrame | None = None):
         uni, src = fetch_universe_pit(sig)
         fund, cap, snap_d = fetch_snapshot(sig)
         assert snap_d <= sig.strftime("%Y%m%d"), "look-ahead: 스냅샷이 신호일 이후"
-        mom = _make_mom(mom_closes, sig, p) if p["sort"] == "momentum" else None
+        mom = _make_mom(mom_closes, sig, p) if p["sort"] in ("momentum", "qvm") else None
         sel, n_prelim = screen_at(sig, uni, fund, cap, p, fstore, mom)
         out.append({"sig": sig, "ex": ex, "selected": sel, "n_prelim": n_prelim, "uni_src": src})
         if fstore:
@@ -612,7 +629,7 @@ def probe():
 # ── 실행 ─────────────────────────────────────────────────
 def run_one(days, rebals, p, fstore, start, end, bench,
             slip_mult=1.0, full_rebalance=False, label="base"):
-    if p["sort"] == "momentum":
+    if p["sort"] in ("momentum", "qvm"):
         # 사전 단계: 밸류 관문 통과 전 종목 가격 확보 (모멘텀 룩백만큼 과거로 연장)
         prelim_codes = collect_prelim_codes(rebals, p)
         mom_start = (pd.Timestamp(start) - pd.Timedelta(days=int((p["mom_win"] + p["mom_skip"]) * 1.6) + 30)
@@ -643,7 +660,7 @@ def main():
     ap.add_argument("--margin-min", type=float, default=MARGIN_MIN)
     ap.add_argument("--fscore-min", type=int, default=FSCORE_MIN)
     ap.add_argument("--no-fscore", action="store_true")
-    ap.add_argument("--sort", choices=["fscore_margin", "margin", "momentum"], default="fscore_margin")
+    ap.add_argument("--sort", choices=["fscore_margin", "margin", "momentum", "qvm"], default="fscore_margin")
     ap.add_argument("--mom-win", type=int, default=MOM_WIN, help="모멘텀 룩백 거래일 (기본=라이브 12-1)")
     ap.add_argument("--mom-skip", type=int, default=MOM_SKIP, help="최근 N거래일 제외 (기본=라이브 12-1)")
     ap.add_argument("--full-rebalance", action="store_true")
@@ -685,7 +702,7 @@ def main():
         "metrics": m,
         "screens": [{"sig": str(s["sig"].date()), "n_prelim": s["n_prelim"],
                      "uni_src": s["uni_src"],
-                     "selected": [{k: r.get(k) for k in ("code", "name", "margin", "per", "pbr", "f_score", "mom")}
+                     "selected": [{k: r.get(k) for k in ("code", "name", "margin", "per", "pbr", "f_score", "mom", "qvm")}
                                   for r in s["selected"]]} for s in screens],
         "trades": trades,
         "nav": {str(k.date()): round(float(v), 5) for k, v in nav.items()},

@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-14T21:52:55+09:00",
+ "updated": "2026-07-20T15:39:34+09:00",
  "kospi": {
-  "price": 6856.83,
-  "ma200": 5548.12,
-  "ma50": 7971.21,
+  "price": 6515.09,
+  "ma200": 5599.6,
+  "ma50": 7965.21,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-14T21:52:55+09:00"
+  "updated": "2026-07-20T15:39:34+09:00"
  },
  "holdings": [
   {
@@ -21,19 +21,19 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 131400.0,
-   "peak_price": 139500.0,
-   "return_pct": -5.81,
-   "total_return_pct": -5.81,
+   "last_price": 146700.0,
+   "peak_price": 146700.0,
+   "return_pct": 5.16,
+   "total_return_pct": 5.16,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 1,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-14",
+   "days_held": 7,
+   "stage_now": 1,
+   "confidence_now": 75,
+   "last_updated": "2026-07-20",
    "signals_at_entry": [
     "MTT 통과",
     "RS 87 — 상위 강세",
@@ -49,13 +49,13 @@
    "entry_date": "2026-07-05",
    "entry_price": 54100.0,
    "entry_confidence": 80,
-   "last_price": 55500.0,
-   "peak_price": 55500.0,
-   "return_pct": 2.59,
-   "days_held": 9,
+   "last_price": 55000.0,
+   "peak_price": 56500.0,
+   "return_pct": 1.66,
+   "days_held": 15,
    "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-14",
+   "confidence_now": 0,
+   "last_updated": "2026-07-20",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
@@ -67,7 +67,7 @@
    "realized_pct": 0.0,
    "tp_3r_done": false,
    "was_extended": false,
-   "total_return_pct": 2.59
+   "total_return_pct": 1.66
   },
   {
    "ticker": "010950",
@@ -78,26 +78,28 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 131400.0,
-   "peak_price": 139500.0,
-   "return_pct": -0.15,
-   "total_return_pct": -0.15,
+   "last_price": 146700.0,
+   "peak_price": 146700.0,
+   "return_pct": 11.47,
+   "total_return_pct": 11.47,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 6,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-07-14",
+   "days_held": 12,
+   "stage_now": 1,
+   "confidence_now": 75,
+   "last_updated": "2026-07-20",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승",
     "RS 88 — 상위 강세"
    ]
-  },
+  }
+ ],
+ "exited": [
   {
    "ticker": "161890",
    "name": "한국콜마",
@@ -107,24 +109,59 @@
    "entry_price": 112100.0,
    "entry_confidence": 80,
    "init_stop_pct": -4.1,
-   "last_price": 106300.0,
+   "last_price": 99500.0,
    "peak_price": 115800.0,
-   "return_pct": -5.17,
-   "total_return_pct": -5.17,
+   "return_pct": -11.24,
+   "total_return_pct": -11.24,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 6,
+   "days_held": 12,
    "stage_now": 1,
-   "confidence_now": 50,
-   "last_updated": "2026-07-14",
+   "confidence_now": 55,
+   "last_updated": "2026-07-20",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.05x",
     "반전 확장 후 저점 상승",
     "RS 83 — 상위 강세"
-   ]
+   ],
+   "exit_date": "2026-07-20",
+   "exit_price": 99500.0,
+   "exit_reason": "손절 (-11.24%)"
+  },
+  {
+   "ticker": "127120",
+   "name": "제이에스링크",
+   "sector": "자연과학 및 공학 연구개발업",
+   "entry_stage": 1,
+   "entry_date": "2026-07-15",
+   "entry_price": 40250.0,
+   "entry_confidence": 83,
+   "init_stop_pct": -8.7,
+   "last_price": 34750.0,
+   "peak_price": 40250.0,
+   "return_pct": -13.66,
+   "total_return_pct": -13.66,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 1,
+   "stage_now": null,
+   "confidence_now": 0.0,
+   "last_updated": "2026-07-16",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.08x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "당일 신규 탈환"
+   ],
+   "exit_date": "2026-07-16",
+   "exit_price": 34750.0,
+   "exit_reason": "손절 (-13.66%)"
   },
   {
    "ticker": "045100",
@@ -135,28 +172,29 @@
    "entry_price": 33750.0,
    "entry_confidence": 93,
    "init_stop_pct": -3.7,
-   "last_price": 32750.0,
-   "peak_price": 33750.0,
-   "return_pct": -2.96,
-   "total_return_pct": -2.96,
+   "last_price": 30800.0,
+   "peak_price": 33800.0,
+   "return_pct": -8.74,
+   "total_return_pct": -8.74,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 1,
+   "days_held": 3,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-07-14",
+   "last_updated": "2026-07-16",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.46x",
     "10-20 EMA 압착 (변동성 수축)",
     "베이스 거래량 마름 후 폭증",
     "반전 확장 후 저점 상승"
-   ]
-  }
- ],
- "exited": [
+   ],
+   "exit_date": "2026-07-16",
+   "exit_price": 30800.0,
+   "exit_reason": "추세 이탈 (MA60 하회)"
+  },
   {
    "ticker": "073240",
    "name": "금호타이어",
@@ -631,6 +669,18 @@
    {
     "date": "2026-07-14",
     "cum": -8.54
+   },
+   {
+    "date": "2026-07-15",
+    "cum": -7.25
+   },
+   {
+    "date": "2026-07-16",
+    "cum": -6.6
+   },
+   {
+    "date": "2026-07-20",
+    "cum": -6.35
    }
   ],
   "1": [
@@ -661,6 +711,18 @@
    {
     "date": "2026-07-14",
     "cum": -7.56
+   },
+   {
+    "date": "2026-07-15",
+    "cum": -6.3
+   },
+   {
+    "date": "2026-07-16",
+    "cum": -7.65
+   },
+   {
+    "date": "2026-07-20",
+    "cum": -8.02
    }
   ]
  },
@@ -676,35 +738,47 @@
    },
    {
     "date": "2026-07-03",
-    "nav": 983.01
+    "nav": 974.53
    },
    {
     "date": "2026-07-06",
-    "nav": 943.07
+    "nav": 962.12
    },
    {
     "date": "2026-07-07",
-    "nav": 919.63
+    "nav": 906.55
    },
    {
     "date": "2026-07-08",
-    "nav": 895.66
+    "nav": 882.92
    },
    {
     "date": "2026-07-09",
-    "nav": 821.36
+    "nav": 809.67
    },
    {
     "date": "2026-07-10",
-    "nav": 821.36
+    "nav": 809.67
    },
    {
     "date": "2026-07-13",
-    "nav": 787.66
+    "nav": 776.46
    },
    {
     "date": "2026-07-14",
-    "nav": 730.69
+    "nav": 720.3
+   },
+   {
+    "date": "2026-07-15",
+    "nav": 769.63
+   },
+   {
+    "date": "2026-07-16",
+    "nav": 794.3
+   },
+   {
+    "date": "2026-07-20",
+    "nav": 804.17
    }
   ],
   "1": [
@@ -722,39 +796,51 @@
    },
    {
     "date": "2026-07-06",
-    "nav": 943.22
+    "nav": 940.82
    },
    {
     "date": "2026-07-07",
-    "nav": 889.45
+    "nav": 886.99
    },
    {
     "date": "2026-07-08",
-    "nav": 839.59
+    "nav": 857.92
    },
    {
     "date": "2026-07-09",
-    "nav": 840.07
+    "nav": 828.53
    },
    {
     "date": "2026-07-10",
-    "nav": 877.9
+    "nav": 801.26
    },
    {
     "date": "2026-07-13",
-    "nav": 895.64
+    "nav": 817.63
    },
    {
     "date": "2026-07-14",
-    "nav": 860.69
+    "nav": 755.84
+   },
+   {
+    "date": "2026-07-15",
+    "nav": 784.93
+   },
+   {
+    "date": "2026-07-16",
+    "nav": 747.99
+   },
+   {
+    "date": "2026-07-20",
+    "nav": 724.48
    }
   ]
  },
  "nav_base": "2026-07-01",
  "stats": {
-  "holding_count": 5,
-  "exited_count": 15,
-  "avg_return": -2.3,
+  "holding_count": 3,
+  "exited_count": 18,
+  "avg_return": 6.1,
   "win_rate": 0.0
  }
 }
