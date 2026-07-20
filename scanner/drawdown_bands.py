@@ -6,7 +6,7 @@
   2) pykrx 시총 필터 (3,000억+) → 낙폭 깊은 순 최대 100종목 (API 보호)
   3) 종목별 최근 1년 일별 PER/PBR/EPS (pykrx) → 현재 멀티플의 1년 밴드 백분위 계산
   4) 판정:
-     - derating       : PBR이 1년 밴드 하위 20% + EPS 훼손 없음 → 가격만 빠짐(싸짐) — 매수 후보
+     - derating       : PBR이 1년 밴드 하위 20% + EPS 유지 확인(적자 제외) → 가격만 빠짐(싸짐) — 매수 후보
      - earnings_driven: EPS 1년 -15% 이하 훼손 → 이익 동반 하락(안 싸짐) — 함정 주의
      - neutral        : 그 외 (밴드 중상단 등)
 출력: docs/data/drawdown_bands.json (프론트 '이벤트드리븐 > 낙폭·밸류밴드'가 읽음)
@@ -81,6 +81,10 @@ def _verdict(rec: dict) -> str:
     eps = rec.get("eps_chg_1y")
     if eps is not None and eps <= EPS_DROP_MIN:
         return "earnings_driven"
+    # EPS 판별 불가(적자 등)면 "이익 유지" 증거가 없음 — 디레이팅 자격 없음.
+    # (적자 고PBR 테마주가 밴드 하위라는 이유만으로 디레이팅 상위에 오르는 것 방지)
+    if eps is None:
+        return "neutral"
     if rec.get("pbr_pct") is not None and rec["pbr_pct"] <= DERATE_PBR_PCT:
         return "derating"
     return "neutral"
