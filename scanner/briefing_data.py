@@ -124,10 +124,14 @@ def collect_kr_close(today_str):
     # 업종 등락 — 네이버 업종별 시세
     try:
         import pandas as pd
-        tables = pd.read_html("https://finance.naver.com/sise/sise_group.naver?type=upjong", encoding="cp949")
+        from io import StringIO
+        # pd.read_html에 URL을 직접 주면 cp949 페이지가 잘못 디코드되어 컬럼명이 깨진다(업종명 KeyError)
+        html = requests.get("https://finance.naver.com/sise/sise_group.naver?type=upjong",
+                            headers=H, timeout=15).content.decode("cp949", "replace")
+        tables = pd.read_html(StringIO(html))
         df = max(tables, key=len)
         df.columns = [c[0] if isinstance(c, tuple) else c for c in df.columns]  # 멀티헤더 평탄화
-        df = df.dropna(subset=["업종명"])
+        df = df.dropna(subset=["업종명"]).copy()
         df["chg"] = df["전일대비"].map(_num)
         df = df.dropna(subset=["chg"]).sort_values("chg", ascending=False)
         out["sectors_top"] = [{"name": r["업종명"], "chg_pct": r["chg"]} for _, r in df.head(5).iterrows()]
