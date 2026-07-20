@@ -60,30 +60,37 @@ def _band(code: str, start: str, end: str):
         return None
     pbrs = [float(v) for v in df.get("PBR", []) if _fnum(v)]
     pers = [float(v) for v in df.get("PER", []) if _fnum(v)]  # 적자(0/NaN) 제외
-    epss = [float(v) for v in df.get("EPS", []) if _fnum(v)]
+    # EPS는 0(적자)도 유효값 — 흑자전환/적자전환을 구분해야 하므로 걸러내지 않는다
+    epss = [float(v) for v in df.get("EPS", []) if _fnum(v, allow_zero=True) is not None]
     if not pbrs:
         return None
     pbr = pbrs[-1]
     per = pers[-1] if pers and _fnum(df["PER"].iloc[-1]) else None  # 현재 적자면 PER 없음
-    eps_chg = None
-    if len(epss) >= 2 and epss[0]:
-        eps_chg = round((epss[-1] - epss[0]) / abs(epss[0]) * 100, 1)
+    eps_chg, eps_note = None, None
+    if len(epss) >= 2:
+        if epss[0] > 0 and epss[-1] > 0:
+            eps_chg = round((epss[-1] - epss[0]) / epss[0] * 100, 1)
+        elif epss[0] <= 0 < epss[-1]:
+            eps_note = "흑자전환"
+        elif epss[-1] <= 0 < epss[0]:
+            eps_note = "적자전환"
+        # 둘 다 0 이하 → 적자 지속(eps_chg/note 없음)
     return {
         "pbr": round(pbr, 2), "pbr_pct": _pct_rank(pbrs, pbr),
         "pbr_lo": round(min(pbrs), 2), "pbr_hi": round(max(pbrs), 2),
         "per": round(per, 1) if per else None,
         "per_pct": _pct_rank(pers, per) if per else None,
-        "eps_chg_1y": eps_chg,
+        "eps_chg_1y": eps_chg, "eps_note": eps_note,
     }
 
 
 def _verdict(rec: dict) -> str:
-    eps = rec.get("eps_chg_1y")
-    if eps is not None and eps <= EPS_DROP_MIN:
+    eps, note = rec.get("eps_chg_1y"), rec.get("eps_note")
+    if note == "적자전환" or (eps is not None and eps <= EPS_DROP_MIN):
         return "earnings_driven"
-    # EPS 판별 불가(적자 등)면 "이익 유지" 증거가 없음 — 디레이팅 자격 없음.
+    # EPS 판별 불가(적자 지속)면 "이익 유지" 증거가 없음 — 디레이팅 자격 없음.
     # (적자 고PBR 테마주가 밴드 하위라는 이유만으로 디레이팅 상위에 오르는 것 방지)
-    if eps is None:
+    if eps is None and note != "흑자전환":
         return "neutral"
     if rec.get("pbr_pct") is not None and rec["pbr_pct"] <= DERATE_PBR_PCT:
         return "derating"
@@ -133,10 +140,18 @@ def build() -> dict | None:
             logger.warning("%s 밴드 실패: %s", code, e)
             band = None
         time.sleep(PYKRX_SLEEP)
+        f = fund.get(code) or {}
+        # 시계열 무결성 검증 — KRX가 (특히 해외 IP에) 낡은 시계열을 주는 사례 발견:
+        # 시계열 마지막 PBR이 전종목 스냅샷(신뢰 가능)과 15% 이상 어긋나면 불량으로 탈락.
+        snap_pbr = f.get("pbr")
+        if band and snap_pbr and band.get("pbr"):
+            if abs(band["pbr"] - snap_pbr) / snap_pbr > 0.15:
+                logger.warning("%s 시계열 불일치: 밴드 PBR %.2f vs 스냅샷 %.2f — 탈락",
+                               code, band["pbr"], snap_pbr)
+                band = None
         if not band:
             fails += 1
             continue
-        f = fund.get(code) or {}
         rec = {
             "code": code, "name": r.get("name"), "sector": r.get("sector"),
             "price": r.get("current_price"), "off_high": r.get("off_high"),
