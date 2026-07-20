@@ -284,6 +284,80 @@ def _fscore(corp: str, year: int | None = None) -> dict | None:
     return {"score": sum(c.values()), "components": c, "year": year}
 
 
+def _quality_metrics(corp: str, year: int | None = None) -> dict | None:
+    """퀄리티 성장주 발굴용 원시 재무지표 (DART 전체재무제표, 연결 우선).
+    year 미지정 시 최근 확정 사업연도. 반환: gpa·opm·debt·accruals·rev_g·op_g (비율=소수) 또는 None.
+      gpa=매출총이익/자산총계, opm=영업이익/매출, debt=부채총계/자본총계,
+      accruals=(순이익−영업활동현금흐름)/자산총계, rev_g·op_g=매출·영업이익 2년 CAGR(전전기 대비).
+    quality_backtest._quality_fin과 동일 정의 — 라이브·백테스트 정합."""
+    if year is None:
+        year = dt.datetime.now(tz=KST).year - 1
+    rows = None
+    for fs in ("CFS", "OFS"):
+        url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
+               f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                d = json.loads(r.read().decode())
+        except Exception as e:
+            logger.warning("퀄리티 재무 실패 %s: %s", corp, e)
+            return None
+        if d.get("status") == "000" and d.get("list"):
+            rows = d["list"]
+            break
+    if not rows:
+        return None
+
+    def get(nm, sj, per="thstrm"):
+        nmz = nm.replace(" ", "")
+        for x in rows:
+            if x.get("sj_div") != sj:
+                continue
+            a = (x.get("account_nm", "") or "").replace(" ", "")
+            if a == nmz or a == nmz + "(손실)" or a.startswith(nmz):
+                return _num(x.get(per + "_amount"))
+        return None
+
+    def acct(nm, sjs, per="thstrm"):
+        for sj in sjs:
+            v = get(nm, sj, per)
+            if v is not None:
+                return v
+        return None
+
+    assets = get("자산총계", "BS")
+    liab = get("부채총계", "BS")
+    equity = get("자본총계", "BS")
+    def rev_of(per="thstrm"):   # 서비스·플랫폼기업은 '영업수익' 표기 → 폴백
+        return (acct("매출액", ("CIS", "IS"), per) or acct("수익(매출액)", ("CIS", "IS"), per)
+                or acct("영업수익", ("CIS", "IS"), per))
+    rev = rev_of()
+    gp = acct("매출총이익", ("CIS", "IS"))
+    op = acct("영업이익", ("CIS", "IS"))
+    ni = acct("당기순이익", ("CIS", "IS"))
+    cfo = get("영업활동 현금흐름", "CF") or get("영업활동으로 인한 현금흐름", "CF")
+    rev_p2 = rev_of("bfefrmtrm")
+    op_p2 = acct("영업이익", ("CIS", "IS"), "bfefrmtrm")
+
+    def ratio(n, d):
+        return (n / d) if (n is not None and d not in (None, 0)) else None
+
+    def cagr2(now, past):
+        if now is None or past is None or past <= 0 or now <= 0:
+            return None
+        return (now / past) ** (1 / 2) - 1
+
+    gpa = ratio(gp, assets)
+    opm = ratio(op, rev)
+    if gpa is None and opm is None:   # 금융·지주 등 매출/매출총이익 미보고 → 무효
+        return None
+    return {
+        "gpa": gpa, "opm": opm, "debt": ratio(liab, equity),
+        "accruals": ratio((ni - cfo) if (ni is not None and cfo is not None) else None, assets),
+        "rev_g": cagr2(rev, rev_p2), "op_g": cagr2(op, op_p2), "year": year,
+    }
+
+
 def _company(corp: str) -> dict:
     """DART 기업개요 — 대표·설립·시장·홈페이지·주소."""
     if corp in _company_cache:

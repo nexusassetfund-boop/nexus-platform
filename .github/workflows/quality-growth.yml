@@ -1,0 +1,43 @@
+name: 퀄리티 성장주 자동 발굴
+on:
+  schedule:
+    - cron: "20 7 * * 1"    # 매주 월 16:20 KST (장마감 후) — 재무는 주 1회면 충분
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: quality-growth, cancel-in-progress: false }
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      - name: 발굴 실행
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
+        run: python scanner/quality_growth.py
+      - name: 결과 커밋
+        run: |
+          test -f docs/data/quality_growth.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
+          bash .github/scripts/commit-data.sh "quality-growth: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data
+      - name: KV 즉시 반영 (다음 스캔 동기화 대기 없이)
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: |
+          test -f docs/data/quality_growth.json || exit 0
+          python - > /tmp/push.json <<'PY'
+          import json
+          files = {'quality_growth.json': json.load(open('docs/data/quality_growth.json'))}
+          print(json.dumps({'files': files}))
+          PY
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
+            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/push.json || echo "KV push 실패 — 다음 스캔 동기화 때 자동 반영됨"
