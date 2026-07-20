@@ -43,6 +43,7 @@ DERATE_PBR_PCT = 20.0       # 디레이팅 게이트: PBR 1년 밴드 하위 20%
 DERATE_PER_PCT = 30.0       # 디레이팅 확인: PER 1년 밴드 하위 30% (이익 기준도 싸야 함)
 TRAP_PER_PCT = 50.0         # 함정: PBR 낮은데 PER 밴드 상위 → 이익이 가격보다 더 빠짐
 EPS_DROP_MIN = -15.0        # 이익 훼손 판정: EPS 1년 변화 -15% 이하
+STABLE_RISE_MIN = 15.0      # 바닥 안정화: 52주 저점 대비 +15% 이상 반등(또는 MA20 위)
 PYKRX_SLEEP = 0.25          # KRX 조회 간격
 
 
@@ -174,11 +175,17 @@ def build() -> dict | None:
         if not band:
             fails += 1
             continue
+        # 바닥 안정화 — 저점 대비 반등폭 + MA20 위 여부 (아직 신저가 갱신 중인 '칼날' 배제용)
+        price, ma20 = r.get("current_price"), r.get("ma20")
+        rise = r.get("rise_from_low_pct")
+        above_ma20 = bool(price and ma20 and price >= ma20)
+        stabilized = bool((rise is not None and rise >= STABLE_RISE_MIN) or above_ma20)
         rec = {
             "code": code, "name": r.get("name"), "sector": r.get("sector"),
-            "price": r.get("current_price"), "off_high": r.get("off_high"),
+            "price": price, "off_high": r.get("off_high"),
             "high52": r.get("high52"), "low52": r.get("low52"),
             "ret_1m": r.get("ret_1m"), "rs_rank": r.get("rs_rank"),
+            "rise_from_low": rise, "above_ma20": above_ma20, "stabilized": stabilized,
             "div": f.get("div"), "cap_100m": round((cap[code]["cap"]) / 1e8),
             **band,
         }
@@ -200,6 +207,7 @@ def build() -> dict | None:
             "off_high_max": OFF_HIGH_MAX, "min_cap_100m": MIN_CAP // 100_000_000,
             "derate_pbr_pct": DERATE_PBR_PCT, "derate_per_pct": DERATE_PER_PCT,
             "trap_per_pct": TRAP_PER_PCT, "eps_drop_min": EPS_DROP_MIN,
+            "stable_rise_min": STABLE_RISE_MIN,
             "band_days": BAND_DAYS,
             "note": "판정은 백테스트 미검증 — 발굴 보조용. PBR 밴드=최근 1년 일별 분포 백분위.",
         },
