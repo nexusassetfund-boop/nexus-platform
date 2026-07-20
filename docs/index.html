@@ -317,8 +317,6 @@
           class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">모델 포트폴리오</a>
         <a href="#" id="navValue" onclick="showView('value');return false"
           class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">가치투자</a>
-        <a href="#" id="navQuality" onclick="showView('quality');return false"
-          class="text-sm font-medium text-slate-400 hover:text-blue-800 transition-colors">퀄리티 성장</a>
       </div>
     </div>
     <div class="flex items-center gap-3">
@@ -676,21 +674,6 @@
 
       <div id="val-tab-universe"><div id="valUniverse"></div></div>
       <div id="val-tab-portfolio" class="hidden"><div id="valPortfolio"></div></div>
-    </div>
-  </section>
-
-  <!-- ── 퀄리티 성장 (재무 퀄리티 + 모멘텀, 백테스트 검증) ── -->
-  <section id="qualityView" class="hidden w-full flex-1 bg-[#f6f3ea] min-h-screen">
-    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
-      <div class="mb-4 flex flex-col md:flex-row md:items-start justify-between gap-4">
-        <div>
-          <h1 class="text-3xl font-extrabold text-nexus-ink font-headline leading-tight">퀄리티 성장</h1>
-          <p class="text-sm text-slate-500 mt-1.5">우량 재무 + 주가 모멘텀 상위 자동 발굴 — 코스피200·코스닥150 · DART 연동</p>
-        </div>
-        <span id="qgUpdated" class="text-[11px] text-slate-400 font-medium"></span>
-      </div>
-      <div id="qgCriteria" class="mb-5 text-[12px] text-slate-500 bg-white/60 border border-[#ded7c4] rounded-lg px-4 py-3 leading-relaxed"></div>
-      <div id="qualityList"><div class="text-center py-20 text-slate-400 text-sm">로딩 중…</div></div>
     </div>
   </section>
 
@@ -1057,76 +1040,23 @@
     function showView(view) {
       // 하위호환: 'tracking' → 감지기 그룹의 전략 포트폴리오 하위탭
       if (view === 'tracking') { _currentView = 'dashboard'; _detectorTab = 'ledger'; }
-      else _currentView = ['portfolio', 'value', 'quality'].includes(view) ? view : 'dashboard';
+      else _currentView = ['portfolio', 'value'].includes(view) ? view : 'dashboard';
       const inDetector = _currentView === 'dashboard';
       document.querySelector('main').classList.toggle('hidden', !(inDetector && _detectorTab === 'scan'));
       document.getElementById('trackingView').classList.toggle('hidden', !(inDetector && _detectorTab === 'ledger'));
       document.getElementById('portfolioView').classList.toggle('hidden', _currentView !== 'portfolio');
       document.getElementById('valueView').classList.toggle('hidden', _currentView !== 'value');
-      document.getElementById('qualityView').classList.toggle('hidden', _currentView !== 'quality');
       document.getElementById('detectorSubnav').classList.toggle('hidden', !inDetector);
       document.getElementById('navDashboard').className = inDetector ? _navActive : _navIdle;
       document.getElementById('navPortfolio').className = _currentView === 'portfolio' ? _navActive : _navIdle;
       document.getElementById('navValue').className = _currentView === 'value' ? _navActive : _navIdle;
-      document.getElementById('navQuality').className = _currentView === 'quality' ? _navActive : _navIdle;
       document.getElementById('subScan').className = _detectorTab === 'scan' ? _subActive : _subIdle;
       document.getElementById('subLedger').className = _detectorTab === 'ledger' ? _subActive : _subIdle;
       if (_currentView === 'portfolio') loadPortfolio();
       else if (_currentView === 'value') loadValue();
-      else if (_currentView === 'quality') loadQuality();
       else if (_detectorTab === 'ledger') loadTracking();
     }
     function showDetectorTab(tab) { _detectorTab = tab; showView('dashboard'); }
-
-    // ── 퀄리티 성장 (재무 퀄리티 + 모멘텀, 백테스트 검증) ──────
-    const _zCls = v => v == null ? 'text-slate-400' : v > 0.05 ? 'text-red-500 font-bold' : v < -0.05 ? 'text-blue-600' : 'text-slate-500';
-    const _zFmt = v => v == null ? '-' : `${v > 0 ? '+' : ''}${v.toFixed(2)}`;
-    async function loadQuality() {
-      const host = document.getElementById('qualityList');
-      try {
-        const d = await fetch(`${DATA}/quality_growth.json?t=${Date.now()}`).then(r => {
-          if (!r.ok) throw new Error(r.status); return r.json();
-        });
-        const upd = d.updated ? new Date(d.updated) : null;
-        const ageDays = upd ? Math.floor((Date.now() - upd.getTime()) / 86400000) : null;
-        const stale = ageDays != null && ageDays > 9;
-        document.getElementById('qgUpdated').innerHTML =
-          (upd ? `${String(upd.getMonth() + 1).padStart(2, '0')}/${String(upd.getDate()).padStart(2, '0')} 재무 기준` : '')
-          + (stale ? ` <span style="color:#c0392b;font-weight:700">· ${ageDays}일 전(오래됨)</span>` : '');
-        const c = d.criteria || {};
-        document.getElementById('qgCriteria').innerHTML =
-          `<b>관문</b> ${c.min_cap || ''} · PER ≤ ${c.per_max ?? ''} &nbsp;|&nbsp; <b>정렬</b> ${c.sort || ''}`
-          + `<br><b>퀄리티 Z</b> ${c.quality_z || ''}`
-          + (c.backtest ? `<br><span class="text-slate-400">${c.backtest} · ${c.note || ''}</span>` : '');
-
-        const rows = (d.candidates || []);
-        if (!rows.length) { host.innerHTML = _valEmpty('발굴된 후보가 없습니다.'); return; }
-        const badge = r => (r.is_new
-          ? '<span class="ml-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">NEW</span>' : '')
-          + (r.stale ? '<span class="ml-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200">장기잔류</span>' : '');
-        const body = rows.map((r, i) => `
-          <tr class="border-b border-[#f4f0e6] hover:bg-[#faf8f2]">
-            <td class="pl-4 px-3 py-2.5 text-center text-slate-400 font-semibold">${i + 1}</td>
-            <td class="px-3 py-2.5"><span class="font-bold text-nexus-ink">${r.name}</span>
-              <span class="text-[11px] text-slate-400 ml-1">${r.code}</span>${badge(r)}</td>
-            <td class="px-3 py-2.5 text-right font-extrabold ${_zCls(r.composite)}">${_zFmt(r.composite)}</td>
-            <td class="px-3 py-2.5 text-right ${_zCls(r.quality_z)}">${_zFmt(r.quality_z)}</td>
-            <td class="px-3 py-2.5 text-right ${_zCls(r.mom_z)}">${_zFmt(r.mom_z)}</td>
-            <td class="px-3 py-2.5 text-right text-slate-600">${_mPct(r.roe)}</td>
-            <td class="px-3 py-2.5 text-right text-slate-600">${_mPct(r.opm)}</td>
-            <td class="px-3 py-2.5 text-right text-slate-600">${_mPct(r.gpa)}</td>
-            <td class="px-3 py-2.5 text-right text-slate-500">${_mNum(r.debt, '%')}</td>
-            <td class="px-3 py-2.5 text-right ${r.mom_12_1 > 0 ? 'text-red-500' : 'text-blue-600'}">${_mPct(r.mom_12_1)}</td>
-            <td class="px-3 py-2.5 text-right text-slate-500">${_mNum(r.per)}</td>
-            <td class="pr-4 px-3 py-2.5 text-right text-slate-400 text-[12px]">${r.mktcap || '-'}</td>
-          </tr>`).join('');
-        host.innerHTML = _valTable(
-          ['#', '종목', 'Composite', '퀄리티Z', '모멘텀Z', 'ROE', '영업이익률', 'GPA', '부채비율', '12-1 모멘텀', 'PER', '시총'],
-          body, [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-      } catch (e) {
-        host.innerHTML = _valEmpty(`퀄리티 성장 데이터 로드 실패: ${e.message}`);
-      }
-    }
 
     // ── 가치투자 (DART 재무 연동) ───────────────────────────
     let _valData = null, _valTab = 'universe';
