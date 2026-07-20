@@ -9,7 +9,7 @@ concurrency: { group: drawdown-bands, cancel-in-progress: false }
 jobs:
   bands:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45    # 필터 통과 ~300종목 × 종목당 수 초 (해외 러너에서 KRX 응답 느림)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
