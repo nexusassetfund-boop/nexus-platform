@@ -53,6 +53,9 @@ def download_marcap() -> pd.DataFrame:
     df = pd.concat((pd.read_parquet(CACHE / f"marcap-{y}.parquet", columns=cols)
                     for y in years), ignore_index=True)
     df = df[df["Market"] == "KOSPI"].copy()
+    # 우선주 제외 (종목코드 끝자리 0 = 보통주) — 삼성전자우 등이 거래대금·시총 순위를
+    # 차지해 실질 편입 슬롯을 줄이는 문제 방지. 순위 산정·후보 모두에서 뺀다 (사용자 요청 2026-07-21)
+    df = df[df["Code"].str.endswith("0")]
     df["Date"] = pd.to_datetime(df["Date"])
     df.sort_values(["Code", "Date"], inplace=True)
     return df
