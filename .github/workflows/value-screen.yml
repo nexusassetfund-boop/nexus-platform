@@ -23,6 +23,8 @@ jobs:
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
         run: python scanner/value_screen.py
+      - name: 낙폭·밸류밴드 스크리닝
+        run: python scanner/drawdown_bands.py || echo "낙폭·밸류밴드 실패 — 기존 파일 보존 (다음 주 재시도)"
       - name: 결과 커밋
         run: |
           test -f docs/data/value_screen.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
@@ -31,7 +33,13 @@ jobs:
         env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
         run: |
           test -f docs/data/value_screen.json || exit 0
-          python -c "import json; print(json.dumps({'files': {'value_screen.json': json.load(open('docs/data/value_screen.json'))}}))" > /tmp/push.json
+          python - > /tmp/push.json <<'PY'
+          import json, os
+          files = {'value_screen.json': json.load(open('docs/data/value_screen.json'))}
+          if os.path.exists('docs/data/drawdown_bands.json'):
+              files['drawdown_bands.json'] = json.load(open('docs/data/drawdown_bands.json'))
+          print(json.dumps({'files': files}))
+          PY
           curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
             -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
             --data @/tmp/push.json || echo "KV push 실패 — 다음 스캔 동기화 때 자동 반영됨"
