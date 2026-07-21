@@ -110,11 +110,17 @@ def _date_iso(v):
     return f"{s[0:4]}-{s[4:6]}-{s[6:8]}" if len(s) == 8 else None
 
 
-def fetch_details(corp_codes: set[str]) -> dict[str, dict]:
-    """corp_code별 fricDecsn 조회 → rcept_no → 상세 매핑."""
+def fetch_details(corp_codes: set[str]):
+    """corp_code별 fricDecsn 조회 → (rcept_no → 상세, corp_code → 상세 목록).
+
+    정정공시가 나오면 fricDecsn의 rcept_no가 정정본 번호로 바뀌어 원공시
+    번호 매칭이 실패한다 → 회사별 목록(bddd 이사회결의일 포함)을 함께 반환해
+    발표일 근접 매칭 폴백에 쓴다.
+    """
     today = datetime.now().strftime("%Y%m%d")
     bgn = BGN_DATE.replace("-", "")
     details: dict[str, dict] = {}
+    by_corp: dict[str, list] = {}
     for i, corp in enumerate(sorted(corp_codes), 1):
         data = _dart_get("fricDecsn.json", corp_code=corp, bgn_de=bgn, end_de=today)
         for row in data.get("list", []) or []:
@@ -126,18 +132,21 @@ def fetch_details(corp_codes: set[str]) -> dict[str, dict]:
             ratio = _num(row.get("nstk_ascnt_ps_ostk"))
             if ratio is None and new_shares and base_shares:
                 ratio = round(new_shares / base_shares, 4)
-            details[rno] = {
+            det = {
                 "ratio": ratio,
                 "record_date": _date_iso(row.get("nstk_asstd")),
                 "listing_date": _date_iso(row.get("nstk_lstprd")),
                 "new_shares": new_shares,      # 신주 보통주식수
                 "base_shares": base_shares,    # 증자 전 발행주식총수(보통)
+                "bddd": _date_iso(row.get("bddd")),  # 이사회결의일 (폴백 매칭용)
             }
+            details[rno] = det
+            by_corp.setdefault(corp, []).append(det)
         if i % 50 == 0:
             print(f"  fricDecsn {i}/{len(corp_codes)}")
         time.sleep(0.15)
     print(f"  fricDecsn 상세: {len(details)}건")
-    return details
+    return details, by_corp
 
 
 # ──────────────────────────────────────────
@@ -290,7 +299,7 @@ def main():
         sys.exit(1)
 
     print("\n[2/3] fricDecsn 상세 (배정비율·기준일)...")
-    details = fetch_details({r["corp_code"] for r in rows})
+    details, details_by_corp = fetch_details({r["corp_code"] for r in rows})
 
     print(f"\n[3/3] 일봉·시가총액 수집 ({len(rows)}건)...")
     today = datetime.now().strftime("%Y-%m-%d")
@@ -301,14 +310,14 @@ def main():
     # 기존 KV 데이터에서 시가총액 보존 — 매수일 시총은 불변의 과거 사실이므로
     # 이벤트 발생 직후(가격이 명목가일 때) 한 번 확정한 값을 계속 쓴다.
     # 이후 다른 무증·분할로 수정주가가 재조정돼도 저장값은 영향받지 않는다.
-    existing_mcap: dict[tuple[str, str], tuple] = {}
+    existing_ev: dict[tuple[str, str], dict] = {}
     if OUT.exists():
         try:
             old = json.loads(OUT.read_text("utf-8"))
             for e in old.get("events", []):
-                existing_mcap[(e["ticker"], e["disc_date"])] = (e.get("mcap_d0"), e.get("mcap_d1"))
-            n_kept = sum(1 for v in existing_mcap.values() if v[0] is not None)
-            print(f"  기존 데이터 시총 보존: {n_kept}건")
+                existing_ev[(e["ticker"], e["disc_date"])] = e
+            n_kept = sum(1 for e in existing_ev.values() if e.get("mcap_d0") is not None)
+            print(f"  기존 데이터 보존 로드: {len(existing_ev)}건 (시총 {n_kept}건)")
         except Exception:
             pass
 
@@ -347,13 +356,32 @@ def main():
         prices = [dict(p) for p in all_prices[start_i: idx0 + MAX_BARS_AFTER]]  # 이벤트별 사본
         li0 = idx0 - start_i  # 사본 내 공시일 봉 인덱스
 
-        det = details.get(r["rcept_no"], {})
+        det = details.get(r["rcept_no"])
+        if det is None:
+            # 정정공시로 rcept_no가 바뀌면 원공시 번호 매칭 실패 → 이사회결의일 근접 폴백
+            cands = [c for c in details_by_corp.get(r["corp_code"], []) if c.get("bddd")]
+            def _dday(c):
+                try:
+                    return abs((datetime.strptime(c["bddd"], "%Y-%m-%d")
+                                - datetime.strptime(disc_date, "%Y-%m-%d")).days)
+                except Exception:
+                    return 999
+            cands.sort(key=_dday)
+            if cands and _dday(cands[0]) <= 5:
+                det = cands[0]
+        det = dict(det) if det else {}
+        # 과거 확정된 상세는 보존 — 정정공시·API 누락으로 새 조회가 비어도 유지
+        old_ev = existing_ev.get((ticker, disc_date), {})
+        for k in ("ratio", "record_date", "listing_date"):
+            if det.get(k) is None and old_ev.get(k) is not None:
+                det[k] = old_ev[k]
+
         prices, series_fixed = fix_unadjusted_rights(prices, det, name)
         if prices is None:
             print(" → 제외")
             continue
 
-        old_d0, old_d1 = existing_mcap.get((ticker, disc_date), (None, None))
+        old_d0, old_d1 = old_ev.get("mcap_d0"), old_ev.get("mcap_d1")
         if series_fixed:
             old_d0 = old_d1 = None  # 미조정 시세로 계산·저장됐던 시총 폐기 → 재계산
 
