@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-20T22:33:14+09:00",
+ "updated": "2026-07-21T15:37:20+09:00",
  "kospi": {
-  "price": 6516.27,
-  "ma200": 5599.6,
-  "ma50": 7965.23,
+  "price": 6773.7,
+  "ma200": 5616.24,
+  "ma50": 7950.9,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": false,
   "exit_signal": false,
   "entry_allowed": true,
-  "updated": "2026-07-20T22:33:14+09:00"
+  "updated": "2026-07-21T15:37:20+09:00"
  },
  "holdings": [
   {
@@ -21,19 +21,19 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 146700.0,
+   "last_price": 141600.0,
    "peak_price": 146700.0,
-   "return_pct": 5.16,
-   "total_return_pct": 5.16,
+   "return_pct": 1.51,
+   "total_return_pct": 1.51,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 7,
+   "days_held": 8,
    "stage_now": 1,
    "confidence_now": 75,
-   "last_updated": "2026-07-20",
+   "last_updated": "2026-07-21",
    "signals_at_entry": [
     "MTT 통과",
     "RS 87 — 상위 강세",
@@ -52,10 +52,10 @@
    "last_price": 55000.0,
    "peak_price": 56500.0,
    "return_pct": 1.66,
-   "days_held": 15,
+   "days_held": 16,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-07-20",
+   "last_updated": "2026-07-21",
    "signals_at_entry": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
@@ -78,19 +78,19 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 146700.0,
+   "last_price": 141600.0,
    "peak_price": 146700.0,
-   "return_pct": 11.47,
-   "total_return_pct": 11.47,
+   "return_pct": 7.6,
+   "total_return_pct": 7.6,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 12,
+   "days_held": 13,
    "stage_now": 1,
    "confidence_now": 75,
-   "last_updated": "2026-07-20",
+   "last_updated": "2026-07-21",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -681,6 +681,10 @@
    {
     "date": "2026-07-20",
     "cum": -6.35
+   },
+   {
+    "date": "2026-07-21",
+    "cum": -7.08
    }
   ],
   "1": [
@@ -723,6 +727,10 @@
    {
     "date": "2026-07-20",
     "cum": -8.02
+   },
+   {
+    "date": "2026-07-21",
+    "cum": -8.26
    }
   ]
  },
@@ -779,6 +787,10 @@
    {
     "date": "2026-07-20",
     "nav": 804.17
+   },
+   {
+    "date": "2026-07-21",
+    "nav": 776.21
    }
   ],
   "1": [
@@ -833,6 +845,10 @@
    {
     "date": "2026-07-20",
     "nav": 724.48
+   },
+   {
+    "date": "2026-07-21",
+    "nav": 699.3
    }
   ]
  },
@@ -840,7 +856,7 @@
  "stats": {
   "holding_count": 3,
   "exited_count": 18,
-  "avg_return": 6.1,
+  "avg_return": 3.59,
   "win_rate": 0.0
  }
 }
