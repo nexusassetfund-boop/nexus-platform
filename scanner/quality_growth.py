@@ -134,17 +134,23 @@ async def build() -> dict | None:
         logger.error("관문 통과 0 — 기존 출력 보존, 중단")
         return None
 
-    # 2차: DART 퀄리티 재무 (관문 통과 전 종목)
+    # 2차: DART 퀄리티 재무 (관문 통과 전 종목) — 병렬 조회 (직렬이면 200종목×수초 = 타임아웃)
     corp_map = fetch_value._corp_map()
-    fetched = []
-    for rec in prelim:
+    dart_sem = asyncio.Semaphore(6)
+
+    async def _fin(rec):
         corp = corp_map.get(rec["code"])
-        q = fetch_value._quality_metrics(corp) if corp else None
+        if not corp:
+            return None
+        async with dart_sem:
+            q = await asyncio.to_thread(fetch_value._quality_metrics, corp)
         if not q:
-            continue
+            return None
         rec.update({k: q.get(k) for k in ("gpa", "opm", "debt", "accruals", "rev_g", "op_g")})
         rec["fy"] = q.get("year")
-        fetched.append(rec)
+        return rec
+
+    fetched = [r for r in await asyncio.gather(*(_fin(rec) for rec in prelim)) if r]
     logger.info("DART 재무 확보 %d종목", len(fetched))
     if len(fetched) < 5:
         logger.error("재무 확보 %d(<5) — Z 산출 불가, 기존 출력 보존, 중단", len(fetched))
