@@ -11,6 +11,7 @@ from __future__ import annotations
 import html as _html
 import io
 import json
+import time
 import logging
 import os
 import re
@@ -58,17 +59,22 @@ def _corp_map() -> dict[str, str]:
     _corp_cache = {}
     if not DART_KEY:
         return _corp_cache
-    try:
-        with urllib.request.urlopen(f"{_DART}/corpCode.xml?crtfc_key={DART_KEY}", timeout=40) as r:
-            z = zipfile.ZipFile(io.BytesIO(r.read()))
-        root = ET.fromstring(z.read(z.namelist()[0]).decode("utf-8"))
-        for e in root.iter("list"):
-            sc = (e.findtext("stock_code") or "").strip()
-            if sc:
-                _corp_cache[sc] = (e.findtext("corp_code") or "").strip()
-        logger.info("corp_code 매핑 %d건", len(_corp_cache))
-    except Exception as e:
-        logger.warning("corpCode 다운로드 실패: %s", e)
+    # corpCode.xml은 모든 DART 조회의 관문 — 단발 타임아웃이 전체 스크린을 무너뜨리므로 재시도.
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(f"{_DART}/corpCode.xml?crtfc_key={DART_KEY}", timeout=60) as r:
+                z = zipfile.ZipFile(io.BytesIO(r.read()))
+            root = ET.fromstring(z.read(z.namelist()[0]).decode("utf-8"))
+            for e in root.iter("list"):
+                sc = (e.findtext("stock_code") or "").strip()
+                if sc:
+                    _corp_cache[sc] = (e.findtext("corp_code") or "").strip()
+            logger.info("corp_code 매핑 %d건", len(_corp_cache))
+            break
+        except Exception as e:
+            logger.warning("corpCode 다운로드 실패 (%d/3): %s", attempt + 1, e)
+            _corp_cache = {}
+            time.sleep(3 * (attempt + 1))
     return _corp_cache
 
 
