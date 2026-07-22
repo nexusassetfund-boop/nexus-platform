@@ -330,6 +330,7 @@ async def build() -> dict | None:
             "sort": "12-1 모멘텀 내림차순 (밸류는 관문, 순서는 추세)",
             "fscore_note": f"F-Score는 참고 표시 전용 ({FSCORE_MIN}점 미만 주의) — 컷·정렬 미사용",
             "fair_note": "적정가 = fade RIM(초과ROE 10년/보수 5년 소멸·Ke 9%·ROE 상한 25%) — 정상화 ROE(3개년 평균) 기준·Graham 폐지",
+            "backtest": "5.0y 포인트인타임 재검증(2026-07): CAGR 6.6%·Sharpe 0.41·MDD -27.5% vs KS200 20.4% — 안전마진 단독은 선정 알파 아님(발굴 관문·가격 참고 전용). fade RIM은 구 산식 대비 +2.1%p 개선",
         },
         "scanned": len(constituents),
         "passed_value": len(prelim),
