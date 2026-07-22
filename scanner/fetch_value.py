@@ -149,6 +149,9 @@ def _financials(corp: str) -> dict:
     ca = series(["유동자산"])
     cl = series(["유동부채"])
 
+    _cf = _cashflow(corp)
+    interest = series(["이자비용"])
+
     years = sorted(set(rev) | set(op) | set(ni))[-6:]
     trend = [{"year": y, "revenue": rev.get(y), "op": op.get(y), "ni": ni.get(y)} for y in years]
 
@@ -172,6 +175,13 @@ def _financials(corp: str) -> dict:
             "rev_growth": pct(rev.get(ly) - rev.get(py), rev.get(py)) if (py and rev.get(ly) is not None and rev.get(py)) else None,
             "ni_growth": pct(ni.get(ly) - ni.get(py), ni.get(py)) if (py and ni.get(ly) is not None and ni.get(py)) else None,
         }
+        ext = _compute_quality_ext(
+            rev=rev.get(ly), op=op.get(ly), ni=ni.get(ly),
+            equity=equity.get(ly), liab=liab.get(ly),
+            ca=ca.get(ly), cl=cl.get(ly),
+            cfo=_cf.get("cfo"), capex=_cf.get("capex"),
+            cash=_cf.get("cash"), interest=interest.get(ly))
+        metrics.update({k: v for k, v in ext.items() if v is not None})
     result = {"trend": trend, "metrics": metrics}
     _fin_cache[corp] = result
     return result
@@ -409,6 +419,121 @@ def _fnguide_business(code: str) -> dict:
     return {"date": m.group(1).strip(), "text": txt} if txt else {}
 
 
+def _cashflow(corp: str) -> dict:
+    """DART 전체재무제표(fnlttSinglAcntAll)에서 영업활동현금흐름·CAPEX·현금성자산 (최근 사업연도)."""
+    if not DART_KEY or not corp:
+        return {}
+    year = dt.datetime.now(tz=KST).year - 1
+    rows = None
+    for fs in ("CFS", "OFS"):
+        url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
+               f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                d = json.loads(r.read().decode())
+        except Exception as e:
+            logger.warning("현금흐름 조회 실패 %s: %s", corp, e)
+            return {}
+        if d.get("status") == "000" and d.get("list"):
+            rows = d["list"]
+            break
+    if not rows:
+        return {}
+
+    def find(sj, names):
+        for x in rows:
+            if x.get("sj_div") != sj:
+                continue
+            a = x.get("account_nm", "") or ""
+            if any(n in a for n in names):
+                v = _num(x.get("thstrm_amount"))
+                if v is not None:
+                    return v
+        return None
+
+    cfo = find("CF", ["영업활동 현금흐름", "영업활동으로 인한 현금흐름", "영업활동현금흐름"])
+    capex = find("CF", ["유형자산의 취득", "유형자산의취득"])
+    cash = find("BS", ["현금및현금성자산"])
+    if capex is not None:
+        capex = abs(capex)
+    return {"cfo": cfo, "capex": capex, "cash": cash}
+
+
+
+def _compute_quality_ext(rev, op, ni, equity, liab, ca, cl, cfo, capex,
+                         cash, interest, tax_rate=0.22, mktcap=None):
+    """워크벤치용 확장 퀄리티 지표(순수 계산, DART 호출 없음)."""
+    def _n(x):
+        return x if isinstance(x, (int, float)) else None
+    op, equity, liab, cash = _n(op), _n(equity), _n(liab), _n(cash)
+    cfo, capex, ca, rev = _n(cfo), _n(capex), _n(ca), _n(rev)
+    # ROIC = NOPAT / 투하자본(자본+부채-현금)
+    roic = None
+    if op is not None and equity is not None and liab is not None:
+        invested = equity + liab - (cash or 0)
+        if invested > 0:
+            roic = round(op * (1 - tax_rate) / invested * 100, 1)
+    # FCF = 영업활동현금흐름 - CAPEX
+    fcf = None
+    if cfo is not None and capex is not None:
+        fcf = round(cfo - capex)
+    # FCF 수익률 (시총 있으면 FCF/시총, 없으면 None)
+    fcf_yield = None
+    fcf_margin = None
+    if fcf is not None and mktcap:
+        fcf_yield = round(fcf / mktcap * 100, 1)
+    # 시총 미상 시 FCF/매출 마진으로 대체(퀄리티 신호 유지)
+    if fcf is not None and rev:
+        fcf_margin = round(fcf / rev * 100, 1)
+    # 순현금 = 현금 - 총부채
+    net_cash = None
+    if cash is not None and liab is not None:
+        net_cash = round(cash - liab)
+    # EV/EBIT (시총 있으면)
+    ev_ebit = None
+    if mktcap and op and op > 0:
+        ev = mktcap + (liab or 0) - (cash or 0)
+        ev_ebit = round(ev / op, 1)
+    return {"roic": roic, "fcf": fcf, "fcf_yield": fcf_yield,
+            "net_cash": net_cash, "ev_ebit": ev_ebit, "fcf_margin": fcf_margin}
+
+
+
+def _shares(corp: str) -> float | None:
+    """DART 주식총수현황(stockTotqySttus) — 보통주 발행주식총수(없으면 합계). 내재가치 주당 환산용."""
+    if not DART_KEY or not corp:
+        return None
+    this_year = dt.datetime.now(tz=KST).year
+    for year in (this_year - 1, this_year - 2):
+        url = (f"{_DART}/stockTotqySttus.json?crtfc_key={DART_KEY}"
+               f"&corp_code={corp}&bsns_year={year}&reprt_code=11011")
+        try:
+            with urllib.request.urlopen(url, timeout=15) as r:
+                d = json.loads(r.read().decode())
+        except Exception as e:
+            logger.warning("주식총수 조회 실패 %s/%s: %s", corp, year, e)
+            continue
+        if d.get("status") != "000":
+            continue
+        rows = d.get("list", []) or []
+
+        def pick(pred):
+            for it in rows:
+                if pred(it.get("se", "") or ""):
+                    v = _num(it.get("istc_totqy")) or _num(it.get("distb_stock_co"))
+                    if v:
+                        return v
+            return None
+
+        common = pick(lambda se: "보통주" in se and "우선" not in se)
+        total = pick(lambda se: "합계" in se or "총계" in se)
+        v = common or total
+        if v:
+            return v
+    return None
+
+
+
 def _enrich(rec: dict) -> dict:
     code = rec.get("code", "")
     corp = _corp_map().get(code)
@@ -416,7 +541,12 @@ def _enrich(rec: dict) -> dict:
     out = dict(rec)
     out["financials"] = fin.get("trend", [])
     out["metrics"] = fin.get("metrics", {})
-    out["quality_score"] = _quality_score(fin.get("metrics", {}))
+    _m = fin.get("metrics", {})
+    if corp:
+        sh = _shares(corp)
+        if sh:
+            _m["shares"] = sh
+    out["quality_score"] = _quality_score(_m)
     out["f_score"] = _fscore(corp) if corp else None  # Piotroski F-Score(9점)
     out["company"] = _company(corp) if corp else {}
     out["biz_summary"] = _fnguide_business(code)  # FnGuide Business Summary

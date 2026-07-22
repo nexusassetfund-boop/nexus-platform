@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-20T16:31:06+09:00",
+  "updated": "2026-07-22T13:12:03+09:00",
   "dart": true,
   "universe": [
     {
@@ -59,7 +59,12 @@
         "debt_ratio": 45.9,
         "current_ratio": 185.8,
         "rev_growth": 46.8,
-        "ni_growth": 116.9
+        "ni_growth": 116.9,
+        "roic": 22.8,
+        "fcf": 25854202000000,
+        "net_cash": -40517142000000,
+        "fcf_margin": 26.6,
+        "shares": 728002365.0
       },
       "quality_score": 100,
       "f_score": {
@@ -146,7 +151,12 @@
         "debt_ratio": 140.9,
         "current_ratio": 53.5,
         "rev_growth": 5.5,
-        "ni_growth": -65.4
+        "ni_growth": -65.4,
+        "roic": 2.5,
+        "fcf": 499731583677,
+        "net_cash": -8415847206528,
+        "fcf_margin": 7.2,
+        "shares": 9645181.0
       },
       "quality_score": 28,
       "f_score": {
@@ -215,7 +225,12 @@
         "debt_ratio": 28.6,
         "current_ratio": 446.2,
         "rev_growth": 68.2,
-        "ni_growth": 413.0
+        "ni_growth": 413.0,
+        "roic": 51.3,
+        "fcf": 68180958296,
+        "net_cash": 44212945546,
+        "fcf_margin": 13.1,
+        "shares": 12392665.0
       },
       "quality_score": 100,
       "f_score": {
@@ -302,7 +317,12 @@
         "debt_ratio": 61.8,
         "current_ratio": 156.5,
         "rev_growth": 6.2,
-        "ni_growth": -22.7
+        "ni_growth": -22.7,
+        "roic": 8.3,
+        "fcf": 5289632000000,
+        "net_cash": -23790485000000,
+        "fcf_margin": 4.6,
+        "shares": 390412998.0
       },
       "quality_score": 59,
       "f_score": {
@@ -371,7 +391,9 @@
         "debt_ratio": 1211.7,
         "current_ratio": null,
         "rev_growth": null,
-        "ni_growth": 16.1
+        "ni_growth": 16.1,
+        "roic": 0.8,
+        "shares": 381462103.0
       },
       "quality_score": 59,
       "f_score": {
@@ -458,7 +480,12 @@
         "debt_ratio": 52.0,
         "current_ratio": 217.1,
         "rev_growth": 11.4,
-        "ni_growth": -5.4
+        "ni_growth": -5.4,
+        "roic": 7.9,
+        "fcf": -56660000000,
+        "net_cash": -3939455000000,
+        "fcf_margin": -0.9,
+        "shares": 117976645.0
       },
       "quality_score": 76,
       "f_score": {
@@ -545,7 +572,12 @@
         "debt_ratio": 50.5,
         "current_ratio": 154.0,
         "rev_growth": -3.2,
-        "ni_growth": 40.9
+        "ni_growth": 40.9,
+        "roic": 3.1,
+        "fcf": 1287347527014,
+        "net_cash": -25577578642934,
+        "fcf_margin": 3.2,
+        "shares": 169976544.0
       },
       "quality_score": 62,
       "f_score": {
@@ -583,10 +615,10 @@
       "buy_date": "2026-07-01",
       "buy_price": 223700,
       "qty": 35,
-      "target_price": null,
+      "target_price": 300000,
       "stop_loss": null,
       "thesis": null,
-      "memo": "",
+      "memo": null,
       "financials": [
         {
           "year": 2023,
@@ -615,7 +647,12 @@
         "debt_ratio": 28.6,
         "current_ratio": 446.2,
         "rev_growth": 68.2,
-        "ni_growth": 413.0
+        "ni_growth": 413.0,
+        "roic": 51.3,
+        "fcf": 68180958296,
+        "net_cash": 44212945546,
+        "fcf_margin": 13.1,
+        "shares": 12392665.0
       },
       "quality_score": 100,
       "f_score": {
