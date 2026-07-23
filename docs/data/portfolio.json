@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-23T21:54:38+09:00",
+ "updated": "2026-07-24T00:47:17+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 140058351.0,
@@ -8,8 +8,8 @@
   "eval_pnl_pct": -1.2,
   "cum_pnl": -9941649.0,
   "cum_pnl_pct": -6.63,
-  "day_change": null,
-  "day_change_pct": null,
+  "day_change": 0.0,
+  "day_change_pct": 0.0,
   "realized_pnl": 9425204.0,
   "nav_index": 933.72,
   "n_stocks": 3.0,
@@ -25,20 +25,20 @@
     "change": 39.2
    },
    "dow": {
-    "value": 52218.6,
-    "change": 0.0
+    "value": 51671.4,
+    "change": -547.2
    },
    "nasdaq": {
-    "value": 25690.9,
-    "change": -146.3
+    "value": 25019.8,
+    "change": -671.1
    },
    "sp500": {
-    "value": 7499.0,
-    "change": -10.2
+    "value": 7391.2,
+    "change": -107.8
    },
    "usdkrw": {
-    "value": 1474.2,
-    "change": 4.4
+    "value": 1475.5,
+    "change": 3.2
    }
   }
  },
@@ -58,7 +58,7 @@
    "buy_amount": 9625500.0,
    "target_price": null,
    "buy_date": "2026-07-01",
-   "hold_days": 22.0,
+   "hold_days": 23.0,
    "weight": "31.2%",
    "memo": ""
   },
@@ -77,7 +77,7 @@
    "buy_amount": 20250000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
-   "hold_days": 15.0,
+   "hold_days": 16.0,
    "weight": "65.7%",
    "memo": ""
   },
@@ -96,7 +96,7 @@
    "buy_amount": 950300.0,
    "target_price": null,
    "buy_date": "2026-07-23",
-   "hold_days": 0.0,
+   "hold_days": 1.0,
    "weight": "3.1%",
    "memo": ""
   }
@@ -665,6 +665,12 @@
    }
   ],
   "value": [
+   {
+    "date": "2026-7-24",
+    "portfolio_value": 140058351.0,
+    "total_value": 30455200.0,
+    "eval_pnl": -370600.12
+   },
    {
     "date": "2026-7-23",
     "portfolio_value": 140058350.9,
