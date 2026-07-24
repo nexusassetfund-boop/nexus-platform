@@ -1,0 +1,16 @@
+[
+ {
+  "date": "2026-07-24",
+  "added": [],
+  "removed": [
+   {
+    "code": "004170",
+    "name": "신세계",
+    "first_seen": "2026-07-24",
+    "days": 0,
+    "last_score": 6,
+    "last_price": 506000.0
+   }
+  ]
+ }
+]
