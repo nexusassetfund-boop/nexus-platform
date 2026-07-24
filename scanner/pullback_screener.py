@@ -58,6 +58,8 @@ def _pykrx_stock():
 KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).parent.parent
 OUT_PATH = ROOT / "docs" / "data" / "pullback.json"
+STATE_PATH = ROOT / "docs" / "data" / "pullback_state.json"      # {code: first_seen}
+HISTORY_PATH = ROOT / "docs" / "data" / "pullback_history.json"  # append-only 편입/편출
 SCAN_PATH = ROOT / "docs" / "data" / "scan.json"
 
 # ── 기준 (사양서 §3~4 — 완화하려면 여기만 수정) ──
@@ -250,6 +252,44 @@ def _score(rec: dict) -> tuple[int, dict]:
     return sum(b.values()), b
 
 
+def _update_history(cands: list[dict], prev_state: dict, today: str) -> list:
+    """편입/편출 이력 누적 (append-only, quality_growth 패턴).
+    편출 기록에는 당시 score·가격·체류일을 남겨 사후 성과 추적(90일 보유 룰 운영)에 쓴다."""
+    try:
+        history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        history = []
+    prev_codes = set(prev_state)
+    if not prev_codes:                      # 최초 실행 — diff 없음
+        return history[-30:]
+    try:
+        prev_by_code = {c["ticker"]: c
+                        for c in json.loads(OUT_PATH.read_text(encoding="utf-8"))["candidates"]}
+    except Exception:
+        prev_by_code = {}
+    cur = {r["ticker"]: r for r in cands}
+    added = [{"code": c, "name": r["name"], "score": r["pullback_score"]}
+             for c, r in cur.items() if c not in prev_codes]
+    removed = []
+    for c in sorted(prev_codes - set(cur)):
+        p = prev_by_code.get(c, {})
+        first = prev_state.get(c)
+        days = None
+        if first:
+            try:
+                days = (dt.date.fromisoformat(today) - dt.date.fromisoformat(first)).days
+            except Exception:
+                pass
+        removed.append({"code": c, "name": p.get("name", c), "first_seen": first,
+                        "days": days, "last_score": p.get("pullback_score"),
+                        "last_price": p.get("current_price")})
+    if added or removed:
+        history.append({"date": today, "added": added, "removed": removed})
+        HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+    return history[-30:]
+
+
 def build() -> dict | None:
     pykrx = _pykrx_stock()
     dates = _trading_dates()
@@ -379,9 +419,27 @@ def build() -> dict | None:
     for i, r in enumerate(out, 1):
         r["rank"] = i
 
+    # 편입일 추적 (신규 배지·90일 보유 룰 운영용) + 편입/편출 이력
+    today = f"{d0[:4]}-{d0[4:6]}-{d0[6:]}"
+    try:
+        state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        state = {}
+    for r in out:
+        first = state.get(r["ticker"], today)
+        r["first_seen"] = first
+        r["is_new"] = int(first == today and bool(state))
+        try:
+            r["days_in_list"] = (dt.date.fromisoformat(today) - dt.date.fromisoformat(first)).days
+        except Exception:
+            r["days_in_list"] = 0
+    history = _update_history(out, state, today)
+
     return {
         "updated": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
-        "snap_date": f"{d0[:4]}-{d0[4:6]}-{d0[6:]}",
+        "snap_date": today,
+        "_state": {r["ticker"]: r["first_seen"] for r in out},
+        "history": history,
         "market": market_direction(),
         "thresholds": {
             "pct_6m_min": PCT_6M_MIN, "pct_12m_min": PCT_12M_MIN,
@@ -403,7 +461,9 @@ def main():
     if data is None:
         logger.error("눌림목 스캔 실패 — 기존 파일 보존, exit 1")
         sys.exit(1)
+    new_state = data.pop("_state", {})
     OUT_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    STATE_PATH.write_text(json.dumps(new_state, ensure_ascii=False, indent=1), encoding="utf-8")
     n4 = sum(1 for c in data["candidates"] if c["pullback_score"] >= 4)
     logger.info("저장: %s (후보 %d, score≥4 %d, 시장 %s)",
                 OUT_PATH, data["count"], n4, data["market"]["status"])
