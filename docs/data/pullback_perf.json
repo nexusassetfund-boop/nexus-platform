@@ -1,0 +1,168 @@
+{
+ "episodes": [
+  {
+   "code": "034730",
+   "name": "SK",
+   "entry_date": "2026-07-24",
+   "entry_price": 624000.0,
+   "entry_score": 7,
+   "status": "open",
+   "last_close": 632000.0,
+   "trading_days": 0,
+   "ret_pct": 1.3
+  },
+  {
+   "code": "053610",
+   "name": "프로텍",
+   "entry_date": "2026-07-24",
+   "entry_price": 63200.0,
+   "entry_score": 7,
+   "status": "open",
+   "last_close": 64000.0,
+   "trading_days": 0,
+   "ret_pct": 1.3
+  },
+  {
+   "code": "319660",
+   "name": "피에스케이",
+   "entry_date": "2026-07-24",
+   "entry_price": 143700.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 144400.0,
+   "trading_days": 0,
+   "ret_pct": 0.5
+  },
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "entry_date": "2026-07-24",
+   "entry_price": 249500.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 251250.0,
+   "trading_days": 0,
+   "ret_pct": 0.7
+  },
+  {
+   "code": "017670",
+   "name": "SK텔레콤",
+   "entry_date": "2026-07-24",
+   "entry_price": 100200.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 103800.0,
+   "trading_days": 0,
+   "ret_pct": 3.6
+  },
+  {
+   "code": "041830",
+   "name": "인바디",
+   "entry_date": "2026-07-24",
+   "entry_price": 47550.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 47500.0,
+   "trading_days": 0,
+   "ret_pct": -0.1
+  },
+  {
+   "code": "252990",
+   "name": "샘씨엔에스",
+   "entry_date": "2026-07-24",
+   "entry_price": 13370.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 13420.0,
+   "trading_days": 0,
+   "ret_pct": 0.4
+  },
+  {
+   "code": "127120",
+   "name": "제이에스링크",
+   "entry_date": "2026-07-24",
+   "entry_price": 32650.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 32750.0,
+   "trading_days": 0,
+   "ret_pct": 0.3
+  },
+  {
+   "code": "322000",
+   "name": "HD현대에너지솔루션",
+   "entry_date": "2026-07-24",
+   "entry_price": 165900.0,
+   "entry_score": 5,
+   "status": "open",
+   "last_close": 172400.0,
+   "trading_days": 0,
+   "ret_pct": 3.9
+  },
+  {
+   "code": "131290",
+   "name": "티에스이",
+   "entry_date": "2026-07-24",
+   "entry_price": 202000.0,
+   "entry_score": 5,
+   "status": "open",
+   "last_close": 203500.0,
+   "trading_days": 0,
+   "ret_pct": 0.7
+  },
+  {
+   "code": "005090",
+   "name": "SGC에너지",
+   "entry_date": "2026-07-24",
+   "entry_price": 49750.0,
+   "entry_score": 5,
+   "status": "open",
+   "last_close": 50500.0,
+   "trading_days": 0,
+   "ret_pct": 1.5
+  },
+  {
+   "code": "028050",
+   "name": "삼성E&A",
+   "entry_date": "2026-07-24",
+   "entry_price": 47250.0,
+   "entry_score": 5,
+   "status": "open",
+   "last_close": 47700.0,
+   "trading_days": 0,
+   "ret_pct": 1.0
+  },
+  {
+   "code": "006340",
+   "name": "대원전선",
+   "entry_date": "2026-07-24",
+   "entry_price": 13730.0,
+   "entry_score": 4,
+   "status": "open",
+   "last_close": 13930.0,
+   "trading_days": 0,
+   "ret_pct": 1.5
+  },
+  {
+   "code": "019210",
+   "name": "와이지-원",
+   "entry_date": "2026-07-24",
+   "entry_price": 18450.0,
+   "entry_score": 4,
+   "status": "open",
+   "last_close": 18530.0,
+   "trading_days": 0,
+   "ret_pct": 0.4
+  }
+ ],
+ "summary": {
+  "hold_td": 90,
+  "closed_n": 0,
+  "closed_win_rate": null,
+  "closed_avg_ret": null,
+  "open_n": 14,
+  "open_avg_ret": 1.2,
+  "note": "편입일 종가 진입 근사 · 90거래일 보유(B90) 시뮬 · 거래비용 미반영"
+ },
+ "updated": "2026-07-24"
+}
