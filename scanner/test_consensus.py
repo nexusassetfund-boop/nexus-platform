@@ -28,8 +28,27 @@ def test_parse_no_estimate_column():
     assert consensus._parse_consensus(html) is None
 
 
+def test_parse_multi_fixture():
+    html = io.open(Path(__file__).parent / "fixtures/wise_cf1001_000660.html", encoding="utf-8").read()
+    out = consensus._parse_consensus_multi(html)
+    assert len(out) == 3, out
+    assert out[0] == {"year": "2026/12(E)", "eps": 314786.61}, out
+    assert out[1] == {"year": "2027/12(E)", "eps": 436642.46}, out
+    assert out[2]["year"] == "2028/12(E)", out
+
+
+def test_parse_multi_fail_closed():
+    assert consensus._parse_consensus_multi("") == []
+    assert consensus._parse_consensus_multi("<html>다른 페이지</html>") == []
+    # (E) 헤더는 있는데 bgE 추정 셀이 없으면 빈 리스트
+    html = '<table><tr><th>2026/12(E)</th></tr><tr><th>EPS</th><td class="num">1,000</td></tr></table>'
+    assert consensus._parse_consensus_multi(html) == []
+
+
 if __name__ == "__main__":
     test_parse_fixture()
     test_parse_garbage_fail_closed()
     test_parse_no_estimate_column()
+    test_parse_multi_fixture()
+    test_parse_multi_fail_closed()
     print("OK")

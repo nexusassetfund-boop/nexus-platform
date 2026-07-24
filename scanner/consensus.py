@@ -63,6 +63,59 @@ def _parse_consensus(html: str) -> dict | None:
     return {"fwd_eps": eps, "fwd_year": years[est_idx]}
 
 
+_AJAX = ("https://navercomp.wisereport.co.kr/v2/company/ajax/cF1001.aspx"
+         "?cmp_cd={code}&fin_typ=0&freq_typ=Y&encparam={enc}")
+
+
+def _parse_consensus_multi(html: str) -> list[dict]:
+    """cF1001 연간 하이라이트에서 (E) 다개년 EPS 추출.
+
+    추정 컬럼은 <td class="... bgE ..."> + title 속성(정밀값)으로 식별.
+    반환: [{"year": "2026/12(E)", "eps": float}, ...] — 구조 불일치 시 [].
+    """
+    if not html:
+        return []
+    years, seen = [], set()
+    for y in re.findall(r"\d{4}/\d{2}\(E\)", html):
+        if y not in seen:
+            seen.add(y)
+            years.append(y)
+    row = re.search(r"<tr[^>]*>(?:(?!</tr>).)*?>EPS(?:(?!</tr>).)*?</tr>", html, re.S)
+    if not row or not years:
+        return []
+    est = re.findall(r'<td[^>]*class="[^"]*bgE[^"]*"[^>]*title="([^"]*)"', row.group(0))
+    out = []
+    for y, s in zip(years, est):
+        v = _num(s)
+        if v is not None and v != 0:
+            out.append({"year": y, "eps": v})
+    return out
+
+
+def fetch_consensus_multi(code: str) -> list[dict]:
+    """종목코드 → 다개년 컨센서스 EPS 리스트. 실패·미제공 시 [] (fail-closed).
+
+    encparam(페이지 토큰) 확보용 본문 1회 + ajax 1회 = 종목당 2요청.
+    """
+    try:
+        req = urllib.request.Request(_URL.format(code=code), headers={"User-Agent": _UA})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            main = r.read().decode("utf-8", errors="replace")
+        m = re.search(r"encparam\s*[:=]\s*['\"]([^'\"]+)", main)
+        if not m:
+            return []
+        req = urllib.request.Request(
+            _AJAX.format(code=code, enc=m.group(1)),
+            headers={"User-Agent": _UA, "Referer": _URL.format(code=code),
+                     "X-Requested-With": "XMLHttpRequest"})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            html = r.read().decode("utf-8", errors="replace")
+        return _parse_consensus_multi(html)
+    except Exception as e:
+        logger.warning("다개년 컨센서스 조회 실패 %s: %s", code, e)
+        return []
+
+
 def fetch_consensus(code: str) -> dict:
     """종목코드(6자리) → 컨센서스 dict. 실패·미제공 시 {} (스캔 진행에 영향 없음)."""
     try:

@@ -9,11 +9,12 @@
   2) 깡토 RS = percentile(0.5*pct_3m + 0.3*pct_6m + 0.2*pct_12m, 시장별 KOSPI/KOSDAQ) × 98 + 1
   3) 하드필터: pct_6m≥30% AND pct_12m≥50% AND 시총≥5,000억 AND 0.65≤prox52≤0.92
   4) 통과 종목만 개별 1년 일봉 조회 → 응축 지표(consolidation_days, vol_dry, VCP, vol_2x_bo)
-  5) 점수화(0~6, PER 컨센서스 부재로 원 사양 7점 중 PER가속 제외) + 시장방향(KOSPI 200MA+분배일)
+  5) 후보에 한해 WISEreport 다개년 컨센서스(consensus.fetch_consensus_multi) → PER 가속 bit
+  6) 점수화(0~7, 원 사양 §4.2) + 시장방향(KOSPI 200MA+분배일)
 출력: docs/data/pullback.json (프론트 '전략실 > 눌림목' 탭이 읽음)
 
-주의: PER 가속(per_2026e>per_2027e) 필터는 컨센서스 데이터 소스 부재로 미적용 —
-      트레일링 PER만 참고 표시. 백테스트도 PER 제외 조건으로 검증됨(사양서 §5).
+주의: PER 가속(fwd1 PER > fwd2 PER > 0)은 하드필터가 아닌 가점(+1)으로만 사용 —
+      컨센서스 미제공(중소형) 종목이 필터로 전멸하는 것을 방지. 사양 §4.1과 다른 점.
 실행: 매일 장마감 후 pullback.yml. 테스트: PULLBACK_LIMIT=10 으로 개별 조회 수 제한.
 실패 정책: 응축 지표 확보가 후보의 절반 미만이면 기존 출력 보존 후 exit 1.
 """
@@ -28,6 +29,32 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 logger = logging.getLogger("pullback")
+
+_PYKRX = None
+
+
+def _pykrx_stock():
+    """pykrx 지연 import + 재시도. pykrx는 import 시점에 KRX 로그인(KRX_ID/PW)을 시도하는데,
+    KRX가 비JSON 응답(간헐 차단)을 주면 import 자체가 죽는다 — 재시도 후 최후엔 무로그인 폴백."""
+    global _PYKRX
+    if _PYKRX is not None:
+        return _PYKRX
+    for attempt in range(3):
+        try:
+            from pykrx import stock
+            _PYKRX = stock
+            return stock
+        except Exception as e:
+            logger.warning("pykrx import 실패(시도 %d, KRX 로그인 이슈 추정): %s", attempt + 1, e)
+            for m in [k for k in list(sys.modules) if k.startswith("pykrx")]:
+                sys.modules.pop(m, None)
+            time.sleep(5 * (attempt + 1))
+    logger.warning("KRX 로그인 포기 — 무로그인으로 pykrx 재시도")
+    os.environ.pop("KRX_ID", None)
+    os.environ.pop("KRX_PW", None)
+    from pykrx import stock
+    _PYKRX = stock
+    return stock
 KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).parent.parent
 OUT_PATH = ROOT / "docs" / "data" / "pullback.json"
@@ -62,7 +89,7 @@ def _trading_dates(days: int = 420) -> list[str]:
             return [d.strftime("%Y%m%d") for d in df.index]
     except Exception as e:
         logger.warning("FDR KS11 실패: %s — pykrx 지수로 대체", e)
-    from pykrx import stock as pykrx
+    pykrx = _pykrx_stock()
     df = pykrx.get_index_ohlcv(start.strftime("%Y%m%d"), end.strftime("%Y%m%d"), "1001")
     return [d.strftime("%Y%m%d") for d in df.index]
 
@@ -80,7 +107,7 @@ def _kospi_series(days: int = 320):
             return closes, vols, df.index[-1].strftime("%Y-%m-%d")
     except Exception as e:
         logger.warning("FDR KS11 시계열 실패: %s", e)
-    from pykrx import stock as pykrx
+    pykrx = _pykrx_stock()
     df = pykrx.get_index_ohlcv(start.strftime("%Y%m%d"), end.strftime("%Y%m%d"), "1001")
     return ([float(v) for v in df["종가"]], [float(v) for v in df["거래량"]],
             df.index[-1].strftime("%Y-%m-%d"))
@@ -116,7 +143,7 @@ def market_direction() -> dict:
 def _snapshot(dates: list[str], idx: int, market: str) -> tuple[dict[str, float], dict[str, float]]:
     """거래일 dates[idx] 전종목 (종가맵, 시총맵). KRX 간헐 차단 대비 재시도 + 직전 거래일 백오프.
     (get_market_cap_by_ticker는 value_screen·run_scan이 CI에서 검증한 엔드포인트)"""
-    from pykrx import stock as pykrx
+    pykrx = _pykrx_stock()
     for back in range(3):                     # 하루씩 백오프 (수익률 오차 미미)
         date = dates[max(0, idx - back)]
         for attempt in range(3):
@@ -148,7 +175,7 @@ def _pct_rank_map(vals: dict[str, float]) -> dict[str, int]:
 
 def _detail(code: str, start: str, end: str) -> dict | None:
     """개별 1년 일봉 → 응축 지표 (사양서 §3.2~3.3, 3.7)."""
-    from pykrx import stock as pykrx
+    pykrx = _pykrx_stock()
     df = pykrx.get_market_ohlcv(start, end, code)
     if df is None or len(df) < 120:
         return None
@@ -189,9 +216,30 @@ def _detail(code: str, start: str, end: str) -> dict | None:
     }
 
 
+def _consensus_per(code: str, close: float) -> dict:
+    """다개년 컨센서스 → 포워드 PER·PER 가속 bit. 미제공 시 {} (가점 없음)."""
+    import consensus
+    fwd = consensus.fetch_consensus_multi(code)
+    time.sleep(0.4)   # WISEreport 요청 예의 지연 (value_screen과 동일)
+    if len(fwd) < 2:
+        return {}
+    eps1, eps2 = fwd[0]["eps"], fwd[1]["eps"]
+    out = {
+        "fwd_year1": fwd[0]["year"], "fwd_year2": fwd[1]["year"],
+        "per_fwd1": round(close / eps1, 1) if eps1 > 0 else None,
+        "per_fwd2": round(close / eps2, 1) if eps2 > 0 else None,
+        # 사양 §3.5: per_fwd1 > per_fwd2 > 0 ⇔ eps2 > eps1 > 0 (실적 가속)
+        "per_accel": int(eps1 > 0 and eps2 > eps1),
+    }
+    if out["per_fwd1"] and out["per_fwd2"]:
+        out["per_delta_pct"] = round((out["per_fwd1"] - out["per_fwd2"]) / out["per_fwd1"] * 100, 1)
+    return out
+
+
 def _score(rec: dict) -> tuple[int, dict]:
-    """사양서 §4.2 — PER 가속 항목 제외 6점 만점."""
+    """사양서 §4.2 — 7점 만점 (PER 가속은 컨센서스 제공 종목만 가점 가능)."""
     b = {
+        "per_accel": int(rec.get("per_accel") == 1),
         "deep_pullback": int(rec["proximity_52w"] <= DEEP_PROX_MAX),
         "base_short": int(rec["consolidation_days"] >= CONSOL_DAYS),
         "base_tight": int(rec["consolidation_days"] >= CONSOL_TIGHT),
@@ -203,7 +251,7 @@ def _score(rec: dict) -> tuple[int, dict]:
 
 
 def build() -> dict | None:
-    from pykrx import stock as pykrx
+    pykrx = _pykrx_stock()
     dates = _trading_dates()
     if len(dates) < 253:
         logger.error("거래일 캘린더 부족 (%d)", len(dates))
@@ -316,6 +364,7 @@ def build() -> dict | None:
             "market_cap_억": round(caps[code] / 1e8),
             **det,
         }
+        rec.update(_consensus_per(code, det["current_price"]))
         rec["pullback_score"], rec["score_bits"] = _score(rec)
         out.append(rec)
 
@@ -323,7 +372,10 @@ def build() -> dict | None:
         logger.error("일봉 확보 실패 %d/%d — 일시 장애 의심, 기존 파일 보존", fails, len(pool))
         return None
 
-    out.sort(key=lambda r: (-r["pullback_score"], -r["rs_kkangto"], -r["pct_12m"]))
+    # 사양 §4.3: score → RS → PER 개선폭 → 12M 수익률
+    out.sort(key=lambda r: (-r["pullback_score"], -r["rs_kkangto"],
+                            -(r.get("per_delta_pct") if r.get("per_delta_pct") is not None else -1e9),
+                            -r["pct_12m"]))
     for i, r in enumerate(out, 1):
         r["rank"] = i
 
@@ -337,8 +389,8 @@ def build() -> dict | None:
             "consol_days": CONSOL_DAYS, "consol_tight": CONSOL_TIGHT,
             "dry_ratio": DRY_RATIO, "rs_leader": RS_LEADER,
             "min_market_cap_억": MIN_CAP // 100_000_000,
-            "score_max": 6,
-            "note": "PER 가속(컨센서스) 항목은 데이터 소스 부재로 제외 — 6점 만점, 권장 진입선 4점. "
+            "score_max": 7,
+            "note": "7점 만점(PER 가속은 컨센서스 제공 종목만 가점) — 권장 진입선 4점. "
                     "백테스트(2021-01~2026-05): score≥4 + 90일 보유 + 시장방향 필터.",
         },
         "scanned": len(pool), "count": len(out), "candidates": out,
