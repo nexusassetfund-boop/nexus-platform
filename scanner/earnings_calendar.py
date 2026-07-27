@@ -12,8 +12,10 @@
 DART 키가 없으면 네이버 컨센서스 + 예상일 휴리스틱만으로 생성한다.
 
 보조 소스 — 인베스팅닷컴 한국 실적 캘린더 (예정일 보강 + 시장 전체 이벤트):
-  발표일 우선순위: DART 공시 확정일 > 인베스팅 예정일 > 현행 휴리스틱(작년+365d/분기말+45d)
-  모든 이벤트에 date_src("공시"|"인베스팅"|"추정") 필드로 출처 기록.
+  발표일 우선순위: DART 공시 확정일 > 인베스팅 예정일 > 작년잠정+365d(잠정 관행 종목)
+    > IR컨콜일(잠정 관행 없는 종목의 첫 공개일) > 작년정기+365d > 분기말+45d
+  모든 이벤트에 date_src("공시"|"IR공시"|"인베스팅"|"웹"|"추정") 필드로 출처 기록.
+  예상일이 과거로 지나가면(stale) 미래 컨콜일로 승격, 없으면 분기말+45d 재추정(date_kind="지연").
   Cloudflare 안티봇에 차단될 수 있음 — 실패 시 경고만 남기고 기존 파이프라인 그대로 진행(fail-soft).
 """
 from __future__ import annotations
@@ -204,25 +206,34 @@ def _dart_disclosures(corp: str, bgn: dt.date, end: dt.date) -> list[dict]:
     [{rcept_no, rcept_dt, report_nm, ir}] — ir=True는 기업설명회(IR)개최 공시."""
     if not DART_KEY or not corp:
         return []
-    url = (f"{_DART}/list.json?crtfc_key={DART_KEY}&corp_code={corp}"
-           f"&bgn_de={bgn:%Y%m%d}&end_de={end:%Y%m%d}&page_count=100")
-    try:
-        d = _dart_json(url)
-    except Exception as e:
-        logger.warning("DART list 실패 %s: %s", corp, e)
-        return []
-    finally:
-        time.sleep(_DART_SLEEP)
-    if d.get("status") != "000":
-        return []
     out = []
-    for x in d.get("list", []) or []:
-        nm = x.get("report_nm", "")
-        is_earn = _is_earnings_report(nm)
-        is_ir = _is_ir_notice(nm)
-        if is_earn or is_ir:
-            out.append({"rcept_no": x.get("rcept_no"), "rcept_dt": x.get("rcept_dt"),
-                        "report_nm": nm, "ir": (is_ir and not is_earn)})
+    page = 1
+    while page <= 10:  # 안전 상한 — 삼성전자류 공시 다량 종목도 120일 창이면 충분
+        url = (f"{_DART}/list.json?crtfc_key={DART_KEY}&corp_code={corp}"
+               f"&bgn_de={bgn:%Y%m%d}&end_de={end:%Y%m%d}&page_no={page}&page_count=100")
+        try:
+            d = _dart_json(url)
+        except Exception as e:
+            logger.warning("DART list 실패 %s p%d: %s", corp, page, e)
+            break
+        finally:
+            time.sleep(_DART_SLEEP)
+        if d.get("status") != "000":
+            break
+        for x in d.get("list", []) or []:
+            nm = x.get("report_nm", "")
+            is_earn = _is_earnings_report(nm)
+            is_ir = _is_ir_notice(nm)
+            if is_earn or is_ir:
+                out.append({"rcept_no": x.get("rcept_no"), "rcept_dt": x.get("rcept_dt"),
+                            "report_nm": nm, "ir": (is_ir and not is_earn)})
+        try:
+            total = int(d.get("total_page") or 1)
+        except (TypeError, ValueError):
+            total = 1
+        if page >= total:
+            break
+        page += 1
     return out
 
 
@@ -231,11 +242,15 @@ _IR_DATE_RE = re.compile(
     r'일시.{0,200}?(\d{4})\s*[년.\-/]\s*(\d{1,2})\s*[월.\-/]\s*(\d{1,2})', re.S)
 
 
-def _ir_concall_date(rcept_no: str) -> dt.date | None:
+def _ir_concall_date(rcept_no: str, target_q: int | None = None) -> dt.date | None:
     """document.xml API(원문 zip)에서 IR 개최일 추출 — 실패 시 None (fail-soft).
 
     검증된 구조(105560/000660 라이브 확인): zip 안의 단일 XML, euc-kr 인코딩,
     "1. 일시 및 방법" 표에 "일시  2026-07-23  16:00" 형태.
+
+    게이트(오매칭 방지 — 감사에서 컨퍼런스 참석/R&D Day/전분기 컨콜 오인 확인):
+      - 원문에 "실적"/"잠정" 미포함이면 실적 IR이 아님 → None
+      - "N분기 … 실적" 명시 시 target_q와 불일치하면 → None (전분기 컨콜 기각)
     """
     if not DART_KEY or not rcept_no:
         return None
@@ -255,6 +270,14 @@ def _ir_concall_date(rcept_no: str) -> dt.date | None:
         if txt is None:
             txt = data.decode("utf-8", "replace")
         txt = re.sub(r"<[^>]+>", " ", txt)  # 태그 제거 후 텍스트에서 탐색
+        # 목적 게이트: 실적 관련 문구 필수 (투자자 시리즈·R&D Day·NDR 등 일반 IR 제외)
+        if not any(k in txt for k in ("실적", "잠정")):
+            return None
+        # "N분기 … 실적" 명시 시 대상 분기 일치 검증 (Q1 컨콜을 Q2로 오인 방지)
+        if target_q is not None:
+            mq = re.search(r'([1-4])\s*분기.{0,20}?실적', txt)
+            if mq and int(mq.group(1)) != target_q:
+                return None
         m = _IR_DATE_RE.search(txt)
         if not m:
             return None
@@ -345,6 +368,35 @@ def _naver_quarter(code: str) -> dict:
         return {}
     finally:
         time.sleep(_NAVER_SLEEP)
+
+
+def _consensus_sane(cons: dict, naver: dict, year: int, q: int) -> bool:
+    """컨센서스 타당성 게이트 — 통과 못 하면 컨센서스 전체 폐기(재스케일 금지).
+
+    배경(2026-07 조사): FnGuide 상류 오염으로 메가캡(000660/005930/402340)의
+    컨센서스·당해연도 수치가 2~4배 부풀려짐. 값이 날마다 요동치므로 매 실행 검증.
+    대체 엔드포인트(WISEreport/finance/annual/integration) 전부 동일 오염 확인 —
+    공식으로 보정 불가, 탐지 후 폐기만 가능.
+    검사 기준은 전년 동분기 '실적'(오염되지 않음이 확인된 열).
+    """
+    rev, op = cons.get("revenue"), cons.get("op")
+    py = naver.get(f"{year - 1}Q{q}") or {}
+    if py.get("consensus"):  # 전년 열이 실적이 아니면 비교 불능 — 보수적으로 통과
+        py = {}
+    py_rev, py_op = py.get("revenue"), py.get("op")
+    # 형상 검사: 영업이익 ≫ 매출액 (지주사 오염 사례 402340: op 99,084 vs rev 3,650)
+    if rev is not None and op is not None and rev > 0 and op > rev * 1.5:
+        return False
+    # 매출: 전년 동분기 대비 0.4~2.0배 (금융주는 rev None → 생략)
+    if rev is not None and py_rev is not None and py_rev > 0:
+        if not (0.4 <= rev / py_rev <= 2.0):
+            return False
+    # 영업이익: 0.2~3.0배 — 단 흑→적 전환 전망(op<0)이나 전년 적자/저베이스(마진<3%)는 비율 무의미 → 생략
+    if (op is not None and op > 0 and py_op is not None and py_op > 0
+            and py_rev is not None and py_rev > 0 and py_op / py_rev >= 0.03):
+        if not (0.2 <= op / py_op <= 3.0):
+            return False
+    return True
 
 
 # ── 인베스팅닷컴 (보조 소스 — 예정일) ─────────────────────────────
@@ -443,6 +495,10 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
     consensus = None
     if nq and nq.get("consensus"):
         consensus = {k: nq.get(k) for k in ("revenue", "op", "np")}
+        # 타당성 게이트 — 오염된 컨센서스는 통째로 폐기 (YoY/서프라이즈 오염 방지)
+        if not _consensus_sane(consensus, naver, year, q):
+            logger.warning("컨센서스 폐기(스케일 이상) %s %s: %s", code, period, consensus)
+            consensus = None
 
     actual = None
     src = "추정"
@@ -461,11 +517,34 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         actual = {k: nq.get(k) for k in ("revenue", "op", "np")}
         src = "잠정"
 
-    # 발표일 — 우선순위: DART 공시 확정 > 인베스팅 예정일 > 휴리스틱(작년+365d/분기말+45d)
+    # 컨퍼런스콜(확정실적 발표)일 — IR개최 공시 원문에서 추출. 날짜 결정보다 먼저 확보:
+    # 잠정공시를 안 하는 종목(예: SK하이닉스)은 컨콜이 첫 공개일이라 발표예정일 후보가 됨.
+    concall_date = None
+    concall_src = None
+    concall_max = (qend + dt.timedelta(days=75)).isoformat()
+    # 최신 IR 공시부터 최대 3건만 원문 조회 (API 비용 절약)
+    for x in sorted((x for x in recent if x.get("ir")),
+                    key=lambda x: x.get("rcept_dt") or "", reverse=True)[:3]:
+        d_ir = _ir_concall_date(x.get("rcept_no"), target_q=q)
+        if d_ir is None:
+            continue
+        iso = d_ir.isoformat()
+        # 하한 = 분기말 — 분기말 이전 IR은 전분기(Q1) 컨콜/일반 IR 오매칭이므로 기각
+        if iso < qend.isoformat() or iso > concall_max:
+            continue
+        concall_date, concall_src = iso, "IR공시"
+        break
+
+    # 발표일 — 우선순위: DART 공시 확정 > 인베스팅 예정일
+    #   > 작년잠정+365d(잠정 관행 있는 종목만) > IR컨콜일 > 작년정기+365d > 분기말+45d
     if ann:
         rd = ann["rcept_dt"]
         date = f"{rd[:4]}-{rd[4:6]}-{rd[6:]}"
         date_kind, status, date_src = "확정", "발표완료", "공시"
+        # 발표완료면 발표일-3d 이전 컨콜은 무관 IR로 보고 기각
+        lo_cc = (dt.date.fromisoformat(date) - dt.timedelta(days=3)).isoformat()
+        if concall_date and concall_date < lo_cc:
+            concall_date = concall_src = None
     elif inv and inv.get("date") and inv["date"] >= qend.isoformat():
         # 분기말 이후 예정된 인베스팅 날짜만 해당 분기 발표로 인정
         date = inv["date"]
@@ -473,40 +552,46 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         status = "발표완료" if actual else "발표예정"
         date_src = "인베스팅"
     else:
+        # 작년 동분기 창에서 잠정 관행 여부 판정 + base 선정
+        # ("잠정" 우선, [기재정정]·타 분기 사업보고서 제외 — LG화학 정정 사업보고서 오인 사례)
         last_year = _dart_disclosures(
             corp, _quarter_end(year - 1, q), _quarter_end(year - 1, q) + dt.timedelta(days=100))
-        base = None
+        prelim = None       # 작년 잠정공시 접수일
+        periodic_base = None  # 작년 정기보고서 접수일 (잠정 관행 없는 종목 폴백)
         for x in sorted(last_year, key=lambda x: x.get("rcept_dt") or ""):
-            if not x.get("ir"):
-                base = x.get("rcept_dt")
-                break
-        if base:
-            est = dt.date(int(base[:4]), int(base[4:6]), int(base[6:])) + dt.timedelta(days=365)
-        else:
-            est = qend + dt.timedelta(days=45)
-        date = est.isoformat()
+            nm = x.get("report_nm") or ""
+            rdt = x.get("rcept_dt")
+            if x.get("ir") or not rdt or "기재정정" in nm:
+                continue
+            if "잠정" in nm:
+                if prelim is None:
+                    prelim = rdt
+            elif periodic_base is None and ("사업보고서" not in nm or q == 4):
+                periodic_base = rdt
         date_kind = "예상"
         status = "발표완료" if actual else "발표예정"
-        date_src = "추정"
+        if prelim:
+            # 잠정 관행 Y — 작년 잠정공시일 +365d
+            est = dt.date(int(prelim[:4]), int(prelim[4:6]), int(prelim[6:])) + dt.timedelta(days=365)
+            date, date_src = est.isoformat(), "추정"
+        elif concall_date and concall_date >= today.isoformat():
+            # 잠정 관행 N — IR 컨콜이 첫 공개일
+            date, date_src = concall_date, "IR공시"
+        elif periodic_base:
+            est = dt.date(int(periodic_base[:4]), int(periodic_base[4:6]),
+                          int(periodic_base[6:])) + dt.timedelta(days=365)
+            date, date_src = est.isoformat(), "추정"
+        else:
+            date, date_src = (qend + dt.timedelta(days=45)).isoformat(), "추정"
 
-    # 컨퍼런스콜(확정실적 발표)일 — IR개최 공시 원문에서 추출. 표시 전용, status에 영향 없음.
-    concall_date = None
-    concall_src = None
-    concall_max = (qend + dt.timedelta(days=75)).isoformat()
-    # 최신 IR 공시부터 최대 3건만 원문 조회 (API 비용 절약)
-    for x in sorted((x for x in recent if x.get("ir")),
-                    key=lambda x: x.get("rcept_dt") or "", reverse=True)[:3]:
-        d_ir = _ir_concall_date(x.get("rcept_no"))
-        if d_ir is None:
-            continue
-        iso = d_ir.isoformat()
-        # 유효성: 발표완료면 잠정발표일 이후, 그리고 분기말+75일 이내
-        if status == "발표완료" and iso < date:
-            continue
-        if iso > concall_max:
-            continue
-        concall_date, concall_src = iso, "IR공시"
-        break
+    # stale 처리 — 발표예정인데 예상일이 이미 지난 경우(올해 잠정 미공시 등):
+    # 미래 컨콜일이 있으면 그 날로 승격, 없으면 분기말+45d로 재추정하고 date_kind="지연"
+    if status == "발표예정" and date < today.isoformat():
+        if concall_date and concall_date >= today.isoformat():
+            date, date_src, date_kind = concall_date, "IR공시", "예상"
+        else:
+            date = max(qend + dt.timedelta(days=45), today).isoformat()
+            date_kind = "지연"
 
     ref = actual or consensus
     surprise = None
@@ -569,11 +654,14 @@ def build(codes: dict[str, str], use_investing: bool = True) -> dict:
 
 
 def _apply_concall_overlay(data: dict) -> dict:
-    """웹 리서치 오버레이(concall_overlay.json) 병합 — concall_date가 비어있는 이벤트만 채움.
+    """웹 리서치 오버레이(concall_overlay.json) 병합.
 
-    스키마: {"items":[{"code","period","concall_date","source_url"}]}
-    유효성: YYYY-MM-DD 형식 + (발표일 공시확정: 발표일-7d, 추정: 분기말) ~ 분기말+75d 창. 불일치·미지 코드는 로그 후 스킵.
-    concall_src는 "웹". 파일 없으면 no-op (fail-soft).
+    스키마: {"items":[{"code","period","concall_date"?,"announce_date"?,"source_url"}]}
+    - concall_date: 확정실적·컨퍼런스콜일 — 비어있는 이벤트만 채움 (concall_src "웹")
+    - announce_date: 인베스팅닷컴 기준 발표(잠정)예정일 — 발표예정이고 DART 공시 확정이 아닌
+      이벤트의 date를 교체 (date_src "인베스팅", date_kind "예상"). 공시 사실은 절대 덮지 않음.
+    유효성: YYYY-MM-DD + 분기말~분기말+75d 창(공시확정 이벤트의 concall은 발표일-7d 하한). 불일치·미지 코드는 로그 후 스킵.
+    파일 없으면 no-op (fail-soft).
     """
     try:
         if not CONCALL_OVERLAY_PATH.exists():
@@ -588,27 +676,43 @@ def _apply_concall_overlay(data: dict) -> dict:
     for it in items:
         try:
             key = (str(it.get("code", "")).strip(), str(it.get("period", "")).strip())
-            cd = str(it.get("concall_date", "")).strip()
+            cd = str(it.get("concall_date") or "").strip()
             ev = ev_map.get(key)
             if ev is None:
                 logger.warning("오버레이 스킵 — 미지 code+period: %s %s", *key)
                 continue
-            if ev.get("concall_date"):  # IR공시 등 기존 값 우선 — 덮어쓰지 않음
-                continue
-            d_cd = dt.date.fromisoformat(cd)  # 형식 검증 (실패 시 except로)
-            # 타당성 창: 발표일-7d ~ 분기말+75d
             m = re.fullmatch(r"(\d{4})Q([1-4])", key[1])
             if not m:
                 logger.warning("오버레이 스킵 — period 형식 오류: %s", key[1])
                 continue
             qend = _quarter_end(int(m.group(1)), int(m.group(2)))
+            hi = qend + dt.timedelta(days=75)
+
+            # ── 발표예정일 (인베스팅 기준) — DART 공시 사실은 절대 덮지 않음 ──
+            ad = str(it.get("announce_date", "") or "").strip()
+            if ad and ev.get("status") == "발표예정" and ev.get("date_src") != "공시":
+                try:
+                    d_ad = dt.date.fromisoformat(ad)
+                    if qend <= d_ad <= hi:
+                        ev["date"] = ad
+                        ev["date_kind"] = "예상"
+                        ev["date_src"] = "인베스팅"
+                        applied += 1
+                    else:
+                        logger.warning("오버레이 스킵 — 예정일 범위 밖 %s %s: %s (%s~%s)", *key, ad, qend, hi)
+                except ValueError:
+                    logger.warning("오버레이 스킵 — 예정일 형식 오류 %s %s: %s", *key, ad)
+
+            # ── 컨콜일 — 비어있는 이벤트만 채움 (IR공시 등 기존 값 우선) ──
+            if not cd or ev.get("concall_date"):
+                continue
+            d_cd = dt.date.fromisoformat(cd)  # 형식 검증 (실패 시 except로)
             # 하한: 발표일이 공시 확정이면 발표일-7d, 추정이면 분기말 —
             # 휴리스틱 예상일이 실제보다 늦을 때 옳은 컨콜일을 기각하지 않도록 (예: 삼성전자 7/30 vs 예상 8/14)
             if ev.get("date_src") == "공시":
                 lo = dt.date.fromisoformat(ev["date"]) - dt.timedelta(days=7)
             else:
                 lo = qend
-            hi = qend + dt.timedelta(days=75)
             if not (lo <= d_cd <= hi):
                 logger.warning("오버레이 스킵 — 날짜 범위 밖 %s %s: %s (%s~%s)", *key, cd, lo, hi)
                 continue
