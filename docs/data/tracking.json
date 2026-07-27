@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-24T22:10:14+09:00",
+ "updated": "2026-07-27T11:11:44+09:00",
  "kospi": {
-  "price": 6690.62,
-  "ma200": 5666.91,
-  "ma50": 7902.82,
+  "price": 6634.47,
+  "ma200": 5682.72,
+  "ma50": 7878.63,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-07-24T22:10:14+09:00"
+  "updated": "2026-07-27T11:11:44+09:00"
  },
  "holdings": [
   {
@@ -21,18 +21,18 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 151200.0,
+   "last_price": 136100.0,
    "peak_price": 151200.0,
-   "return_pct": 8.39,
-   "total_return_pct": 8.39,
+   "return_pct": -2.44,
+   "total_return_pct": -2.44,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 11,
+   "days_held": 14,
    "stage_now": 1,
-   "confidence_now": 80,
+   "confidence_now": 65,
    "last_updated": "2026-07-24",
    "signals_at_entry": [
     "MTT 통과",
@@ -52,7 +52,7 @@
    "last_price": 55000.0,
    "peak_price": 56500.0,
    "return_pct": 1.66,
-   "days_held": 19,
+   "days_held": 22,
    "stage_now": null,
    "confidence_now": 0,
    "last_updated": "2026-07-24",
@@ -78,18 +78,18 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 151200.0,
+   "last_price": 136100.0,
    "peak_price": 151200.0,
-   "return_pct": 14.89,
-   "total_return_pct": 14.89,
+   "return_pct": 3.42,
+   "total_return_pct": 3.42,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 16,
+   "days_held": 19,
    "stage_now": 1,
-   "confidence_now": 80,
+   "confidence_now": 65,
    "last_updated": "2026-07-24",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
@@ -697,6 +697,10 @@
    {
     "date": "2026-07-24",
     "cum": -5.7
+   },
+   {
+    "date": "2026-07-27",
+    "cum": -7.87
    }
   ],
   "1": [
@@ -755,6 +759,10 @@
    {
     "date": "2026-07-24",
     "cum": -7.8
+   },
+   {
+    "date": "2026-07-27",
+    "cum": -8.52
    }
   ]
  },
@@ -827,6 +835,10 @@
    {
     "date": "2026-07-24",
     "nav": 828.83
+   },
+   {
+    "date": "2026-07-27",
+    "nav": 746.06
    }
   ],
   "1": [
@@ -897,6 +909,10 @@
    {
     "date": "2026-07-24",
     "nav": 746.71
+   },
+   {
+    "date": "2026-07-27",
+    "nav": 672.14
    }
   ]
  },
@@ -904,7 +920,7 @@
  "stats": {
   "holding_count": 3,
   "exited_count": 18,
-  "avg_return": 8.31,
+  "avg_return": 0.88,
   "win_rate": 0.0
  }
 }
