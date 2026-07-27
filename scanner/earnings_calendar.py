@@ -242,6 +242,91 @@ _IR_DATE_RE = re.compile(
     r'일시.{0,200}?(\d{4})\s*[년.\-/]\s*(\d{1,2})\s*[월.\-/]\s*(\d{1,2})', re.S)
 
 
+def _dart_document_text(rcept_no: str) -> str | None:
+    """document.xml(원문 zip) → 태그 제거한 평문. 실패 시 None (fail-soft).
+
+    검증된 구조(105560/000660 라이브 확인): zip 안의 단일 XML, euc-kr 인코딩."""
+    if not DART_KEY or not rcept_no:
+        return None
+    url = f"{_DART}/document.xml?crtfc_key={DART_KEY}&rcept_no={rcept_no}"
+    try:
+        with urllib.request.urlopen(url, timeout=30) as r:
+            raw = r.read()
+        z = zipfile.ZipFile(io.BytesIO(raw))
+        data = z.read(z.namelist()[0])
+        txt = None
+        for enc in ("utf-8", "euc-kr", "cp949"):
+            try:
+                txt = data.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        if txt is None:
+            txt = data.decode("utf-8", "replace")
+        return re.sub(r"<[^>]+>", " ", txt)  # 태그 제거 후 텍스트로
+    except Exception as e:
+        logger.warning("DART 원문 조회 실패 %s: %s", rcept_no, e)
+        return None
+    finally:
+        time.sleep(_DART_SLEEP)
+
+
+# 잠정실적 표 단위 표기 → 원 환산 배수 (문서 내 "단위 : 백만원" 류에서 탐지)
+_PROV_UNIT_MULT = (("백만원", 1e6), ("천원", 1e3), ("억원", 1e8), ("조원", 1e12), ("원", 1.0))
+
+
+def _provisional_actual(rcept_no: str):
+    """영업(잠정)실적 공시 원문에서 당해실적 파싱 → {"revenue","op","np"} (억원).
+
+    검증된 구조(라이브): 표가 "매출액 … 당해실적 <값>" 토큰 순서.
+      KB금융 20260723800451 (백만원): 매출 31,757,381 → 317,574억
+      셀트리온 20260703800022 (억원): 매출 13,000 → 13,000억 (당기순이익 '-' → None)
+    표 전체가 '-'(빈 표)면 "EMPTY" 반환 — 실적 '예고'공시로, 발표가 아님
+      (기아 20260701800569 라이브 확인 — 월간 판매실적 예고류).
+    표 자체를 못 찾으면 None (fail-soft).
+    """
+    txt = _dart_document_text(rcept_no)
+    if txt is None:
+        return None
+    # 단위 탐지 — "단위" 근처의 화폐 단위 표기 중 첫 매칭 (대수/%만 있는 표는 건너뜀)
+    mult = None
+    for m in re.finditer(r"단위.{0,40}", txt):
+        seg = m.group(0)
+        for u, f in _PROV_UNIT_MULT:
+            if u in seg:
+                mult = f
+                break
+        if mult is not None:
+            break
+    if mult is None:
+        mult = 1e6  # 잠정실적 공시 관행상 백만원이 최다 — 보수적 기본값
+    toks = txt.split()
+    vals: dict[str, float | None] = {}
+    found_row = False
+    for key, kw in (("revenue", "매출액"), ("op", "영업이익"), ("np", "당기순이익")):
+        vals[key] = None
+        for i, t in enumerate(toks):
+            if not (t == kw or t.startswith(kw)):
+                continue
+            # 행 키워드 뒤 몇 토큰 내 "당해실적" → 그 다음 토큰이 당해 분기 값
+            hit = False
+            for j in range(i + 1, min(i + 6, len(toks))):
+                if toks[j].startswith("당해실적"):
+                    hit = found_row = True
+                    if j + 1 < len(toks):
+                        v = _num(toks[j + 1])
+                        if v is not None:
+                            vals[key] = round(v * mult / 1e8)  # 억원 환산
+                    break
+            if hit:  # 이 키워드의 실적표 행을 찾았으면 다른 위치는 더 안 봄
+                break
+    if not found_row:
+        return None
+    if all(v is None for v in vals.values()):
+        return "EMPTY"  # 예고공시 — 표는 있으나 값 전부 미기재
+    return vals
+
+
 def _ir_concall_date(rcept_no: str, target_q: int | None = None) -> dt.date | None:
     """document.xml API(원문 zip)에서 IR 개최일 추출 — 실패 시 None (fail-soft).
 
