@@ -10,7 +10,7 @@ concurrency: { group: earnings-calendar, cancel-in-progress: false }
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30  # 컨콜일 웹 리서치 포함
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,7 +22,28 @@ jobs:
       - name: 실적 캘린더 수집 (DART + 네이버)
         env: { DART_API_KEY: "${{ secrets.DART_API_KEY }}" }
         run: python scanner/earnings_calendar.py
+      # ── 컨콜일(확정실적·컨퍼런스콜) 웹 리서치 — 보조 정보이므로 실패해도 캘린더 푸시는 진행 ──
+      - uses: actions/setup-node@v4
+        continue-on-error: true
+        with:
+          node-version: 20
+      - name: Claude Code 설치
+        continue-on-error: true
+        run: npm install -g @anthropic-ai/claude-code
+      - name: 컨콜일 리서치 (Claude — 웹 검색으로 오버레이 생성)
+        continue-on-error: true
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude -p "$(cat scanner/concall_prompt.md)" \
+            --allowedTools "Read,Write,WebSearch,WebFetch" \
+            --permission-mode acceptEdits \
+            --max-turns 25
+      - name: 컨콜일 오버레이 병합 (검증 포함)
+        continue-on-error: true
+        run: python scanner/earnings_calendar.py --overlay-only
       # 데이터 파일은 git에 커밋하지 않고 방금 생성한 파일을 KV로 직접 push
+      # (위 컨콜 스텝이 실패해도 병합 전 파일이 그대로 남아 있으므로 push는 항상 수행됨)
       - name: KV 반영
         env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
         run: |
