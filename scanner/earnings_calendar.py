@@ -572,7 +572,7 @@ def _apply_concall_overlay(data: dict) -> dict:
     """웹 리서치 오버레이(concall_overlay.json) 병합 — concall_date가 비어있는 이벤트만 채움.
 
     스키마: {"items":[{"code","period","concall_date","source_url"}]}
-    유효성: YYYY-MM-DD 형식 + 발표일-7d ~ 분기말+75d 창(window). 불일치·미지 코드는 로그 후 스킵.
+    유효성: YYYY-MM-DD 형식 + (발표일 공시확정: 발표일-7d, 추정: 분기말) ~ 분기말+75d 창. 불일치·미지 코드는 로그 후 스킵.
     concall_src는 "웹". 파일 없으면 no-op (fail-soft).
     """
     try:
@@ -602,7 +602,12 @@ def _apply_concall_overlay(data: dict) -> dict:
                 logger.warning("오버레이 스킵 — period 형식 오류: %s", key[1])
                 continue
             qend = _quarter_end(int(m.group(1)), int(m.group(2)))
-            lo = dt.date.fromisoformat(ev["date"]) - dt.timedelta(days=7)
+            # 하한: 발표일이 공시 확정이면 발표일-7d, 추정이면 분기말 —
+            # 휴리스틱 예상일이 실제보다 늦을 때 옳은 컨콜일을 기각하지 않도록 (예: 삼성전자 7/30 vs 예상 8/14)
+            if ev.get("date_src") == "공시":
+                lo = dt.date.fromisoformat(ev["date"]) - dt.timedelta(days=7)
+            else:
+                lo = qend
             hi = qend + dt.timedelta(days=75)
             if not (lo <= d_cd <= hi):
                 logger.warning("오버레이 스킵 — 날짜 범위 밖 %s %s: %s (%s~%s)", *key, cd, lo, hi)
