@@ -60,7 +60,7 @@ jobs:
           claude -p "$(cat scanner/earnings_prompt.md)" \
             --allowedTools "Read,Write,WebSearch,WebFetch" \
             --permission-mode acceptEdits \
-            --max-turns 50
+            --max-turns 15
 
       - name: Worker에 게시
         env:

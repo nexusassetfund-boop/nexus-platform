@@ -8,8 +8,13 @@
   (financeInfo.trTitleList의 isConsensus="Y" 분기가 컨센서스, "N"은 실적 — 단위 이미 억원)
 - 출력: docs/data/earnings_calendar.json (프론트 '실적 캘린더' 하위 탭이 읽음)
 
-단독 실행: python earnings_calendar.py [--codes 005930,000660] [--limit 5]
+단독 실행: python earnings_calendar.py [--codes 005930,000660] [--limit 5] [--no-investing]
 DART 키가 없으면 네이버 컨센서스 + 예상일 휴리스틱만으로 생성한다.
+
+보조 소스 — 인베스팅닷컴 한국 실적 캘린더 (예정일 보강 + 시장 전체 이벤트):
+  발표일 우선순위: DART 공시 확정일 > 인베스팅 예정일 > 현행 휴리스틱(작년+365d/분기말+45d)
+  모든 이벤트에 date_src("공시"|"인베스팅"|"추정") 필드로 출처 기록.
+  Cloudflare 안티봇에 차단될 수 있음 — 실패 시 경고만 남기고 기존 파이프라인 그대로 진행(fail-soft).
 """
 from __future__ import annotations
 import argparse
@@ -17,7 +22,9 @@ import io
 import json
 import logging
 import os
+import re
 import time
+import urllib.parse
 import urllib.request
 import zipfile
 import datetime as dt
@@ -289,9 +296,80 @@ def _naver_quarter(code: str) -> dict:
         time.sleep(_NAVER_SLEEP)
 
 
+# ── 인베스팅닷컴 (보조 소스 — 예정일) ─────────────────────────────
+
+_INVESTING_URL = "https://kr.investing.com/earnings-calendar/Service/getCalendarFilteredData"
+_INVESTING_HEADERS = {
+    "User-Agent": _NAVER_HEADERS["User-Agent"],
+    "X-Requested-With": "XMLHttpRequest",
+    "Referer": "https://kr.investing.com/earnings-calendar/",
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+}
+_MARKET_EVENT_CAP = 60  # 시장 전체(scope:"market") 이벤트 상한
+
+# HTML 파싱 — 날짜 구분행(theDay)과 회사행(earnCalCompanyName + 6자리 코드)
+_INV_DAY_RE = re.compile(r'class="theDay"[^>]*>\s*(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일')
+_INV_ROW_RE = re.compile(
+    r'earnCalCompanyName[^>]*>(?:<[^>]+>)*([^<]+)</.*?\(A?(\d{6})\)', re.S)
+
+
+def _investing_fetch(bgn: dt.date, end: dt.date) -> list[dict]:
+    """인베스팅 한국 실적 캘린더 [{code, name, date}] — 실패 시 [] (fail-soft).
+
+    응답은 {"data": "<tr>...</tr>"} 형태의 HTML 테이블 조각.
+    Cloudflare 안티봇(403 challenge)에 차단될 수 있으며 그 경우 경고만 남긴다.
+    """
+    form = [
+        ("country[]", "11"),
+        ("importance[]", "2"), ("importance[]", "3"),
+        ("dateFrom", bgn.isoformat()), ("dateTo", end.isoformat()),
+        ("currentTab", "custom"), ("limit_from", "0"),
+    ]
+    req = urllib.request.Request(
+        _INVESTING_URL, data=urllib.parse.urlencode(form).encode(),
+        headers=_INVESTING_HEADERS, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=25) as r:
+            body = r.read().decode("utf-8", "replace")
+        d = json.loads(body)
+        html = d.get("data") or ""
+    except Exception as e:
+        logger.warning("인베스팅 캘린더 조회 실패(건너뜀): %s", e)
+        return []
+    rows: list[dict] = []
+    cur_date: dt.date | None = None
+    try:
+        # 날짜행/회사행이 섞인 <tr> 시퀀스를 순서대로 훑는다
+        for tr in re.split(r"(?=<tr)", html):
+            m = _INV_DAY_RE.search(tr)
+            if m:
+                cur_date = dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                continue
+            m = _INV_ROW_RE.search(tr)
+            if m and cur_date:
+                name = re.sub(r"\s+", " ", m.group(1)).strip()
+                rows.append({"code": m.group(2), "name": name, "date": cur_date.isoformat()})
+    except Exception as e:
+        logger.warning("인베스팅 캘린더 파싱 실패(건너뜀): %s", e)
+        return []
+    logger.info("인베스팅 캘린더 %d건 (%s~%s)", len(rows), bgn, end)
+    return rows
+
+
+def _investing_by_code(today: dt.date, enabled: bool = True) -> dict[str, dict]:
+    """{code: {name, date}} — 향후 ~90일 예정 발표만. 과거 행은 DART가 담당하므로 제외."""
+    if not enabled:
+        return {}
+    out: dict[str, dict] = {}
+    for r in _investing_fetch(today, today + dt.timedelta(days=90)):
+        if r["date"] >= today.isoformat():
+            out.setdefault(r["code"], r)  # 종목당 가장 이른 예정일
+    return out
+
+
 # ── 이벤트 생성 ───────────────────────────────────────────────────
 
-def _build_event(code: str, name: str, today: dt.date) -> dict:
+def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) -> dict:
     year, q = _last_quarter(today)
     period = f"{year}Q{q}"
     qend = _quarter_end(year, q)
@@ -332,11 +410,17 @@ def _build_event(code: str, name: str, today: dt.date) -> dict:
         actual = {k: nq.get(k) for k in ("revenue", "op", "np")}
         src = "잠정"
 
-    # 발표일 — 확정(공시) 또는 예상(작년 발표일+365d, 없으면 분기말+45d)
+    # 발표일 — 우선순위: DART 공시 확정 > 인베스팅 예정일 > 휴리스틱(작년+365d/분기말+45d)
     if ann:
         rd = ann["rcept_dt"]
         date = f"{rd[:4]}-{rd[4:6]}-{rd[6:]}"
-        date_kind, status = "확정", "발표완료"
+        date_kind, status, date_src = "확정", "발표완료", "공시"
+    elif inv and inv.get("date") and inv["date"] >= qend.isoformat():
+        # 분기말 이후 예정된 인베스팅 날짜만 해당 분기 발표로 인정
+        date = inv["date"]
+        date_kind = "예상"
+        status = "발표완료" if actual else "발표예정"
+        date_src = "인베스팅"
     else:
         last_year = _dart_disclosures(
             corp, _quarter_end(year - 1, q), _quarter_end(year - 1, q) + dt.timedelta(days=100))
@@ -351,6 +435,7 @@ def _build_event(code: str, name: str, today: dt.date) -> dict:
         date = est.isoformat()
         date_kind = "예상"
         status = "발표완료" if actual else "발표예정"
+        date_src = "추정"
 
     ref = actual or consensus
     surprise = None
@@ -363,23 +448,45 @@ def _build_event(code: str, name: str, today: dt.date) -> dict:
     return {
         "code": code, "name": name, "period": period,
         "date": date, "date_kind": date_kind, "status": status,
-        "src": src, "rcept_no": rcept_no,
+        "date_src": date_src, "src": src, "rcept_no": rcept_no,
         "consensus": consensus, "actual": actual,
         "surprise": surprise, "yoy": yoy,
     }
 
 
-def build(codes: dict[str, str]) -> dict:
+def _market_event(row: dict, today: dt.date) -> dict:
+    """추적 외 종목의 인베스팅 예정 발표 — 상세조회 없이 가벼운 이벤트(scope:"market")."""
+    d = dt.date.fromisoformat(row["date"])
+    year, q = _last_quarter(d)  # 발표일 기준 가장 최근 마감 분기 = 발표 대상 분기 (best-effort)
+    return {
+        "code": row["code"], "name": row.get("name", ""), "period": f"{year}Q{q}",
+        "date": row["date"], "date_kind": "예상", "status": "발표예정",
+        "date_src": "인베스팅", "src": "추정", "rcept_no": None, "scope": "market",
+        "consensus": None, "actual": None, "surprise": None, "yoy": None,
+    }
+
+
+def build(codes: dict[str, str], use_investing: bool = True) -> dict:
     today = dt.datetime.now(tz=KST).date()
     _corp_map()  # corp_code·회사명 캐시 선적재 (이름 보강은 첫 이벤트부터 필요)
+    inv = _investing_by_code(today, enabled=use_investing)
     events = []
     for i, (code, name) in enumerate(sorted(codes.items()), 1):
         try:
-            ev = _build_event(code, name or _corp_names.get(code, ""), today)
+            ev = _build_event(code, name or _corp_names.get(code, ""), today, inv=inv.get(code))
             events.append(ev)
             logger.info("[%d/%d] %s %s — %s %s", i, len(codes), code, name or "", ev["date"], ev["status"])
         except Exception as e:
             logger.warning("이벤트 생성 실패 %s: %s", code, e)
+    # 추적 외 종목 — 시장 전체 예정 발표 (네이버/DART 상세조회 없이 저렴하게, 상한 적용)
+    market = [r for c, r in sorted(inv.items()) if c not in codes][:_MARKET_EVENT_CAP]
+    for r in market:
+        try:
+            events.append(_market_event(r, today))
+        except Exception as e:
+            logger.warning("시장 이벤트 생성 실패 %s: %s", r.get("code"), e)
+    if market:
+        logger.info("시장 전체(scope:market) 이벤트 %d건 추가", len(market))
     return {
         "updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"),
         "dart": bool(DART_KEY),
@@ -393,6 +500,7 @@ def main():
     ap = argparse.ArgumentParser(description="실적 캘린더 수집기")
     ap.add_argument("--codes", help="쉼표 구분 종목코드 (미지정 시 포트폴리오+유니버스+관심종목)")
     ap.add_argument("--limit", type=int, help="테스트용 — 앞 N종목만")
+    ap.add_argument("--no-investing", action="store_true", help="인베스팅 보조 소스 비활성화")
     args = ap.parse_args()
 
     if args.codes:
@@ -405,7 +513,7 @@ def main():
     if not DART_KEY:
         logger.warning("DART_API_KEY 없음 — 네이버 컨센서스 + 예상일 휴리스틱만 사용")
 
-    d = build(codes)
+    d = build(codes, use_investing=not args.no_investing)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
     logger.info("저장: %s (이벤트 %d건)", OUT_PATH, len(d["events"]))
