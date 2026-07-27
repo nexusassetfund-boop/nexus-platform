@@ -1,0 +1,64 @@
+{
+ "generated_at": "2026-07-27T09:17:57+09:00",
+ "calendar_updated": "2026-07-27T09:17:30+09:00",
+ "event": {
+  "code": "000270",
+  "name": "기아",
+  "period": "2026Q2",
+  "date": "2026-07-01",
+  "date_kind": "확정",
+  "status": "발표완료",
+  "src": "잠정",
+  "rcept_no": "20260701800569",
+  "consensus": {
+   "revenue": 322187,
+   "op": 27935,
+   "np": 23355
+  },
+  "actual": null,
+  "surprise": null,
+  "yoy": {
+   "revenue": 9.8,
+   "op": 1,
+   "np": 3
+  }
+ },
+ "price_context": {
+  "source": "value_price.json",
+  "data": {
+   "price": 130500,
+   "change_pct": -12.88,
+   "per": "6.8x",
+   "mktcap": "509,489억",
+   "pbr": 0.83,
+   "div": null,
+   "eps": 19111.0,
+   "bps": 157456.0,
+   "roe": 12.3,
+   "fair": 170277,
+   "fair_src": "calc",
+   "fair_rim": 178138,
+   "fair_rim_cons": 170277,
+   "high52": 212500,
+   "low52": 97600,
+   "upside": 77.8,
+   "margin": 23.4,
+   "near_low": false,
+   "watch": [
+    "목표가 대비 저평가",
+    "안전마진 충분"
+   ],
+   "ma20": 145280,
+   "ma60": 155562,
+   "gap20": -10.2,
+   "gap60": -16.1,
+   "off_high": -38.6,
+   "rsi14": 38.1,
+   "pullback": {
+    "trend": "down",
+    "zone": null,
+    "ready": false
+   }
+  }
+ }
+}
