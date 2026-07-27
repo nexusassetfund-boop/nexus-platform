@@ -593,6 +593,11 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
             date = max(qend + dt.timedelta(days=45), today).isoformat()
             date_kind = "지연"
 
+    # IR 승격 — 추정일보다 IR공시 컨콜일이 빠르면 그 날이 첫 숫자 공개일
+    # (NAVER·카카오처럼 잠정 없이 발표=콜 당일인 회사 + 추정 오차 교정. 공식 소스 우선)
+    if status == "발표예정" and date_src == "추정" and concall_date and concall_date < date:
+        date, date_src, date_kind = concall_date, "IR공시", "예상"
+
     ref = actual or consensus
     surprise = None
     if actual and consensus:
