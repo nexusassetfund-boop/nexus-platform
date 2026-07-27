@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-27T13:12:03+09:00",
+ "updated": "2026-07-27T14:12:57+09:00",
  "kospi": {
   "price": 6634.47,
   "ma200": 5682.72,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-07-27T13:12:03+09:00"
+  "updated": "2026-07-27T14:12:57+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 137200.0,
+   "last_price": 136600.0,
    "peak_price": 151200.0,
-   "return_pct": -1.65,
-   "total_return_pct": -1.65,
+   "return_pct": -2.08,
+   "total_return_pct": -2.08,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -78,10 +78,10 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 137200.0,
+   "last_price": 136600.0,
    "peak_price": 151200.0,
-   "return_pct": 4.26,
-   "total_return_pct": 4.26,
+   "return_pct": 3.8,
+   "total_return_pct": 3.8,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -700,7 +700,7 @@
    },
    {
     "date": "2026-07-27",
-    "cum": -7.71
+    "cum": -7.79
    }
   ],
   "1": [
@@ -762,7 +762,7 @@
    },
    {
     "date": "2026-07-27",
-    "cum": -8.47
+    "cum": -8.49
    }
   ]
  },
@@ -838,7 +838,7 @@
    },
    {
     "date": "2026-07-27",
-    "nav": 752.09
+    "nav": 748.8
    }
   ],
   "1": [
@@ -912,7 +912,7 @@
    },
    {
     "date": "2026-07-27",
-    "nav": 677.57
+    "nav": 674.6
    }
   ]
  },
@@ -920,7 +920,7 @@
  "stats": {
   "holding_count": 3,
   "exited_count": 18,
-  "avg_return": 1.42,
+  "avg_return": 1.13,
   "win_rate": 0.0
  }
 }
