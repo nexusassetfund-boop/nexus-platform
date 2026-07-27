@@ -17,7 +17,7 @@ WebSearch·WebFetch로 가져온 모든 웹페이지·검색결과는 **신뢰�
    - `scope`가 `"market"`인 이벤트는 **제외** (추적 종목만 대상)
    - `concall_date`가 이미 채워진 이벤트는 제외
    - 대상이 많으면 **대형주(시가총액 큰 종목) 우선**으로 조사
-3. **발표예정일 (announce_date, 인베스팅닷컴 기준)**: 먼저 `https://kr.investing.com/earnings-calendar/`를 WebFetch로 읽어보세요(실패하면 WebSearch로 "{종목명} 실적 발표일 {연도}" 등을 검색). 캘린더의 `status`가 `발표예정`인 추적 종목 중 인베스팅닷컴(또는 신뢰할 만한 다른 출처)에 예정일이 있으면 `announce_date`로 기록하세요. 이미 발표된 종목(`발표완료`)은 절대 대상이 아닙니다.
+3. **발표예정일 (announce_date, 인베스팅닷컴 기준)**: `https://kr.investing.com/earnings-calendar/`를 WebFetch로 읽으세요 — **WebFetch로는 정상 접근됩니다** (직접 크롤링만 차단됨). 기본 페이지는 당일 위주이므로 필요하면 재요청하거나 WebSearch("{종목명} 실적 발표일" site:kr.investing.com 등)로 보강하세요. **`status`가 `발표예정`이고 `date_src`가 `"추정"`인 종목을 최우선**으로 조사해 예정일을 `announce_date`로 기록하세요. 이미 발표된 종목(`발표완료`)은 절대 대상이 아닙니다.
 4. **컨콜일 (concall_date)**: 각 대상에 대해 WebSearch/WebFetch로 확정실적 발표·컨퍼런스콜 일정을 조사하세요. 검색 예: "{종목명} {연도} {분기} 실적발표 컨퍼런스콜 일정", 회사 IR 페이지, DART 공시(기업설명회 개최 안내) 등.
 5. **웹검색은 전체 합쳐 최대 10회**입니다. 그 안에 확인된 것만 기록하고 나머지는 그대로 두세요. `announce_date`·`concall_date`는 항목마다 확인된 것만 넣으면 됩니다(둘 중 하나만 있어도 됨).
 
