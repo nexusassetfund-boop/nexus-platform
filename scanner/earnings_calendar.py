@@ -565,7 +565,12 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         rd = x.get("rcept_dt") or ""
         if rd < f"{qend:%Y%m%d}" or x.get("ir"):
             continue
-        periodic_x = any(k in (x.get("report_nm") or "") for k in ("분기보고서", "반기보고서", "사업보고서"))
+        nm_x = x.get("report_nm") or ""
+        periodic_x = any(k in nm_x for k in ("분기보고서", "반기보고서", "사업보고서"))
+        # 타 분기 정기보고서 기각 — [기재정정] 사업보고서(작년 결산)가 당분기 발표로 오인되는
+        # 사례(LG전자 7/6 정정 사업보고서 → 7/7 잠정공시를 가림). 잠정공시 정정은 유효하므로 유지.
+        if periodic_x and ("기재정정" in nm_x or ("사업보고서" in nm_x and q != 4)):
+            continue
         if not periodic_x and prov_tries < 3:
             prov_tries += 1
             p = _provisional_actual(x.get("rcept_no"))
