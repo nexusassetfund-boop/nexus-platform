@@ -1,7 +1,7 @@
 name: 퀄리티 성장주 자동 발굴
 on:
   schedule:
-    - cron: "20 7 * * 1"    # 매주 월 16:20 KST (장마감 후) — 재무는 주 1회면 충분
+    - cron: "20 7 * * 5"    # 매주 금 16:20 KST (장마감 후) — 재무는 주 1회면 충분
   workflow_dispatch: {}
 permissions:
   contents: write
