@@ -1,0 +1,33 @@
+name: 실적 캘린더 갱신
+on:
+  schedule:
+    - cron: "0 7 * * 1-5"    # KST 16:00 평일 — 당일 잠정실적 공시 수집
+    - cron: "30 22 * * 0-4"  # KST 07:30 평일 — 개장 전 보조 갱신
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency: { group: earnings-calendar, cancel-in-progress: false }
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      - name: 실적 캘린더 수집 (DART + 네이버)
+        env: { DART_API_KEY: "${{ secrets.DART_API_KEY }}" }
+        run: python scanner/earnings_calendar.py
+      # 데이터 파일은 git에 커밋하지 않고 방금 생성한 파일을 KV로 직접 push
+      - name: KV 반영
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: |
+          test -f docs/data/earnings_calendar.json || { echo "생성 파일 없음 — 실패"; exit 1; }
+          python -c "import json; print(json.dumps({'files': {'earnings_calendar.json': json.load(open('docs/data/earnings_calendar.json'))}}))" > /tmp/push.json
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
+            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/push.json
