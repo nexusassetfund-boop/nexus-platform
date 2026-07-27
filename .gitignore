@@ -18,3 +18,5 @@ briefing_output.json
 tmp/
 marcap_cache/
 docs/data/newhigh_backtest.json
+earnings_input.json
+earnings_output.json
