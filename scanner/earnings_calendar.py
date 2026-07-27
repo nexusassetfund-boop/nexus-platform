@@ -445,6 +445,79 @@ def _naver_quarter(code: str) -> dict:
         time.sleep(_NAVER_SLEEP)
 
 
+_WISE_SLEEP = 0.3
+_WISE_BASE = "https://navercomp.wisereport.co.kr/v2/company"
+
+
+def _wise_quarter_consensus(code: str, period: str) -> dict | None:
+    """WISEreport 분기 Financial Highlight에서 대상 분기 '추정(E)' 컨센서스 추출.
+
+    네이버 컨센서스가 없거나 게이트에서 폐기됐을 때만 호출되는 폴백.
+    2단계 요청 (라이브 검증 005930/000660/019210):
+      1) c1010001.aspx?cmp_cd={code} 메인 페이지에서 encparam·id 토큰 추출
+      2) ajax/cF1001.aspx?fin_typ=0&freq_typ=Q&extY=1&extQ=1&encparam=..&id=..
+         → 분기 8컬럼 테이블 HTML (헤더 "2026/06(E)"처럼 추정 컬럼에 (E) 표기,
+           행: 매출액/영업이익/당기순이익, 값은 이미 억원, td title 속성에 정밀값)
+    대상 분기 컬럼이 (E)가 아니면(이미 실적 반영) None — 실적은 기존 경로가 담당.
+    실패·컨센서스 미제공(빈 셀) 시 None (fail-soft).
+    """
+    m = re.fullmatch(r"(\d{4})Q([1-4])", period)
+    if not m:
+        return None
+    target = f"{m.group(1)}/{int(m.group(2)) * 3:02d}"  # 2026Q2 → 2026/06
+    headers = dict(_NAVER_HEADERS)
+    headers["Accept"] = "text/html,*/*"
+    headers["Referer"] = f"{_WISE_BASE}/c1010001.aspx?cmp_cd={code}"
+    try:
+        req = urllib.request.Request(f"{_WISE_BASE}/c1010001.aspx?cmp_cd={code}", headers=headers)
+        with urllib.request.urlopen(req, timeout=20) as r:
+            main_html = r.read().decode("utf-8", "replace")
+        time.sleep(_WISE_SLEEP)
+        me = re.search(r"encparam\s*:\s*'([^']+)'", main_html)
+        mi = re.search(r"\bid\s*:\s*'([^']+)'", main_html)
+        if not me:
+            logger.warning("WISE encparam 미발견 %s — 페이지 구조 변경?", code)
+            return None
+        qs = urllib.parse.urlencode({
+            "cmp_cd": code, "fin_typ": 0, "freq_typ": "Q", "extY": 1, "extQ": 1,
+            "encparam": me.group(1), "id": mi.group(1) if mi else ""})
+        req = urllib.request.Request(f"{_WISE_BASE}/ajax/cF1001.aspx?{qs}", headers=headers)
+        with urllib.request.urlopen(req, timeout=20) as r:
+            html = r.read().decode("utf-8", "replace")
+    except Exception as e:
+        logger.warning("WISE 분기 조회 실패 %s: %s", code, e)
+        return None
+    finally:
+        time.sleep(_WISE_SLEEP)
+    try:
+        # 헤더 — 날짜형 <th>만 순서대로 (placeholder 더미 테이블의 th는 날짜형이 아님)
+        cols = re.findall(r"<th[^>]*>\s*(\d{4}/\d{2})(\(E\))?", html)
+        if not cols:
+            return None
+        try:
+            idx = [c[0] for c in cols].index(target)
+        except ValueError:
+            return None  # 대상 분기 컬럼 없음
+        if not cols[idx][1]:
+            return None  # (E) 아님 = 이미 실적 컬럼 — 컨센서스로 쓰지 않음
+        vals: dict[str, float | None] = {}
+        for key, kw in (("revenue", "매출액"), ("op", "영업이익"), ("np", "당기순이익")):
+            vals[key] = None
+            # th 텍스트가 정확히 행 이름인 행만 ("영업이익(발표기준)"/"당기순이익(지배)" 제외)
+            row = re.search(r"<th[^>]*>\s*" + kw + r"\s*</th>(.*?)</tr>", html, re.S)
+            if not row:
+                continue
+            tds = re.findall(r"<td[^>]*>(.*?)</td>", row.group(1), re.S)
+            if idx < len(tds):
+                vals[key] = _num(re.sub(r"<[^>]+>", "", tds[idx]))
+        if all(v is None for v in vals.values()):
+            return None  # 커버리지 없음 — 컨센서스 미제공 종목
+        return vals
+    except Exception as e:
+        logger.warning("WISE 분기 파싱 실패 %s: %s", code, e)
+        return None
+
+
 def _consensus_sane(cons: dict, naver: dict, year: int, q: int) -> bool:
     """컨센서스 타당성 게이트 — 통과 못 하면 컨센서스 전체 폐기(재스케일 금지).
 
@@ -592,6 +665,17 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         if not _consensus_sane(consensus, naver, year, q):
             logger.warning("컨센서스 폐기(스케일 이상) %s %s: %s", code, period, consensus)
             consensus = None
+
+    # 네이버 컨센서스 부재/폐기 시 WISEreport 분기 추정(E) 폴백 — 동일 타당성 게이트 적용
+    # (naver 데이터가 아예 없으면 게이트는 형상 검사(op≤1.5×rev)만 수행하게 됨)
+    if consensus is None:
+        wise = _wise_quarter_consensus(code, period)
+        if wise:
+            if _consensus_sane(wise, naver, year, q):
+                logger.info("WISE 컨센서스 사용 %s %s: %s", code, period, wise)
+                consensus = wise
+            else:
+                logger.warning("WISE 컨센서스 폐기(스케일 이상) %s %s: %s", code, period, wise)
 
     actual = None
     src = "추정"
