@@ -48,6 +48,7 @@ _NAVER_HEADERS = {
 _REPRT = {1: "11013", 2: "11012", 3: "11014", 4: "11011"}
 
 _corp_cache: dict[str, str] | None = None
+_corp_names: dict[str, str] = {}
 
 
 # ── 유틸 ──────────────────────────────────────────────────────────
@@ -153,7 +154,8 @@ def _dart_json(url: str) -> dict:
 
 
 def _corp_map() -> dict[str, str]:
-    """종목코드(6자리) → DART corp_code(8자리). fetch_value.py 방식."""
+    """종목코드(6자리) → DART corp_code(8자리). fetch_value.py 방식.
+    부수적으로 _corp_names(종목코드 → 회사명)도 채운다 — 소스에 이름 없는 종목 보강용."""
     global _corp_cache
     if _corp_cache is not None:
         return _corp_cache
@@ -168,6 +170,7 @@ def _corp_map() -> dict[str, str]:
             sc = (e.findtext("stock_code") or "").strip()
             if sc:
                 _corp_cache[sc] = (e.findtext("corp_code") or "").strip()
+                _corp_names[sc] = (e.findtext("corp_name") or "").strip()
         logger.info("corp_code 매핑 %d건", len(_corp_cache))
     except Exception as e:
         logger.warning("corpCode 다운로드 실패: %s", e)
@@ -368,10 +371,11 @@ def _build_event(code: str, name: str, today: dt.date) -> dict:
 
 def build(codes: dict[str, str]) -> dict:
     today = dt.datetime.now(tz=KST).date()
+    _corp_map()  # corp_code·회사명 캐시 선적재 (이름 보강은 첫 이벤트부터 필요)
     events = []
     for i, (code, name) in enumerate(sorted(codes.items()), 1):
         try:
-            ev = _build_event(code, name, today)
+            ev = _build_event(code, name or _corp_names.get(code, ""), today)
             events.append(ev)
             logger.info("[%d/%d] %s %s — %s %s", i, len(codes), code, name or "", ev["date"], ev["status"])
         except Exception as e:
