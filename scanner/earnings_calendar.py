@@ -334,29 +334,21 @@ def _ir_concall_date(rcept_no: str, target_q: int | None = None) -> dt.date | No
     "1. 일시 및 방법" 표에 "일시  2026-07-23  16:00" 형태.
 
     게이트(오매칭 방지 — 감사에서 컨퍼런스 참석/R&D Day/전분기 컨콜 오인 확인):
-      - 원문에 "실적"/"잠정" 미포함이면 실적 IR이 아님 → None
+      - "개최목적" 필드에 "실적"/"잠정" 미포함이면 실적 IR이 아님 → None
+        (달바글로벌 NDR 사례: 목적 "투자자 이해도 제고", 내용에만 "경영실적 설명" —
+         문서 전체 검사로는 통과해 버려 오매칭. 목적 필드 미탐지 시에만 전체 검사 폴백)
       - "N분기 … 실적" 명시 시 target_q와 불일치하면 → None (전분기 컨콜 기각)
     """
-    if not DART_KEY or not rcept_no:
+    txt = _dart_document_text(rcept_no)
+    if txt is None:
         return None
-    url = f"{_DART}/document.xml?crtfc_key={DART_KEY}&rcept_no={rcept_no}"
     try:
-        with urllib.request.urlopen(url, timeout=30) as r:
-            raw = r.read()
-        z = zipfile.ZipFile(io.BytesIO(raw))
-        data = z.read(z.namelist()[0])
-        txt = None
-        for enc in ("utf-8", "euc-kr", "cp949"):
-            try:
-                txt = data.decode(enc)
-                break
-            except UnicodeDecodeError:
-                continue
-        if txt is None:
-            txt = data.decode("utf-8", "replace")
-        txt = re.sub(r"<[^>]+>", " ", txt)  # 태그 제거 후 텍스트에서 탐색
-        # 목적 게이트: 실적 관련 문구 필수 (투자자 시리즈·R&D Day·NDR 등 일반 IR 제외)
-        if not any(k in txt for k in ("실적", "잠정")):
+        # 목적 게이트: 개최목적 필드에서 실적 문구 필수 (NDR·컨퍼런스 참가·R&D Day 제외).
+        # 라이브 검증: KB "상반기 경영실적 등 발표"·SK하이닉스 "2분기 경영실적 발표" 통과,
+        # 달바 "투자자 이해도 제고"(NDR) 기각, 달바 "2분기 잠정 경영 실적 발표"(진짜 컨콜) 통과.
+        mp = re.search(r'개최\s*목적(.{0,160}?)(?:개최\s*방법|$)', txt, re.S)
+        gate_txt = mp.group(1) if mp else txt  # 필드 미탐지 시 전체 검사로 폴백(fail-soft)
+        if not any(k in gate_txt for k in ("실적", "잠정")):
             return None
         # "N분기 … 실적" 명시 시 대상 분기 일치 검증 (Q1 컨콜을 Q2로 오인 방지)
         if target_q is not None:
@@ -368,10 +360,8 @@ def _ir_concall_date(rcept_no: str, target_q: int | None = None) -> dt.date | No
             return None
         return dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
     except Exception as e:
-        logger.warning("IR 원문 조회 실패 %s: %s", rcept_no, e)
+        logger.warning("IR 원문 파싱 실패 %s: %s", rcept_no, e)
         return None
-    finally:
-        time.sleep(_DART_SLEEP)
 
 
 def _dart_actual(corp: str, year: int, q: int) -> dict | None:
@@ -565,13 +555,26 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
     corp = _corp_map().get(code)
     # 최근 ~120일 공시 — 발표일·rcept_no 확정 여부
     recent = _dart_disclosures(corp, today - dt.timedelta(days=120), today)
-    # 분기말 이후 접수된 공시만 해당 분기 발표로 인정
+    # 분기말 이후 접수된 공시만 해당 분기 발표로 인정.
+    # 잠정공시는 원문 표를 파싱해 (1) 당해실적 확보, (2) 빈 표(예고공시) 기각 —
+    # 예고공시(기아 20260701800569류: 전 항목 '-')는 발표가 아니므로 다음 후보로 넘어간다.
     ann = None
+    prov = None       # 잠정공시 원문에서 파싱한 당해실적 (억원)
+    prov_tries = 0    # 원문 조회 비용 상한 — 이벤트당 최대 3건
     for x in sorted(recent, key=lambda x: x.get("rcept_dt") or ""):
         rd = x.get("rcept_dt") or ""
-        if rd >= f"{qend:%Y%m%d}" and not x.get("ir"):
-            ann = x
-            break
+        if rd < f"{qend:%Y%m%d}" or x.get("ir"):
+            continue
+        periodic_x = any(k in (x.get("report_nm") or "") for k in ("분기보고서", "반기보고서", "사업보고서"))
+        if not periodic_x and prov_tries < 3:
+            prov_tries += 1
+            p = _provisional_actual(x.get("rcept_no"))
+            if p == "EMPTY":
+                logger.info("예고공시(빈 표) 기각 %s %s — 발표예정 유지", code, x.get("rcept_no"))
+                continue  # 발표 아님 — 다음 후보 공시로
+            prov = p
+        ann = x
+        break
 
     naver = _naver_quarter(code)
     nq = naver.get(period) or {}
@@ -594,6 +597,8 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         src = "확정" if periodic else "잠정"
         if periodic:
             actual = _dart_actual(corp, year, q)
+        elif prov:
+            actual = prov  # 잠정공시 원문 표에서 직접 파싱한 당해실적 (억원)
         if actual is None and nq and not nq.get("consensus"):
             # 네이버가 이미 실적으로 표시한 분기 — 잠정공시~정기보고서 사이 보강
             actual = {k: nq.get(k) for k in ("revenue", "op", "np")}
@@ -714,6 +719,75 @@ def _market_event(row: dict, today: dt.date) -> dict:
     }
 
 
+def _market_provisional_events(tracked: set[str], today: dt.date) -> list[dict]:
+    """시장 전체 최근 잠정실적 공시 → scope:"market" 발표완료 이벤트.
+
+    DART list.json을 corp_code 없이 전체 시장으로 조회(pblntf_ty=I 수시공시,
+    최근 10일, 최대 5페이지×100건)해 "영업(잠정)실적" 공시를 골라낸다 —
+    인베스팅 예정 캘린더가 못 잡는 당일 발표(LG이노텍·두산에너빌리티류) 커버.
+    추적 종목은 정규 경로가 처리하므로 제외. 원문 파싱은 최대 25건(비용 상한),
+    초과분은 actual 없이 발표 사실만 기록. 실패 시 [] (fail-soft).
+    """
+    if not DART_KEY:
+        return []
+    year, q = _last_quarter(today)
+    rev_map = {v: k for k, v in _corp_map().items()}  # corp_code → 종목코드 (비상장 제외)
+    rows: list[dict] = []
+    page = 1
+    while page <= 5:
+        url = (f"{_DART}/list.json?crtfc_key={DART_KEY}"
+               f"&bgn_de={today - dt.timedelta(days=10):%Y%m%d}&end_de={today:%Y%m%d}"
+               f"&pblntf_ty=I&page_no={page}&page_count=100")
+        try:
+            d = _dart_json(url)
+        except Exception as e:
+            logger.warning("시장 잠정공시 조회 실패 p%d(중단): %s", page, e)
+            break
+        finally:
+            time.sleep(_DART_SLEEP)
+        if d.get("status") != "000":
+            break
+        for x in d.get("list", []) or []:
+            if "영업(잠정)실적" in (x.get("report_nm") or ""):
+                rows.append(x)
+        try:
+            total = int(d.get("total_page") or 1)
+        except (TypeError, ValueError):
+            total = 1
+        if page >= total:
+            break
+        page += 1
+    out: list[dict] = []
+    seen: set[str] = set()
+    doc_budget = 25  # 원문(document.xml) 파싱 비용 상한
+    for x in sorted(rows, key=lambda x: x.get("rcept_dt") or "", reverse=True):
+        code = rev_map.get((x.get("corp_code") or "").strip())
+        rd = x.get("rcept_dt") or ""
+        if not code or code in tracked or code in seen or len(rd) != 8:
+            continue
+        actual = None
+        if doc_budget > 0:
+            doc_budget -= 1
+            p = _provisional_actual(x.get("rcept_no"))
+            if p == "EMPTY":
+                continue  # 빈 표 = 예고공시 — 발표 아님, 이벤트 제외
+            actual = p
+        seen.add(code)
+        out.append({
+            "code": code, "name": _corp_names.get(code, x.get("corp_name") or ""),
+            "period": f"{year}Q{q}",
+            "date": f"{rd[:4]}-{rd[4:6]}-{rd[6:]}", "date_kind": "확정",
+            "status": "발표완료", "date_src": "공시", "src": "잠정",
+            "rcept_no": x.get("rcept_no"), "scope": "market",
+            "concall_date": None, "concall_src": None,
+            "consensus": None, "actual": actual, "surprise": None, "yoy": None,
+        })
+        if len(out) >= _MARKET_EVENT_CAP:
+            break
+    logger.info("시장 잠정실적 공시 이벤트 %d건 (원문 파싱 %d건)", len(out), 25 - doc_budget)
+    return out
+
+
 def build(codes: dict[str, str], use_investing: bool = True) -> dict:
     today = dt.datetime.now(tz=KST).date()
     _corp_map()  # corp_code·회사명 캐시 선적재 (이름 보강은 첫 이벤트부터 필요)
@@ -726,8 +800,17 @@ def build(codes: dict[str, str], use_investing: bool = True) -> dict:
             logger.info("[%d/%d] %s %s — %s %s", i, len(codes), code, name or "", ev["date"], ev["status"])
         except Exception as e:
             logger.warning("이벤트 생성 실패 %s: %s", code, e)
+    # 추적 외 종목 — 시장 전체 잠정실적 '발표완료' 이벤트 (DART 전체 시장 공시, fail-soft)
+    try:
+        dart_market = _market_provisional_events(set(codes), today)
+    except Exception as e:
+        logger.warning("시장 잠정실적 이벤트 생성 실패(건너뜀): %s", e)
+        dart_market = []
+    events.extend(dart_market)
+    dart_market_codes = {ev["code"] for ev in dart_market}
     # 추적 외 종목 — 시장 전체 예정 발표 (네이버/DART 상세조회 없이 저렴하게, 상한 적용)
-    market = [r for c, r in sorted(inv.items()) if c not in codes][:_MARKET_EVENT_CAP]
+    market = [r for c, r in sorted(inv.items())
+              if c not in codes and c not in dart_market_codes][:_MARKET_EVENT_CAP]
     for r in market:
         try:
             events.append(_market_event(r, today))
