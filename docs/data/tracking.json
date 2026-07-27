@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-27T14:12:57+09:00",
+ "updated": "2026-07-27T15:09:03+09:00",
  "kospi": {
-  "price": 6634.47,
-  "ma200": 5682.72,
-  "ma50": 7878.63,
+  "price": 6744.8,
+  "ma200": 5683.28,
+  "ma50": 7880.84,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-07-27T14:12:57+09:00"
+  "updated": "2026-07-27T15:09:03+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 136600.0,
+   "last_price": 135700.0,
    "peak_price": 151200.0,
-   "return_pct": -2.08,
-   "total_return_pct": -2.08,
+   "return_pct": -2.72,
+   "total_return_pct": -2.72,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -32,7 +32,7 @@
    "was_extended": false,
    "days_held": 14,
    "stage_now": 1,
-   "confidence_now": 65,
+   "confidence_now": 45,
    "last_updated": "2026-07-24",
    "signals_at_entry": [
     "MTT 통과",
@@ -78,10 +78,10 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 136600.0,
+   "last_price": 135700.0,
    "peak_price": 151200.0,
-   "return_pct": 3.8,
-   "total_return_pct": 3.8,
+   "return_pct": 3.12,
+   "total_return_pct": 3.12,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -89,7 +89,7 @@
    "was_extended": false,
    "days_held": 19,
    "stage_now": 1,
-   "confidence_now": 65,
+   "confidence_now": 45,
    "last_updated": "2026-07-24",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
@@ -700,7 +700,7 @@
    },
    {
     "date": "2026-07-27",
-    "cum": -7.79
+    "cum": -7.92
    }
   ],
   "1": [
@@ -762,7 +762,7 @@
    },
    {
     "date": "2026-07-27",
-    "cum": -8.49
+    "cum": -8.54
    }
   ]
  },
@@ -838,7 +838,7 @@
    },
    {
     "date": "2026-07-27",
-    "nav": 748.8
+    "nav": 743.87
    }
   ],
   "1": [
@@ -912,7 +912,7 @@
    },
    {
     "date": "2026-07-27",
-    "nav": 674.6
+    "nav": 670.16
    }
   ]
  },
@@ -920,7 +920,7 @@
  "stats": {
   "holding_count": 3,
   "exited_count": 18,
-  "avg_return": 1.13,
+  "avg_return": 0.69,
   "win_rate": 0.0
  }
 }
