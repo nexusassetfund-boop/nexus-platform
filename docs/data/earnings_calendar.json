@@ -1,0 +1,33 @@
+{
+  "updated": "2026-07-27T09:14:09+09:00",
+  "dart": false,
+  "months": [
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "events": [
+    {
+      "code": "005930",
+      "name": "",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "src": "추정",
+      "rcept_no": null,
+      "consensus": {
+        "revenue": 1738644.0,
+        "op": 850494.0,
+        "np": 734933.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 133.2,
+        "op": 1718.8,
+        "np": 1336.4
+      }
+    }
+  ]
+}

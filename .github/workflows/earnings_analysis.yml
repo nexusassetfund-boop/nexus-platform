@@ -1,0 +1,68 @@
+name: 실적 분석
+
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "종목코드 (6자리)"
+        required: true
+        type: string
+      period:
+        description: "실적 기간 (YYYYQn, 예: 2026Q2)"
+        required: true
+        type: string
+      name:
+        description: "종목명 (선택)"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: earnings-${{ inputs.code }}
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 실적 이벤트 추출 (확정 숫자)
+        run: |
+          python scanner/earnings_data.py \
+            --code "${{ inputs.code }}" \
+            --period "${{ inputs.period }}" \
+            --name "${{ inputs.name }}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Claude Code 설치
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: 실적 분석 생성 (Claude — 웹 리서치 + 해설 작성)
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude -p "$(cat scanner/earnings_prompt.md)" \
+            --allowedTools "Read,Write,WebSearch,WebFetch" \
+            --permission-mode acceptEdits \
+            --max-turns 50
+
+      - name: Worker에 게시
+        env:
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python scanner/post_earnings.py
