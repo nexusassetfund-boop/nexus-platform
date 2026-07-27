@@ -723,6 +723,10 @@ def _apply_concall_overlay(data: dict) -> dict:
                 continue
             ev["concall_date"] = cd
             ev["concall_src"] = "웹"
+            # 소급 승격 — 오버레이로 찾은 컨콜일이 추정 발표예정일보다 빠르면 그 날이 첫 공개일
+            # (_build_event의 IR 승격과 동일 규칙, 오버레이 단계에도 적용)
+            if ev.get("status") == "발표예정" and ev.get("date_src") == "추정" and cd < ev.get("date", ""):
+                ev["date"], ev["date_src"], ev["date_kind"] = cd, "웹", "예상"
             applied += 1
         except Exception as e:
             logger.warning("오버레이 항목 스킵 %s: %s", it, e)
