@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-27T14:39:24+09:00",
+  "updated": "2026-07-27T14:41:08+09:00",
   "dart": true,
   "months": [
     "2026-06",
@@ -7,6 +7,530 @@
     "2026-08"
   ],
   "events": [
+    {
+      "code": "000270",
+      "name": "기아",
+      "period": "2026Q2",
+      "date": "2026-07-24",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260724800340",
+      "concall_date": "2026-07-24",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 322187.0,
+        "op": 27935.0,
+        "np": 23355.0
+      },
+      "actual": {
+        "revenue": 330371,
+        "op": 26286,
+        "np": 23277
+      },
+      "surprise": {
+        "revenue": 2.5,
+        "op": -5.9,
+        "np": -0.3
+      },
+      "yoy": {
+        "revenue": 12.6,
+        "op": -4.9,
+        "np": 2.6
+      }
+    },
+    {
+      "code": "000660",
+      "name": "SK하이닉스",
+      "period": "2026Q2",
+      "date": "2026-07-29",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-29",
+      "concall_src": "IR공시",
+      "consensus": null,
+      "actual": null,
+      "surprise": null,
+      "yoy": null
+    },
+    {
+      "code": "003490",
+      "name": "대한항공",
+      "period": "2026Q2",
+      "date": "2026-07-13",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260713800490",
+      "concall_date": "2026-07-15",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 70134.0,
+        "op": -2377.0,
+        "np": -3873.0
+      },
+      "actual": {
+        "revenue": 50199,
+        "op": 2618,
+        "np": -973
+      },
+      "surprise": {
+        "revenue": -28.4,
+        "op": 210.1,
+        "np": 74.9
+      },
+      "yoy": {
+        "revenue": -19.2,
+        "op": -29.3,
+        "np": -117.5
+      }
+    },
+    {
+      "code": "003670",
+      "name": "포스코퓨처엠",
+      "period": "2026Q2",
+      "date": "2026-07-30",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-30",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 8162.0,
+        "op": 292.0,
+        "np": 85.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 23.5,
+        "op": 3550.0,
+        "np": 123.9
+      }
+    },
+    {
+      "code": "004170",
+      "name": "신세계",
+      "period": "2026Q2",
+      "date": "2026-07-09",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260709800374",
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 18002.0,
+        "op": 1528.0,
+        "np": 727.0
+      },
+      "actual": {
+        "revenue": 1741,
+        "op": null,
+        "np": null
+      },
+      "surprise": {
+        "revenue": -90.3,
+        "op": null,
+        "np": null
+      },
+      "yoy": {
+        "revenue": -89.7,
+        "op": null,
+        "np": null
+      }
+    },
+    {
+      "code": "005930",
+      "name": "삼성전자",
+      "period": "2026Q2",
+      "date": "2026-07-07",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260707800004",
+      "concall_date": "2026-07-30",
+      "concall_src": "IR공시",
+      "consensus": null,
+      "actual": {
+        "revenue": 1710000,
+        "op": 894000,
+        "np": null
+      },
+      "surprise": null,
+      "yoy": {
+        "revenue": 129.3,
+        "op": 1811.8,
+        "np": null
+      }
+    },
+    {
+      "code": "006400",
+      "name": "삼성SDI",
+      "period": "2026Q2",
+      "date": "2026-07-30",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-30",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 36646.0,
+        "op": -356.0,
+        "np": 52.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 15.3,
+        "op": 91.1,
+        "np": 103.1
+      }
+    },
+    {
+      "code": "009540",
+      "name": "HD한국조선해양",
+      "period": "2026Q2",
+      "date": "2026-07-29",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-29",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 86756.0,
+        "op": 14693.0,
+        "np": 9386.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 16.8,
+        "op": 54.1,
+        "np": 109.9
+      }
+    },
+    {
+      "code": "010130",
+      "name": "고려아연",
+      "period": "2026Q2",
+      "date": "2026-08-06",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 59461.0,
+        "op": 5949.0,
+        "np": 2780.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 55.4,
+        "op": 129.8,
+        "np": -15.7
+      }
+    },
+    {
+      "code": "011200",
+      "name": "HMM",
+      "period": "2026Q2",
+      "date": "2026-08-13",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 32079.0,
+        "op": 3788.0,
+        "np": 3620.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 22.3,
+        "op": 62.4,
+        "np": -23.2
+      }
+    },
+    {
+      "code": "012330",
+      "name": "현대모비스",
+      "period": "2026Q2",
+      "date": "2026-07-24",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260724800096",
+      "concall_date": "2026-07-24",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 166282.0,
+        "op": 9075.0,
+        "np": 10148.0
+      },
+      "actual": {
+        "revenue": 163247,
+        "op": 9752,
+        "np": 10602
+      },
+      "surprise": {
+        "revenue": -1.8,
+        "op": 7.5,
+        "np": 4.5
+      },
+      "yoy": {
+        "revenue": 2.4,
+        "op": 12.1,
+        "np": 13.5
+      }
+    },
+    {
+      "code": "019210",
+      "name": "와이지-원",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": null,
+      "actual": null,
+      "surprise": null,
+      "yoy": null
+    },
+    {
+      "code": "028260",
+      "name": "삼성물산",
+      "period": "2026Q2",
+      "date": "2026-07-30",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 109916.0,
+        "op": 8646.0,
+        "np": 7113.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 9.7,
+        "op": 14.9,
+        "np": 35.1
+      }
+    },
+    {
+      "code": "032830",
+      "name": "삼성생명",
+      "period": "2026Q2",
+      "date": "2026-08-13",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": null,
+        "op": 10171.0,
+        "np": 7336.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": null,
+        "op": 11.1,
+        "np": -7.6
+      }
+    },
+    {
+      "code": "033780",
+      "name": "KT&G",
+      "period": "2026Q2",
+      "date": "2026-08-06",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-08-06",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 16714.0,
+        "op": 3967.0,
+        "np": 3439.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 8.0,
+        "op": 13.4,
+        "np": 139.7
+      }
+    },
+    {
+      "code": "034730",
+      "name": "SK",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 357770.0,
+        "op": 24551.0,
+        "np": 19330.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 18.7,
+        "op": 1130.0,
+        "np": 97.9
+      }
+    },
+    {
+      "code": "035420",
+      "name": "NAVER",
+      "period": "2026Q2",
+      "date": "2026-08-07",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-08-07",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 33663.0,
+        "op": 5660.0,
+        "np": 4842.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 15.5,
+        "op": 8.5,
+        "np": -2.7
+      }
+    },
+    {
+      "code": "035720",
+      "name": "카카오",
+      "period": "2026Q2",
+      "date": "2026-08-06",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-08-06",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 20492.0,
+        "op": 2263.0,
+        "np": 2062.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 1.0,
+        "op": 21.7,
+        "np": 20.0
+      }
+    },
+    {
+      "code": "051910",
+      "name": "LG화학",
+      "period": "2026Q2",
+      "date": "2026-07-31",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-31",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 139638.0,
+        "op": 4246.0,
+        "np": 2468.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 22.3,
+        "op": -10.9,
+        "np": 320.6
+      }
+    },
+    {
+      "code": "055550",
+      "name": "신한지주",
+      "period": "2026Q2",
+      "date": "2026-07-23",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260723800278",
+      "concall_date": "2026-07-23",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": null,
+        "op": 22532.0,
+        "np": 17003.0
+      },
+      "actual": {
+        "revenue": 39927,
+        "op": 2663,
+        "np": 1875
+      },
+      "surprise": {
+        "revenue": null,
+        "op": -88.2,
+        "np": -89.0
+      },
+      "yoy": {
+        "revenue": -82.8,
+        "op": -86.8,
+        "np": -88.1
+      }
+    },
     {
       "code": "066570",
       "name": "LG전자",
@@ -38,6 +562,231 @@
         "revenue": 14.9,
         "op": 146.9,
         "np": null
+      }
+    },
+    {
+      "code": "068270",
+      "name": "셀트리온",
+      "period": "2026Q2",
+      "date": "2026-07-03",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260703800022",
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 12479.0,
+        "op": 4017.0,
+        "np": 3302.0
+      },
+      "actual": {
+        "revenue": 13000,
+        "op": 4300,
+        "np": null
+      },
+      "surprise": {
+        "revenue": 4.2,
+        "op": 7.0,
+        "np": null
+      },
+      "yoy": {
+        "revenue": 35.2,
+        "op": 77.3,
+        "np": null
+      }
+    },
+    {
+      "code": "096770",
+      "name": "SK이노베이션",
+      "period": "2026Q2",
+      "date": "2026-07-30",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-30",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 280015.0,
+        "op": 15582.0,
+        "np": 12619.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 45.0,
+        "op": 473.1,
+        "np": 222.3
+      }
+    },
+    {
+      "code": "105560",
+      "name": "KB금융",
+      "period": "2026Q2",
+      "date": "2026-07-23",
+      "date_kind": "확정",
+      "status": "발표완료",
+      "date_src": "공시",
+      "src": "잠정",
+      "rcept_no": "20260723800451",
+      "concall_date": "2026-07-23",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": null,
+        "op": 26142.0,
+        "np": 18929.0
+      },
+      "actual": {
+        "revenue": 317574,
+        "op": 27125,
+        "np": 20105
+      },
+      "surprise": {
+        "revenue": null,
+        "op": 3.8,
+        "np": 6.2
+      },
+      "yoy": {
+        "revenue": 31.6,
+        "op": 27.2,
+        "np": 15.0
+      }
+    },
+    {
+      "code": "141080",
+      "name": "리가켐바이오",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": null,
+      "actual": null,
+      "surprise": null,
+      "yoy": null
+    },
+    {
+      "code": "161890",
+      "name": "한국콜마",
+      "period": "2026Q2",
+      "date": "2026-08-08",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 8263.0,
+        "op": 951.0,
+        "np": 676.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 13.1,
+        "op": 29.4,
+        "np": 61.7
+      }
+    },
+    {
+      "code": "340570",
+      "name": "티앤엘",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": {
+        "revenue": 552.0,
+        "op": 204.0,
+        "np": 174.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 42.3,
+        "op": 104.0,
+        "np": 123.1
+      }
+    },
+    {
+      "code": "352820",
+      "name": "하이브",
+      "period": "2026Q2",
+      "date": "2026-07-28",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "IR공시",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-07-28",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 12212.0,
+        "op": 1551.0,
+        "np": 1288.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 73.1,
+        "op": 135.4,
+        "np": 731.0
+      }
+    },
+    {
+      "code": "402340",
+      "name": "SK스퀘어",
+      "period": "2026Q2",
+      "date": "2026-08-14",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": null,
+      "concall_src": null,
+      "consensus": null,
+      "actual": null,
+      "surprise": null,
+      "yoy": null
+    },
+    {
+      "code": "483650",
+      "name": "달바글로벌",
+      "period": "2026Q2",
+      "date": "2026-08-08",
+      "date_kind": "예상",
+      "status": "발표예정",
+      "date_src": "추정",
+      "src": "추정",
+      "rcept_no": null,
+      "concall_date": "2026-08-13",
+      "concall_src": "IR공시",
+      "consensus": {
+        "revenue": 1832.0,
+        "op": 412.0,
+        "np": 312.0
+      },
+      "actual": null,
+      "surprise": null,
+      "yoy": {
+        "revenue": 42.7,
+        "op": 41.1,
+        "np": 57.6
       }
     },
     {
@@ -481,28 +1230,6 @@
       "yoy": null
     },
     {
-      "code": "068270",
-      "name": "셀트리온",
-      "period": "2026Q2",
-      "date": "2026-07-27",
-      "date_kind": "확정",
-      "status": "발표완료",
-      "date_src": "공시",
-      "src": "잠정",
-      "rcept_no": "20260727800078",
-      "scope": "market",
-      "concall_date": null,
-      "concall_src": null,
-      "consensus": null,
-      "actual": {
-        "revenue": 13937,
-        "op": 4518,
-        "np": 3713
-      },
-      "surprise": null,
-      "yoy": null
-    },
-    {
       "code": "439580",
       "name": "블루엠텍",
       "period": "2026Q2",
@@ -604,7 +1331,11 @@
       "concall_date": null,
       "concall_src": null,
       "consensus": null,
-      "actual": null,
+      "actual": {
+        "revenue": 3919,
+        "op": 587,
+        "np": 858
+      },
       "surprise": null,
       "yoy": null
     },
@@ -672,24 +1403,6 @@
       "date_src": "공시",
       "src": "잠정",
       "rcept_no": "20260724800407",
-      "scope": "market",
-      "concall_date": null,
-      "concall_src": null,
-      "consensus": null,
-      "actual": null,
-      "surprise": null,
-      "yoy": null
-    },
-    {
-      "code": "000270",
-      "name": "기아",
-      "period": "2026Q2",
-      "date": "2026-07-24",
-      "date_kind": "확정",
-      "status": "발표완료",
-      "date_src": "공시",
-      "src": "잠정",
-      "rcept_no": "20260724800340",
       "scope": "market",
       "concall_date": null,
       "concall_src": null,
@@ -843,24 +1556,6 @@
       "yoy": null
     },
     {
-      "code": "012330",
-      "name": "현대모비스",
-      "period": "2026Q2",
-      "date": "2026-07-24",
-      "date_kind": "확정",
-      "status": "발표완료",
-      "date_src": "공시",
-      "src": "잠정",
-      "rcept_no": "20260724800096",
-      "scope": "market",
-      "concall_date": null,
-      "concall_src": null,
-      "consensus": null,
-      "actual": null,
-      "surprise": null,
-      "yoy": null
-    },
-    {
       "code": "318060",
       "name": "그래피",
       "period": "2026Q2",
@@ -1005,24 +1700,6 @@
       "yoy": null
     },
     {
-      "code": "105560",
-      "name": "KB금융",
-      "period": "2026Q2",
-      "date": "2026-07-23",
-      "date_kind": "확정",
-      "status": "발표완료",
-      "date_src": "공시",
-      "src": "잠정",
-      "rcept_no": "20260723800451",
-      "scope": "market",
-      "concall_date": null,
-      "concall_src": null,
-      "consensus": null,
-      "actual": null,
-      "surprise": null,
-      "yoy": null
-    },
-    {
       "code": "114810",
       "name": "한솔아이원스",
       "period": "2026Q2",
@@ -1104,24 +1781,6 @@
       "date_src": "공시",
       "src": "잠정",
       "rcept_no": "20260723800288",
-      "scope": "market",
-      "concall_date": null,
-      "concall_src": null,
-      "consensus": null,
-      "actual": null,
-      "surprise": null,
-      "yoy": null
-    },
-    {
-      "code": "055550",
-      "name": "신한지주",
-      "period": "2026Q2",
-      "date": "2026-07-23",
-      "date_kind": "확정",
-      "status": "발표완료",
-      "date_src": "공시",
-      "src": "잠정",
-      "rcept_no": "20260723800278",
       "scope": "market",
       "concall_date": null,
       "concall_src": null,
