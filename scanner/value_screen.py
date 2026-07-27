@@ -54,6 +54,7 @@ MOM_WIN = 231               # 12-1 모멘텀 룩백 (거래일 ≈ 11개월)
 MOM_SKIP = 21               # 최근 1개월 제외 (단기 반전 회피) — 백테스트 검증 조합
 STALE_WEEKS = 39            # 장기잔류 기준 (약 9개월 — 백테스트: 12개월+ 보유 평균 -8.4%)
 STATE_PATH = ROOT / "docs" / "data" / "value_screen_state.json"
+HISTORY_PATH = ROOT / "docs" / "data" / "value_screen_history.json"
 
 
 
@@ -317,6 +318,31 @@ async def build() -> dict | None:
 
     # 5차: 신규/장기잔류 배지 (first_seen 추적 — 이탈 후 재진입은 신규 취급)
     today = dt.datetime.now(tz=KST).date().isoformat()
+
+    def _update_history(survivors, prev_state):
+        """편입/제외 이력 누적 (append-only, quality_growth와 동일 패턴). 반환: 최근 26회."""
+        try:
+            history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            history = []
+        prev_codes = set(prev_state)
+        if not prev_codes:                  # 최초 실행 — diff 없음
+            return history[-26:]
+        try:
+            prev_names = {c["code"]: c["name"]
+                          for c in json.loads(OUT_PATH.read_text(encoding="utf-8"))["candidates"]}
+        except Exception:
+            prev_names = {}
+        cur = {r["code"]: r["name"] for r in survivors}
+        added = [{"code": c, "name": n} for c, n in cur.items() if c not in prev_codes]
+        removed = [{"code": c, "name": prev_names.get(c, c)}
+                   for c in sorted(prev_codes - set(cur))]
+        if added or removed:
+            history.append({"date": today, "added": added, "removed": removed})
+            HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=2),
+                                    encoding="utf-8")
+        return history[-26:]
+
     try:
         state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     except Exception:
@@ -329,6 +355,7 @@ async def build() -> dict | None:
         rec["weeks_listed"] = weeks
         rec["stale"] = weeks >= STALE_WEEKS  # 장기잔류 — 밸류트랩 경고 (백테스트: 12M+ 평균 -8.4%)
     new_state = {rec["code"]: rec["first_seen"] for rec in survivors}
+    history = _update_history(survivors, state)
 
     return {
         "updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"),
@@ -345,6 +372,7 @@ async def build() -> dict | None:
         "scanned": len(constituents),
         "passed_value": len(prelim),
         "candidates": survivors,
+        "history": history,
         "_state": new_state,
     }
 
