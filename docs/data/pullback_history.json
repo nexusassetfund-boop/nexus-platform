@@ -26,5 +26,48 @@
     "last_price": 253500.0
    }
   ]
+ },
+ {
+  "date": "2026-07-27",
+  "added": [
+   {
+    "code": "278470",
+    "name": "에이피알",
+    "score": 7
+   },
+   {
+    "code": "004170",
+    "name": "신세계",
+    "score": 6
+   },
+   {
+    "code": "475150",
+    "name": "SK이터닉스",
+    "score": 4
+   },
+   {
+    "code": "010950",
+    "name": "S-Oil",
+    "score": 1
+   }
+  ],
+  "removed": [
+   {
+    "code": "005090",
+    "name": "SGC에너지",
+    "first_seen": "2026-07-24",
+    "days": 3,
+    "last_score": 5,
+    "last_price": 49300.0
+   },
+   {
+    "code": "322000",
+    "name": "HD현대에너지솔루션",
+    "first_seen": "2026-07-24",
+    "days": 3,
+    "last_score": 5,
+    "last_price": 164000.0
+   }
+  ]
  }
 ]

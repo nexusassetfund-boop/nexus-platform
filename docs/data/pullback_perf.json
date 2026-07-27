@@ -7,9 +7,9 @@
    "entry_price": 624000.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 630000.0,
-   "trading_days": 0,
-   "ret_pct": 1.0
+   "last_close": 617000.0,
+   "trading_days": 1,
+   "ret_pct": -1.1
   },
   {
    "code": "053610",
@@ -18,9 +18,9 @@
    "entry_price": 63200.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 63400.0,
-   "trading_days": 0,
-   "ret_pct": 0.3
+   "last_close": 65000.0,
+   "trading_days": 1,
+   "ret_pct": 2.8
   },
   {
    "code": "319660",
@@ -29,9 +29,9 @@
    "entry_price": 143700.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 143900.0,
-   "trading_days": 0,
-   "ret_pct": 0.1
+   "last_close": 142700.0,
+   "trading_days": 1,
+   "ret_pct": -0.7
   },
   {
    "code": "005930",
@@ -40,9 +40,9 @@
    "entry_price": 249500.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 249500.0,
-   "trading_days": 0,
-   "ret_pct": 0.0
+   "last_close": 248750.0,
+   "trading_days": 1,
+   "ret_pct": -0.3
   },
   {
    "code": "017670",
@@ -51,9 +51,9 @@
    "entry_price": 100200.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 100000.0,
-   "trading_days": 0,
-   "ret_pct": -0.2
+   "last_close": 99400.0,
+   "trading_days": 1,
+   "ret_pct": -0.8
   },
   {
    "code": "041830",
@@ -62,9 +62,9 @@
    "entry_price": 47550.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 47500.0,
-   "trading_days": 0,
-   "ret_pct": -0.1
+   "last_close": 50200.0,
+   "trading_days": 1,
+   "ret_pct": 5.6
   },
   {
    "code": "252990",
@@ -73,9 +73,9 @@
    "entry_price": 13370.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 13580.0,
-   "trading_days": 0,
-   "ret_pct": 1.6
+   "last_close": 12480.0,
+   "trading_days": 1,
+   "ret_pct": -6.7
   },
   {
    "code": "127120",
@@ -84,9 +84,9 @@
    "entry_price": 32650.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 32850.0,
-   "trading_days": 0,
-   "ret_pct": 0.6
+   "last_close": 32800.0,
+   "trading_days": 1,
+   "ret_pct": 0.5
   },
   {
    "code": "322000",
@@ -95,9 +95,10 @@
    "entry_price": 165900.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 164000.0,
-   "trading_days": 0,
-   "ret_pct": -1.1
+   "last_close": 131000.0,
+   "trading_days": 1,
+   "ret_pct": -21.0,
+   "removed_date": "2026-07-27"
   },
   {
    "code": "131290",
@@ -106,9 +107,9 @@
    "entry_price": 202000.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 202500.0,
-   "trading_days": 0,
-   "ret_pct": 0.2
+   "last_close": 205000.0,
+   "trading_days": 1,
+   "ret_pct": 1.5
   },
   {
    "code": "005090",
@@ -117,9 +118,10 @@
    "entry_price": 49750.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 49300.0,
-   "trading_days": 0,
-   "ret_pct": -0.9
+   "last_close": 45100.0,
+   "trading_days": 1,
+   "ret_pct": -9.3,
+   "removed_date": "2026-07-27"
   },
   {
    "code": "028050",
@@ -128,9 +130,9 @@
    "entry_price": 47250.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 47600.0,
-   "trading_days": 0,
-   "ret_pct": 0.7
+   "last_close": 46500.0,
+   "trading_days": 1,
+   "ret_pct": -1.6
   },
   {
    "code": "006340",
@@ -139,9 +141,9 @@
    "entry_price": 13730.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 13730.0,
-   "trading_days": 0,
-   "ret_pct": 0.0
+   "last_close": 13880.0,
+   "trading_days": 1,
+   "ret_pct": 1.1
   },
   {
    "code": "019210",
@@ -150,9 +152,53 @@
    "entry_price": 18450.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 18390.0,
+   "last_close": 19700.0,
+   "trading_days": 1,
+   "ret_pct": 6.8
+  },
+  {
+   "code": "278470",
+   "name": "에이피알",
+   "entry_date": "2026-07-27",
+   "entry_price": 361500.0,
+   "entry_score": 7,
+   "status": "open",
+   "last_close": 359500.0,
    "trading_days": 0,
-   "ret_pct": -0.3
+   "ret_pct": -0.6
+  },
+  {
+   "code": "004170",
+   "name": "신세계",
+   "entry_date": "2026-07-27",
+   "entry_price": 512000.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 504000.0,
+   "trading_days": 0,
+   "ret_pct": -1.6
+  },
+  {
+   "code": "475150",
+   "name": "SK이터닉스",
+   "entry_date": "2026-07-27",
+   "entry_price": 57900.0,
+   "entry_score": 4,
+   "status": "open",
+   "last_close": 58100.0,
+   "trading_days": 0,
+   "ret_pct": 0.3
+  },
+  {
+   "code": "010950",
+   "name": "S-Oil",
+   "entry_date": "2026-07-27",
+   "entry_price": 137500.0,
+   "entry_score": 1,
+   "status": "open",
+   "last_close": 136000.0,
+   "trading_days": 0,
+   "ret_pct": -1.1
   }
  ],
  "summary": {
@@ -160,9 +206,9 @@
   "closed_n": 0,
   "closed_win_rate": null,
   "closed_avg_ret": null,
-  "open_n": 14,
-  "open_avg_ret": 0.1,
+  "open_n": 18,
+  "open_avg_ret": -1.5,
   "note": "편입일 종가 진입 근사 · 90거래일 보유(B90) 시뮬 · 거래비용 미반영"
  },
- "updated": "2026-07-24"
+ "updated": "2026-07-27"
 }
