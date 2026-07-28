@@ -335,6 +335,8 @@ def _update_stage_history(stage_history: dict, results: list[dict]):
 #       + RS≥70 + 웨지 신뢰도 stage1_entry_confidence(75)↑
 #     공통: KOSPI 진입 허용 + 클라이맥스 경고 없음. 같은 종목이 두 트랙에 각각 편입 가능.
 #   유지: 편입 후 스테이지가 흔들려도 원장에 유지 — 보유일은 리셋되지 않음
+#   재편입 쿨다운: 일반 이탈 reentry_cooldown_days(5) / 손절 이탈 stop_reentry_cooldown_days(28≈20영업일)
+#   손절 조기 경보: 수익률이 stop_warn_pct(-8%) 또는 init_stop+2%p 이하로 접근하면 stop_warning 표시(규칙 아님)
 #   부분 익절(Oliver Kell): 승자는 러너로 보유하되 강세에 일부 실현
 #                    ⓐ 3~5일 내 3R↑ 급등 → 잔여의 절반 익절 (1회)
 #                    ⓑ 소진 확장(종가가 10 EMA +N% 이격) 진입 시 → 잔여의 절반 익절
@@ -378,6 +380,9 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
     # 편입 빈도 스로틀 — 스탁이지 실측(주당 4~6건, 동시 보유 15~17종목)에 맞춤
     entry_max_age = params.get("stage_entry_max_age_days", 2)      # 스테이지 진입 후 N일 이내만 편입 (상태→이벤트)
     reentry_cooldown = params.get("reentry_cooldown_days", 5)      # 이탈 후 N일간 같은 트랙 재편입 금지
+    # 손절 이탈은 신호 재현성이 약함(주간복기 W30: 동일 종목 반복 손절) → 더 긴 쿨다운 (달력일, ≈20영업일)
+    stop_cooldown = params.get("stop_reentry_cooldown_days", 28)
+    stop_warn_pct = float(params.get("stop_warn_pct", -8.0))       # 손절 조기 경보 기준 (%)
     max_per_track = params.get("max_holdings_per_track", 10)       # 트랙당 동시 보유 상한
     max_daily = params.get("max_daily_entries_per_track", 3)       # 트랙당 하루 신규 편입 상한 (conf 상위 우선)
     # 부분 익절 (Oliver Kell) — 승자는 러너로 끌고 가되 강세에 일부 실현
@@ -483,6 +488,8 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
             "tp_3r_done": tp_3r_done,
             "was_extended": was_extended,
             "peak_price": round(peak_price, 0),
+            # 손절 조기 경보 (주간복기 W30) — 손절선 접근 시 표시용 플래그 (규칙 아님)
+            "stop_warning": bool(not exit_reason and ret_pct <= max(stop_warn_pct, init_stop + 2.0)),
             "days_held": days_held,
             "stage_now": r.get("stage") if r else None,
             "confidence_now": r.get("confidence", 0) if r else 0,
@@ -500,13 +507,22 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
 
     # 신규 편입 — 시장 청산 신호는 전량 매도 대신 신규 편입 차단으로만 사용
     if kospi.get("entry_allowed", True) and not kospi.get("exit_signal"):
-        # 재편입 쿨다운: 트랙별 가장 최근 이탈일
-        last_exit = {}
+        # 재편입 쿨다운: 트랙별 가장 최근 이탈일 — 손절 이탈은 더 긴 쿨다운 적용
+        last_exit = {}   # (ticker, tid) -> (exit_date, is_stop)
         for e in exited:
             key = (e["ticker"], e.get("entry_stage", 3))
-            if e.get("exit_date", "") > last_exit.get(key, ""):
-                last_exit[key] = e["exit_date"]
+            if e.get("exit_date", "") > (last_exit.get(key) or ("", False))[0]:
+                is_stop = isinstance(e.get("exit_reason"), str) and e["exit_reason"].startswith("손절")
+                last_exit[key] = (e["exit_date"], is_stop)
         cooldown_cut = (today - dt.timedelta(days=reentry_cooldown)).isoformat()
+        stop_cooldown_cut = (today - dt.timedelta(days=stop_cooldown)).isoformat()
+
+        def _cooldown_ok(ticker, tid):
+            le = last_exit.get((ticker, tid))
+            if not le:
+                return True
+            exit_date, is_stop = le
+            return exit_date < (stop_cooldown_cut if is_stop else cooldown_cut)
 
         for track in entry_tracks:
             tid, min_conf = track["id"], track["min_conf"]
@@ -520,7 +536,7 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
                 and not r.get("climax_warning")
                 and track["cand"](r, min_conf)
                 and (r["ticker"], tid) not in held_keys
-                and last_exit.get((r["ticker"], tid), "") < cooldown_cut
+                and _cooldown_ok(r["ticker"], tid)
                 and float(r.get("current_price") or 0) > 0
             ]
             cands.sort(key=lambda r: -track["conf"](r))
@@ -585,6 +601,8 @@ def _refresh_ledger_view(ledger: dict, results: list[dict]) -> dict:
             "last_price": round(price, 0),
             "return_pct": round(ret_pct, 2),
             "total_return_pct": round(realized + qty_frac * ret_pct, 2),
+            # 손절 조기 경보 — 장중 시세 기준으로 갱신 (마감 확정과 동일 기준)
+            "stop_warning": bool(ret_pct <= max(-8.0, float(h2.get("init_stop_pct") or -10.0) + 2.0)),
             "stage_now": r.get("stage") if r else h2.get("stage_now"),
             "confidence_now": r.get("confidence", 0) if r else h2.get("confidence_now", 0),
         })
