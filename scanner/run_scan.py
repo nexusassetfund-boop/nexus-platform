@@ -657,11 +657,12 @@ def _update_track_history(state: dict, ledger: dict):
         meta[key] = {"mode": "avg", "last_date": today_str}
 
 
-TRACK_NAV_BASE = "2026-07-01"  # 기준가 1000 기점
+TRACK_NAV_BASE = "2026-07-28"  # 누적수익률 0% 기점 — 손절 로직 수정과 함께 전 트랙 리셋 (v2)
 
 
 def _update_track_nav(state: dict, ledger: dict, ohlcv_map: dict):
-    """트랙별 기준가(NAV) 곡선 — 7/1=1000, 일별 동일가중 리밸런스 포트폴리오.
+    """트랙별 누적수익률(%) 곡선 — 기점=0%, 일별 동일가중 리밸런스 복리.
+    (내부는 기준가 복리로 계산하고 출력만 누적수익률 %로 변환)
 
     매 마감 실행마다 원장(보유+이탈)과 OHLCV로 전 구간을 재계산한다(증분 누적 드리프트 방지).
     트레이드의 일간 수익률: 진입일 = 종가/진입가, 보유중 = 종가/전일종가, 청산일 = 청산가/전일종가.
@@ -706,7 +707,8 @@ def _update_track_nav(state: dict, ledger: dict, ohlcv_map: dict):
                 trades.append({"ticker": h.get("ticker"), "entry": h["entry_date"], "exit": None,
                                "entry_price": float(h.get("entry_price") or 0), "exit_price": None, "ret": None})
         nav = 1000.0
-        series = [{"date": TRACK_NAV_BASE, "nav": 1000.0}]
+        _cum = lambda v: round((v / 1000.0 - 1) * 100, 2)
+        series = [{"date": TRACK_NAV_BASE, "cum": 0.0}]
         prev_date = None
         for d in dates:
             rets = []
@@ -733,9 +735,9 @@ def _update_track_nav(state: dict, ledger: dict, ohlcv_map: dict):
             if rets:
                 nav *= 1 + sum(rets) / len(rets)
             if not series or series[-1]["date"] != d:
-                series.append({"date": d, "nav": round(nav, 2)})
+                series.append({"date": d, "cum": _cum(nav)})
             else:
-                series[-1] = {"date": d, "nav": round(nav, 2)}
+                series[-1] = {"date": d, "cum": _cum(nav)}
             prev_date = d
         nav_out[str(tid)] = series[-260:]
     state["track_nav"] = nav_out
@@ -1088,7 +1090,7 @@ async def main():
         state["ledger"] = ledger
         ledger_view = ledger
         _update_track_history(state, ledger)
-        _update_track_nav(state, ledger, ohlcv_map)  # 기준가(7/1=1000) 곡선
+        _update_track_nav(state, ledger, ohlcv_map)  # 누적수익률(%) 곡선 (7/28=0%)
         logger.info("장마감 이후 실행 — 전략 포트폴리오 갱신(확정)")
     elif trading_day:
         # 장중: 편입/이탈/부분익절 확정 없이 표시 데이터만 갱신해 tracking.json에 반영.
