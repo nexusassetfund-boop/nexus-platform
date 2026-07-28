@@ -303,6 +303,7 @@ def _provisional_actual(rcept_no: str):
     toks = txt.split()
     vals: dict[str, float | None] = {}
     found_row = False
+    self_ok = False
     for key, kw in (("revenue", "매출액"), ("op", "영업이익"), ("np", "당기순이익")):
         vals[key] = None
         for i, t in enumerate(toks):
@@ -317,6 +318,22 @@ def _provisional_actual(rcept_no: str):
                         v = _num(toks[j + 1])
                         if v is not None:
                             vals[key] = round(v * mult / 1e8)  # 억원 환산
+                            # 자기일관성 검증: 같은 행의 전년동기값·증감율(%)이
+                            # 당해값과 산술적으로 맞으면(±2%p) 당해 컬럼을 제대로
+                            # 잡은 것 — 급성장 분기가 외부(네이버) 스케일 게이트에
+                            # 오폐기되는 것을 막는 근거로 쓴다
+                            win = toks[j + 2:j + 10]
+                            nums = [_num(w) for w in win]
+                            for a in range(len(nums)):
+                                py = nums[a]
+                                if py is None or py <= 0:
+                                    continue
+                                for b in range(a + 1, min(a + 3, len(nums))):
+                                    pct = nums[b]
+                                    if pct is None or abs(pct) >= 10000:
+                                        continue
+                                    if abs(v / py - (1 + pct / 100)) <= 0.02:
+                                        self_ok = True
                     break
             if hit:  # 이 키워드의 실적표 행을 찾았으면 다른 위치는 더 안 봄
                 break
@@ -324,6 +341,7 @@ def _provisional_actual(rcept_no: str):
         return None
     if all(v is None for v in vals.values()):
         return "EMPTY"  # 예고공시 — 표는 있으나 값 전부 미기재
+    vals["self_ok"] = self_ok
     return vals
 
 
@@ -698,9 +716,15 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
 
     # 실제치도 동일 타당성 게이트 — 공시 표 파싱이 누계/타컬럼을 잡는 사례 차단
     # (예: 삼성전자 잠정공시에서 매출 171조가 파싱되던 오류 — 전년동기 대비 스케일 검사로 폐기)
-    if actual and not _consensus_sane(actual, naver, year, q):
-        logger.warning("실제치 폐기(스케일 이상) %s %s: %s", code, period, actual)
-        actual = None
+    # 단 공시 원문의 전년동기·증감율과 자기일관(self_ok)하면 원문이 우선 —
+    # 급성장 분기(예: SK하이닉스 2026Q2 매출 +256.8%)가 외부 게이트에 오폐기되지 않게
+    if actual:
+        self_ok = bool(actual.pop("self_ok", False)) if isinstance(actual, dict) else False
+        if self_ok:
+            logger.info("실제치 자기일관 검증 통과(게이트 생략) %s %s", code, period)
+        elif not _consensus_sane(actual, naver, year, q):
+            logger.warning("실제치 폐기(스케일 이상) %s %s: %s", code, period, actual)
+            actual = None
 
     # 컨퍼런스콜(확정실적 발표)일 — IR개최 공시 원문에서 추출. 날짜 결정보다 먼저 확보:
     # 잠정공시를 안 하는 종목(예: SK하이닉스)은 컨콜이 첫 공개일이라 발표예정일 후보가 됨.
@@ -866,6 +890,8 @@ def _market_provisional_events(tracked: set[str], today: dt.date) -> list[dict]:
             p = _provisional_actual(x.get("rcept_no"))
             if p == "EMPTY":
                 continue  # 빈 표 = 예고공시 — 발표 아님, 이벤트 제외
+            if isinstance(p, dict):
+                p.pop("self_ok", None)  # 내부 검증 플래그 — 출력 JSON엔 미노출
             actual = p
             # 형상 검사만 (시장 이벤트는 네이버 미조회) — 영업이익 > 매출 1.5배면 파싱 오류로 폐기
             if actual and actual.get("op") and actual.get("revenue") and abs(actual["op"]) > abs(actual["revenue"]) * 1.5:
