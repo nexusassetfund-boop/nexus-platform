@@ -19,8 +19,11 @@
 """
 import json
 import os
+import socket
 import sys
 import urllib.request
+
+socket.setdefaulttimeout(60)  # marcap parquet 다운로드 행 방지 (ipo_fetcher와 동일 패턴, 대용량이라 여유 있게)
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
