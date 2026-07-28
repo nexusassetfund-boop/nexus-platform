@@ -321,13 +321,46 @@ def _update_perf(cands: list[dict], today: str, dates: list[str],
     return {"summary": summary, "episodes": recent}
 
 
-def _update_history(cands: list[dict], prev_state: dict, today: str) -> list:
-    """편입/편출 이력 누적 (append-only, quality_growth 패턴).
-    편출 기록에는 당시 score·가격·체류일을 남겨 사후 성과 추적(90일 보유 룰 운영)에 쓴다."""
+def _normalize_history(history: list) -> list:
+    """과거 오염 데이터 보정(멱등): 같은 날짜 행 병합 후, 당일 편입·편출이 상쇄된
+    종목(added∩removed, 또는 removed의 days==0)은 제거 — 장중 실행이 확정하던
+    시절의 당일 왕복 기록을 정리한다."""
+    merged: list = []
+    for row in history:
+        if merged and merged[-1].get("date") == row.get("date"):
+            merged[-1]["added"] += row.get("added", [])
+            merged[-1]["removed"] += row.get("removed", [])
+        else:
+            merged.append({"date": row.get("date"),
+                           "added": list(row.get("added", [])),
+                           "removed": list(row.get("removed", []))})
+    out = []
+    for row in merged:
+        # 코드별 중복 제거 (마지막 항목 유지) — 같은 날 재확정 병합 시 중복 방지
+        row["added"] = list({a["code"]: a for a in row["added"]}.values())
+        row["removed"] = list({r["code"]: r for r in row["removed"]}.values())
+        add_codes = {a["code"] for a in row["added"]}
+        rm_codes = {r["code"] for r in row["removed"]}
+        cancel = add_codes & rm_codes
+        row["added"] = [a for a in row["added"] if a["code"] not in cancel]
+        row["removed"] = [r for r in row["removed"]
+                          if r["code"] not in cancel and r.get("days") != 0]
+        if row["added"] or row["removed"]:
+            out.append(row)
+    return out
+
+
+def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bool) -> list:
+    """편입/편출 이력 누적 — 마감 확정 실행(confirm)에서만 기록한다.
+    편출 기록에는 당시 score·가격·체류일을 남겨 사후 성과 추적(90일 보유 룰 운영)에 쓴다.
+    같은 날 재실행은 기존 행에 병합(멱등) — 중복 행이 쌓이지 않는다."""
     try:
         history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
     except Exception:
         history = []
+    history = _normalize_history(history)
+    if not confirm:                         # 장중/휴장 실행 — 표시만, 확정 없음
+        return history[-30:]
     prev_codes = set(prev_state)
     if not prev_codes:                      # 최초 실행 — diff 없음
         return history[-30:]
@@ -353,9 +386,14 @@ def _update_history(cands: list[dict], prev_state: dict, today: str) -> list:
                         "days": days, "last_score": p.get("pullback_score"),
                         "last_price": p.get("current_price")})
     if added or removed:
-        history.append({"date": today, "added": added, "removed": removed})
-        HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
-                                encoding="utf-8")
+        if history and history[-1].get("date") == today:   # 같은 날 재확정 → 병합 (멱등)
+            history[-1]["added"] += added
+            history[-1]["removed"] += removed
+            history = _normalize_history(history)
+        else:
+            history.append({"date": today, "added": added, "removed": removed})
+    HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
+                            encoding="utf-8")
     return history[-30:]
 
 
@@ -491,6 +529,25 @@ def build() -> dict | None:
 
     # 편입일 추적 (신규 배지·90일 보유 룰 운영용) + 편입/편출 이력
     today = f"{d0[:4]}-{d0[4:6]}-{d0[6:]}"
+    # ── 마감 확정 게이트 (스테이지 원장 is_close_run과 동일 원칙) ──
+    # 편입/편출·체류일·성과는 거래일 15:30 이후 + 스냅샷이 오늘 종가일 때만 확정.
+    # 장중(가격 유동)·심야/휴장(스냅샷=전 거래일) 실행은 표시 데이터만 갱신 —
+    # 당일 왕복 편입·편출(플래핑)의 원인이던 장중 확정을 차단한다.
+    now = dt.datetime.now(tz=KST)
+    confirm = (now.hour, now.minute) >= (15, 30) and now.strftime("%Y-%m-%d") == today
+    if not confirm:
+        logger.info("비확정 실행 (now=%s, snap=%s) — 이력/상태/성과 동결", now.strftime("%H:%M"), today)
+    # 후보 급감 가드 — 데이터 소스 부분 장애로 풀이 쪼그라든 실행이 대량 편출을
+    # 확정하는 것 방지 (7/28 사례: scanned 52→39, 후보 20→6, score 7 무더기 편출).
+    # 급감이 진짜 시장 상황이면 다음 마감 실행이 1일 지연으로 확정한다.
+    if confirm:
+        try:
+            prev_n = len(json.loads(OUT_PATH.read_text(encoding="utf-8"))["candidates"])
+            if prev_n >= 8 and len(out) < prev_n * 0.4:
+                confirm = False
+                logger.warning("후보 급감 (%d→%d) — 일시 장애 의심, 이번 실행은 확정 보류", prev_n, len(out))
+        except Exception:
+            pass
     try:
         state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     except Exception:
@@ -503,14 +560,24 @@ def build() -> dict | None:
             r["days_in_list"] = (dt.date.fromisoformat(today) - dt.date.fromisoformat(first)).days
         except Exception:
             r["days_in_list"] = 0
-    history = _update_history(out, state, today)
-    removed_codes = set(state) - {r["ticker"] for r in out}
-    perf = _update_perf(out, today, dates, all_closes, removed_codes)
+    history = _update_history(out, state, today, confirm)
+    if confirm:
+        removed_codes = set(state) - {r["ticker"] for r in out}
+        perf = _update_perf(out, today, dates, all_closes, removed_codes)
+    else:
+        # 비확정 실행 — 직전 확정본 그대로 (에피소드 갱신·기록 없음)
+        try:
+            saved = json.loads(PERF_PATH.read_text(encoding="utf-8"))
+            eps = sorted(saved.get("episodes", []), key=lambda e: e["entry_date"], reverse=True)[:30]
+            perf = {"summary": saved.get("summary", {}), "episodes": eps}
+        except Exception:
+            perf = {"summary": {}, "episodes": []}
 
     return {
         "updated": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
         "snap_date": today,
         "_state": {r["ticker"]: r["first_seen"] for r in out},
+        "_confirm": confirm,
         "history": history,
         "perf": perf,
         "market": market_direction(),
@@ -535,8 +602,10 @@ def main():
         logger.error("눌림목 스캔 실패 — 기존 파일 보존, exit 1")
         sys.exit(1)
     new_state = data.pop("_state", {})
+    confirm = data.pop("_confirm", True)
     OUT_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-    STATE_PATH.write_text(json.dumps(new_state, ensure_ascii=False, indent=1), encoding="utf-8")
+    if confirm:   # 편입일 상태는 마감 확정 실행에서만 갱신 (장중 실행이 diff 기준을 오염시키지 않게)
+        STATE_PATH.write_text(json.dumps(new_state, ensure_ascii=False, indent=1), encoding="utf-8")
     n4 = sum(1 for c in data["candidates"] if c["pullback_score"] >= 4)
     logger.info("저장: %s (후보 %d, score≥4 %d, 시장 %s)",
                 OUT_PATH, data["count"], n4, data["market"]["status"])
