@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-28T20:08:14+09:00",
+ "updated": "2026-07-28T22:07:08+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 137305296.0,
@@ -26,7 +26,7 @@
    },
    "dow": {
     "value": 52210.1,
-    "change": 262.8
+    "change": 0.0
    },
    "nasdaq": {
     "value": 24932.1,
@@ -37,8 +37,8 @@
     "change": 1.2
    },
    "usdkrw": {
-    "value": 1459.8,
-    "change": 6.4
+    "value": 1458.2,
+    "change": 6.6
    }
   }
  },
