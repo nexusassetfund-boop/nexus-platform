@@ -1,44 +1,44 @@
 {
- "updated": "2026-07-28T01:40:48+09:00",
+ "updated": "2026-07-28T10:10:08+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": 139946751.0,
+  "portfolio_value": 137699651.0,
   "cash": 109748996.0,
-  "eval_pnl": -482200.12,
-  "eval_pnl_pct": -1.56,
-  "cum_pnl": -10053249.0,
-  "cum_pnl_pct": -6.7,
+  "eval_pnl": -2729300.12,
+  "eval_pnl_pct": -8.85,
+  "cum_pnl": -12300349.0,
+  "cum_pnl_pct": -8.2,
   "day_change": null,
   "day_change_pct": null,
   "realized_pnl": 9425204.0,
-  "nav_index": 932.98,
+  "nav_index": 918.0,
   "n_stocks": 3.0,
   "n_win": 3.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6755.8,
-    "change": 65.1
+    "value": 6233.9,
+    "change": -521.8
    },
    "kosdaq": {
-    "value": 764.9,
-    "change": 16.6
+    "value": 718.6,
+    "change": 46.3
    },
    "dow": {
-    "value": 52167.1,
-    "change": 219.8
+    "value": 52210.1,
+    "change": 262.8
    },
    "nasdaq": {
-    "value": 24942.6,
-    "change": -33.3
+    "value": 24932.1,
+    "change": -43.7
    },
    "sp500": {
-    "value": 7412.5,
-    "change": 0.5
+    "value": 7413.2,
+    "change": 1.2
    },
    "usdkrw": {
-    "value": 1465.2,
-    "change": 3.1
+    "value": 1469.5,
+    "change": 3.7
    }
   }
  },
@@ -48,13 +48,13 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 43.0,
-   "price": 259500.0,
-   "change_pct": 7.9,
+   "price": 253500.0,
+   "change_pct": -2.31,
    "avg_price": 223849.0,
-   "eval_pnl": 1533000.0,
-   "return_pct": 15.93,
-   "contrib_pct": 1.53,
-   "eval_amount": 11158500.0,
+   "eval_pnl": 1275000.0,
+   "return_pct": 13.25,
+   "contrib_pct": 1.27,
+   "eval_amount": 10900500.0,
    "buy_amount": 9625500.0,
    "target_price": null,
    "buy_date": "2026-07-01",
@@ -67,13 +67,13 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 10.0,
-   "price": 1816000.0,
-   "change_pct": 3.24,
+   "price": 1621000.0,
+   "change_pct": -10.74,
    "avg_price": 2025000.0,
-   "eval_pnl": -2090000.0,
-   "return_pct": -10.32,
-   "contrib_pct": -2.09,
-   "eval_amount": 18160000.0,
+   "eval_pnl": -4040000.0,
+   "return_pct": -19.95,
+   "contrib_pct": -4.04,
+   "eval_amount": 16210000.0,
    "buy_amount": 20250000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
@@ -86,13 +86,13 @@
    "code": "340570",
    "name": "티앤엘",
    "qty": 17.0,
-   "price": 60300.0,
-   "change_pct": 7.1,
+   "price": 58000.0,
+   "change_pct": -3.81,
    "avg_price": 55900.0,
-   "eval_pnl": 74800.0,
-   "return_pct": 7.87,
-   "contrib_pct": 0.07,
-   "eval_amount": 1025100.0,
+   "eval_pnl": 35700.0,
+   "return_pct": 3.76,
+   "contrib_pct": 0.04,
+   "eval_amount": 986000.0,
    "buy_amount": 950300.0,
    "target_price": null,
    "buy_date": "2026-07-23",
@@ -130,7 +130,7 @@
    "change_pct": 3.24,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "7,785억",
+   "mktcap": "7,760억",
    "per": "17.2x",
    "eps": "105,627원",
    "high52": 2987000.0,
@@ -667,9 +667,9 @@
   "value": [
    {
     "date": "2026-7-28",
-    "portfolio_value": 139946751.0,
-    "total_value": 30343600.0,
-    "eval_pnl": -482200.12
+    "portfolio_value": 137699651.0,
+    "total_value": 28096500.0,
+    "eval_pnl": -2729300.12
    },
    {
     "date": "2026-7-23",
