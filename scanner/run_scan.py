@@ -853,7 +853,8 @@ async def _build_value_price(ohlcv_map: dict, realtime: dict) -> None:
                 df = None
         if df is None or df.empty:
             continue
-        price = realtime.get(code) or float(df.iloc[-1]["close"])
+        rt = realtime.get(code)
+        price = float(rt["close"]) if rt and rt.get("close") else float(df.iloc[-1]["close"])
         change_pct = round((float(df.iloc[-1]["close"]) / float(df.iloc[-2]["close"]) - 1) * 100, 2) if len(df) >= 2 and float(df.iloc[-2]["close"]) else None
         f = fund_map.get(code, {})
         eps, bps, div_v = f.get("eps"), f.get("bps"), f.get("div")
