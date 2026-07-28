@@ -22,7 +22,10 @@ jobs:
           cache: "pip"
       - name: 의존성 설치
         run: pip install -r requirements.txt
-      - name: 52주 신고가 데이터 수집 (marcap)
+      - name: 52주 신고가 데이터 수집 (marcap + KRX 최신 보충)
+        env:
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
         run: python scanner/newhigh_fetcher.py
       - name: Worker KV 게시
         env:

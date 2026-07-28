@@ -2,7 +2,10 @@
 """52주 신고가 주도주 이벤트드리븐 데이터 수집 (넥서스 이벤트드리븐 > 52주 신고가 탭용)
 
 데이터: marcap (KRX 원본 전종목 일별 시세·시가총액·거래대금, FinanceData 공개 배포)
-  https://github.com/FinanceData/marcap — pykrx는 KRX 로그인 요구로 CI 불가라 사용 안 함.
+  https://github.com/FinanceData/marcap — 히스토리 본체. 다만 갱신이 1거래일+ 지연되고
+  주말에 멈추므로, 마지막 날짜 이후 구간은 pykrx(KRX_ID/PW 로그인, pullback_screener와
+  동일 경로)로 일별 전종목 시세·시총을 보충해 직전 거래일 종가까지 최신화한다.
+  pykrx 보충 실패 시엔 marcap만으로 진행 (기존 동작 = fail-soft).
 
 원본 전략(검증 완료: 2021-01~2026-07, 29건, 승률 82.8%, 평균 +27.1%)의 계산부만 이식:
   KOSPI 주봉에서 ①주간 거래대금 순위 ②주 마지막 거래일 시총 순위 ③직전 51주 고가 최대값을
@@ -61,6 +64,71 @@ def download_marcap() -> pd.DataFrame:
     return df
 
 
+def _pykrx_stock():
+    """pykrx 지연 import + 재시도 (pullback_screener와 동일 패턴).
+    import 시점 KRX 로그인이 간헐 차단되면 재시도 후 최후엔 무로그인 폴백."""
+    import time
+    for attempt in range(3):
+        try:
+            from pykrx import stock
+            return stock
+        except Exception as e:
+            print(f"  pykrx import 실패(시도 {attempt + 1}): {e}")
+            time.sleep(3)
+    os.environ.pop("KRX_ID", None)
+    os.environ.pop("KRX_PW", None)
+    from pykrx import stock
+    return stock
+
+
+def supplement_krx(df: pd.DataFrame) -> pd.DataFrame:
+    """marcap 지연 구간(마지막 날짜 다음날 ~ 직전 거래일)을 KRX 일별 시세로 보충.
+    16시 이전 실행이면 당일은 미마감이므로 어제까지만. 어떤 실패든 marcap만으로 진행."""
+    try:
+        stock = _pykrx_stock()
+    except Exception as e:
+        print(f"  pykrx 사용 불가, marcap만 사용: {e}")
+        return df
+    names = df.sort_values("Date").groupby("Code")["Name"].last()
+    end = TODAY if datetime.now(KST).hour >= 16 else TODAY - timedelta(days=1)
+    added = []
+    d = df["Date"].max().date() + timedelta(days=1)
+    while d <= end:
+        if d.weekday() < 5:
+            try:
+                ohlcv = stock.get_market_ohlcv_by_ticker(d.strftime("%Y%m%d"), market="KOSPI")
+                # 휴장일은 빈 프레임 또는 거래대금 0으로 온다
+                if ohlcv is not None and len(ohlcv) > 0 and ohlcv["거래대금"].sum() > 0:
+                    cap = stock.get_market_cap_by_ticker(d.strftime("%Y%m%d"), market="KOSPI")["시가총액"]
+                    # 기준가 = 종가/(1+등락률) — 액면분할 등 수정계수가 marcap의 Close-Changes와 동일하게 복원되도록
+                    base = ohlcv["종가"] / (1 + ohlcv["등락률"] / 100)
+                    part = pd.DataFrame({
+                        "Code": ohlcv.index.astype(str),
+                        "Name": [names.get(c, "") for c in ohlcv.index.astype(str)],
+                        "Date": pd.Timestamp(d),
+                        "High": ohlcv["고가"].values,
+                        "Low": ohlcv["저가"].values,
+                        "Close": ohlcv["종가"].values,
+                        "Changes": (ohlcv["종가"] - base).values,
+                        "Volume": ohlcv["거래량"].values,
+                        "Amount": ohlcv["거래대금"].values,
+                        "Marcap": cap.reindex(ohlcv.index).values,
+                        "Market": "KOSPI",
+                    })
+                    # marcap과 동일 필터: 보통주(코드 끝 0)만, 신규상장 등 이름 미상은 제외
+                    part = part[part["Code"].str.endswith("0") & (part["Name"] != "")]
+                    added.append(part)
+                    print(f"  KRX 보충: {d} {len(part)}종목")
+            except Exception as e:
+                print(f"  KRX 보충 실패({d}), 건너뜀: {e}")
+        d += timedelta(days=1)
+    if not added:
+        return df
+    df = pd.concat([df] + added, ignore_index=True)
+    df.sort_values(["Code", "Date"], inplace=True)
+    return df
+
+
 def complete_week_of(last_date: pd.Timestamp):
     """완결 주(금요일) 판정 — 원본 로직. 금요일 데이터가 아직 없으면 직전 주까지만."""
     last_friday = TODAY - timedelta(days=(TODAY.weekday() - 4) % 7)
@@ -74,7 +142,7 @@ def complete_week_of(last_date: pd.Timestamp):
 
 def main():
     print("=== 52주 신고가 데이터 수집 시작 (marcap) ===")
-    df = download_marcap()
+    df = supplement_krx(download_marcap())
     last_date = df["Date"].max()
     print(f"  데이터: ~ {last_date.date()} / KOSPI {df['Code'].nunique()}종목")
 
