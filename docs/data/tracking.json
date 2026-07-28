@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-28T01:40:15+09:00",
+ "updated": "2026-07-28T11:09:08+09:00",
  "kospi": {
-  "price": 6755.75,
-  "ma200": 5683.33,
-  "ma50": 7881.06,
+  "price": 6212.26,
+  "ma200": 5697.46,
+  "ma50": 7845.68,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-07-28T01:40:15+09:00"
+  "updated": "2026-07-28T11:09:08+09:00"
  },
  "holdings": [
   {
@@ -21,16 +21,16 @@
    "entry_price": 139500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 136400.0,
+   "last_price": 131400.0,
    "peak_price": 151200.0,
-   "return_pct": -2.22,
-   "total_return_pct": -2.22,
+   "return_pct": -5.81,
+   "total_return_pct": -5.81,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 14,
+   "days_held": 15,
    "stage_now": 1,
    "confidence_now": 65,
    "last_updated": "2026-07-27",
@@ -52,7 +52,7 @@
    "last_price": 55000.0,
    "peak_price": 56500.0,
    "return_pct": 1.66,
-   "days_held": 22,
+   "days_held": 23,
    "stage_now": null,
    "confidence_now": 0,
    "last_updated": "2026-07-27",
@@ -78,16 +78,16 @@
    "entry_price": 131600.0,
    "entry_confidence": 88,
    "init_stop_pct": -5.6,
-   "last_price": 136400.0,
+   "last_price": 131400.0,
    "peak_price": 151200.0,
-   "return_pct": 3.65,
-   "total_return_pct": 3.65,
+   "return_pct": -0.15,
+   "total_return_pct": -0.15,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 19,
+   "days_held": 20,
    "stage_now": 1,
    "confidence_now": 65,
    "last_updated": "2026-07-27",
@@ -701,6 +701,10 @@
    {
     "date": "2026-07-27",
     "cum": -7.82
+   },
+   {
+    "date": "2026-07-28",
+    "cum": -8.54
    }
   ],
   "1": [
@@ -763,6 +767,10 @@
    {
     "date": "2026-07-27",
     "cum": -8.5
+   },
+   {
+    "date": "2026-07-28",
+    "cum": -8.74
    }
   ]
  },
@@ -839,6 +847,10 @@
    {
     "date": "2026-07-27",
     "nav": 747.7
+   },
+   {
+    "date": "2026-07-28",
+    "nav": 720.3
    }
   ],
   "1": [
@@ -913,6 +925,10 @@
    {
     "date": "2026-07-27",
     "nav": 673.62
+   },
+   {
+    "date": "2026-07-28",
+    "nav": 648.92
    }
   ]
  },
@@ -920,7 +936,7 @@
  "stats": {
   "holding_count": 3,
   "exited_count": 18,
-  "avg_return": 1.03,
+  "avg_return": -1.43,
   "win_rate": 0.0
  }
 }
