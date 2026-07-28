@@ -4,6 +4,7 @@ name: 52주 신고가 스크리너 데이터
 on:
   schedule:
     - cron: "40 23 * * *"   # 매일 KST 08:40 — 전일 종가까지 반영 (ipo 08:00·bonus 08:20와 시차)
+    - cron: "30 7 * * 1-5"  # 평일 KST 16:30 — 장마감 당일 종가 반영 (16시 이후라 supplement_krx가 당일 포함)
   workflow_dispatch: {}
 permissions:
   contents: read
