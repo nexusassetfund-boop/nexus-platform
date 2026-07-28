@@ -248,20 +248,23 @@ _FS_LABELS = [
 def _fscore(corp: str, year: int | None = None) -> dict | None:
     """Piotroski F-Score(9점) — DART 전체재무제표(연결)로 t vs t-1 비교.
     year 미지정 시 최근 확정 사업연도(작년). 백테스트는 포인트인타임 연도를 넘긴다."""
-    if year is None:
-        year = dt.datetime.now(tz=KST).year - 1
+    # 사업보고서는 3월 말까지 순차 제출 — 1~3월엔 작년 보고서가 아직 없을 수 있어 재작년 폴백 (_shares와 동일 패턴)
+    years = (year,) if year is not None else tuple(dt.datetime.now(tz=KST).year - k for k in (1, 2))
     rows = None
-    for fs in ("CFS", "OFS"):
-        url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
-               f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
-        try:
-            with urllib.request.urlopen(url, timeout=30) as r:
-                d = json.loads(r.read().decode())
-        except Exception as e:
-            logger.warning("F-Score 재무 실패 %s: %s", corp, e)
-            return None
-        if d.get("status") == "000" and d.get("list"):
-            rows = d["list"]
+    for year in years:
+        for fs in ("CFS", "OFS"):
+            url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
+                   f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
+            try:
+                with urllib.request.urlopen(url, timeout=30) as r:
+                    d = json.loads(r.read().decode())
+            except Exception as e:
+                logger.warning("F-Score 재무 실패 %s: %s", corp, e)
+                return None
+            if d.get("status") == "000" and d.get("list"):
+                rows = d["list"]
+                break
+        if rows:
             break
     if not rows:
         return None
@@ -334,20 +337,23 @@ def _quality_metrics(corp: str, year: int | None = None) -> dict | None:
       gpa=매출총이익/자산총계, opm=영업이익/매출, debt=부채총계/자본총계,
       accruals=(순이익−영업활동현금흐름)/자산총계, rev_g·op_g=매출·영업이익 2년 CAGR(전전기 대비).
     quality_backtest._quality_fin과 동일 정의 — 라이브·백테스트 정합."""
-    if year is None:
-        year = dt.datetime.now(tz=KST).year - 1
+    # 1~3월 작년 사업보고서 미제출 대비 재작년 폴백 (_shares와 동일 패턴)
+    years = (year,) if year is not None else tuple(dt.datetime.now(tz=KST).year - k for k in (1, 2))
     rows = None
-    for fs in ("CFS", "OFS"):
-        url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
-               f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
-        try:
-            with urllib.request.urlopen(url, timeout=30) as r:
-                d = json.loads(r.read().decode())
-        except Exception as e:
-            logger.warning("퀄리티 재무 실패 %s: %s", corp, e)
-            return None
-        if d.get("status") == "000" and d.get("list"):
-            rows = d["list"]
+    for year in years:
+        for fs in ("CFS", "OFS"):
+            url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
+                   f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
+            try:
+                with urllib.request.urlopen(url, timeout=30) as r:
+                    d = json.loads(r.read().decode())
+            except Exception as e:
+                logger.warning("퀄리티 재무 실패 %s: %s", corp, e)
+                return None
+            if d.get("status") == "000" and d.get("list"):
+                rows = d["list"]
+                break
+        if rows:
             break
     if not rows:
         return None
@@ -451,19 +457,22 @@ def _cashflow(corp: str) -> dict:
     """DART 전체재무제표(fnlttSinglAcntAll)에서 영업활동현금흐름·CAPEX·현금성자산 (최근 사업연도)."""
     if not DART_KEY or not corp:
         return {}
-    year = dt.datetime.now(tz=KST).year - 1
+    this_year = dt.datetime.now(tz=KST).year
     rows = None
-    for fs in ("CFS", "OFS"):
-        url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
-               f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
-        try:
-            with urllib.request.urlopen(url, timeout=30) as r:
-                d = json.loads(r.read().decode())
-        except Exception as e:
-            logger.warning("현금흐름 조회 실패 %s: %s", corp, e)
-            return {}
-        if d.get("status") == "000" and d.get("list"):
-            rows = d["list"]
+    for year in (this_year - 1, this_year - 2):  # 1~3월 작년 보고서 미제출 대비 재작년 폴백
+        for fs in ("CFS", "OFS"):
+            url = (f"{_DART}/fnlttSinglAcntAll.json?crtfc_key={DART_KEY}&corp_code={corp}"
+                   f"&bsns_year={year}&reprt_code=11011&fs_div={fs}")
+            try:
+                with urllib.request.urlopen(url, timeout=30) as r:
+                    d = json.loads(r.read().decode())
+            except Exception as e:
+                logger.warning("현금흐름 조회 실패 %s: %s", corp, e)
+                return {}
+            if d.get("status") == "000" and d.get("list"):
+                rows = d["list"]
+                break
+        if rows:
             break
     if not rows:
         return {}

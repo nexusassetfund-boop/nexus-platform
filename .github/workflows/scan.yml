@@ -22,6 +22,8 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      TZ: Asia/Seoul
     steps:
       - uses: actions/checkout@v4
 
