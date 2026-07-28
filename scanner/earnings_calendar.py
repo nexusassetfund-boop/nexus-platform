@@ -677,11 +677,13 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
     prev = naver.get(f"{year - 1}Q{q}") or {}
 
     consensus = None
+    cons_rejected: list[dict] = []  # 게이트 폐기분 보관 — 자기일관 실제치로 사후 복권 후보
     if nq and nq.get("consensus"):
         consensus = {k: nq.get(k) for k in ("revenue", "op", "np")}
         # 타당성 게이트 — 오염된 컨센서스는 통째로 폐기 (YoY/서프라이즈 오염 방지)
         if not _consensus_sane(consensus, naver, year, q):
             logger.warning("컨센서스 폐기(스케일 이상) %s %s: %s", code, period, consensus)
+            cons_rejected.append(consensus)
             consensus = None
 
     # 네이버 컨센서스 부재/폐기 시 WISEreport 분기 추정(E) 폴백 — 동일 타당성 게이트 적용
@@ -694,6 +696,7 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
                 consensus = wise
             else:
                 logger.warning("WISE 컨센서스 폐기(스케일 이상) %s %s: %s", code, period, wise)
+                cons_rejected.append(wise)
 
     actual = None
     src = "추정"
@@ -718,6 +721,7 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
     # (예: 삼성전자 잠정공시에서 매출 171조가 파싱되던 오류 — 전년동기 대비 스케일 검사로 폐기)
     # 단 공시 원문의 전년동기·증감율과 자기일관(self_ok)하면 원문이 우선 —
     # 급성장 분기(예: SK하이닉스 2026Q2 매출 +256.8%)가 외부 게이트에 오폐기되지 않게
+    self_ok = False
     if actual:
         self_ok = bool(actual.pop("self_ok", False)) if isinstance(actual, dict) else False
         if self_ok:
@@ -725,6 +729,18 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         elif not _consensus_sane(actual, naver, year, q):
             logger.warning("실제치 폐기(스케일 이상) %s %s: %s", code, period, actual)
             actual = None
+
+    # 컨센서스 복권: 게이트 폐기분이 자기일관 검증된 실제치와 스케일 부합(0.5~2x)하면
+    # "오염"이 아니라 진짜 급성장 전망이었던 것 — 복원해 서프라이즈 계산에 사용
+    # (전년동기 기반 게이트는 급성장 국면에서 컨센서스도 실제치와 같이 오폐기함)
+    if consensus is None and cons_rejected and actual and self_ok:
+        for cand in cons_rejected:
+            pair = next(((a, c) for a, c in [(actual.get("revenue"), cand.get("revenue")),
+                                             (actual.get("op"), cand.get("op"))] if a and c), None)
+            if pair and 0.5 <= pair[1] / pair[0] <= 2.0:
+                logger.info("컨센서스 복권(실제치 스케일 부합) %s %s: %s", code, period, cand)
+                consensus = cand
+                break
 
     # 컨퍼런스콜(확정실적 발표)일 — IR개최 공시 원문에서 추출. 날짜 결정보다 먼저 확보:
     # 잠정공시를 안 하는 종목(예: SK하이닉스)은 컨콜이 첫 공개일이라 발표예정일 후보가 됨.
