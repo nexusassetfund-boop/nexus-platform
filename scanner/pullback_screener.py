@@ -542,7 +542,9 @@ def build() -> dict | None:
     # 급감이 진짜 시장 상황이면 다음 마감 실행이 1일 지연으로 확정한다.
     if confirm:
         try:
-            prev_n = len(json.loads(OUT_PATH.read_text(encoding="utf-8"))["candidates"])
+            # 기준은 마지막 '확정' 멤버십(state) — 비확정/장애 실행이 남긴 표시 파일에
+            # 기준이 끌려 내려가 가드가 무력화되는 것 방지
+            prev_n = len(json.loads(STATE_PATH.read_text(encoding="utf-8")))
             if prev_n >= 8 and len(out) < prev_n * 0.4:
                 confirm = False
                 logger.warning("후보 급감 (%d→%d) — 일시 장애 의심, 이번 실행은 확정 보류", prev_n, len(out))
