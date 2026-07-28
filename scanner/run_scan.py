@@ -339,7 +339,8 @@ def _update_stage_history(stage_history: dict, results: list[dict]):
 #                    ⓐ 3~5일 내 3R↑ 급등 → 잔여의 절반 익절 (1회)
 #                    ⓑ 소진 확장(종가가 10 EMA +N% 이격) 진입 시 → 잔여의 절반 익절
 #                    → 잔여 비중이 tp_min_frac 밑으로 떨어지면 전량 청산 마무리
-#   전량 이탈(트랙 공통): ① 고점 대비 trail_stop_pct 하락 (기본 -10%, 진입 직후엔 손절 겸용)
+#   전량 이탈(트랙 공통): ⓪ 초기 손절(1R): 진입가 대비 init_stop_pct 하락 (모멘텀=웨지 저가, 돌파=trail_stop)
+#                    ① 고점 대비 trail_stop_pct 하락 (기본 -10%, 진입 직후엔 손절 겸용)
 #                    ② 웨지 드롭: 대량 거래 동반 10·20 EMA 종가 하향 이탈 (Oliver Kell)
 #                    ③ 추세 이탈: 종가 < exit_ma_period 이동평균 (기본 60일선)
 def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict) -> dict:
@@ -389,6 +390,11 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
     scan_map = {r["ticker"]: r for r in results if r.get("ticker")}
     holdings = ledger.get("holdings", [])
     exited = list(ledger.get("exited", []))
+    # 과거 기록 보정(멱등): 손절 사유의 %가 잔여분 미실현 기준으로 저장돼 return_pct(총수익률)와
+    # 어긋난 항목을 총수익률로 통일 — 프론트 표시 모순 제거
+    for e in exited:
+        if isinstance(e.get("exit_reason"), str) and e["exit_reason"].startswith("손절 ("):
+            e["exit_reason"] = f"손절 ({e.get('return_pct', 0)}%)"
     # 기존(v2) 원장은 entry_stage가 없음 — 전부 Stage 3 편입이었으므로 3으로 보정
     for h in holdings:
         h.setdefault("entry_stage", 3)
@@ -418,13 +424,18 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
         tp_3r_done = bool(h["tp_3r_done"])
         was_extended = bool(h["was_extended"])
 
-        # ── 전량 청산 조건 (트랙 공통): 트레일링 / 웨지 드롭 / MA60 ──
+        # ── 전량 청산 조건 (트랙 공통): 초기 손절(1R) / 트레일링 / 웨지 드롭 / MA60 ──
+        # 손절 사유의 %는 실현+미실현 총수익률(total_return) 확정 후 채운다 — 표시 불일치 방지
+        init_stop = float(h.get("init_stop_pct") or trail_stop)
         exit_reason = None
-        if drop_from_peak <= trail_stop + 1e-9:
+        if ret_pct <= init_stop + 1e-9:
+            # 초기 손절(1R): 모멘텀(웨지)은 돌파 당일 저가 기준 타이트 스탑, 돌파는 트레일링과 동일
+            exit_reason = "__stop__"
+        elif drop_from_peak <= trail_stop + 1e-9:
             if peak_ret > abs(trail_stop):
                 exit_reason = f"트레일링 스탑 (고점 대비 {trail_stop}%)"
             else:
-                exit_reason = f"손절 ({round(ret_pct, 2)}%)"
+                exit_reason = "__stop__"
         elif r and r.get("wedge_drop"):
             # 웨지 드롭: 대량 거래 동반 10·20 EMA 종가 하향 이탈 → 추세 종료 (Oliver Kell)
             exit_reason = "웨지 드롭 (대량 거래 + 10·20 EMA 이탈)"
@@ -458,6 +469,8 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
                     exit_reason = "익절 완료 (분할 매도 소진)"
 
         total_return = round(realized + qty_frac * ret_pct, 2)   # 원포지션 기준 총수익률(실현+미실현)
+        if exit_reason == "__stop__":
+            exit_reason = f"손절 ({total_return}%)"
 
         h2 = dict(h)
         h2.update({
@@ -1120,7 +1133,9 @@ async def main():
             "stats": {
                 "holding_count": len(ledger_view["holdings"]),
                 "exited_count": len(ledger_view["exited"]),
+                # avg_return = 보유 중 평균(미확정), exited_avg_return·win_rate = 이탈 확정 기준 — 모집단이 다름
                 "avg_return": round(sum(h.get("total_return_pct", h["return_pct"]) for h in ledger_view["holdings"]) / len(ledger_view["holdings"]), 2) if ledger_view["holdings"] else 0,
+                "exited_avg_return": round(sum(e.get("return_pct", 0) for e in ledger_view["exited"]) / len(ledger_view["exited"]), 2) if ledger_view["exited"] else 0,
                 "win_rate": round(sum(1 for e in ledger_view["exited"] if e.get("return_pct", 0) > 0) / len(ledger_view["exited"]) * 100, 1) if ledger_view["exited"] else 0,
             },
         })
