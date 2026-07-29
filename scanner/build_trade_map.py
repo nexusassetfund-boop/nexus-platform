@@ -47,15 +47,59 @@ KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).parent.parent
 OUT_PATH = Path(__file__).parent / "data" / "trade_map.json"
 CACHE_PATH = ROOT / "docs" / "data" / "trade_raw_cache.json"
-SECTOR_MAP = ROOT.parent / "nexus-cloud" / "public" / "sector_map.json"
+# sector_map.json은 nexus-cloud에 있다. CI에서는 워크플로가 Worker의 공개 URL에서
+# scanner/data/ 로 내려받아 두고, 로컬에서는 옆 디렉터리의 원본을 그대로 읽는다.
+SECTOR_MAP_LOCAL = ROOT.parent / "nexus-cloud" / "public" / "sector_map.json"
+SECTOR_MAP_CI = Path(__file__).parent / "data" / "sector_map.json"
 HS_MASTER = Path(__file__).parent / "data" / "hs_master.json"   # 관세청 HS부호 파일데이터 가공본
 
 # ── 기준 ──
 CORR_A, CORR_B, CORR_C = 0.85, 0.70, 0.50
 MIN_QUARTERS = 8          # 상관계수 신뢰를 위한 최소 분기 수 (2년)
-YEARS = 4                 # 수집 연수
+# 수집 연수. 1회 조회가 1년 이내라 연수 = 조합당 호출 수다. 개발계정 한도가 10,000회이고
+# 대상이 900종목 규모라 4년이면 한도를 넘길 수 있다 — 3년(12분기)이면 상관계수에 충분하다.
+YEARS = 3
 SIM_CUTOFF = 0.6          # 테마명 ↔ HS 품목명 문자열 유사도 하한
-MAX_HS_PER_THEME = 3      # 테마당 HS 후보 상한 (API 호출량 억제)
+MAX_HS_PER_THEME = 4      # 테마당 HS 후보 상한 (API 호출량 억제)
+MIN_HS_AMOUNT = 50_000    # 후보 HS의 월 수출액 하한(천USD) — 교역이 미미한 품목은 노이즈
+
+# 문자열 유사도만으로는 테마와 HS 품목명이 잘 안 붙는다. HS 품목명은 "디램", "모노리식
+# 집적회로"처럼 산업 용어가 아니라 관세 분류 용어라서, "HBM"·"조선"·"이차전지" 같은
+# 투자 테마명과 어휘가 겹치지 않는다(실측: 조선 → 은(銀)의 "선", 화장품 → 도자기 화장용품).
+# 그래서 교역 규모가 큰 주요 테마는 씨앗 매핑을 직접 주고, 나머지는 유사도로 넓힌다.
+# 최종 채택은 어차피 매출 상관계수가 거른다 — 씨앗은 정밀도가 아니라 재현율을 위한 것이다.
+_SEED_HS: dict[str, list[str]] = {
+    "반도체": ["854232", "854231", "854233", "854239", "847330"],
+    "dram": ["854232", "847330"], "디램": ["854232", "847330"],
+    "hbm": ["854232", "847330"], "메모리": ["854232", "847330"],
+    "nand": ["854232"], "낸드": ["854232"],
+    "반도체장비": ["848620", "848640"], "반도체소재": ["381800", "370790"],
+    "기판": ["853400"], "pcb": ["853400"], "패키징": ["854290"],
+    "디스플레이": ["901380", "852990"], "oled": ["901380"],
+    "이차전지": ["850760", "850790"], "배터리": ["850760"],
+    "양극재": ["282200", "284190"], "음극재": ["380110"],
+    "전해액": ["382499"], "분리막": ["392020"],
+    "자동차": ["870323", "870324", "870380"], "자동차부품": ["870829", "870899", "870880"],
+    "타이어": ["401120"], "전기차": ["870380"],
+    "화장품": ["330499", "330491", "330420"], "뷰티": ["330499"],
+    "화학": ["390210", "290250"], "석유화학": ["290250", "271019"],
+    "정유": ["271019", "271012"], "석유제품": ["271019"],
+    "철강": ["720839", "721049"], "조선": ["890120", "890190", "890200"],
+    "기계": ["847989"], "방산": ["930690", "880240"],
+    "바이오": ["300215", "300490"], "제약": ["300490"], "의약품": ["300490"],
+    "의료기기": ["901890", "902139"],
+    "식품": ["190230", "210390"], "라면": ["190230"],
+}
+
+
+def _seed_for(theme: str) -> list[str]:
+    """테마명에 씨앗 키워드가 포함되면 그 HS들을 후보로 준다(부분 일치 허용)."""
+    t = (theme or "").lower().replace(" ", "")
+    hits: list[str] = []
+    for key, codes in _SEED_HS.items():
+        if key in t:
+            hits.extend(c for c in codes if c not in hits)
+    return hits
 
 # 시도명 → 시군구 코드 접두. 관세청 지역코드 체계는 행정표준코드를 따른다.
 # DART 주소는 "충청남도 아산시"처럼 정식 명칭으로 오므로 축약형·정식형을 모두 받는다.
@@ -128,22 +172,87 @@ def match_sgg(addr_sgg: str | None, available: list[str]) -> str | None:
     return hit[0] if hit else None
 
 
+def build_hs_master(api_key: str, yymm: str) -> list[dict]:
+    """품목별 API로 HS(10단위)↔한글품목명↔수출금액 표를 만들고 HS6로 묶는다.
+
+    시군구별 API가 HS 6단위를 요구하므로 6단위로 접는다. 같은 6단위 안의 10단위
+    품목명을 모두 보관해 매칭 폭을 넓히고, 수출금액 합계로 규모 순위를 매긴다.
+    """
+    rows = capi.fetch_all_items(yymm, api_key, CACHE_PATH)
+    by6: dict[str, dict] = {}
+    for r in rows:
+        hs = str(r.get("hs") or "")
+        name = (r.get("name") or "").strip()
+        if len(hs) < 6 or not name:
+            continue
+        e = by6.setdefault(hs[:6], {"hs": hs[:6], "names": set(), "amount": 0.0})
+        # '기타' 같은 무의미한 잎 이름은 매칭에 도움이 안 되므로 제외한다.
+        if name not in ("기타", "기타의 것", "그 밖의 것"):
+            e["names"].add(name)
+        e["amount"] += r.get("exp_amt") or 0.0
+    out = [{"hs": v["hs"], "names": sorted(v["names"]), "amount": round(v["amount"], 1)}
+           for v in by6.values() if v["names"]]
+    out.sort(key=lambda x: -x["amount"])
+    logger.info("HS 마스터 %d개(6단위, %s 기준)", len(out), yymm)
+    return out
+
+
+_HS_CAND_CACHE: dict[str, list[tuple[str, str]]] = {}
+
+
 def hs_candidates(theme: str, hs_master: list[dict]) -> list[tuple[str, str]]:
-    """테마명과 HS 한글 품목명의 문자열 유사도로 후보 HS를 뽑는다."""
+    """테마명과 HS 한글 품목명의 문자열 유사도로 후보 HS(6단위)를 뽑는다.
+
+    같은 유사도면 수출 규모가 큰 쪽을 앞세운다 — 이름만 비슷하고 실제 교역이 거의
+    없는 품목이 후보를 차지하면 상관계수 검증 단계에서 표본이 모자라 버려진다.
+    """
     if not theme or not hs_master:
         return []
+    # 종목마다 같은 테마를 다시 계산하면(1,759종목 × 244테마 × 4,535 HS) 몇 시간이 든다.
+    if theme in _HS_CAND_CACHE:
+        return _HS_CAND_CACHE[theme]
+    idx = {r["hs"]: r for r in hs_master}
+
+    # 1) 씨앗 매핑 우선 — 실제 마스터에 존재하는 코드만 채택
+    out: list[tuple[str, str]] = []
+    for hs in _seed_for(theme):
+        row = idx.get(hs)
+        if row:
+            names = row.get("names") or ([row["name"]] if row.get("name") else [])
+            out.append((hs, names[0] if names else theme))
+    if len(out) >= MAX_HS_PER_THEME:
+        _HS_CAND_CACHE[theme] = out[:MAX_HS_PER_THEME]
+        return _HS_CAND_CACHE[theme]
+
+    # 2) 모자라면 문자열 유사도로 보충. 교역이 미미한 품목은 제외한다 —
+    #    이름만 스치듯 닮고 실제 수출이 없으면 상관계수 표본이 안 나온다.
+    #    SequenceMatcher는 비싸다(테마 244 × 품목 4,535 × 이름 여러 개 = 수백만 회).
+    #    먼저 2-gram이 하나도 겹치지 않는 이름을 걸러 대부분을 건너뛴다.
+    seen = {hs for hs, _ in out}
+    t_grams = {theme[i:i + 2] for i in range(len(theme) - 1)} or {theme}
     scored = []
     for row in hs_master:
-        name = row.get("name") or ""
-        if not name:
+        if row["hs"] in seen or (row.get("amount") or 0) < MIN_HS_AMOUNT:
             continue
-        ratio = difflib.SequenceMatcher(None, theme, name).ratio()
-        if theme in name or name in theme:
-            ratio = max(ratio, 0.8)
-        if ratio >= SIM_CUTOFF:
-            scored.append((ratio, row.get("hs"), name))
+        best_r, best_n = 0.0, None
+        names = row.get("names") or ([row["name"]] if row.get("name") else [])
+        for name in names:
+            if not any(g in name for g in t_grams):
+                continue                      # 겹치는 2-gram이 없으면 유사도도 낮다
+            r = difflib.SequenceMatcher(None, theme, name).ratio()
+            if theme in name or name in theme:
+                r = max(r, 0.85)
+            if r > best_r:
+                best_r, best_n = r, name
+        if best_r >= SIM_CUTOFF:
+            scored.append((round(best_r, 3), row.get("amount") or 0.0, row["hs"], best_n))
     scored.sort(reverse=True)
-    return [(hs, nm) for _, hs, nm in scored[:MAX_HS_PER_THEME] if hs]
+    for _, _, hs, nm in scored:
+        if len(out) >= MAX_HS_PER_THEME:
+            break
+        out.append((hs, nm))
+    _HS_CAND_CACHE[theme] = out
+    return out
 
 
 def quarterly_revenue(corp_code: str, years: list[int]) -> dict[str, float]:
@@ -220,14 +329,28 @@ def build() -> dict | None:
         logger.error("DART_API_KEY 미설정 — 상관계수 검증 불가")
         return None
 
-    smap = _load(SECTOR_MAP, None)
+    smap = _load(SECTOR_MAP_CI, None) or _load(SECTOR_MAP_LOCAL, None)
     if not smap:
-        logger.error("sector_map.json 없음: %s", SECTOR_MAP)
+        logger.error("sector_map.json 없음 (%s 또는 %s)", SECTOR_MAP_CI, SECTOR_MAP_LOCAL)
         return None
+    # HS 마스터는 품목별 API에서 자동 생성한다(수동 파일 준비 불필요). 캐시가 있으면 재사용.
+    today0 = dt.datetime.now(tz=KST).date()
+    # 확정치는 매월 15일경 전월분이 현행화된다 — 그 전이면 두 달 전을 기준으로 잡는다.
+    back = 1 if today0.day >= 16 else 2
+    _t = today0.year * 12 + (today0.month - 1) - back
+    ref_month = f"{_t // 12:04d}{_t % 12 + 1:02d}"
     hs_master = _load(HS_MASTER, [])
     if not hs_master:
-        logger.error("HS 마스터 없음 (%s) — data.go.kr '관세청_HS부호' 파일데이터를 "
-                     "[{hs, name}] 형태로 가공해 두세요.", HS_MASTER)
+        try:
+            hs_master = build_hs_master(api_key, ref_month)
+        except capi.CustomsError as e:
+            logger.error("HS 마스터 생성 실패: %s", e)
+            return None
+        if hs_master:
+            HS_MASTER.parent.mkdir(parents=True, exist_ok=True)
+            HS_MASTER.write_text(json.dumps(hs_master, ensure_ascii=False), encoding="utf-8")
+    if not hs_master:
+        logger.error("HS 마스터가 비어 있음 — 품목별 API 응답을 확인하세요")
         return None
 
     # ── 테마 → 종목
@@ -328,7 +451,10 @@ def build() -> dict | None:
         # 귀속 충돌은 시도가 아니라 (시군구 × 품목) 단위로 봐야 한다.
         combo_users.setdefault((sido_cd, best.get("sgg"), best["hs"][0]), []).append(code)
         if i % 25 == 0:
-            logger.info("진행 %d/%d — 채택 %d", i, len(tickers), len(entries))
+            # 호출 수를 함께 찍는다 — 개발계정 10,000회 한도에 근접하면 TRADE_MAP_LIMIT로
+            # 나눠 돌려야 한다(캐시가 actions/cache에 남으므로 이어서 진행된다).
+            logger.info("진행 %d/%d — 채택 %d · 관세청 호출 %d회",
+                        i, len(tickers), len(entries), capi.call_count())
 
     # 같은 (지역×품목)에 복수 종목이 걸리면 귀속 불확실 → 플래그
     for combo, users in combo_users.items():

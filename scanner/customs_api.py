@@ -72,6 +72,14 @@ class CustomsError(RuntimeError):
     pass
 
 
+# 실제 네트워크 호출 수(캐시 히트는 세지 않는다). 개발계정 한도 대비 소진량 파악용.
+_CALLS = 0
+
+
+def call_count() -> int:
+    return _CALLS
+
+
 def _cache_load(path: Path) -> dict:
     if not path.exists():
         return {}
@@ -118,6 +126,8 @@ def _parse(xml_text: str) -> list[dict]:
 
 def _get(endpoint: str, params: dict, api_key: str) -> list[dict]:
     """단일 호출 + 재시도. serviceKey는 이미 인코딩된 키를 그대로 붙인다(이중 인코딩 방지)."""
+    global _CALLS
+    _CALLS += 1
     qs = urllib.parse.urlencode({k: v for k, v in params.items() if v is not None})
     url = f"{endpoint}?serviceKey={api_key}&{qs}"
     last = None
@@ -149,6 +159,17 @@ def fetch_item(hs: str, start_yymm: str, end_yymm: str, api_key: str,
     """품목별 수출입실적. 기간은 1년 이내여야 한다(API 제약)."""
     return _fetch_cached(EP_ITEM, {"strtYymm": start_yymm, "endYymm": end_yymm, "hsSgn": hs},
                          api_key, cache_path, f"item:{hs}:{start_yymm}:{end_yymm}")
+
+
+def fetch_all_items(yymm: str, api_key: str, cache_path: Path | None = None) -> list[dict]:
+    """hsSgn을 생략하면 그 달의 전 품목(HS 10단위 약 9,600건)이 품목명과 함께 온다.
+
+    별도의 HS 마스터 파일(data.go.kr 파일데이터)을 수동으로 준비하지 않아도
+    이 호출 하나로 코드↔한글품목명 대응표를 만들 수 있다. 수출금액도 함께 오므로
+    같은 이름의 후보가 여럿일 때 규모로 우선순위를 매길 수 있다.
+    """
+    return _fetch_cached(EP_ITEM, {"strtYymm": yymm, "endYymm": yymm},
+                         api_key, cache_path, f"allitems:{yymm}")
 
 
 def fetch_district(hs: str, sido_cd: str, start_yymm: str, end_yymm: str, api_key: str,

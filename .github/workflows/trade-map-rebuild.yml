@@ -16,12 +16,14 @@ jobs:
     timeout-minutes: 300    # 종목별 DART 조회 + 조합별 4년 수집
     steps:
       - uses: actions/checkout@v4
-      - name: nexus-cloud 체크아웃 (sector_map.json 참조)
-        uses: actions/checkout@v4
-        with:
-          repository: nexusassetfund-boop/nexus-cloud
-          token: ${{ secrets.NEXUS_CLOUD_TOKEN }}
-          path: ../nexus-cloud
+      # sector_map.json은 nexus-cloud(사설)에 있지만 Worker가 정적 자산으로 공개 제공한다.
+      # 사설 저장소 체크아웃용 토큰을 새로 만드는 것보다 이쪽이 단순하고 권한도 덜 요구한다.
+      - name: 섹터맵 내려받기
+        run: |
+          mkdir -p scanner/data
+          curl -sf --retry 3 -o scanner/data/sector_map.json \
+            "https://nexus-platform.nexusassetfund.workers.dev/sector_map.json"
+          python -c "import json;d=json.load(open('scanner/data/sector_map.json',encoding='utf-8'));print('섹터',len(d['sectors']),'개')"
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
       - name: 의존성 설치
