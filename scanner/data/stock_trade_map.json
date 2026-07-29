@@ -20,6 +20,11 @@
       "hs": ["300249"], "label": "독소·톡소이드(보툴리눔)",
       "note": "오창공장", "seed_confidence": "mid" },
 
+    { "ticker": "278470", "name": "에이피알", "sido": "11", "sgg_hint": "강남",
+      "hs": ["854370", "330790"], "label": "미용기기(뷰티 디바이스)",
+      "note": "강남 본사(생산은 평택 자체공장이나 통관은 본사 기준으로 보임). 실측 강남 1위 58%. 마스크팩(330790)은 강남 40%·송파 40%로 갈린다",
+      "seed_confidence": "mid" },
+
     { "ticker": "214370", "name": "케어젠", "sido": "11", "sgg_hint": "강남",
       "hs": ["210690"], "label": "조제식료품(펩타이드 건기식)",
       "note": "실측 강남 1위 35%", "seed_confidence": "mid" },
@@ -47,7 +52,9 @@
       "note": "반월공장", "seed_confidence": "mid" },
 
     { "ticker": "096530", "name": "씨젠", "sido": "11", "sgg_hint": "송파",
-      "hs": ["382200"], "label": "진단시약", "seed_confidence": "mid" },
+      "hs": ["382219"], "label": "면역물품(분자진단)",
+      "note": "송파 본사·공장. 실측 송파 1위 61% — 382200이 아니라 382219가 맞다",
+      "seed_confidence": "high" },
 
     { "ticker": "145720", "name": "덴티움", "sido": "41", "sgg_hint": "수원",
       "hs": ["902129"], "label": "치과용품(임플란트)", "seed_confidence": "mid" },
@@ -101,13 +108,17 @@
       "hs": ["854290"], "label": "집적회로 부분품(패키징)", "seed_confidence": "mid" },
 
     { "ticker": "064760", "name": "티씨케이", "sido": "41", "sgg_hint": "안성",
-      "hs": ["681510"], "label": "흑연제품(SiC 링)", "seed_confidence": "mid" },
+      "hs": ["690310"], "label": "흑연 함유 내화물(SiC 링)",
+      "note": "안성 단일공장. 실측 안성 1위 72% — SiC 링은 흑연제품(6815)이 아니라 내화물(6903)로 분류된다",
+      "seed_confidence": "high" },
 
     { "ticker": "005290", "name": "동진쎄미켐", "sido": "28", "sgg_hint": "인천",
       "hs": ["370790"], "label": "사진용 조제품(포토레지스트)", "seed_confidence": "mid" },
 
     { "ticker": "039030", "name": "이오테크닉스", "sido": "41", "sgg_hint": "안양",
-      "hs": ["845680"], "label": "레이저 가공기계", "seed_confidence": "mid" },
+      "hs": ["848610", "901320"], "label": "레이저 가공기",
+      "note": "안양 본사. 실측 안양 2위 17%뿐이라 프록시로는 약하다 — 화성 81%가 누구인지 불명. 오산 반도체장비 38%($110M)는 규모상 세메스(비상장)로 보여 이오테크닉스가 아니다",
+      "seed_confidence": "low" },
 
     { "ticker": "098460", "name": "고영", "sido": "11", "sgg_hint": "금천",
       "hs": ["903180"], "label": "측정·검사기기", "seed_confidence": "mid" },

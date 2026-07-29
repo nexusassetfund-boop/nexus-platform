@@ -4,11 +4,14 @@
 이 도구가 이 기능에서 실질적으로 가장 중요하다. 매핑은 한 번에 맞출 수 없고, 여기서
 점유율과 순위를 보며 HS나 지역을 고쳐 다시 돌리는 반복이 곧 큐레이션 작업이다.
 
-판정 기준(실측 근거):
-  70%+ 且 1위        high — 사실상 단독      (휴젤 춘천 100%)
-  30~70% 且 1~2위    mid  — 타사 혼재        (파마리서치 강릉 47%, 케어젠 강남 35%)
-  30% 미만 또는 3위 이하  매핑 오류로 간주      (에이피알 송파 4%)
-  데이터 없음          실패 — 지역·HS 재확인   (하이텍팜 충주)
+판정 기준: 점유율(시도 내 비중)과 **균등 몫 대비 배수**를 함께 본다.
+점유율만 쓰면 시군구가 31개인 경기도 기업이 구조적으로 불리해 전부 탈락한다 —
+코스맥스 화성 14%는 균등 대비 4.4배로 충분히 몰려 있는데도 예전 기준에선 버려졌다.
+
+  1위  且 (점유 50%+ 또는 배수 5+)      high — 사실상 단독
+  1~3위 且 (점유 20%+ 또는 배수 2.5+)   mid  — 타사 혼재 가능
+  그 외                              low  — 매핑을 다시 잡는다
+  데이터 없음                          실패 — 지역·HS 재확인
 
 자동으로 버리지 않는다. 표를 출력하고 사람이 stock_trade_map.json을 고친다.
 
@@ -60,12 +63,23 @@ def _match_sgg(hint: str, available: list[str]) -> str | None:
     return None
 
 
-def grade(share: float, rank: int) -> str:
-    if rank == 1 and share >= 70:
+def grade(share: float, rank: int, n_sgg: int) -> str:
+    """귀속 신뢰도. 점유율만 보면 큰 시도에 있는 기업이 부당하게 탈락한다.
+
+    경기도는 시군구가 31개라 하나가 30%를 넘기기 구조적으로 어렵고, 강원 춘천은
+    해당 품목 수출 시군구가 3개뿐이라 쉽게 100%가 나온다. 그래서 점유율과 함께
+    **균등 몫 대비 배수**(share × 시군구수 / 100)를 본다 — 몰려 있는 정도를
+    시도 크기와 무관하게 재는 지표다.
+
+    실측 예: 씨젠 송파 61%(15.3배) · 에이피알 강남 58%(14.5) · 파마리서치 강릉 51%(9.1) ·
+             티씨케이 안성 72%(5.7) · 휴젤 춘천 94%(4.7) · 코스맥스 화성 14%(4.4).
+    반례: 이오테크닉스 안양 17%는 배수 1.3에 그친다 — 레이저 가공기를 수출하는
+    시군구가 8개뿐이라 17%는 균등 수준이고, 몰려 있다고 볼 수 없다.
+    """
+    conc = share * max(1, n_sgg) / 100.0
+    if rank == 1 and (share >= 50 or conc >= 5):
         return "high"
-    if rank <= 2 and share >= 30:
-        return "mid"
-    if share >= 30:
+    if rank <= 3 and (share >= 20 or conc >= 2.5):
         return "mid"
     return "low"
 
@@ -113,12 +127,13 @@ def verify_entry(e: dict, month: str, api_key: str) -> dict:
         share = amt / total * 100
         cand = {"hs_used": hs, "sgg": sgg, "amount": round(amt, 1),
                 "rank": rank, "of": len(ranked), "share": round(share, 1),
-                "grade": grade(share, rank)}
+                "grade": grade(share, rank, len(ranked)), "conc": round(share * len(ranked) / 100.0, 1)}
         if amt < MIN_MONTHLY:
             cand["grade"] = "low"
             cand["small"] = True
-        # 여러 HS 후보 중 점유율이 가장 높은 것을 채택
-        if best is None or cand["share"] > best["share"]:
+        # 여러 HS 후보 중 더 잘 몰려 있는 쪽을 채택 — 등급이 같으면 배수로 가린다.
+        _ord = {"high": 2, "mid": 1, "low": 0}
+        if best is None or (_ord[cand["grade"]], cand["conc"]) > (_ord[best["grade"]], best["conc"]):
             best = cand
 
     if best is None:
@@ -146,8 +161,8 @@ def main():
     month = f"{t // 12:04d}{t % 12 + 1:02d}"
 
     print(f"기준월 {month} · 대상 {len(entries)}개\n")
-    print(f"{'종목':<20}{'지역':<10}{'HS':<8}{'수출(천$)':>11}{'순위':>7}{'점유':>7}  판정")
-    print("-" * 78)
+    print(f"{'종목':<20}{'지역':<10}{'HS':<8}{'수출(천$)':>11}{'순위':>7}{'점유':>7}{'배수':>7}  판정")
+    print("-" * 84)
 
     results = []
     for e in entries:
@@ -156,14 +171,14 @@ def main():
         if r["ok"]:
             mark = {"high": "OK ", "mid": "△  ", "low": "✗  "}[r["grade"]]
             print(f"{r['name'][:19]:<20}{r['sgg'].split()[-1][:9]:<10}{r['hs_used']:<8}"
-                  f"{r['amount']:>11,.0f}{r['rank']}/{r['of']:>5}{r['share']:>6.0f}%  {mark}"
+                  f"{r['amount']:>11,.0f}{r['rank']}/{r['of']:>5}{r['share']:>6.0f}%{r['conc']:>6.1f}x  {mark}"
                   + ("(소액)" if r.get("small") else ""))
         else:
-            print(f"{r['name'][:19]:<20}{'-':<10}{'-':<8}{'-':>11}{'-':>7}{'-':>7}  ✗  {r['reason']}")
+            print(f"{r['name'][:19]:<20}{'-':<10}{'-':<8}{'-':>11}{'-':>7}{'-':>7}{'-':>7}  ✗  {r['reason']}")
 
     ok = [r for r in results if r["ok"]]
     by = {g: len([r for r in ok if r["grade"] == g]) for g in ("high", "mid", "low")}
-    print("-" * 78)
+    print("-" * 84)
     print(f"통과 {len(ok)}/{len(results)} — high {by['high']} · mid {by['mid']} · low {by['low']}")
     print("\nhigh/mid만 화면에 올립니다. low는 stock_trade_map.json에서 HS나 지역을 고쳐 재실행하세요.")
 

@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-29 16:33",
+ "updated": "2026-07-30 08:15",
  "base_month": "202606",
  "method": "종목별 공장 소재 시군구 × HS6 수출액을 매출 프록시로 사용. 시도 내 점유율·순위로 귀속 신뢰도를 표시한다.",
  "entries": [
@@ -19,7 +19,8 @@
    "rank": 1,
    "of": 18,
    "share": 50.8,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 9.1
   },
   {
    "ticker": "145020",
@@ -37,7 +38,8 @@
    "rank": 1,
    "of": 5,
    "share": 93.9,
-   "grade": "high"
+   "grade": "high",
+   "conc": 4.7
   },
   {
    "ticker": "086900",
@@ -55,7 +57,28 @@
    "rank": 1,
    "of": 4,
    "share": 89.1,
-   "grade": "high"
+   "grade": "high",
+   "conc": 3.6
+  },
+  {
+   "ticker": "278470",
+   "name": "에이피알",
+   "sido": "11",
+   "sgg_hint": "강남",
+   "hs": [
+    "854370",
+    "330790"
+   ],
+   "label": "미용기기(뷰티 디바이스)",
+   "note": "강남 본사(생산은 평택 자체공장이나 통관은 본사 기준으로 보임). 실측 강남 1위 58%. 마스크팩(330790)은 강남 40%·송파 40%로 갈린다",
+   "hs_used": "854370",
+   "sgg": "서울특별시 강남구",
+   "amount": 26689.0,
+   "rank": 1,
+   "of": 25,
+   "share": 58.0,
+   "grade": "high",
+   "conc": 14.5
   },
   {
    "ticker": "214370",
@@ -73,7 +96,26 @@
    "rank": 1,
    "of": 25,
    "share": 34.9,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 8.7
+  },
+  {
+   "ticker": "287410",
+   "name": "제이시스메디칼",
+   "sido": "41",
+   "sgg_hint": "성남",
+   "hs": [
+    "901890"
+   ],
+   "label": "의료기기(에스테틱 장비)",
+   "hs_used": "901890",
+   "sgg": "경기도 성남시",
+   "amount": 10482.0,
+   "rank": 2,
+   "of": 29,
+   "share": 21.6,
+   "grade": "mid",
+   "conc": 6.3
   },
   {
    "ticker": "214150",
@@ -90,7 +132,8 @@
    "rank": 1,
    "of": 25,
    "share": 51.6,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 12.9
   },
   {
    "ticker": "336570",
@@ -107,7 +150,8 @@
    "rank": 1,
    "of": 5,
    "share": 99.6,
-   "grade": "high"
+   "grade": "high",
+   "conc": 5.0
   },
   {
    "ticker": "237690",
@@ -125,7 +169,27 @@
    "rank": 1,
    "of": 22,
    "share": 92.3,
-   "grade": "high"
+   "grade": "high",
+   "conc": 20.3
+  },
+  {
+   "ticker": "096530",
+   "name": "씨젠",
+   "sido": "11",
+   "sgg_hint": "송파",
+   "hs": [
+    "382219"
+   ],
+   "label": "면역물품(분자진단)",
+   "note": "송파 본사·공장. 실측 송파 1위 61% — 382200이 아니라 382219가 맞다",
+   "hs_used": "382219",
+   "sgg": "서울특별시 송파구",
+   "amount": 16362.0,
+   "rank": 1,
+   "of": 25,
+   "share": 61.1,
+   "grade": "high",
+   "conc": 15.3
   },
   {
    "ticker": "145720",
@@ -142,7 +206,8 @@
    "rank": 1,
    "of": 18,
    "share": 60.8,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 10.9
   },
   {
    "ticker": "039840",
@@ -159,7 +224,8 @@
    "rank": 1,
    "of": 6,
    "share": 53.7,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 3.2
   },
   {
    "ticker": "228670",
@@ -176,7 +242,8 @@
    "rank": 1,
    "of": 6,
    "share": 82.3,
-   "grade": "high"
+   "grade": "high",
+   "conc": 4.9
   },
   {
    "ticker": "003230",
@@ -194,7 +261,27 @@
    "rank": 1,
    "of": 18,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 18.0
+  },
+  {
+   "ticker": "192820",
+   "name": "코스맥스",
+   "sido": "41",
+   "sgg_hint": "화성",
+   "hs": [
+    "330499"
+   ],
+   "label": "기초화장용 제품류",
+   "note": "실측 경기 내 14% — 김포·성남 등과 혼재",
+   "hs_used": "330499",
+   "sgg": "경기도 화성시",
+   "amount": 27813.0,
+   "rank": 3,
+   "of": 31,
+   "share": 14.3,
+   "grade": "mid",
+   "conc": 4.4
   },
   {
    "ticker": "161890",
@@ -211,7 +298,8 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 1.0
   },
   {
    "ticker": "950140",
@@ -228,7 +316,8 @@
    "rank": 1,
    "of": 10,
    "share": 69.6,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 7.0
   },
   {
    "ticker": "278280",
@@ -245,7 +334,8 @@
    "rank": 1,
    "of": 11,
    "share": 63.4,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 7.0
   },
   {
    "ticker": "066970",
@@ -262,7 +352,27 @@
    "rank": 1,
    "of": 3,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 3.0
+  },
+  {
+   "ticker": "247540",
+   "name": "에코프로비엠",
+   "sido": "43",
+   "sgg_hint": "청주",
+   "hs": [
+    "284190"
+   ],
+   "label": "양극재",
+   "note": "청주·포항 다거점",
+   "hs_used": "284190",
+   "sgg": "충청북도 청주시",
+   "amount": 30930.0,
+   "rank": 2,
+   "of": 6,
+   "share": 22.2,
+   "grade": "mid",
+   "conc": 1.3
   },
   {
    "ticker": "058470",
@@ -279,7 +389,27 @@
    "rank": 1,
    "of": 16,
    "share": 57.0,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 9.1
+  },
+  {
+   "ticker": "064760",
+   "name": "티씨케이",
+   "sido": "41",
+   "sgg_hint": "안성",
+   "hs": [
+    "690310"
+   ],
+   "label": "흑연 함유 내화물(SiC 링)",
+   "note": "안성 단일공장. 실측 안성 1위 72% — SiC 링은 흑연제품(6815)이 아니라 내화물(6903)로 분류된다",
+   "hs_used": "690310",
+   "sgg": "경기도 안성시",
+   "amount": 309.0,
+   "rank": 1,
+   "of": 8,
+   "share": 71.5,
+   "grade": "high",
+   "conc": 5.7
   },
   {
    "ticker": "005290",
@@ -296,7 +426,44 @@
    "rank": 1,
    "of": 8,
    "share": 82.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 6.6
+  },
+  {
+   "ticker": "403870",
+   "name": "HPSP",
+   "sido": "41",
+   "sgg_hint": "화성",
+   "hs": [
+    "848620"
+   ],
+   "label": "반도체 제조용 장비",
+   "hs_used": "848620",
+   "sgg": "경기도 화성시",
+   "amount": 83191.0,
+   "rank": 2,
+   "of": 18,
+   "share": 28.9,
+   "grade": "mid",
+   "conc": 5.2
+  },
+  {
+   "ticker": "348210",
+   "name": "넥스틴",
+   "sido": "41",
+   "sgg_hint": "화성",
+   "hs": [
+    "903141"
+   ],
+   "label": "반도체 검사장비",
+   "hs_used": "903141",
+   "sgg": "경기도 화성시",
+   "amount": 357.0,
+   "rank": 2,
+   "of": 12,
+   "share": 23.5,
+   "grade": "mid",
+   "conc": 2.8
   },
   {
    "ticker": "042700",
@@ -313,7 +480,44 @@
    "rank": 1,
    "of": 4,
    "share": 36.1,
-   "grade": "mid"
+   "grade": "mid",
+   "conc": 1.4
+  },
+  {
+   "ticker": "001820",
+   "name": "삼화콘덴서",
+   "sido": "41",
+   "sgg_hint": "용인",
+   "hs": [
+    "853229"
+   ],
+   "label": "축전기(MLCC)",
+   "hs_used": "853229",
+   "sgg": "경기도 용인시",
+   "amount": 1547.0,
+   "rank": 2,
+   "of": 27,
+   "share": 17.3,
+   "grade": "mid",
+   "conc": 4.7
+  },
+  {
+   "ticker": "189300",
+   "name": "인텔리안테크",
+   "sido": "41",
+   "sgg_hint": "평택",
+   "hs": [
+    "852910"
+   ],
+   "label": "안테나",
+   "hs_used": "852910",
+   "sgg": "경기도 평택시",
+   "amount": 497.0,
+   "rank": 2,
+   "of": 29,
+   "share": 12.9,
+   "grade": "mid",
+   "conc": 3.7
   },
   {
    "ticker": "108320",
@@ -330,7 +534,8 @@
    "rank": 1,
    "of": 5,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 5.0
   },
   {
    "ticker": "060720",
@@ -347,7 +552,8 @@
    "rank": 1,
    "of": 14,
    "share": 54.0,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 7.6
   },
   {
    "ticker": "195870",
@@ -364,7 +570,26 @@
    "rank": 1,
    "of": 3,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 3.0
+  },
+  {
+   "ticker": "025320",
+   "name": "시노펙스",
+   "sido": "41",
+   "sgg_hint": "화성",
+   "hs": [
+    "842121"
+   ],
+   "label": "여과기(멤브레인)",
+   "hs_used": "842121",
+   "sgg": "경기도 화성시",
+   "amount": 5085.0,
+   "rank": 1,
+   "of": 30,
+   "share": 27.1,
+   "grade": "high",
+   "conc": 8.1
   },
   {
    "ticker": "137400",
@@ -381,7 +606,8 @@
    "rank": 1,
    "of": 18,
    "share": 39.8,
-   "grade": "mid"
+   "grade": "high",
+   "conc": 7.2
   },
   {
    "ticker": "298040",
@@ -398,7 +624,8 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 1.0
   },
   {
    "ticker": "005070",
@@ -415,7 +642,8 @@
    "rank": 1,
    "of": 6,
    "share": 77.7,
-   "grade": "high"
+   "grade": "high",
+   "conc": 4.7
   },
   {
    "ticker": "093370",
@@ -432,7 +660,8 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 1.0
   },
   {
    "ticker": "161390",
@@ -449,7 +678,8 @@
    "rank": 1,
    "of": 3,
    "share": 95.4,
-   "grade": "high"
+   "grade": "high",
+   "conc": 2.9
   },
   {
    "ticker": "073240",
@@ -466,7 +696,8 @@
    "rank": 1,
    "of": 3,
    "share": 100.0,
-   "grade": "high"
+   "grade": "high",
+   "conc": 3.0
   },
   {
    "ticker": "010140",
@@ -484,6 +715,7 @@
    "of": 1,
    "share": 100.0,
    "grade": "high",
+   "conc": 1.0,
    "shared": true
   },
   {
@@ -502,6 +734,7 @@
    "of": 1,
    "share": 100.0,
    "grade": "high",
+   "conc": 1.0,
    "shared": true
   },
   {
@@ -519,7 +752,8 @@
    "rank": 1,
    "of": 6,
    "share": 78.1,
-   "grade": "high"
+   "grade": "high",
+   "conc": 4.7
   },
   {
    "ticker": "005010",
@@ -536,14 +770,15 @@
    "rank": 1,
    "of": 5,
    "share": 87.9,
-   "grade": "high"
+   "grade": "high",
+   "conc": 4.4
   }
  ],
  "coverage": {
-  "adopted": 31,
-  "checked": 71,
-  "high": 20,
-  "mid": 11,
-  "low": 21
+  "adopted": 42,
+  "checked": 72,
+  "high": 34,
+  "mid": 8,
+  "low": 14
  }
 }
