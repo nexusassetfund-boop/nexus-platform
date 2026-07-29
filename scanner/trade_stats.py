@@ -166,16 +166,55 @@ def latest_confirmed_month(today: dt.date) -> str:
     return _prev_yymm(f"{today.year:04d}{today.month:02d}", 1 if today.day >= 16 else 2)
 
 
+# 순별 잠정치 응답은 itemUsdAmt00~10 열로 오고 품목명이 없다. 순서는 실측으로 검증했다
+# (반도체 221억달러·+180.6%, 컴퓨터주변기기 +231.9%, 승용차 -10.6%가 관세청 보도자료와 일치).
+_PROV_EXP = ["전체", "반도체", "철강제품", "승용차", "석유제품", "무선통신기기",
+             "선박", "자동차부품", "컴퓨터주변기기", "정밀기기", "가전제품"]
+_PROV_IMP = ["전체", "반도체", "원유", "기계류", "가스", "반도체 제조용장비",
+             "정밀기기", "석유제품", "무선통신기기", "승용차", "석탄"]
+
+
 def fetch_macro(api_key: str, yymm: str) -> dict | None:
-    """10대 품목 순별 잠정치. 미승인(403)이면 조용히 건너뛴다."""
-    try:
-        exp = capi.fetch_provisional(yymm, "1", api_key, CACHE_PATH)
-    except capi.CustomsError as e:
-        logger.warning("순별 잠정치 사용 불가(%s) — 매크로 띠는 생략합니다", str(e)[:70])
-        return None
-    if not exp:
-        return None
-    return exp
+    """10대 품목 순별 잠정치 + 전년동기간 대비.
+
+    1~20일치가 21일에 공개돼 월별 확정치(익월 15일)보다 40일 빠르다. 품목이 10개로
+    고정이라 종목 스크리닝에는 못 쓰고 섹터 방향 파악용이다.
+    전년비는 반드시 **같은 기간끼리** 비교한다(1~20일 vs 전년 1~20일).
+    미승인(403)이면 조용히 건너뛴다.
+    """
+    prev_yymm = f"{int(yymm[:4]) - 1}{yymm[4:]}"
+    out = {"items": [], "import_items": []}
+    for imex, names, key in (("1", _PROV_EXP, "items"), ("2", _PROV_IMP, "import_items")):
+        try:
+            cur_rows = capi.fetch_provisional(yymm, imex, api_key, CACHE_PATH)
+            prv_rows = capi.fetch_provisional(prev_yymm, imex, api_key, CACHE_PATH)
+        except capi.CustomsError as e:
+            logger.warning("순별 잠정치 사용 불가(%s) — 매크로 띠는 생략합니다", str(e)[:70])
+            return None
+        if not cur_rows:
+            return None
+        # 가장 긴 기간(1~말일 > 1~20 > 1~10)을 최신으로 본다
+        cur = sorted(cur_rows, key=lambda r: len(str(r.get("priodDt") or "")))[-1]
+        period = str(cur.get("priodDt") or "")
+        prv = next((r for r in prv_rows if str(r.get("priodDt")) == period), None)
+        for i, nm in enumerate(names):
+            if i == 0:
+                continue          # 전체는 헤더에서 따로 쓴다
+            a = cur.get(f"itemUsdAmt{i:02d}")
+            b = prv.get(f"itemUsdAmt{i:02d}") if prv else None
+            if a is None:
+                continue
+            out[key].append({"name": nm, "amt": a, "yoy": _pct(a, b, 0)})
+        out["period"] = f"{yymm[:4]}.{yymm[4:]} {period}"
+        # 수출·수입 총액을 각각 담는다 — 하나의 키에 쓰면 뒤에 도는 수입이 덮어쓴다.
+        pfx = "" if imex == "1" else "import_"
+        out[f"{pfx}total"] = cur.get("itemUsdAmt00")
+        out[f"{pfx}total_yoy"] = _pct(cur.get("itemUsdAmt00"),
+                                      prv.get("itemUsdAmt00") if prv else None, 0)
+    # 증감률이 큰 순으로 — 눈에 띄어야 할 것이 앞에 오도록
+    out["items"].sort(key=lambda x: (x["yoy"] is None, -(x["yoy"] or 0)))
+    out["import_items"].sort(key=lambda x: (x["yoy"] is None, -(x["yoy"] or 0)))
+    return out
 
 
 def build() -> dict | None:
@@ -263,7 +302,11 @@ def build() -> dict | None:
         HISTORY_PATH.write_text(json.dumps(history[-24:], ensure_ascii=False, indent=1),
                                 encoding="utf-8")
 
-    macro = fetch_macro(api_key, f"{today.year:04d}{today.month:02d}")
+    # 월초에는 당월 잠정치가 아직 없다(1~10일치는 11일 공개) — 전월로 물러난다.
+    this_month = f"{today.year:04d}{today.month:02d}"
+    macro = fetch_macro(api_key, this_month)
+    if not macro or not macro.get("items"):
+        macro = fetch_macro(api_key, _prev_yymm(this_month, 1))
     return {
         "updated": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
         "data_month": month,

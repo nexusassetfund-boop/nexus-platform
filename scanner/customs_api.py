@@ -118,7 +118,8 @@ def _parse(xml_text: str) -> list[dict]:
         for child in item:
             key = _FIELD_MAP.get(child.tag, child.tag)
             val = (child.text or "").strip()
-            if key in _NUMERIC:
+            # 순별 잠정치는 itemUsdAmt00~10 처럼 번호가 붙어 오므로 접두사로 판정한다.
+            if key in _NUMERIC or key.startswith("itemUsdAmt"):
                 try:
                     val = float(val.replace(",", "")) if val else None
                 except ValueError:
