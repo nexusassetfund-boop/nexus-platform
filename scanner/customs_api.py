@@ -38,8 +38,13 @@ EP_ITEM = os.environ.get("CUSTOMS_EP_ITEM", f"{BASE}/Itemtrade/getItemtradeList"
 EP_ITEM_COUNTRY = os.environ.get("CUSTOMS_EP_ITEM_COUNTRY", f"{BASE}/nitemtrade/getNitemtradeList")
 EP_DISTRICT = os.environ.get(
     "CUSTOMS_EP_DISTRICT", f"{BASE}/sigunguperprlstperacrs/getSigunguPerPrlstPerAcrs")
-# 관세환율(주간 고시). 수출액이 USD라 원화 매출과 상관계수를 낼 때 환산 보정에 쓴다.
+# 관세환율(주간 고시). 수출액이 USD라 원화 매출과 비교할 때 환산 보정에 쓴다.
 EP_FX = os.environ.get("CUSTOMS_EP_FX", f"{BASE}/retrieveTrifFxrtInfo/getRetrieveTrifFxrtInfo")
+# 10대 주요품목 순별(10일 단위) 잠정치 — 확정치보다 40일 빠르다.
+EP_PROV_EXP = os.environ.get("CUSTOMS_EP_PROV_EXP",
+                             f"{BASE}/prlstMmUtPrviExpAcrs/getPrlstMmUtPrviExpAcrs")
+EP_PROV_IMP = os.environ.get("CUSTOMS_EP_PROV_IMP",
+                             f"{BASE}/prlstMmUtPrviImpAcrs/getPrlstMmUtPrviImpAcrs")
 
 TIMEOUT = 30
 RETRIES = 3
@@ -180,6 +185,8 @@ def fetch_district(hs: str, sido_cd: str, start_yymm: str, end_yymm: str, api_ke
     따라서 (시도 × HS) 1회 호출로 그 도의 모든 시군구를 얻는다 — 호출 수를 크게 아낀다.
     HS는 **6단위 필수**. 파라미터명 HsSgn의 대문자 H는 명세 그대로다(품목별 API는 소문자).
     """
+    # HS는 6자리만 받는다 — 10자리를 넣으면 "품목코드는 6자리로 입력해야 합니다" 오류.
+    # 따라서 지역 단위로는 DRAM/NAND/HBM(모두 8542.32 하위)을 분리할 수 없다.
     hs6 = str(hs)[:6]
     return _fetch_cached(EP_DISTRICT,
                          {"strtYymm": start_yymm, "endYymm": end_yymm, "HsSgn": hs6, "sidoCd": sido_cd},
@@ -197,6 +204,21 @@ def _fetch_cached(endpoint: str, params: dict, api_key: str,
         cache[cache_key] = rows
         _cache_save(cache_path, cache)
     return rows
+
+
+def fetch_provisional(yymm: str, imex: str, api_key: str,
+                      cache_path: Path | None = None) -> list[dict]:
+    """10대 주요품목 순별(10일 단위) 잠정치. imex: '1'=수출, '2'=수입.
+
+    1~10일치는 11일, 1~20일치는 21일, 월전체는 익월 1일에 공개된다 — 월별 확정치가
+    익월 15일인 것에 비해 40일가량 빠르다. 다만 품목이 10개로 고정이고 HS 지정이
+    불가하므로 종목 스크리닝에는 못 쓰고 섹터 방향 파악용이다.
+
+    응답은 기간 1행에 itemUsdAmt00(전체)~10(10대 품목)이 열로 붙는 형태다.
+    """
+    ep = EP_PROV_EXP if imex == "1" else EP_PROV_IMP
+    return _fetch_cached(ep, {"strtYymm": yymm, "endYymm": yymm},
+                         api_key, cache_path, f"prov:{imex}:{yymm}")
 
 
 def fetch_fx_month(yymm: str, api_key: str, cache_path: Path | None = None,
