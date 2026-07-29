@@ -60,9 +60,21 @@ def _load_json(path: Path, default):
         return default
 
 
-def _pct(cur, prev):
-    """증감률(%). 기준값이 없거나 0이면 None — 0으로 나눠 무한대를 만들지 않는다."""
+# 증감률 기준월 금액 하한(USD). 전월 수출이 몇백 달러였다면 이번 달 47만 달러가
+# 나와도 "+374,316%"가 되는데, 이건 신호가 아니라 통관 한두 건짜리 노이즈다.
+# 키움 화면의 증감률이 +77%·+47% 수준인 것도 이런 걸 걸러내기 때문으로 보인다.
+BASE_MIN = 50_000.0
+
+
+def _pct(cur, prev, base_min: float = BASE_MIN):
+    """증감률(%). 기준값이 없거나 0이거나 너무 작으면 None.
+
+    작은 기준값을 그대로 두면 분모가 0에 가까워 증감률이 폭주한다. 0으로 나누는 것만
+    막아서는 부족하고, 의미 있는 규모의 기준월이 있을 때만 증감률을 낸다.
+    """
     if cur is None or prev is None or prev == 0:
+        return None
+    if base_min and abs(prev) < base_min:
         return None
     return round((cur - prev) / abs(prev) * 100, 1)
 
@@ -152,9 +164,12 @@ def compute_metrics(series: dict[str, dict], month: str) -> dict | None:
             return None
         return (rec.get("amt") or 0.0) / rec["qty"]
 
+    # 단가(달러/kg)·물량(kg)은 금액과 스케일이 달라 금액용 하한을 적용하면 안 된다.
     p_cur, p_prev = _unit(cur), _unit(series.get(_prev_yymm(month, 12)))
     q_cur = cur.get("qty") or None
     q_prev = (series.get(_prev_yymm(month, 12)) or {}).get("qty") or None
+    price_yoy = _pct(p_cur, p_prev, 0)
+    qty_yoy = _pct(q_cur, q_prev, 0)
 
     # P/Q 기여도 분해 — 금액 증가분 중 가격 기여 vs 물량 기여
     contrib_p = contrib_q = None
@@ -180,7 +195,7 @@ def compute_metrics(series: dict[str, dict], month: str) -> dict | None:
         "yoy": _pct(amt, prev_y), "mom": _pct(amt, prev_m),
         "q_avg_yoy": q_avg, "cum_yoy": cum_yoy, "streak": streak,
         "price": round(p_cur, 4) if p_cur else None,
-        "price_yoy": _pct(p_cur, p_prev), "qty_yoy": _pct(q_cur, q_prev),
+        "price_yoy": price_yoy, "qty_yoy": qty_yoy,
         "contrib_p": contrib_p, "contrib_q": contrib_q,
         "flags": flags,
     }
