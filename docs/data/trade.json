@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-29 14:54",
+ "updated": "2026-07-29 14:57",
  "data_month": "202606",
  "industries": [
   "2차전지",
@@ -826,7 +826,7 @@
    ],
    "amount": 64811566.0,
    "import_amount": 4061.0,
-   "import_yoy": -25.1,
+   "import_yoy": null,
    "import_mom": -96.5,
    "yoy": -6.0,
    "mom": 6.5,
@@ -1415,7 +1415,7 @@
    ],
    "amount": 52895029.0,
    "import_amount": 1015.0,
-   "import_yoy": -97.6,
+   "import_yoy": null,
    "import_mom": -99.1,
    "yoy": -43.9,
    "mom": 12.5,
@@ -1608,8 +1608,8 @@
    ],
    "amount": 48671476.0,
    "import_amount": 40966.0,
-   "import_yoy": 623.5,
-   "import_mom": 1370.4,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": 24.3,
    "mom": 43.7,
    "q_avg_yoy": -11.8,
@@ -1770,7 +1770,7 @@
    "amount": 36160000.0,
    "import_amount": 87.0,
    "import_yoy": null,
-   "import_mom": 0.0,
+   "import_mom": null,
    "yoy": null,
    "mom": null,
    "q_avg_yoy": 19670.3,
@@ -3208,8 +3208,8 @@
    ],
    "amount": 21857593.0,
    "import_amount": 1722.0,
-   "import_yoy": -40.5,
-   "import_mom": -87.8,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": -30.1,
    "mom": 12.9,
    "q_avg_yoy": -42.2,
@@ -3642,8 +3642,8 @@
    ],
    "amount": 20866130.0,
    "import_amount": 11667.0,
-   "import_yoy": 50.6,
-   "import_mom": -76.4,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": -1.6,
    "mom": 10.9,
    "q_avg_yoy": -15.7,
@@ -4834,8 +4834,8 @@
    ],
    "amount": 12166695.0,
    "import_amount": 3340.0,
-   "import_yoy": 68.3,
-   "import_mom": -92.1,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": 57.1,
    "mom": 7.8,
    "q_avg_yoy": 32.0,
@@ -5270,7 +5270,7 @@
    ],
    "amount": 11675292.0,
    "import_amount": 2138.0,
-   "import_yoy": -93.8,
+   "import_yoy": null,
    "import_mom": -97.4,
    "yoy": 75.7,
    "mom": 12.6,
@@ -5472,7 +5472,7 @@
    "amount": 9183849.0,
    "import_amount": 2157.0,
    "import_yoy": -96.7,
-   "import_mom": -93.4,
+   "import_mom": null,
    "yoy": 54.7,
    "mom": 49.1,
    "q_avg_yoy": 17.7,
@@ -7665,11 +7665,11 @@
    "import_amount": 1945754.0,
    "import_yoy": 163.6,
    "import_mom": 30.0,
-   "yoy": 18014.3,
-   "mom": 13460.8,
-   "q_avg_yoy": 6082.6,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
    "cum_yoy": 845.3,
-   "streak": 3,
+   "streak": 0,
    "price": 39.6211,
    "price_yoy": 69.9,
    "qty_yoy": 10564.5,
@@ -9457,7 +9457,7 @@
    "import_yoy": 38.8,
    "import_mom": -7.0,
    "yoy": 273.1,
-   "mom": 5116.0,
+   "mom": null,
    "q_avg_yoy": 53.1,
    "cum_yoy": 49.7,
    "streak": 1,
@@ -9600,12 +9600,12 @@
    ],
    "amount": 1817140.0,
    "import_amount": 109615.0,
-   "import_yoy": 5221.1,
+   "import_yoy": null,
    "import_mom": -48.8,
    "yoy": null,
    "mom": 47.3,
-   "q_avg_yoy": 15180.3,
-   "cum_yoy": 86016.7,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 7.528,
    "price_yoy": null,
@@ -10206,7 +10206,7 @@
    "amount": 1299577.0,
    "import_amount": 89445.0,
    "import_yoy": 39.3,
-   "import_mom": 109.8,
+   "import_mom": null,
    "yoy": -55.0,
    "mom": 153.4,
    "q_avg_yoy": -58.6,
@@ -10600,7 +10600,7 @@
    "amount": 1243206.0,
    "import_amount": 235000.0,
    "import_yoy": null,
-   "import_mom": 24027.3,
+   "import_mom": null,
    "yoy": -5.3,
    "mom": 44.0,
    "q_avg_yoy": -13.4,
@@ -11597,7 +11597,7 @@
    "amount": 978424.0,
    "import_amount": 82873.0,
    "import_yoy": 26.9,
-   "import_mom": 4018.9,
+   "import_mom": null,
    "yoy": 110.7,
    "mom": 10.5,
    "q_avg_yoy": 69.0,
@@ -13290,8 +13290,8 @@
    ],
    "amount": 733070.0,
    "import_amount": 62156.0,
-   "import_yoy": 783.3,
-   "import_mom": 299.7,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": -2.4,
    "mom": 19.0,
    "q_avg_yoy": 12.1,
@@ -14253,8 +14253,8 @@
    ],
    "amount": 541742.0,
    "import_amount": 50002.0,
-   "import_yoy": 19.7,
-   "import_mom": 83.7,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": 3.1,
    "mom": 23.3,
    "q_avg_yoy": -8.0,
@@ -14668,7 +14668,7 @@
    "import_yoy": -51.0,
    "import_mom": -8.9,
    "yoy": null,
-   "mom": 374316.5,
+   "mom": null,
    "q_avg_yoy": null,
    "cum_yoy": 190.4,
    "streak": 0,
@@ -16150,10 +16150,10 @@
    ],
    "amount": 378049.0,
    "import_amount": 611723.0,
-   "import_yoy": 1307.6,
+   "import_yoy": null,
    "import_mom": null,
    "yoy": -33.2,
-   "mom": 11856.0,
+   "mom": null,
    "q_avg_yoy": -65.3,
    "cum_yoy": 87.7,
    "streak": 0,
@@ -16339,9 +16339,9 @@
    "import_mom": -3.9,
    "yoy": 55.1,
    "mom": 223.4,
-   "q_avg_yoy": 169.3,
+   "q_avg_yoy": 33.0,
    "cum_yoy": 30.6,
-   "streak": 4,
+   "streak": 2,
    "price": 3.68,
    "price_yoy": -21.7,
    "qty_yoy": 98.1,
@@ -17334,7 +17334,7 @@
    ],
    "amount": 282609.0,
    "import_amount": 21060.0,
-   "import_yoy": 133.6,
+   "import_yoy": null,
    "import_mom": -66.7,
    "yoy": -31.2,
    "mom": null,
@@ -18039,8 +18039,8 @@
    ],
    "amount": 249884.0,
    "import_amount": 5339.0,
-   "import_yoy": -73.0,
-   "import_mom": -27.2,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": 196.6,
    "mom": 49.7,
    "q_avg_yoy": 29.9,
@@ -18283,12 +18283,12 @@
    "amount": 236896.0,
    "import_amount": 47487.0,
    "import_yoy": -47.9,
-   "import_mom": 71.3,
-   "yoy": 515.5,
+   "import_mom": null,
+   "yoy": null,
    "mom": -26.9,
-   "q_avg_yoy": 596.7,
+   "q_avg_yoy": 79.5,
    "cum_yoy": 101.5,
-   "streak": 4,
+   "streak": 0,
    "price": 5.8929,
    "price_yoy": -23.4,
    "qty_yoy": 704.0,
@@ -18516,7 +18516,7 @@
    "amount": 222823.0,
    "import_amount": 6408.0,
    "import_yoy": -92.7,
-   "import_mom": 152.5,
+   "import_mom": null,
    "yoy": -0.3,
    "mom": 6.6,
    "q_avg_yoy": 14.8,
@@ -20310,7 +20310,7 @@
    "import_mom": -71.5,
    "yoy": null,
    "mom": null,
-   "q_avg_yoy": 1259.2,
+   "q_avg_yoy": null,
    "cum_yoy": 417.3,
    "streak": 0,
    "price": 7.3607,
@@ -20511,11 +20511,11 @@
    "import_amount": 404756.0,
    "import_yoy": 102.0,
    "import_mom": 21.7,
-   "yoy": 202.9,
-   "mom": 585.6,
-   "q_avg_yoy": 73.9,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
    "cum_yoy": 8.0,
-   "streak": 1,
+   "streak": 0,
    "price": 7.117,
    "price_yoy": -41.5,
    "qty_yoy": 417.5,
@@ -20750,7 +20750,7 @@
    ],
    "amount": 109901.0,
    "import_amount": 27133.0,
-   "import_yoy": 324.6,
+   "import_yoy": null,
    "import_mom": -69.3,
    "yoy": 41.3,
    "mom": 86.8,
@@ -21349,7 +21349,7 @@
    "import_mom": null,
    "yoy": -10.4,
    "mom": -53.9,
-   "q_avg_yoy": 344.1,
+   "q_avg_yoy": -10.4,
    "cum_yoy": 101.0,
    "streak": 0,
    "price": 3.0757,
@@ -22064,11 +22064,11 @@
    "import_amount": 175314.0,
    "import_yoy": 89.8,
    "import_mom": -47.9,
-   "yoy": 2623.3,
-   "mom": 781.3,
-   "q_avg_yoy": 2876.3,
-   "cum_yoy": 200.3,
-   "streak": 2,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 29.496,
    "price_yoy": 1224.3,
    "qty_yoy": 105.6,
@@ -22265,13 +22265,13 @@
    ],
    "amount": 61874.0,
    "import_amount": 164736.0,
-   "import_yoy": 2749.6,
-   "import_mom": 269.1,
-   "yoy": 43.5,
-   "mom": 137.8,
-   "q_avg_yoy": 371.5,
+   "import_yoy": null,
+   "import_mom": null,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": -75.5,
    "cum_yoy": 126.5,
-   "streak": 1,
+   "streak": 0,
    "price": 22.8233,
    "price_yoy": 39.5,
    "qty_yoy": 2.9,
@@ -22468,11 +22468,11 @@
    "import_amount": 240044.0,
    "import_yoy": 295.0,
    "import_mom": 197.2,
-   "yoy": 370.7,
+   "yoy": null,
    "mom": -18.4,
-   "q_avg_yoy": 156.8,
+   "q_avg_yoy": null,
    "cum_yoy": -25.7,
-   "streak": 1,
+   "streak": 0,
    "price": 24.9253,
    "price_yoy": -11.1,
    "qty_yoy": 429.2,
@@ -22654,8 +22654,8 @@
    "import_yoy": 21.8,
    "import_mom": 12.8,
    "yoy": -56.5,
-   "mom": 32.1,
-   "q_avg_yoy": 18.3,
+   "mom": null,
+   "q_avg_yoy": -56.5,
    "cum_yoy": -36.7,
    "streak": 0,
    "price": 4.6976,
@@ -23284,8 +23284,8 @@
    ],
    "amount": 45154.0,
    "import_amount": 128967.0,
-   "import_yoy": 2579240.0,
-   "import_mom": 1526.9,
+   "import_yoy": null,
+   "import_mom": null,
    "yoy": null,
    "mom": -39.2,
    "q_avg_yoy": null,
@@ -23420,8 +23420,8 @@
    "import_yoy": -1.3,
    "import_mom": 18.3,
    "yoy": -61.0,
-   "mom": 87.3,
-   "q_avg_yoy": 298.6,
+   "mom": null,
+   "q_avg_yoy": -61.0,
    "cum_yoy": 48.1,
    "streak": 0,
    "price": 31.1476,
@@ -23621,7 +23621,7 @@
    "import_yoy": 45.4,
    "import_mom": 126.5,
    "yoy": -69.6,
-   "mom": -19.8,
+   "mom": null,
    "q_avg_yoy": -75.0,
    "cum_yoy": -64.2,
    "streak": 0,
@@ -23797,11 +23797,11 @@
    "import_amount": 7988873.0,
    "import_yoy": 120.4,
    "import_mom": 106.2,
-   "yoy": 92.2,
-   "mom": 482.5,
-   "q_avg_yoy": 6.9,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
    "cum_yoy": 63.3,
-   "streak": 1,
+   "streak": 0,
    "price": 0.622,
    "price_yoy": -23.1,
    "qty_yoy": 150.0,
@@ -24040,11 +24040,11 @@
    "import_amount": 234316.0,
    "import_yoy": 22.0,
    "import_mom": 112.7,
-   "yoy": 10.4,
-   "mom": 7869.0,
-   "q_avg_yoy": -7.1,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
    "cum_yoy": -5.5,
-   "streak": 1,
+   "streak": 0,
    "price": 0.3219,
    "price_yoy": -17.9,
    "qty_yoy": 34.3,
@@ -24194,7 +24194,7 @@
    "import_yoy": 84.7,
    "import_mom": 12.8,
    "yoy": -86.6,
-   "mom": 3455.2,
+   "mom": null,
    "q_avg_yoy": -95.2,
    "cum_yoy": -96.3,
    "streak": 0,
@@ -24434,9 +24434,9 @@
    "import_amount": 584656.0,
    "import_yoy": 316.1,
    "import_mom": -2.2,
-   "yoy": -8.6,
+   "yoy": null,
    "mom": -52.8,
-   "q_avg_yoy": -11.1,
+   "q_avg_yoy": -80.4,
    "cum_yoy": -65.4,
    "streak": 0,
    "price": 11.928,
@@ -24668,8 +24668,8 @@
    "import_yoy": 4.0,
    "import_mom": -3.7,
    "yoy": -80.8,
-   "mom": 604.2,
-   "q_avg_yoy": 18.7,
+   "mom": null,
+   "q_avg_yoy": -89.1,
    "cum_yoy": -64.0,
    "streak": 0,
    "price": 28.6287,
@@ -24869,8 +24869,8 @@
    "import_yoy": 13.1,
    "import_mom": -0.3,
    "yoy": -93.8,
-   "mom": 661.9,
-   "q_avg_yoy": -88.2,
+   "mom": null,
+   "q_avg_yoy": -88.8,
    "cum_yoy": -79.2,
    "streak": 0,
    "price": 3.9228,
@@ -25086,7 +25086,7 @@
    "import_yoy": -0.4,
    "import_mom": 49.6,
    "yoy": -87.8,
-   "mom": -52.3,
+   "mom": null,
    "q_avg_yoy": -63.8,
    "cum_yoy": -55.8,
    "streak": 0,
@@ -25327,8 +25327,8 @@
    "import_yoy": 57.8,
    "import_mom": 0.7,
    "yoy": -69.5,
-   "mom": 37.7,
-   "q_avg_yoy": -14.9,
+   "mom": null,
+   "q_avg_yoy": -69.5,
    "cum_yoy": -40.7,
    "streak": 0,
    "price": 7.9868,
@@ -25509,13 +25509,13 @@
    ],
    "amount": 14900.0,
    "import_amount": 139800.0,
-   "import_yoy": 854.1,
-   "import_mom": 3637.0,
-   "yoy": 404.1,
+   "import_yoy": null,
+   "import_mom": null,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": 157.0,
+   "q_avg_yoy": null,
    "cum_yoy": -48.5,
-   "streak": 1,
+   "streak": 0,
    "price": 66.2222,
    "price_yoy": 572.1,
    "qty_yoy": -25.0,
@@ -25697,12 +25697,12 @@
    "amount": 9124.0,
    "import_amount": 155265.0,
    "import_yoy": 110.3,
-   "import_mom": 970306.2,
-   "yoy": 418.7,
+   "import_mom": null,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": 159.3,
-   "cum_yoy": 11261.8,
-   "streak": 1,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 50.6889,
    "price_yoy": -88.5,
    "qty_yoy": 4400.0,
@@ -25923,11 +25923,11 @@
    "import_amount": 260785.0,
    "import_yoy": 14.8,
    "import_mom": 53.8,
-   "yoy": 16843.1,
-   "mom": 19102.2,
-   "q_avg_yoy": 8495.2,
-   "cum_yoy": 338.4,
-   "streak": 1,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 28.5182,
    "price_yoy": 67.8,
    "qty_yoy": 10000.0,
@@ -26110,10 +26110,10 @@
    "import_amount": 798971.0,
    "import_yoy": 8.2,
    "import_mom": -41.5,
-   "yoy": -33.3,
-   "mom": 88.7,
-   "q_avg_yoy": 1692.8,
-   "cum_yoy": 8.3,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 3.0322,
    "price_yoy": -59.7,
@@ -26295,9 +26295,9 @@
    "import_amount": 499142.0,
    "import_yoy": 16.8,
    "import_mom": 30.0,
-   "yoy": -91.3,
-   "mom": -55.5,
-   "q_avg_yoy": -90.5,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": -97.2,
    "cum_yoy": -41.5,
    "streak": 0,
    "price": 640.2,
@@ -26498,7 +26498,7 @@
    "import_mom": 16.8,
    "yoy": -98.0,
    "mom": -97.9,
-   "q_avg_yoy": 7638.2,
+   "q_avg_yoy": -98.0,
    "cum_yoy": 164.4,
    "streak": 0,
    "price": 443.0,
@@ -26713,11 +26713,11 @@
    "import_amount": 227259.0,
    "import_yoy": 16.7,
    "import_mom": 106.7,
-   "yoy": 96.3,
-   "mom": -37.9,
-   "q_avg_yoy": 13.4,
-   "cum_yoy": -56.6,
-   "streak": 2,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 1.9924,
    "price_yoy": 57.4,
    "qty_yoy": 24.7,
@@ -26930,10 +26930,10 @@
    "import_amount": 1397402.0,
    "import_yoy": 4.3,
    "import_mom": 17.7,
-   "yoy": -79.8,
-   "mom": 141.4,
-   "q_avg_yoy": 73.6,
-   "cum_yoy": -49.5,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 86.2143,
    "price_yoy": 769.9,
@@ -27130,11 +27130,11 @@
    "amount": 923.0,
    "import_amount": 142659.0,
    "import_yoy": 34.9,
-   "import_mom": 345.9,
-   "yoy": -77.6,
+   "import_mom": null,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": 1218.2,
-   "cum_yoy": 274.8,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 16.193,
    "price_yoy": -77.2,
@@ -27316,10 +27316,10 @@
    "import_amount": 3282571.0,
    "import_yoy": -13.6,
    "import_mom": 43.2,
-   "yoy": -97.6,
-   "mom": 43.6,
-   "q_avg_yoy": 647.5,
-   "cum_yoy": -67.8,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 11.9028,
    "price_yoy": -83.6,
@@ -27556,12 +27556,12 @@
    "amount": 513.0,
    "import_amount": 315937.0,
    "import_yoy": -41.1,
-   "import_mom": 1416.2,
-   "yoy": 1040.0,
-   "mom": 143.1,
-   "q_avg_yoy": 11020.0,
-   "cum_yoy": -36.2,
-   "streak": 2,
+   "import_mom": null,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 128.25,
    "price_yoy": null,
    "qty_yoy": null,
@@ -27790,10 +27790,10 @@
    "import_amount": 416030.0,
    "import_yoy": -36.6,
    "import_mom": -47.8,
-   "yoy": -92.2,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": -97.4,
-   "cum_yoy": -49.1,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 0.9034,
    "price_yoy": -50.5,
@@ -27975,10 +27975,10 @@
    "import_amount": 538735.0,
    "import_yoy": 58.2,
    "import_mom": 14.8,
-   "yoy": -98.5,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": -99.2,
-   "cum_yoy": -98.6,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": 11.7273,
    "price_yoy": -45.3,
@@ -28001,7 +28001,7 @@
      "pct_12m": null
     }
    ],
-   "yoy_krw": 687.2,
+   "yoy_krw": null,
    "series": [
     {
      "m": "202407",
@@ -28128,11 +28128,11 @@
    "import_amount": 3104956.0,
    "import_yoy": -59.3,
    "import_mom": 21.5,
-   "yoy": 600.0,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": 250.0,
-   "cum_yoy": 29.3,
-   "streak": 1,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
+   "streak": 0,
    "price": 35.0,
    "price_yoy": null,
    "qty_yoy": null,
@@ -28350,7 +28350,7 @@
    "yoy": null,
    "mom": null,
    "q_avg_yoy": null,
-   "cum_yoy": 371135.9,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -28534,10 +28534,10 @@
    "import_amount": 131825.0,
    "import_yoy": -29.6,
    "import_mom": -17.1,
-   "yoy": -98.4,
+   "yoy": null,
    "mom": -100.0,
-   "q_avg_yoy": 2739.4,
-   "cum_yoy": 569.6,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -28834,10 +28834,10 @@
    "import_amount": 20327844.0,
    "import_yoy": -5.6,
    "import_mom": 46.5,
-   "yoy": -100.0,
+   "yoy": null,
    "mom": -100.0,
-   "q_avg_yoy": 846.9,
-   "cum_yoy": 1481.1,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -29015,8 +29015,8 @@
    "import_mom": 0.8,
    "yoy": null,
    "mom": null,
-   "q_avg_yoy": -100.0,
-   "cum_yoy": 12.4,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -29409,7 +29409,7 @@
    "import_amount": 3928763.0,
    "import_yoy": 33.6,
    "import_mom": -34.3,
-   "yoy": -100.0,
+   "yoy": null,
    "mom": null,
    "q_avg_yoy": -100.0,
    "cum_yoy": -100.0,
@@ -29652,9 +29652,9 @@
    "import_amount": 3764290.0,
    "import_yoy": 1.9,
    "import_mom": 303.5,
-   "yoy": -100.0,
+   "yoy": null,
    "mom": -100.0,
-   "q_avg_yoy": -47.3,
+   "q_avg_yoy": null,
    "cum_yoy": 28.0,
    "streak": 0,
    "price": null,
@@ -29853,10 +29853,10 @@
    "import_amount": 3570416.0,
    "import_yoy": -50.0,
    "import_mom": 93.6,
-   "yoy": -100.0,
-   "mom": -100.0,
-   "q_avg_yoy": 4684.4,
-   "cum_yoy": 214.9,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -30266,8 +30266,8 @@
    "import_yoy": 11.0,
    "import_mom": 12.2,
    "yoy": -100.0,
-   "mom": -100.0,
-   "q_avg_yoy": -86.2,
+   "mom": null,
+   "q_avg_yoy": -100.0,
    "cum_yoy": -70.7,
    "streak": 0,
    "price": null,
@@ -30659,10 +30659,10 @@
    "import_amount": 1234917.0,
    "import_yoy": 67.5,
    "import_mom": 4.4,
-   "yoy": -100.0,
-   "mom": -100.0,
-   "q_avg_yoy": 87.8,
-   "cum_yoy": -95.5,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -31065,10 +31065,10 @@
    "import_amount": 301933.0,
    "import_yoy": -36.0,
    "import_mom": -39.7,
-   "yoy": -100.0,
-   "mom": -100.0,
-   "q_avg_yoy": -15.7,
-   "cum_yoy": 1198.9,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -31245,7 +31245,7 @@
    "amount": 0.0,
    "import_amount": 278353.0,
    "import_yoy": 32.5,
-   "import_mom": 1021.0,
+   "import_mom": null,
    "yoy": null,
    "mom": null,
    "q_avg_yoy": null,
@@ -31487,10 +31487,10 @@
    "import_amount": 246402.0,
    "import_yoy": 10.5,
    "import_mom": -44.9,
-   "yoy": -100.0,
-   "mom": -100.0,
-   "q_avg_yoy": 63.6,
-   "cum_yoy": -48.7,
+   "yoy": null,
+   "mom": null,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -32306,7 +32306,7 @@
    "amount": 0.0,
    "import_amount": 126316.0,
    "import_yoy": 84.3,
-   "import_mom": 158.0,
+   "import_mom": null,
    "yoy": null,
    "mom": null,
    "q_avg_yoy": null,
@@ -32685,12 +32685,12 @@
    ],
    "amount": 0.0,
    "import_amount": 108588.0,
-   "import_yoy": 54466.8,
+   "import_yoy": null,
    "import_mom": -20.9,
-   "yoy": -100.0,
+   "yoy": null,
    "mom": null,
-   "q_avg_yoy": 218.0,
-   "cum_yoy": -37.4,
+   "q_avg_yoy": null,
+   "cum_yoy": null,
    "streak": 0,
    "price": null,
    "price_yoy": null,
@@ -32701,12 +32701,7 @@
   }
  ],
  "risers": [
-  "7006003000",
-  "7502200000",
-  "8501332010",
-  "7601100000",
   "8477510000",
-  "6301300000",
   "8549211000",
   "0303630000",
   "7018200000",
@@ -32750,7 +32745,12 @@
   "8703241020",
   "9030400000",
   "2815200000",
-  "7608200000"
+  "7608200000",
+  "4012909040",
+  "7901201000",
+  "8703318000",
+  "2710198040",
+  "2833240000"
  ],
  "by_ticker": {
   "001530": [
@@ -32766,7 +32766,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -32815,7 +32815,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -32871,14 +32871,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -32886,16 +32886,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -32903,15 +32903,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -32928,7 +32928,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -32952,7 +32952,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33001,7 +33001,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33057,14 +33057,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -33072,16 +33072,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -33089,15 +33089,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -33114,7 +33114,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -33138,7 +33138,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33187,7 +33187,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33243,14 +33243,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -33258,16 +33258,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -33275,15 +33275,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -33300,7 +33300,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -33324,7 +33324,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33373,7 +33373,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33429,14 +33429,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -33444,16 +33444,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -33461,15 +33461,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -33486,7 +33486,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -33510,7 +33510,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33559,7 +33559,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33615,14 +33615,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -33630,16 +33630,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -33647,15 +33647,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -33672,7 +33672,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -33696,7 +33696,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33745,7 +33745,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33801,14 +33801,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -33816,16 +33816,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -33833,15 +33833,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -33858,7 +33858,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -33882,7 +33882,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -33931,7 +33931,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -33987,14 +33987,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34002,16 +34002,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34019,15 +34019,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34044,7 +34044,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -34068,7 +34068,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -34117,7 +34117,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -34173,14 +34173,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34188,16 +34188,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34205,15 +34205,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34230,7 +34230,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -34254,7 +34254,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -34303,7 +34303,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -34359,14 +34359,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34374,16 +34374,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34391,15 +34391,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34416,7 +34416,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -34440,7 +34440,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -34489,7 +34489,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -34545,14 +34545,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34560,16 +34560,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34577,15 +34577,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34602,7 +34602,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -34626,7 +34626,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -34675,7 +34675,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -34731,14 +34731,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34746,16 +34746,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34763,15 +34763,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34788,7 +34788,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -34812,7 +34812,7 @@
     "hs": "7601100000",
     "name": "합금하지 않은 알루미늄",
     "industry": "철강/금속",
-    "mom": 5116.0,
+    "mom": null,
     "yoy": 273.1,
     "import_mom": -7.0
    },
@@ -34861,7 +34861,7 @@
     "name": "알루미늄광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 303.5
    },
    {
@@ -34917,14 +34917,14 @@
     "name": "알루미늄의 함유량이 전 중량의 100분의 99.99 이상인 것",
     "industry": "철강/금속",
     "mom": -52.8,
-    "yoy": -8.6,
+    "yoy": null,
     "import_mom": -2.2
    },
    {
     "hs": "7616910000",
     "name": "알루미늄선으로 만든 클로스(cloth)ㆍ그릴ㆍ망ㆍ울타리",
     "industry": "철강/금속",
-    "mom": 37.7,
+    "mom": null,
     "yoy": -69.5,
     "import_mom": 0.7
    },
@@ -34932,16 +34932,16 @@
     "hs": "2835291000",
     "name": "인산알루미늄",
     "industry": "화학",
-    "mom": 143.1,
-    "yoy": 1040.0,
-    "import_mom": 1416.2
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2826120000",
     "name": "플루오르화알루미늄",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -44.9
    },
    {
@@ -34949,15 +34949,15 @@
     "name": "알루미나겔",
     "industry": "화학",
     "mom": -26.9,
-    "yoy": 515.5,
-    "import_mom": 71.3
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "2827320000",
     "name": "알루미늄 염화물",
     "industry": "화학",
-    "mom": 7869.0,
-    "yoy": 10.4,
+    "mom": null,
+    "yoy": null,
     "import_mom": 112.7
    },
    {
@@ -34974,7 +34974,7 @@
     "industry": "제약/바이오",
     "mom": null,
     "yoy": null,
-    "import_mom": 158.0
+    "import_mom": null
    },
    {
     "hs": "7616999010",
@@ -35024,7 +35024,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -35040,7 +35040,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -35048,7 +35048,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -35064,7 +35064,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -35104,7 +35104,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -35120,7 +35120,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -35234,7 +35234,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -35250,7 +35250,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -35258,7 +35258,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -35274,7 +35274,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -35314,7 +35314,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -35330,7 +35330,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -35444,7 +35444,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -35460,7 +35460,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -35468,7 +35468,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -35484,7 +35484,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -35532,7 +35532,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -35548,7 +35548,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -35578,8 +35578,8 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
@@ -35610,7 +35610,7 @@
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -35643,8 +35643,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -35702,7 +35702,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -35718,7 +35718,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -35726,7 +35726,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -35742,7 +35742,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -35782,7 +35782,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -35798,7 +35798,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -35912,7 +35912,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -35928,7 +35928,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -35936,7 +35936,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -35952,7 +35952,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -35992,7 +35992,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -36008,7 +36008,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -36122,7 +36122,7 @@
     "industry": "자동차",
     "mom": 43.7,
     "yoy": 24.3,
-    "import_mom": 1370.4
+    "import_mom": null
    },
    {
     "hs": "8703241020",
@@ -36138,7 +36138,7 @@
     "industry": "자동차",
     "mom": 12.9,
     "yoy": -30.1,
-    "import_mom": -87.8
+    "import_mom": null
    },
    {
     "hs": "8704211020",
@@ -36146,7 +36146,7 @@
     "industry": "자동차",
     "mom": 10.9,
     "yoy": -1.6,
-    "import_mom": -76.4
+    "import_mom": null
    },
    {
     "hs": "8703249020",
@@ -36162,7 +36162,7 @@
     "industry": "자동차",
     "mom": 7.8,
     "yoy": 57.1,
-    "import_mom": -92.1
+    "import_mom": null
    },
    {
     "hs": "8703228000",
@@ -36202,7 +36202,7 @@
     "industry": "자동차",
     "mom": 44.0,
     "yoy": -5.3,
-    "import_mom": 24027.3
+    "import_mom": null
    },
    {
     "hs": "8703602000",
@@ -36218,7 +36218,7 @@
     "industry": "자동차",
     "mom": 10.5,
     "yoy": 110.7,
-    "import_mom": 4018.9
+    "import_mom": null
    },
    {
     "hs": "8702102020",
@@ -36315,7 +36315,7 @@
     "name": "전자담배용 용액",
     "industry": "음식료",
     "mom": null,
-    "yoy": 600.0,
+    "yoy": null,
     "import_mom": 21.5
    },
    {
@@ -36330,15 +36330,15 @@
     "hs": "4810321000",
     "name": "카톤(carton)용 원지(화장품ㆍ의약품ㆍ담배의 포장용과 이와 유사한 것을 포함한다)",
     "industry": "소비재",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 4.4
    },
    {
     "hs": "4420909010",
     "name": "담배용 상자와 신변장식용품용 상자",
     "industry": "소비재",
-    "mom": 3455.2,
+    "mom": null,
     "yoy": -86.6,
     "import_mom": 12.8
    }
@@ -36364,7 +36364,7 @@
     "hs": "7006003000",
     "name": "유기발광 디스플레이 패널용",
     "industry": "소비재",
-    "mom": 374316.5,
+    "mom": null,
     "yoy": null,
     "import_mom": -8.9
    }
@@ -36390,7 +36390,7 @@
     "hs": "7006003000",
     "name": "유기발광 디스플레이 패널용",
     "industry": "소비재",
-    "mom": 374316.5,
+    "mom": null,
     "yoy": null,
     "import_mom": -8.9
    }
@@ -36416,7 +36416,7 @@
     "hs": "7006003000",
     "name": "유기발광 디스플레이 패널용",
     "industry": "소비재",
-    "mom": 374316.5,
+    "mom": null,
     "yoy": null,
     "import_mom": -8.9
    }
@@ -36458,7 +36458,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36484,7 +36484,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36510,7 +36510,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36536,7 +36536,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36562,7 +36562,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36588,7 +36588,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36614,7 +36614,7 @@
     "industry": "방산/항공",
     "mom": null,
     "yoy": null,
-    "import_mom": 0.0
+    "import_mom": null
    },
    {
     "hs": "0504003000",
@@ -36647,7 +36647,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -36672,7 +36672,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -36711,23 +36711,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -36776,7 +36776,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -36800,7 +36800,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "7219211010",
@@ -36822,15 +36822,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -36840,7 +36840,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -36856,14 +36856,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -36878,9 +36878,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -36888,14 +36888,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -36913,7 +36913,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -36938,7 +36938,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -36977,23 +36977,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -37042,7 +37042,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -37066,7 +37066,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "7219211010",
@@ -37088,15 +37088,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -37106,7 +37106,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -37122,14 +37122,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -37144,9 +37144,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -37154,14 +37154,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -37187,7 +37187,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -37228,14 +37228,14 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "2704001010",
     "name": "석탄에서 제조한 것",
     "industry": "석유/에너지",
-    "mom": 482.5,
-    "yoy": 92.2,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.2
    },
    {
@@ -37283,23 +37283,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -37348,7 +37348,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -37372,7 +37372,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "2710198040",
@@ -37402,15 +37402,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -37420,7 +37420,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -37436,14 +37436,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -37458,9 +37458,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -37468,14 +37468,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -37501,7 +37501,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -37534,7 +37534,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -37581,23 +37581,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -37646,7 +37646,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -37670,7 +37670,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "2710198040",
@@ -37700,15 +37700,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -37718,7 +37718,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -37734,14 +37734,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -37756,9 +37756,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -37766,14 +37766,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -37791,7 +37791,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -37816,7 +37816,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -37855,23 +37855,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -37928,7 +37928,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -37952,7 +37952,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "7219211010",
@@ -37974,15 +37974,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -37992,7 +37992,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -38008,14 +38008,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -38030,9 +38030,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -38040,14 +38040,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -38065,7 +38065,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -38090,7 +38090,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -38129,23 +38129,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -38194,7 +38194,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -38218,7 +38218,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "7219211010",
@@ -38240,15 +38240,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -38258,7 +38258,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -38274,14 +38274,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -38296,9 +38296,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -38306,14 +38306,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -38331,7 +38331,7 @@
     "name": "니켈광과 그 정광(精鑛)",
     "industry": "석유/에너지",
     "mom": -100.0,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": 46.5
    },
    {
@@ -38356,7 +38356,7 @@
     "industry": "철강/금속",
     "mom": 49.1,
     "yoy": 54.7,
-    "import_mom": -93.4
+    "import_mom": null
    },
    {
     "hs": "7507120000",
@@ -38395,23 +38395,23 @@
     "name": "철강·구리·니켈·납·아연을 함유한 것",
     "industry": "IT",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -34.3
    },
    {
     "hs": "3815110000",
     "name": "활성물질로서 니켈이나 니켈화합물의 것",
     "industry": "화학",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": 93.6
    },
    {
     "hs": "7502200000",
     "name": "니켈 합금",
     "industry": "철강/금속",
-    "mom": 13460.8,
-    "yoy": 18014.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -38460,7 +38460,7 @@
     "industry": "철강/금속",
     "mom": 153.4,
     "yoy": -55.0,
-    "import_mom": 109.8
+    "import_mom": null
    },
    {
     "hs": "7219351010",
@@ -38484,7 +38484,7 @@
     "industry": "철강/금속",
     "mom": 19.0,
     "yoy": -2.4,
-    "import_mom": 299.7
+    "import_mom": null
    },
    {
     "hs": "7219211010",
@@ -38506,15 +38506,15 @@
     "hs": "7505210000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
-    "mom": -100.0,
-    "yoy": -100.0,
+    "mom": null,
+    "yoy": null,
     "import_mom": -39.7
    },
    {
     "hs": "7220201010",
     "name": "니켈 함유량이 6% 미만이고, 망간 함유량이 3% 이상인 것",
     "industry": "철강/금속",
-    "mom": 661.9,
+    "mom": null,
     "yoy": -93.8,
     "import_mom": -0.3
    },
@@ -38524,7 +38524,7 @@
     "industry": "IT",
     "mom": null,
     "yoy": null,
-    "import_mom": 1021.0
+    "import_mom": null
    },
    {
     "hs": "7403291010",
@@ -38540,14 +38540,14 @@
     "industry": "철강/금속",
     "mom": 49.7,
     "yoy": 196.6,
-    "import_mom": -27.2
+    "import_mom": null
    },
    {
     "hs": "7408221000",
     "name": "구리-니켈 합금으로 만든 것(백동)",
     "industry": "철강/금속",
     "mom": -18.4,
-    "yoy": 370.7,
+    "yoy": null,
     "import_mom": 197.2
    },
    {
@@ -38562,9 +38562,9 @@
     "hs": "7408222000",
     "name": "구리-니켈-아연 합금으로 만든 것(양백)",
     "industry": "철강/금속",
-    "mom": 137.8,
-    "yoy": 43.5,
-    "import_mom": 269.1
+    "mom": null,
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8549391000",
@@ -38572,14 +38572,14 @@
     "industry": "IT",
     "mom": -39.2,
     "yoy": null,
-    "import_mom": 1526.9
+    "import_mom": null
    },
    {
     "hs": "7505110000",
     "name": "합금하지 않은 니켈로 만든 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -100.0,
+    "yoy": null,
     "import_mom": -20.9
    }
   ],
@@ -39332,15 +39332,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39356,8 +39356,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39382,15 +39382,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39406,8 +39406,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39432,15 +39432,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39456,8 +39456,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39482,15 +39482,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39506,8 +39506,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39532,15 +39532,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39556,8 +39556,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39582,15 +39582,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39606,8 +39606,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39632,15 +39632,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39656,8 +39656,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39682,15 +39682,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39706,8 +39706,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39732,15 +39732,15 @@
     "hs": "2816400000",
     "name": "스트론튬이나 바륨의 산화물, 수산화물, 과산화물",
     "industry": "화학",
-    "mom": 141.4,
-    "yoy": -79.8,
+    "mom": null,
+    "yoy": null,
     "import_mom": 17.7
    },
    {
     "hs": "2816101000",
     "name": "수산화마그네슘",
     "industry": "화학",
-    "mom": -52.3,
+    "mom": null,
     "yoy": -87.8,
     "import_mom": 49.6
    },
@@ -39756,8 +39756,8 @@
     "hs": "2825902010",
     "name": "수산화칼슘",
     "industry": "화학",
-    "mom": -37.9,
-    "yoy": 96.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.7
    }
   ],
@@ -39774,8 +39774,8 @@
     "hs": "2704001010",
     "name": "석탄에서 제조한 것",
     "industry": "석유/에너지",
-    "mom": 482.5,
-    "yoy": 92.2,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.2
    },
    {
@@ -39800,8 +39800,8 @@
     "hs": "2704001010",
     "name": "석탄에서 제조한 것",
     "industry": "석유/에너지",
-    "mom": 482.5,
-    "yoy": 92.2,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.2
    }
   ],
@@ -39818,8 +39818,8 @@
     "hs": "2704001010",
     "name": "석탄에서 제조한 것",
     "industry": "석유/에너지",
-    "mom": 482.5,
-    "yoy": 92.2,
+    "mom": null,
+    "yoy": null,
     "import_mom": 106.2
    }
   ],
@@ -39836,7 +39836,7 @@
     "hs": "8516500000",
     "name": "마이크로웨이브 오븐(microwave oven)",
     "industry": "IT",
-    "mom": 32.1,
+    "mom": null,
     "yoy": -56.5,
     "import_mom": 12.8
    },
@@ -39868,15 +39868,15 @@
     "hs": "0303895020",
     "name": "부세[라리미크티스 크로세아(Larimichthys crocea)]",
     "industry": "음식료",
-    "mom": 43.6,
-    "yoy": -97.6,
+    "mom": null,
+    "yoy": null,
     "import_mom": 43.2
    },
    {
     "hs": "0307493010",
     "name": "갑오징어[세피아 오피시날리스(Sepia officinalis)ㆍ로시아 마크로소마(Rossia macrosoma)ㆍ세피올라(Sepiola)속]와 오징어[옴마스트레페스(Ommastrephes)속ㆍ로리고(Loligo)속ㆍ노토토다루스(Nototodarus)속ㆍ세피오투디스(Sepioteuthis)속]",
     "industry": "음식료",
-    "mom": -100.0,
+    "mom": null,
     "yoy": -100.0,
     "import_mom": 12.2
    },
@@ -39884,8 +39884,8 @@
     "hs": "2008930000",
     "name": "크랜베리(cranberry)[바치니움 매크로카르폰(Vaccinium macrocarpon)ㆍ바치니움 옥시코코스(Vaccinium oxycoccos), 링곤베리(lingonberry)[바치니움 비티스-이다에아(Vaccinium vitis-idaea)]",
     "industry": "음식료",
-    "mom": 88.7,
-    "yoy": -33.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -41.5
    },
    {
@@ -39893,15 +39893,15 @@
     "name": "대구[가두스 모르화(Gadus morhua)ㆍ가두스 오각(Gadus ogac)ㆍ가두스 마크로세팔루스(Gadus macrocephalus)]",
     "industry": "음식료",
     "mom": null,
-    "yoy": -98.5,
+    "yoy": null,
     "import_mom": 14.8
    },
    {
     "hs": "9027901000",
     "name": "마이크로톰(microtome)",
     "industry": "의료기기/정밀",
-    "mom": -55.5,
-    "yoy": -91.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -39909,15 +39909,15 @@
     "name": "스위치 블레이드(switch blade)ㆍ교차구류(crossing frog)ㆍ전철봉(point rod)과 그 밖의 크로싱피스(crossing piece)",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": 418.7,
-    "import_mom": 970306.2
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8203402000",
     "name": "볼트크로퍼(bolt cropper)와 클리퍼",
     "industry": "철강/금속",
     "mom": -100.0,
-    "yoy": -98.4,
+    "yoy": null,
     "import_mom": -17.1
    },
    {
@@ -39942,7 +39942,7 @@
     "hs": "8516500000",
     "name": "마이크로웨이브 오븐(microwave oven)",
     "industry": "IT",
-    "mom": 32.1,
+    "mom": null,
     "yoy": -56.5,
     "import_mom": 12.8
    },
@@ -39974,15 +39974,15 @@
     "hs": "0303895020",
     "name": "부세[라리미크티스 크로세아(Larimichthys crocea)]",
     "industry": "음식료",
-    "mom": 43.6,
-    "yoy": -97.6,
+    "mom": null,
+    "yoy": null,
     "import_mom": 43.2
    },
    {
     "hs": "0307493010",
     "name": "갑오징어[세피아 오피시날리스(Sepia officinalis)ㆍ로시아 마크로소마(Rossia macrosoma)ㆍ세피올라(Sepiola)속]와 오징어[옴마스트레페스(Ommastrephes)속ㆍ로리고(Loligo)속ㆍ노토토다루스(Nototodarus)속ㆍ세피오투디스(Sepioteuthis)속]",
     "industry": "음식료",
-    "mom": -100.0,
+    "mom": null,
     "yoy": -100.0,
     "import_mom": 12.2
    },
@@ -39990,8 +39990,8 @@
     "hs": "2008930000",
     "name": "크랜베리(cranberry)[바치니움 매크로카르폰(Vaccinium macrocarpon)ㆍ바치니움 옥시코코스(Vaccinium oxycoccos), 링곤베리(lingonberry)[바치니움 비티스-이다에아(Vaccinium vitis-idaea)]",
     "industry": "음식료",
-    "mom": 88.7,
-    "yoy": -33.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -41.5
    },
    {
@@ -39999,15 +39999,15 @@
     "name": "대구[가두스 모르화(Gadus morhua)ㆍ가두스 오각(Gadus ogac)ㆍ가두스 마크로세팔루스(Gadus macrocephalus)]",
     "industry": "음식료",
     "mom": null,
-    "yoy": -98.5,
+    "yoy": null,
     "import_mom": 14.8
    },
    {
     "hs": "9027901000",
     "name": "마이크로톰(microtome)",
     "industry": "의료기기/정밀",
-    "mom": -55.5,
-    "yoy": -91.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -40015,15 +40015,15 @@
     "name": "스위치 블레이드(switch blade)ㆍ교차구류(crossing frog)ㆍ전철봉(point rod)과 그 밖의 크로싱피스(crossing piece)",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": 418.7,
-    "import_mom": 970306.2
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8203402000",
     "name": "볼트크로퍼(bolt cropper)와 클리퍼",
     "industry": "철강/금속",
     "mom": -100.0,
-    "yoy": -98.4,
+    "yoy": null,
     "import_mom": -17.1
    },
    {
@@ -40048,7 +40048,7 @@
     "hs": "8516500000",
     "name": "마이크로웨이브 오븐(microwave oven)",
     "industry": "IT",
-    "mom": 32.1,
+    "mom": null,
     "yoy": -56.5,
     "import_mom": 12.8
    },
@@ -40080,15 +40080,15 @@
     "hs": "0303895020",
     "name": "부세[라리미크티스 크로세아(Larimichthys crocea)]",
     "industry": "음식료",
-    "mom": 43.6,
-    "yoy": -97.6,
+    "mom": null,
+    "yoy": null,
     "import_mom": 43.2
    },
    {
     "hs": "0307493010",
     "name": "갑오징어[세피아 오피시날리스(Sepia officinalis)ㆍ로시아 마크로소마(Rossia macrosoma)ㆍ세피올라(Sepiola)속]와 오징어[옴마스트레페스(Ommastrephes)속ㆍ로리고(Loligo)속ㆍ노토토다루스(Nototodarus)속ㆍ세피오투디스(Sepioteuthis)속]",
     "industry": "음식료",
-    "mom": -100.0,
+    "mom": null,
     "yoy": -100.0,
     "import_mom": 12.2
    },
@@ -40096,8 +40096,8 @@
     "hs": "2008930000",
     "name": "크랜베리(cranberry)[바치니움 매크로카르폰(Vaccinium macrocarpon)ㆍ바치니움 옥시코코스(Vaccinium oxycoccos), 링곤베리(lingonberry)[바치니움 비티스-이다에아(Vaccinium vitis-idaea)]",
     "industry": "음식료",
-    "mom": 88.7,
-    "yoy": -33.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -41.5
    },
    {
@@ -40105,15 +40105,15 @@
     "name": "대구[가두스 모르화(Gadus morhua)ㆍ가두스 오각(Gadus ogac)ㆍ가두스 마크로세팔루스(Gadus macrocephalus)]",
     "industry": "음식료",
     "mom": null,
-    "yoy": -98.5,
+    "yoy": null,
     "import_mom": 14.8
    },
    {
     "hs": "9027901000",
     "name": "마이크로톰(microtome)",
     "industry": "의료기기/정밀",
-    "mom": -55.5,
-    "yoy": -91.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -40121,15 +40121,15 @@
     "name": "스위치 블레이드(switch blade)ㆍ교차구류(crossing frog)ㆍ전철봉(point rod)과 그 밖의 크로싱피스(crossing piece)",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": 418.7,
-    "import_mom": 970306.2
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8203402000",
     "name": "볼트크로퍼(bolt cropper)와 클리퍼",
     "industry": "철강/금속",
     "mom": -100.0,
-    "yoy": -98.4,
+    "yoy": null,
     "import_mom": -17.1
    },
    {
@@ -40154,7 +40154,7 @@
     "hs": "8516500000",
     "name": "마이크로웨이브 오븐(microwave oven)",
     "industry": "IT",
-    "mom": 32.1,
+    "mom": null,
     "yoy": -56.5,
     "import_mom": 12.8
    },
@@ -40186,15 +40186,15 @@
     "hs": "0303895020",
     "name": "부세[라리미크티스 크로세아(Larimichthys crocea)]",
     "industry": "음식료",
-    "mom": 43.6,
-    "yoy": -97.6,
+    "mom": null,
+    "yoy": null,
     "import_mom": 43.2
    },
    {
     "hs": "0307493010",
     "name": "갑오징어[세피아 오피시날리스(Sepia officinalis)ㆍ로시아 마크로소마(Rossia macrosoma)ㆍ세피올라(Sepiola)속]와 오징어[옴마스트레페스(Ommastrephes)속ㆍ로리고(Loligo)속ㆍ노토토다루스(Nototodarus)속ㆍ세피오투디스(Sepioteuthis)속]",
     "industry": "음식료",
-    "mom": -100.0,
+    "mom": null,
     "yoy": -100.0,
     "import_mom": 12.2
    },
@@ -40202,8 +40202,8 @@
     "hs": "2008930000",
     "name": "크랜베리(cranberry)[바치니움 매크로카르폰(Vaccinium macrocarpon)ㆍ바치니움 옥시코코스(Vaccinium oxycoccos), 링곤베리(lingonberry)[바치니움 비티스-이다에아(Vaccinium vitis-idaea)]",
     "industry": "음식료",
-    "mom": 88.7,
-    "yoy": -33.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -41.5
    },
    {
@@ -40211,15 +40211,15 @@
     "name": "대구[가두스 모르화(Gadus morhua)ㆍ가두스 오각(Gadus ogac)ㆍ가두스 마크로세팔루스(Gadus macrocephalus)]",
     "industry": "음식료",
     "mom": null,
-    "yoy": -98.5,
+    "yoy": null,
     "import_mom": 14.8
    },
    {
     "hs": "9027901000",
     "name": "마이크로톰(microtome)",
     "industry": "의료기기/정밀",
-    "mom": -55.5,
-    "yoy": -91.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -40227,15 +40227,15 @@
     "name": "스위치 블레이드(switch blade)ㆍ교차구류(crossing frog)ㆍ전철봉(point rod)과 그 밖의 크로싱피스(crossing piece)",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": 418.7,
-    "import_mom": 970306.2
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8203402000",
     "name": "볼트크로퍼(bolt cropper)와 클리퍼",
     "industry": "철강/금속",
     "mom": -100.0,
-    "yoy": -98.4,
+    "yoy": null,
     "import_mom": -17.1
    },
    {
@@ -40260,7 +40260,7 @@
     "hs": "8516500000",
     "name": "마이크로웨이브 오븐(microwave oven)",
     "industry": "IT",
-    "mom": 32.1,
+    "mom": null,
     "yoy": -56.5,
     "import_mom": 12.8
    },
@@ -40292,15 +40292,15 @@
     "hs": "0303895020",
     "name": "부세[라리미크티스 크로세아(Larimichthys crocea)]",
     "industry": "음식료",
-    "mom": 43.6,
-    "yoy": -97.6,
+    "mom": null,
+    "yoy": null,
     "import_mom": 43.2
    },
    {
     "hs": "0307493010",
     "name": "갑오징어[세피아 오피시날리스(Sepia officinalis)ㆍ로시아 마크로소마(Rossia macrosoma)ㆍ세피올라(Sepiola)속]와 오징어[옴마스트레페스(Ommastrephes)속ㆍ로리고(Loligo)속ㆍ노토토다루스(Nototodarus)속ㆍ세피오투디스(Sepioteuthis)속]",
     "industry": "음식료",
-    "mom": -100.0,
+    "mom": null,
     "yoy": -100.0,
     "import_mom": 12.2
    },
@@ -40308,8 +40308,8 @@
     "hs": "2008930000",
     "name": "크랜베리(cranberry)[바치니움 매크로카르폰(Vaccinium macrocarpon)ㆍ바치니움 옥시코코스(Vaccinium oxycoccos), 링곤베리(lingonberry)[바치니움 비티스-이다에아(Vaccinium vitis-idaea)]",
     "industry": "음식료",
-    "mom": 88.7,
-    "yoy": -33.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -41.5
    },
    {
@@ -40317,15 +40317,15 @@
     "name": "대구[가두스 모르화(Gadus morhua)ㆍ가두스 오각(Gadus ogac)ㆍ가두스 마크로세팔루스(Gadus macrocephalus)]",
     "industry": "음식료",
     "mom": null,
-    "yoy": -98.5,
+    "yoy": null,
     "import_mom": 14.8
    },
    {
     "hs": "9027901000",
     "name": "마이크로톰(microtome)",
     "industry": "의료기기/정밀",
-    "mom": -55.5,
-    "yoy": -91.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": 30.0
    },
    {
@@ -40333,15 +40333,15 @@
     "name": "스위치 블레이드(switch blade)ㆍ교차구류(crossing frog)ㆍ전철봉(point rod)과 그 밖의 크로싱피스(crossing piece)",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": 418.7,
-    "import_mom": 970306.2
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "8203402000",
     "name": "볼트크로퍼(bolt cropper)와 클리퍼",
     "industry": "철강/금속",
     "mom": -100.0,
-    "yoy": -98.4,
+    "yoy": null,
     "import_mom": -17.1
    },
    {
@@ -40408,7 +40408,7 @@
     "industry": "화학",
     "mom": 23.3,
     "yoy": 3.1,
-    "import_mom": 83.7
+    "import_mom": null
    },
    {
     "hs": "8426121000",
@@ -40498,7 +40498,7 @@
     "industry": "화학",
     "mom": 23.3,
     "yoy": 3.1,
-    "import_mom": 83.7
+    "import_mom": null
    },
    {
     "hs": "8426121000",
@@ -40588,7 +40588,7 @@
     "industry": "화학",
     "mom": 23.3,
     "yoy": 3.1,
-    "import_mom": 83.7
+    "import_mom": null
    },
    {
     "hs": "8426121000",
@@ -40678,7 +40678,7 @@
     "industry": "화학",
     "mom": 23.3,
     "yoy": 3.1,
-    "import_mom": 83.7
+    "import_mom": null
    },
    {
     "hs": "8426121000",
@@ -40768,7 +40768,7 @@
     "industry": "화학",
     "mom": 23.3,
     "yoy": 3.1,
-    "import_mom": 83.7
+    "import_mom": null
    },
    {
     "hs": "8426121000",
@@ -41047,14 +41047,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41064,14 +41064,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41089,14 +41089,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41106,14 +41106,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41131,14 +41131,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41148,14 +41148,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41173,14 +41173,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41190,14 +41190,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41215,14 +41215,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41232,14 +41232,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41257,14 +41257,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41274,14 +41274,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41299,14 +41299,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41316,14 +41316,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41341,14 +41341,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41358,14 +41358,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41383,14 +41383,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41400,14 +41400,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41425,14 +41425,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41442,14 +41442,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41467,14 +41467,14 @@
     "name": "소변기",
     "industry": "소비재",
     "mom": null,
-    "yoy": -92.2,
+    "yoy": null,
     "import_mom": -47.8
    },
    {
     "hs": "8504321000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 604.2,
+    "mom": null,
     "yoy": -80.8,
     "import_mom": -3.7
    },
@@ -41484,14 +41484,14 @@
     "industry": "IT",
     "mom": 6.6,
     "yoy": -0.3,
-    "import_mom": 152.5
+    "import_mom": null
    },
    {
     "hs": "8504331000",
     "name": "계기용 변압기",
     "industry": "IT",
-    "mom": 781.3,
-    "yoy": 2623.3,
+    "mom": null,
+    "yoy": null,
     "import_mom": -47.9
    }
   ],
@@ -41508,8 +41508,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -41556,7 +41556,7 @@
     "hs": "8501332010",
     "name": "연료전지스택",
     "industry": "IT",
-    "mom": 11856.0,
+    "mom": null,
     "yoy": -33.2,
     "import_mom": null
    },
@@ -41564,7 +41564,7 @@
     "hs": "8414809211",
     "name": "연료전지(fuel cell) 차량용의 것",
     "industry": "기계",
-    "mom": 87.3,
+    "mom": null,
     "yoy": -61.0,
     "import_mom": 18.3
    }
@@ -41582,7 +41582,7 @@
     "hs": "8501332010",
     "name": "연료전지스택",
     "industry": "IT",
-    "mom": 11856.0,
+    "mom": null,
     "yoy": -33.2,
     "import_mom": null
    },
@@ -41590,7 +41590,7 @@
     "hs": "8414809211",
     "name": "연료전지(fuel cell) 차량용의 것",
     "industry": "기계",
-    "mom": 87.3,
+    "mom": null,
     "yoy": -61.0,
     "import_mom": 18.3
    }
@@ -41808,15 +41808,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -41833,8 +41833,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -41858,15 +41858,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -41883,8 +41883,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -41908,15 +41908,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -41933,8 +41933,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -41958,15 +41958,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -41983,8 +41983,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -42008,15 +42008,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -42033,8 +42033,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -42058,15 +42058,15 @@
     "hs": "6301300000",
     "name": "면으로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": 585.6,
-    "yoy": 202.9,
+    "mom": null,
+    "yoy": null,
     "import_mom": 21.7
    },
    {
     "hs": "6301200000",
     "name": "양모나 동물의 부드러운 털로 만든 모포(전기모포는 제외한다)와 여행용 러그(rug)",
     "industry": "섬유/의류",
-    "mom": -19.8,
+    "mom": null,
     "yoy": -69.6,
     "import_mom": 126.5
    },
@@ -42083,8 +42083,8 @@
     "name": "트렁크ㆍ슈트케이스나 이와 유사한 여행용구에 적합한 것",
     "industry": "철강/금속",
     "mom": null,
-    "yoy": -77.6,
-    "import_mom": 345.9
+    "yoy": null,
+    "import_mom": null
    },
    {
     "hs": "9605000000",
@@ -42207,8 +42207,8 @@
     "name": "광산용 왜건푸셔ㆍ기관차ㆍ화차의 트레버서ㆍ화차 경사기나 이와 유사한 철도화차 취급 장비",
     "industry": "기계",
     "mom": null,
-    "yoy": 404.1,
-    "import_mom": 3637.0
+    "yoy": null,
+    "import_mom": null
    }
   ],
   "068240": [
@@ -42233,8 +42233,8 @@
     "name": "광산용 왜건푸셔ㆍ기관차ㆍ화차의 트레버서ㆍ화차 경사기나 이와 유사한 철도화차 취급 장비",
     "industry": "기계",
     "mom": null,
-    "yoy": 404.1,
-    "import_mom": 3637.0
+    "yoy": null,
+    "import_mom": null
    }
   ],
   "006340": [
@@ -42259,8 +42259,8 @@
     "name": "광산용 왜건푸셔ㆍ기관차ㆍ화차의 트레버서ㆍ화차 경사기나 이와 유사한 철도화차 취급 장비",
     "industry": "기계",
     "mom": null,
-    "yoy": 404.1,
-    "import_mom": 3637.0
+    "yoy": null,
+    "import_mom": null
    }
   ],
   "234300": [
@@ -42285,8 +42285,8 @@
     "name": "광산용 왜건푸셔ㆍ기관차ㆍ화차의 트레버서ㆍ화차 경사기나 이와 유사한 철도화차 취급 장비",
     "industry": "기계",
     "mom": null,
-    "yoy": 404.1,
-    "import_mom": 3637.0
+    "yoy": null,
+    "import_mom": null
    }
   ],
   "064350": [
@@ -42311,8 +42311,8 @@
     "name": "광산용 왜건푸셔ㆍ기관차ㆍ화차의 트레버서ㆍ화차 경사기나 이와 유사한 철도화차 취급 장비",
     "industry": "기계",
     "mom": null,
-    "yoy": 404.1,
-    "import_mom": 3637.0
+    "yoy": null,
+    "import_mom": null
    }
   ],
   "008970": [
@@ -42320,8 +42320,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42330,8 +42330,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42340,8 +42340,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42350,8 +42350,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42360,8 +42360,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42370,8 +42370,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42380,8 +42380,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42390,8 +42390,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
@@ -42400,8 +42400,8 @@
     "hs": "9206001000",
     "name": "북",
     "industry": "소비재",
-    "mom": 19102.2,
-    "yoy": 16843.1,
+    "mom": null,
+    "yoy": null,
     "import_mom": 53.8
    }
   ],
