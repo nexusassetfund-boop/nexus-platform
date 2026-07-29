@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-29T11:12:20+09:00",
+ "updated": "2026-07-29T12:09:28+09:00",
  "kospi": {
   "price": 6053.06,
   "ma200": 5709.63,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-07-29T11:12:20+09:00"
+  "updated": "2026-07-29T12:09:28+09:00"
  },
  "holdings": [],
  "exited": [],
