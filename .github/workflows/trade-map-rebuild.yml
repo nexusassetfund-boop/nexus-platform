@@ -1,0 +1,45 @@
+name: 수출입 매칭 테이블 재구축
+# 스케줄 없음 — 분기 실적 발표 후 수동 실행. 호출량이 크므로(조합 수 × 4년) 자동화하지 않는다.
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "검토할 종목 수 상한 (0=전체, 테스트는 20 권장)"
+        required: false
+        default: "0"
+permissions:
+  contents: write
+concurrency: { group: trade-map, cancel-in-progress: false }
+jobs:
+  trade-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300    # 종목별 DART 조회 + 조합별 4년 수집
+    steps:
+      - uses: actions/checkout@v4
+      - name: nexus-cloud 체크아웃 (sector_map.json 참조)
+        uses: actions/checkout@v4
+        with:
+          repository: nexusassetfund-boop/nexus-cloud
+          token: ${{ secrets.NEXUS_CLOUD_TOKEN }}
+          path: ../nexus-cloud
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      # 매칭 구축은 (종목 × HS후보 × 4년) 이라 호출량이 가장 크다 — 캐시 공유가 필수다.
+      - name: 관세청 응답 캐시 복원
+        uses: actions/cache@v4
+        with:
+          path: docs/data/trade_raw_cache.json
+          key: trade-cache-${{ github.run_id }}
+          restore-keys: trade-cache-
+      - name: 매칭 테이블 구축
+        env:
+          CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          TRADE_MAP_LIMIT: ${{ inputs.limit }}
+        run: python scanner/build_trade_map.py
+      - name: 결과 커밋
+        run: |
+          test -f scanner/data/trade_map.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
+          bash .github/scripts/commit-data.sh "trade-map: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" scanner/data
