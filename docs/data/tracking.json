@@ -1,15 +1,15 @@
 {
- "updated": "2026-07-29T14:12:10+09:00",
+ "updated": "2026-07-29T15:09:21+09:00",
  "kospi": {
-  "price": 6053.06,
-  "ma200": 5709.63,
-  "ma50": 7813.1,
-  "above_ma200": true,
+  "price": 5435.76,
+  "ma200": 5706.54,
+  "ma50": 7800.76,
+  "above_ma200": false,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
-  "entry_allowed": true,
-  "updated": "2026-07-29T14:12:10+09:00"
+  "entry_allowed": false,
+  "updated": "2026-07-29T15:09:21+09:00"
  },
  "holdings": [],
  "exited": [],
