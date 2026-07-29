@@ -1,0 +1,81 @@
+{
+ "updated": "2026-07-29 13:52",
+ "method": "소재지 시군구 × 품목(HS) 수출액을 프록시로 사용, 분기매출 상관계수로 검증",
+ "fx_adjusted": true,
+ "fx_months": 36,
+ "criteria": {
+  "corr_a": 0.85,
+  "corr_b": 0.7,
+  "corr_c": 0.5,
+  "min_quarters": 8,
+  "note": "수출액(USD)을 관세환율로 원화 환산한 뒤 원화 매출과 상관계수를 낸다"
+ },
+ "entries": {
+  "000100": {
+   "name": "유한양행",
+   "region": "11",
+   "region_name": "서울특별시 동작구",
+   "grade": "C",
+   "note": "지역×품목 프록시",
+   "corr": 0.531,
+   "hs": [
+    "300490"
+   ],
+   "hs_names": [
+    "아스피린제제"
+   ],
+   "theme": "제약",
+   "sgg": "서울특별시 동작구",
+   "alpha": -254762144239.7,
+   "beta": 205596.5747,
+   "err_band": 9.8,
+   "quarters": 11
+  },
+  "000270": {
+   "name": "기아",
+   "region": "11",
+   "region_name": "서울특별시 서초구",
+   "grade": "C",
+   "note": "지역×품목 프록시",
+   "corr": 0.561,
+   "hs": [
+    "850760"
+   ],
+   "hs_names": [
+    "전기차(하이브리드형을 포함한다)용"
+   ],
+   "theme": "전기차",
+   "sgg": "서울특별시 서초구",
+   "alpha": 14389827239531.2,
+   "beta": 1416789.2353,
+   "err_band": 11.171,
+   "quarters": 11
+  },
+  "000660": {
+   "name": "SK하이닉스",
+   "region": "41",
+   "region_name": "경기도 이천시",
+   "grade": "C",
+   "note": "지역×품목 프록시",
+   "corr": 0.646,
+   "hs": [
+    "854232"
+   ],
+   "hs_names": [
+    "디램"
+   ],
+   "theme": "DRAM",
+   "sgg": "경기도 이천시",
+   "alpha": -14037191549225.8,
+   "beta": 7237.2368,
+   "err_band": 3.6,
+   "quarters": 11
+  }
+ },
+ "coverage": {
+  "graded_a": 0,
+  "graded_b": 0,
+  "graded_c": 3,
+  "total_checked": 20
+ }
+}
