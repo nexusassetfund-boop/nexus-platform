@@ -1,44 +1,44 @@
 {
- "updated": "2026-07-29T01:17:09+09:00",
+ "updated": "2026-07-29T10:09:44+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": 137305296.0,
+  "portfolio_value": 137626096.0,
   "cash": 94714496.0,
-  "eval_pnl": -3121399.82,
-  "eval_pnl_pct": -6.81,
-  "cum_pnl": -12694704.0,
-  "cum_pnl_pct": -8.46,
+  "eval_pnl": -2800599.82,
+  "eval_pnl_pct": -6.11,
+  "cum_pnl": -12373904.0,
+  "cum_pnl_pct": -8.25,
   "day_change": null,
   "day_change_pct": null,
   "realized_pnl": 9425204.0,
-  "nav_index": 915.37,
+  "nav_index": 917.51,
   "n_stocks": 4.0,
   "n_win": 4.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6023.7,
-    "change": -732.1
+    "value": 6086.8,
+    "change": 63.2
    },
    "kosdaq": {
-    "value": 705.9,
-    "change": 59.0
+    "value": 697.5,
+    "change": 8.4
    },
    "dow": {
-    "value": 52854.9,
-    "change": 644.9
+    "value": 52747.3,
+    "change": 537.2
    },
    "nasdaq": {
-    "value": 24917.4,
-    "change": -14.7
+    "value": 24876.9,
+    "change": -55.2
    },
    "sp500": {
-    "value": 7437.9,
-    "change": 24.8
+    "value": 7428.8,
+    "change": 15.6
    },
    "usdkrw": {
-    "value": 1453.0,
-    "change": 12.6
+    "value": 1454.2,
+    "change": 1.2
    }
   }
  },
@@ -48,13 +48,13 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 63.0,
-   "price": 256000.0,
-   "change_pct": -1.35,
+   "price": 262000.0,
+   "change_pct": 2.34,
    "avg_price": 230087.0,
-   "eval_pnl": 1632500.0,
-   "return_pct": 11.26,
-   "contrib_pct": 1.63,
-   "eval_amount": 16128000.0,
+   "eval_pnl": 2010500.0,
+   "return_pct": 13.87,
+   "contrib_pct": 2.01,
+   "eval_amount": 16506000.0,
    "buy_amount": 14495500.0,
    "target_price": null,
    "buy_date": "2026-07-01",
@@ -67,13 +67,13 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 10.0,
-   "price": 1550000.0,
-   "change_pct": -14.65,
+   "price": 1548000.0,
+   "change_pct": -0.13,
    "avg_price": 2025000.0,
-   "eval_pnl": -4750000.0,
-   "return_pct": -23.46,
-   "contrib_pct": -4.75,
-   "eval_amount": 15500000.0,
+   "eval_pnl": -4770000.0,
+   "return_pct": -23.56,
+   "contrib_pct": -4.77,
+   "eval_amount": 15480000.0,
    "buy_amount": 20250000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
@@ -86,13 +86,13 @@
    "code": "340570",
    "name": "티앤엘",
    "qty": 17.0,
-   "price": 57200.0,
-   "change_pct": -5.14,
+   "price": 56600.0,
+   "change_pct": -1.05,
    "avg_price": 55900.0,
-   "eval_pnl": 22100.0,
-   "return_pct": 2.33,
-   "contrib_pct": 0.02,
-   "eval_amount": 972400.0,
+   "eval_pnl": 11900.0,
+   "return_pct": 1.25,
+   "contrib_pct": 0.01,
+   "eval_amount": 962200.0,
    "buy_amount": 950300.0,
    "target_price": null,
    "buy_date": "2026-07-23",
@@ -105,13 +105,13 @@
    "code": "214450",
    "name": "파마리서치",
    "qty": 27.0,
-   "price": 375500.0,
-   "change_pct": 1.49,
+   "price": 374500.0,
+   "change_pct": -0.27,
    "avg_price": 376463.0,
-   "eval_pnl": -26000.0,
-   "return_pct": -0.26,
-   "contrib_pct": -0.03,
-   "eval_amount": 10138500.0,
+   "eval_pnl": -53000.0,
+   "return_pct": -0.52,
+   "contrib_pct": -0.05,
+   "eval_amount": 10111500.0,
    "buy_amount": 10164500.0,
    "target_price": null,
    "buy_date": "2026-07-28",
@@ -149,7 +149,7 @@
    "change_pct": -14.65,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "11,046,890억",
+   "mktcap": "8,073억",
    "per": "14.7x",
    "eps": "105,627원",
    "high52": 2987000.0,
@@ -185,7 +185,7 @@
    "change_pct": -15.6,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "1,220,615억",
+   "mktcap": "1,220,614억",
    "per": "7.9x",
    "eps": "117,817원",
    "high52": 2189000.0,
@@ -728,9 +728,9 @@
   "value": [
    {
     "date": "2026-7-29",
-    "portfolio_value": 137305296.0,
-    "total_value": 42738900.0,
-    "eval_pnl": -3121399.82
+    "portfolio_value": 137626096.0,
+    "total_value": 43059700.0,
+    "eval_pnl": -2800599.82
    },
    {
     "date": "2026-7-23",
