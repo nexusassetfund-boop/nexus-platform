@@ -28,7 +28,6 @@ jobs:
       - name: 수출입 스크리닝
         env:
           CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
-          DART_API_KEY: ${{ secrets.DART_API_KEY }}
         run: python scanner/trade_stats.py
       - name: 결과 커밋
         run: |

@@ -1,46 +1,39 @@
-name: 수출입 매칭 테이블 재구축
-# 스케줄 없음 — 분기 실적 발표 후 수동 실행. 호출량이 크므로(조합 수 × 4년) 자동화하지 않는다.
+name: 수출입 매핑 검증
+# 스케줄 없음 — stock_trade_map.json(사람이 큐레이션)을 고친 뒤 수동 실행한다.
+# 시도 내 점유율·순위를 뽑아 검증하고, 통과분만 trade_map.json으로 저장한다.
+# DART를 쓰지 않는다 — 본점 주소는 등기상 본사라 공장 위치와 다르다(기아=서초구).
 on:
   workflow_dispatch:
     inputs:
-      limit:
-        description: "검토할 종목 수 상한 (0=전체, 테스트는 20 권장)"
+      tickers:
+        description: "특정 종목만 검증 (공백 구분 6자리 코드, 비우면 전체)"
         required: false
-        default: "0"
+        default: ""
 permissions:
   contents: write
 concurrency: { group: trade-map, cancel-in-progress: false }
 jobs:
   trade-map:
     runs-on: ubuntu-latest
-    timeout-minutes: 300    # 종목별 DART 조회 + 조합별 4년 수집
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      # sector_map.json은 nexus-cloud(사설)에 있지만 Worker가 정적 자산으로 공개 제공한다.
-      # 사설 저장소 체크아웃용 토큰을 새로 만드는 것보다 이쪽이 단순하고 권한도 덜 요구한다.
-      - name: 섹터맵 내려받기
-        run: |
-          mkdir -p scanner/data
-          curl -sf --retry 3 -o scanner/data/sector_map.json \
-            "https://nexus-platform.nexusassetfund.workers.dev/sector_map.json"
-          python -c "import json;d=json.load(open('scanner/data/sector_map.json',encoding='utf-8'));print('섹터',len(d['sectors']),'개')"
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
       - name: 의존성 설치
         run: pip install -r requirements.txt
-      # 매칭 구축은 (종목 × HS후보 × 4년) 이라 호출량이 가장 크다 — 캐시 공유가 필수다.
+      # 관세청 응답 캐시를 러너 간에 보존한다. 러너는 매번 새로 뜨므로 캐시가 없으면
+      # 매번 전량 재호출해 개발계정 한도(10,000회/월)를 금방 넘긴다.
       - name: 관세청 응답 캐시 복원
         uses: actions/cache@v4
         with:
           path: docs/data/trade_raw_cache.json
           key: trade-cache-${{ github.run_id }}
           restore-keys: trade-cache-
-      - name: 매칭 테이블 구축
+      - name: 매핑 검증
         env:
           CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
-          DART_API_KEY: ${{ secrets.DART_API_KEY }}
-          TRADE_MAP_LIMIT: ${{ inputs.limit }}
-        run: python scanner/build_trade_map.py
+        run: python -X utf8 scanner/verify_trade_map.py ${{ inputs.tickers }}
       - name: 결과 커밋
         run: |
           test -f scanner/data/trade_map.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
