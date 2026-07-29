@@ -1,0 +1,47 @@
+name: 수출입 데이터 스크리너
+on:
+  schedule:
+    - cron: "0 22 * * *"    # 매일 07:00 KST (기존 스캔 08:00~08:40보다 앞)
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: trade-stats, cancel-in-progress: false }
+jobs:
+  trade-stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30    # 월 단위 데이터 — 대부분 캐시 히트로 끝난다
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      # 관세청 응답 캐시를 러너 간에 보존한다. 러너는 매번 새로 뜨므로 캐시가 없으면
+      # 36개월 × 조합 수만큼 매일 다시 호출해 개발계정 한도(10,000회/월)를 금방 넘긴다.
+      # 월 단위 데이터라 지난 달들은 값이 바뀌지 않아 캐시가 그대로 유효하다.
+      - name: 관세청 응답 캐시 복원
+        uses: actions/cache@v4
+        with:
+          path: docs/data/trade_raw_cache.json
+          key: trade-cache-${{ github.run_id }}
+          restore-keys: trade-cache-
+      - name: 수출입 스크리닝
+        env:
+          CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python scanner/trade_stats.py
+      - name: 결과 커밋
+        run: |
+          test -f docs/data/trade.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
+          bash .github/scripts/commit-data.sh "trade: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data
+      - name: KV 즉시 반영 (다음 스캔 동기화 대기 없이)
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: |
+          test -f docs/data/trade.json || exit 0
+          python - > /tmp/push.json <<'PY'
+          import json
+          print(json.dumps({'files': {'trade.json': json.load(open('docs/data/trade.json'))}}))
+          PY
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
+            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/push.json || echo "KV push 실패 — 다음 스캔 동기화 때 자동 반영됨"
