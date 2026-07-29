@@ -8,7 +8,6 @@ on:
     # "말일" 표현이 필요해진다). 발표는 오전이므로 18시면 충분히 여유가 있다.
     - cron: "0 9 1,11,15,21 * *"
   workflow_dispatch: {}
-  workflow_dispatch: {}
 permissions:
   contents: write
 concurrency: { group: trade-stats, cancel-in-progress: false }
