@@ -55,10 +55,14 @@ HS_MASTER = Path(__file__).parent / "data" / "hs_master.json"   # 관세청 HS�
 
 # ── 기준 ──
 CORR_A, CORR_B, CORR_C = 0.85, 0.70, 0.50
-MIN_QUARTERS = 8          # 상관계수 신뢰를 위한 최소 분기 수 (2년)
-# 수집 연수. 1회 조회가 1년 이내라 연수 = 조합당 호출 수다. 개발계정 한도가 10,000회이고
-# 대상이 900종목 규모라 4년이면 한도를 넘길 수 있다 — 3년(12분기)이면 상관계수에 충분하다.
-YEARS = 3
+# 상관을 증감률로 재므로 앞 4분기는 기준값으로 소모된다. 12분기를 요구해야 증감률
+# 표본이 8개 확보된다 — 8분기만 요구하면 표본 4개짜리 상관계수가 나와 노이즈다.
+MIN_QUARTERS = 12
+MIN_GROWTH_PTS = 8        # 증감률 상관에 쓸 최소 표본
+# 수집 연수. 1회 조회가 1년 이내라 연수 = 조합당 호출 수다.
+# 증감률 상관이 앞 4분기를 소모하므로 4년(16분기 → 증감률 12개)은 있어야 표본이 선다.
+# 호출량이 커지므로 TRADE_MAP_LIMIT로 나눠 돌리고 캐시를 재사용한다.
+YEARS = 4
 SIM_CUTOFF = 0.6          # 테마명 ↔ HS 품목명 문자열 유사도 하한
 MAX_HS_PER_THEME = 4      # 테마당 HS 후보 상한 (API 호출량 억제)
 MIN_HS_AMOUNT = 50_000    # 후보 HS의 월 수출액 하한(천USD) — 교역이 미미한 품목은 노이즈
@@ -303,11 +307,29 @@ def _quarter_key(yymm: str) -> str:
     return f"{y}Q{(m - 1) // 3 + 1}"
 
 
+def _yoy(seq: list[float]) -> list[float]:
+    """분기 시계열 → 전년동기비 증감률. 4분기 이전과 비교한다."""
+    out = []
+    for i in range(4, len(seq)):
+        base = seq[i - 4]
+        out.append((seq[i] - base) / abs(base) if base else 0.0)
+    return out
+
+
 def _corr(xs: list[float], ys: list[float]) -> float | None:
+    """증감률 기준 상관계수.
+
+    수준(level)으로 재면 수출과 매출이 함께 우상향하기만 해도 0.5~0.6이 나온다 —
+    인과가 없어도 공통 추세만으로 상관이 생긴다(실측: 기아 본사 서초구의 무관한
+    품목 수출이 corr 0.56). 증감률로 바꾸면 추세가 제거돼 실제 연동만 남는다.
+    """
     if len(xs) < MIN_QUARTERS:
         return None
+    gx, gy = _yoy(xs), _yoy(ys)
+    if len(gx) < MIN_GROWTH_PTS:
+        return None
     try:
-        return statistics.correlation(xs, ys)
+        return statistics.correlation(gx, gy)
     except (statistics.StatisticsError, ValueError):
         return None
 
@@ -380,7 +402,9 @@ def build() -> dict | None:
     today = dt.datetime.now(tz=KST).date()
     end_month = f"{today.year:04d}{today.month:02d}"
     chunks = capi.month_range(end_month, YEARS * 12)
-    years = list(range(today.year - YEARS, today.year + 1))
+    # YEARS년치 분기 매출만 받는다. 연도 하나가 늘면 종목당 DART 호출이 4회 늘어
+    # 900종목 기준 3,600회가 더 붙는다(작업 시간의 최대 병목).
+    years = list(range(today.year - YEARS + 1, today.year + 1))
 
     # 환율은 종목과 무관하게 월 단위로 공통이므로 한 번만 받아 재사용한다(호출 한도 1,000).
     all_months = sorted({m for s, e in chunks
@@ -409,44 +433,59 @@ def build() -> dict | None:
         best = None
         for theme in theme_of[code]:
             for hs, hs_name in hs_candidates(theme, hs_master):
-                rows = []
+                # 두 프록시를 모두 시험하고 상관이 높은 쪽을 채택한다.
+                #  (a) 전국 품목 수출 — 지역 가정이 없다
+                #  (b) 소재지 시군구 수출 — 지역이 맞으면 더 날카롭다
+                # DART 본점 주소는 등기상 본사라 공장과 다른 경우가 많다(기아=서초구,
+                # 유한양행=동작구). 지역만 믿으면 그런 종목이 통째로 어긋난다.
+                variants: list[tuple[str, str | None, dict]] = []
                 try:
+                    nat_rows = []
+                    for s, e in chunks:
+                        nat_rows.extend(capi.fetch_item(hs, s, e, api_key, CACHE_PATH))
+                    nat = _series(nat_rows, None, fx)
+                    if nat:
+                        variants.append(("전국", None, nat))
+                except capi.CustomsError as ex:
+                    logger.debug("전국 수집 실패 %s: %s", hs, ex)
+                try:
+                    rows = []
                     for s, e in chunks:
                         rows.extend(capi.fetch_district(hs, sido_cd, s, e, api_key, CACHE_PATH))
+                    if rows:
+                        sgg = match_sgg(addr_sgg, _sgg_names(rows))
+                        reg = _series(rows, sgg, fx)
+                        if reg:
+                            variants.append(("지역", sgg, reg))
                 except capi.CustomsError as ex:
-                    logger.debug("수집 실패 %s/%s: %s", sido_cd, hs, ex)
-                    continue
-                if not rows:
-                    continue
-                # 응답은 시도 전체 시군구를 담고 있으므로 이 기업의 시군구만 골라낸다.
-                sgg = match_sgg(addr_sgg, _sgg_names(rows))
-                merged = _series(rows, sgg, fx)   # USD → 원화 환산 후 매출과 비교
-                if not merged:
-                    continue
-                # 분기 합산 후 매출과 정렬
-                q_exp: dict[str, float] = {}
-                for mm, amt in merged.items():
-                    q_exp[_quarter_key(mm)] = q_exp.get(_quarter_key(mm), 0.0) + amt
-                common = sorted(set(q_exp) & set(rev))
-                if len(common) < MIN_QUARTERS:
-                    continue
-                xs = [q_exp[q] for q in common]
-                ys = [rev[q] for q in common]
-                c = _corr(xs, ys)
-                if c is None:
-                    continue
-                if best is None or c > best["corr"]:
-                    alpha, beta, err = _linreg(xs, ys)
-                    best = {"corr": round(c, 3), "hs": [hs], "hs_names": [hs_name],
-                            "theme": theme, "sgg": sgg, "alpha": round(alpha, 1),
-                            "beta": round(beta, 4), "err_band": err, "quarters": len(common)}
+                    logger.debug("지역 수집 실패 %s/%s: %s", sido_cd, hs, ex)
+
+                for scope, sgg, merged in variants:
+                    q_exp: dict[str, float] = {}
+                    for mm, amt in merged.items():
+                        q_exp[_quarter_key(mm)] = q_exp.get(_quarter_key(mm), 0.0) + amt
+                    common = sorted(set(q_exp) & set(rev))
+                    if len(common) < MIN_QUARTERS:
+                        continue
+                    xs = [q_exp[q] for q in common]
+                    ys = [rev[q] for q in common]
+                    c = _corr(xs, ys)
+                    if c is None:
+                        continue
+                    if best is None or c > best["corr"]:
+                        alpha, beta, err = _linreg(xs, ys)
+                        best = {"corr": round(c, 3), "hs": [hs], "hs_names": [hs_name],
+                                "theme": theme, "scope": scope, "sgg": sgg,
+                                "alpha": round(alpha, 1), "beta": round(beta, 6),
+                                "err_band": err, "quarters": len(common)}
 
         if not best or best["corr"] < CORR_C:
             continue
         grade = "A" if best["corr"] >= CORR_A else "B" if best["corr"] >= CORR_B else "C"
         entries[code] = {
             "name": names.get(code, code), "region": sido_cd, "region_name": region_name,
-            "grade": grade, "note": "지역×품목 프록시", **best,
+            # scope가 '전국'이면 지역 가정 없이 품목 전체를 프록시로 쓴 것이다.
+            "grade": grade, "note": "품목 수출 프록시 (증감률 상관 검증)", **best,
         }
         # 귀속 충돌은 시도가 아니라 (시군구 × 품목) 단위로 봐야 한다.
         combo_users.setdefault((sido_cd, best.get("sgg"), best["hs"][0]), []).append(code)

@@ -230,24 +230,31 @@ def build() -> dict | None:
     prices = {str(r.get("ticker")).zfill(6): r for r in (scan.get("results") or [])}
 
     # ── (시군구, HS) 조합별 시계열 수집 — 여러 종목이 같은 조합을 공유하면 1회만 호출
-    combos: dict[tuple[str, str], dict] = {}
+    # scope='전국'인 항목은 지역 없이 품목별 API를 쓴다(매칭 단계에서 전국이 더
+    # 잘 맞은 종목 — 본점 주소와 공장 위치가 다른 경우가 많다). region을 None으로 둔다.
+    combos: dict[tuple[str | None, str], dict] = {}
     for e in entries.values():
+        region = None if e.get("scope") == "전국" else e.get("region")
         for hs in e.get("hs") or []:
-            combos.setdefault((e.get("region"), hs), {})
+            combos.setdefault((region, hs), {})
 
     # (시도, HS) 1회 호출로 그 도의 모든 시군구가 함께 오므로 원시 응답을 먼저 모은다.
     raw_by_combo: dict[tuple[str, str], list[dict]] = {}
     failed = 0
     for (region, hs) in combos:
-        if not region or not hs:
+        if not hs:
             failed += 1
             continue
         rows: list[dict] = []
         try:
             for s, e in chunks:
-                rows.extend(capi.fetch_district(hs, region, s, e, api_key, CACHE_PATH))
+                if region is None:
+                    # 전국 품목별 — 중량이 있어 실제 수출단가를 낼 수 있다
+                    rows.extend(capi.fetch_item(hs, s, e, api_key, CACHE_PATH))
+                else:
+                    rows.extend(capi.fetch_district(hs, region, s, e, api_key, CACHE_PATH))
         except capi.CustomsError as ex:
-            logger.warning("수집 실패 sido=%s hs=%s: %s", region, hs, ex)
+            logger.warning("수집 실패 %s hs=%s: %s", region or "전국", hs, ex)
             failed += 1
             continue
         if rows:
@@ -263,11 +270,13 @@ def build() -> dict | None:
     # ── 종목별 지표 계산
     rows = []
     for ticker, e in entries.items():
-        # 종목은 시도가 아니라 자기 시군구 행만 봐야 한다 — 같은 도의 타 지역이 섞이면 프록시가 무너진다.
-        sgg = e.get("sgg")
+        # 지역 스코프면 자기 시군구 행만 봐야 한다 — 같은 도의 타 지역이 섞이면 프록시가 무너진다.
+        national = e.get("scope") == "전국"
+        sgg = None if national else e.get("sgg")
+        region = None if national else e.get("region")
         merged: dict[str, dict] = {}
         for hs in e.get("hs") or []:
-            raw = raw_by_combo.get((e.get("region"), hs))
+            raw = raw_by_combo.get((region, hs))
             if not raw:
                 continue
             for k, v in _series_to_map(raw, sgg).items():
@@ -303,7 +312,10 @@ def build() -> dict | None:
             "name": e.get("name") or sc.get("name") or ticker,
             "grade": e.get("grade"), "corr": e.get("corr"),
             "region_name": e.get("region_name"), "hs": e.get("hs"),
-            "qty_is_count": True,   # 시군구별에는 중량이 없어 물량=건수, 단가=건당 금액
+            "scope": e.get("scope"),
+            # 시군구별에는 중량이 없어 물량=건수·단가=건당 금액이다.
+            # 전국(품목별)은 중량이 있어 실제 수출단가가 나온다.
+            "qty_is_count": not national,
             "yoy_krw": yoy_krw,     # 원화 환산 기준 — USD 기준과의 차이가 환율 효과
             "shared": bool(e.get("shared")),
             "est_rev": est_rev, "est_band": est_band,
