@@ -27,6 +27,7 @@ ROOT = Path(__file__).parent.parent
 TRADE_PATH = ROOT / "docs" / "data" / "trade.json"
 REPORT_PATH = ROOT / "docs" / "data" / "trade_report.json"
 EARN_PATH = ROOT / "docs" / "data" / "earnings_calendar.json"
+DISC_PATH = ROOT / "docs" / "data" / "trade_discover.json"
 INPUT_PATH = ROOT / "trade_report_input.json"
 OUTPUT_PATH = ROOT / "trade_report_output.json"
 WORKER = "https://nexus-platform.nexusassetfund.workers.dev"
@@ -89,6 +90,8 @@ def prepare() -> int:
         "stocks": slim,
         "prev_report": prev_report,
         "earnings": earn,
+        "imports": trade.get("imports"),
+        "discover": (_load(DISC_PATH, {}) or {}).get("items", [])[:10],
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     logger.info("입력 준비 완료 — 기준월 %s, 종목 %d, 발표예정 %d", month, len(slim), len(earn))
     return 0
