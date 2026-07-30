@@ -43,8 +43,12 @@ jobs:
         run: |
           test -f docs/data/trade.json || exit 0
           python - > /tmp/push.json <<'PY'
-          import json
-          print(json.dumps({'files': {'trade.json': json.load(open('docs/data/trade.json'))}}))
+          import json, os
+          files = {'trade.json': json.load(open('docs/data/trade.json'))}
+          # 리포트도 있으면 함께 민다 — trade-report 실행의 KV push가 실패했을 때의 복구 경로.
+          if os.path.exists('docs/data/trade_report.json'):
+              files['trade_report.json'] = json.load(open('docs/data/trade_report.json'))
+          print(json.dumps({'files': files}))
           PY
           curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
             -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
