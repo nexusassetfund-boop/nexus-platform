@@ -33,7 +33,9 @@ jobs:
       - name: 수출입 스크리닝
         env:
           CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
-        run: python scanner/trade_stats.py
+        run: |
+          python scanner/trade_stats.py
+          python scanner/trade_discover.py || echo "발굴 실패 — 스캔 산출물은 유지"
       - name: 결과 커밋
         run: |
           test -f docs/data/trade.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
@@ -48,6 +50,8 @@ jobs:
           # 리포트도 있으면 함께 민다 — trade-report 실행의 KV push가 실패했을 때의 복구 경로.
           if os.path.exists('docs/data/trade_report.json'):
               files['trade_report.json'] = json.load(open('docs/data/trade_report.json'))
+          if os.path.exists('docs/data/trade_discover.json'):
+              files['trade_discover.json'] = json.load(open('docs/data/trade_discover.json'))
           print(json.dumps({'files': files}))
           PY
           curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \

@@ -45,6 +45,7 @@ OUT_PATH = ROOT / "docs" / "data" / "trade.json"
 HISTORY_PATH = ROOT / "docs" / "data" / "trade_history.json"
 CACHE_PATH = ROOT / "docs" / "data" / "trade_raw_cache.json"
 MAP_PATH = Path(__file__).parent / "data" / "trade_map.json"
+SRC_MAP_PATH = Path(__file__).parent / "data" / "stock_trade_map.json"  # import_watch 큐레이션
 SCAN_PATH = ROOT / "docs" / "data" / "scan.json"
 
 # ── 기준 ──
@@ -371,6 +372,12 @@ def build() -> dict | None:
         if (m.get("amount") or 0) < SMALL_SCALE:
             m.setdefault("flags", []).append("small_scale")
 
+        # 급감 경고 — 백테스트에서 가장 신뢰도 높은 신호. 분기 -30% 진입 후 6개월
+        # 초과수익이 중앙 -16.1%(승률 31%)였다. 유니버스 선택 편향은 이 결과를
+        # 좋게 만드는 방향인데도 뚜렷이 나빴다.
+        if m.get("q_sum_yoy") is not None and m["q_sum_yoy"] <= -30:
+            m.setdefault("flags", []).append("q_drop")
+
         sc = prices.get(str(e.get("ticker")).zfill(6), {})
         out.append({
             "ticker": e.get("ticker"), "name": e.get("name"),
@@ -467,6 +474,41 @@ def build() -> dict | None:
         HISTORY_PATH.write_text(json.dumps(history[-24:], ensure_ascii=False, indent=1),
                                 encoding="utf-8")
 
+    # ── 수입 선행 워치 — 원재료·장비 수입은 생산 확대를 앞선다(BeOn: MR-MUF→하이닉스,
+    #    펄프→제지). 전국 품목별(Itemtrade)의 imp를 쓴다. **단위가 USD**라(시군구는 천USD)
+    #    시리즈를 천USD로 환산해 화면 단위를 통일한다.
+    imports = []
+    watch = (_load_json(SRC_MAP_PATH, {}) or {}).get("import_watch") or []
+    for w in watch:
+        hs = w.get("hs")
+        if not hs:
+            continue
+        rows: list[dict] = []
+        try:
+            for s0, e0 in chunks:
+                rows.extend(capi.fetch_item(hs, s0, e0, api_key, CACHE_PATH))
+        except capi.CustomsError as ex:
+            logger.warning("수입 워치 실패 hs=%s: %s", hs, ex)
+            continue
+        ser: dict[str, dict] = {}
+        for r in rows:
+            p = "".join(c for c in str(r.get("period", "")) if c.isdigit())[:6]
+            if len(p) != 6 or r.get("imp_amt") is None:
+                continue
+            cur = ser.setdefault(p, {"amt": 0.0, "qty": 0.0})
+            cur["amt"] += r["imp_amt"] / 1000.0          # USD → 천USD
+            cur["qty"] += (r.get("imp_wgt") or 0.0)
+        met = compute_metrics(ser, month)
+        if not met:
+            continue
+        imports.append({
+            "hs": hs, "label": w.get("label"), "note": w.get("note"),
+            "stocks": w.get("stocks") or [],
+            "series": [{"m": k, "amt": round(ser[k]["amt"], 1)} for k in sorted(ser)][-24:],
+            **met,
+        })
+    imports.sort(key=lambda x: (x.get("yoy") is None, -(x.get("yoy") or -1e9)))
+
     # 월초에는 당월 잠정치가 아직 없다(1~10일치는 11일 공개) — 전월로 물러난다.
     this_month = f"{today.year:04d}{today.month:02d}"
     macro = fetch_macro(api_key, this_month)
@@ -477,6 +519,7 @@ def build() -> dict | None:
         "data_month": month,
         "stocks": sorted(out, key=lambda x: (x.get("yoy") is None, -(x.get("yoy") or -1e9))),
         "macro": macro,
+        "imports": imports,
         "report_input": report_input,
         "fx": {"usd_krw": fx.get(month), "months": len(fx)},
         "thresholds": {
