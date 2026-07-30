@@ -1,0 +1,38 @@
+name: 수출 리포트 생성
+on:
+  schedule:
+    # 확정치가 갱신되는 회차에만 리포트를 쓴다. 잠정치만 갱신되는 11·21일은 매크로 띠로 충분.
+    # trade-stats(09:00 UTC, 1·11·15·21일)가 먼저 돌고 한 시간 뒤에 시작한다.
+    - cron: "0 10 1,15 * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: trade-report, cancel-in-progress: false }
+jobs:
+  trade-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 입력 준비 (같은 기준월 리포트가 있으면 skip)
+        run: python -X utf8 scanner/trade_report.py prepare
+      - name: Claude Code 설치
+        run: npm install -g @anthropic-ai/claude-code
+      - name: 리포트 생성 (Claude — 데이터만으로 작성, 웹 검색 없음)
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude -p "$(cat scanner/trade_report_prompt.md)" \
+            --allowedTools "Read,Write" \
+            --permission-mode acceptEdits \
+            --max-turns 30
+      - name: 검증·게시
+        env:
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python -X utf8 scanner/trade_report.py publish
+      - name: 결과 커밋
+        run: |
+          test -f docs/data/trade_report.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
+          bash .github/scripts/commit-data.sh "trade-report: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data/trade_report.json
