@@ -52,7 +52,14 @@ SCAN_PATH = ROOT / "docs" / "data" / "scan.json"
 # 증감률이 폭주하므로 산출하지 않는다($50k 상당).
 BASE_MIN = 50.0
 STREAK_YOY = 10.0         # '연속 성장' 판정 기준 YoY (%)
-BASE_EFFECT_Q = 0.25      # 전년동월이 자기 시계열 하위 25% 미만이면 기저효과 플래그
+# 전년동월이 자기 시계열의 양 극단이면 증감률이 과장된다. 낮은 쪽만 보면 안 된다 —
+# 효성중공업 변압기는 전년동월(2025-06)이 24개월 중 최대값이라 -88%가 찍혔지만
+# 12개월 이동합계로는 횡보였다. 높은 기준월도 똑같이 경고해야 한다.
+BASE_EFFECT_Q = 0.25      # 하위 25% 미만 → base_effect (증가율 과장)
+BASE_SPIKE_Q = 0.90       # 상위 10% 초과 → base_spike (감소율 과장)
+# 월 편차가 큰 품목(대형 수주품)은 월 단위 증감률이 노이즈다. 최대/최소 배수가
+# 이 값을 넘으면 lumpy로 표시하고 12개월 이동합계를 함께 본다.
+LUMPY_RATIO = 10.0
 MONTHS = 60               # 수집 개월 수 — 역대 대비 위치를 보려면 장기간이 필요
 
 
@@ -149,14 +156,33 @@ def compute_metrics(s: dict[str, dict], month: str) -> dict | None:
 
     flags = []
     amts = sorted(v.get("amt", 0.0) for v in s.values() if v.get("amt"))
-    if prev_y is not None and amts and prev_y <= amts[max(0, int(len(amts) * BASE_EFFECT_Q))]:
-        flags.append("base_effect")
+    if prev_y is not None and amts:
+        if prev_y <= amts[max(0, int(len(amts) * BASE_EFFECT_Q))]:
+            flags.append("base_effect")
+        elif prev_y >= amts[min(len(amts) - 1, int(len(amts) * BASE_SPIKE_Q))]:
+            flags.append("base_spike")
+
+    # ── 12개월 이동합계 — 월 편차가 큰 품목은 이걸 봐야 추세가 보인다.
+    ordered_keys = sorted(s)
+    idx = ordered_keys.index(month) if month in ordered_keys else -1
+    ttm = ttm_prev = None
+    if idx >= 11:
+        ttm = sum(s[k].get("amt", 0.0) for k in ordered_keys[idx - 11:idx + 1])
+        if idx >= 23:
+            ttm_prev = sum(s[k].get("amt", 0.0) for k in ordered_keys[idx - 23:idx - 11])
+    recent24 = [s[k].get("amt", 0.0) for k in ordered_keys[-24:] if s[k].get("amt")]
+    lumpy = bool(recent24) and max(recent24) / max(1e-9, min(recent24)) >= LUMPY_RATIO
+    if lumpy:
+        flags.append("lumpy")
 
     return {
         "amount": round(amt, 1),
         "yoy": _pct(amt, prev_y), "mom": _pct(amt, prev_m),
         "q_avg_yoy": round(statistics.fmean(q_yoys), 1) if q_yoys else None,
         "cum_yoy": _pct(ytd, ytd_prev), "streak": streak,
+        # 12개월 이동합계와 그 전년비 — 월 편차가 큰 품목의 진짜 추세
+        "ttm": round(ttm, 1) if ttm is not None else None,
+        "ttm_yoy": _pct(ttm, ttm_prev),
         "ath": ath, "high_12m": high_12m, "flags": flags,
     }
 

@@ -262,10 +262,13 @@
    "q_avg_yoy": 1452.2,
    "cum_yoy": 2431.8,
    "streak": 1,
+   "ttm": 16383.0,
+   "ttm_yoy": 879.3,
    "ath": true,
    "high_12m": true,
    "flags": [
-    "base_effect"
+    "base_effect",
+    "lumpy"
    ]
   },
   {
@@ -524,9 +527,13 @@
    "q_avg_yoy": 1048.2,
    "cum_yoy": 743.1,
    "streak": 17,
+   "ttm": 423401.0,
+   "ttm_yoy": 596.5,
    "ath": true,
    "high_12m": true,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "005010",
@@ -792,6 +799,8 @@
    "q_avg_yoy": 159.7,
    "cum_yoy": 52.9,
    "streak": 1,
+   "ttm": 11719.0,
+   "ttm_yoy": 38.2,
    "ath": true,
    "high_12m": true,
    "flags": [
@@ -1062,6 +1071,8 @@
    "q_avg_yoy": 46.0,
    "cum_yoy": 28.4,
    "streak": 1,
+   "ttm": 58081.0,
+   "ttm_yoy": 31.0,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -1230,6 +1241,8 @@
    "q_avg_yoy": 119.3,
    "cum_yoy": 265.9,
    "streak": 1,
+   "ttm": 1364.0,
+   "ttm_yoy": 103.0,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -1498,6 +1511,8 @@
    "q_avg_yoy": 90.6,
    "cum_yoy": 67.0,
    "streak": 4,
+   "ttm": 110530.0,
+   "ttm_yoy": 81.8,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -1742,6 +1757,8 @@
    "q_avg_yoy": 52.0,
    "cum_yoy": 73.0,
    "streak": 1,
+   "ttm": 130999.0,
+   "ttm_yoy": 54.7,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2010,6 +2027,8 @@
    "q_avg_yoy": 93.4,
    "cum_yoy": 70.0,
    "streak": 4,
+   "ttm": 1279307.0,
+   "ttm_yoy": 31.1,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -2280,6 +2299,8 @@
    "q_avg_yoy": 31.3,
    "cum_yoy": 28.1,
    "streak": 1,
+   "ttm": 85484.0,
+   "ttm_yoy": 20.6,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2548,6 +2569,8 @@
    "q_avg_yoy": 104.2,
    "cum_yoy": 105.5,
    "streak": 8,
+   "ttm": 67984.0,
+   "ttm_yoy": 67.4,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2816,6 +2839,8 @@
    "q_avg_yoy": 32.0,
    "cum_yoy": 33.3,
    "streak": 6,
+   "ttm": 372446.0,
+   "ttm_yoy": 21.1,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -3084,9 +3109,13 @@
    "q_avg_yoy": 34.2,
    "cum_yoy": 34.6,
    "streak": 4,
+   "ttm": 189089.0,
+   "ttm_yoy": 34.9,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike"
+   ]
   },
   {
    "ticker": "042700",
@@ -3352,10 +3381,13 @@
    "q_avg_yoy": 500.0,
    "cum_yoy": 146.0,
    "streak": 1,
+   "ttm": 28136.0,
+   "ttm_yoy": 50.5,
    "ath": false,
    "high_12m": false,
    "flags": [
-    "base_effect"
+    "base_effect",
+    "lumpy"
    ]
   },
   {
@@ -3622,6 +3654,8 @@
    "q_avg_yoy": 36.5,
    "cum_yoy": 42.2,
    "streak": 5,
+   "ttm": 249115.0,
+   "ttm_yoy": 26.2,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -3890,6 +3924,8 @@
    "q_avg_yoy": -6.2,
    "cum_yoy": -10.8,
    "streak": 1,
+   "ttm": 109292.0,
+   "ttm_yoy": -14.6,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -4158,6 +4194,8 @@
    "q_avg_yoy": 54.6,
    "cum_yoy": 61.1,
    "streak": 14,
+   "ttm": 1807737.0,
+   "ttm_yoy": 70.0,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -4426,6 +4464,8 @@
    "q_avg_yoy": 34.7,
    "cum_yoy": 31.7,
    "streak": 3,
+   "ttm": 63896.0,
+   "ttm_yoy": 23.7,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -4694,6 +4734,8 @@
    "q_avg_yoy": 0.4,
    "cum_yoy": -18.1,
    "streak": 1,
+   "ttm": 385713.0,
+   "ttm_yoy": -30.5,
    "ath": false,
    "high_12m": true,
    "flags": [
@@ -4964,6 +5006,8 @@
    "q_avg_yoy": 3.1,
    "cum_yoy": 3.9,
    "streak": 1,
+   "ttm": 75358.0,
+   "ttm_yoy": -5.2,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5232,6 +5276,8 @@
    "q_avg_yoy": 19.1,
    "cum_yoy": 14.2,
    "streak": 4,
+   "ttm": 17283.0,
+   "ttm_yoy": 17.9,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5500,6 +5546,8 @@
    "q_avg_yoy": -0.1,
    "cum_yoy": -3.1,
    "streak": 1,
+   "ttm": 158255.0,
+   "ttm_yoy": 0.8,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5768,9 +5816,13 @@
    "q_avg_yoy": 18.0,
    "cum_yoy": 16.1,
    "streak": 1,
+   "ttm": 91745.0,
+   "ttm_yoy": 14.7,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike"
+   ]
   },
   {
    "ticker": "278280",
@@ -6036,6 +6088,8 @@
    "q_avg_yoy": 17.8,
    "cum_yoy": 11.0,
    "streak": 3,
+   "ttm": 91945.0,
+   "ttm_yoy": 5.0,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -6304,9 +6358,13 @@
    "q_avg_yoy": -19.0,
    "cum_yoy": 6.6,
    "streak": 1,
+   "ttm": 215225.0,
+   "ttm_yoy": 10.0,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "306200",
@@ -6572,6 +6630,8 @@
    "q_avg_yoy": -9.6,
    "cum_yoy": -30.2,
    "streak": 1,
+   "ttm": 31238.0,
+   "ttm_yoy": -39.7,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -6840,6 +6900,8 @@
    "q_avg_yoy": 22.3,
    "cum_yoy": 27.8,
    "streak": 2,
+   "ttm": 47963.0,
+   "ttm_yoy": 21.7,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7108,9 +7170,13 @@
    "q_avg_yoy": 12.6,
    "cum_yoy": 8.5,
    "streak": 1,
+   "ttm": 449984.0,
+   "ttm_yoy": 9.7,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike"
+   ]
   },
   {
    "ticker": "096530",
@@ -7352,6 +7418,8 @@
    "q_avg_yoy": 13.9,
    "cum_yoy": 8.2,
    "streak": 0,
+   "ttm": 194555.0,
+   "ttm_yoy": 6.6,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7620,6 +7688,8 @@
    "q_avg_yoy": 20.6,
    "cum_yoy": 4.4,
    "streak": 0,
+   "ttm": 46093.0,
+   "ttm_yoy": 10.8,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7888,6 +7958,8 @@
    "q_avg_yoy": 21.5,
    "cum_yoy": 13.9,
    "streak": 0,
+   "ttm": 127234.0,
+   "ttm_yoy": 7.9,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -8158,9 +8230,13 @@
    "q_avg_yoy": 20.0,
    "cum_yoy": 7.6,
    "streak": 0,
+   "ttm": 639256.0,
+   "ttm_yoy": -8.4,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike"
+   ]
   },
   {
    "ticker": "010140",
@@ -8402,9 +8478,13 @@
    "q_avg_yoy": 122.1,
    "cum_yoy": 129.6,
    "streak": 0,
+   "ttm": 8772514.0,
+   "ttm_yoy": 122.1,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "042660",
@@ -8646,9 +8726,13 @@
    "q_avg_yoy": 122.1,
    "cum_yoy": 129.6,
    "streak": 0,
+   "ttm": 8772514.0,
+   "ttm_yoy": 122.1,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "278470",
@@ -8914,9 +8998,14 @@
    "q_avg_yoy": 312.6,
    "cum_yoy": 221.5,
    "streak": 0,
+   "ttm": 365104.0,
+   "ttm_yoy": 359.3,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike",
+    "lumpy"
+   ]
   },
   {
    "ticker": "189300",
@@ -9182,6 +9271,8 @@
    "q_avg_yoy": -47.9,
    "cum_yoy": -30.8,
    "streak": 0,
+   "ttm": 6772.0,
+   "ttm_yoy": -13.5,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -9426,6 +9517,8 @@
    "q_avg_yoy": -1.4,
    "cum_yoy": 8.1,
    "streak": 0,
+   "ttm": 55328.0,
+   "ttm_yoy": 14.0,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -9694,9 +9787,13 @@
    "q_avg_yoy": -58.0,
    "cum_yoy": -49.0,
    "streak": 0,
+   "ttm": 457820.0,
+   "ttm_yoy": -8.4,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "137400",
@@ -9962,9 +10059,13 @@
    "q_avg_yoy": -23.0,
    "cum_yoy": -16.7,
    "streak": 0,
+   "ttm": 249744.0,
+   "ttm_yoy": -18.2,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "064760",
@@ -10230,9 +10331,13 @@
    "q_avg_yoy": -80.1,
    "cum_yoy": -66.5,
    "streak": 0,
+   "ttm": 7781.0,
+   "ttm_yoy": -49.5,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "348210",
@@ -10498,9 +10603,13 @@
    "q_avg_yoy": 156.0,
    "cum_yoy": -43.2,
    "streak": 0,
+   "ttm": 33400.0,
+   "ttm_yoy": -29.8,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "lumpy"
+   ]
   },
   {
    "ticker": "298040",
@@ -10766,9 +10875,14 @@
    "q_avg_yoy": 48.8,
    "cum_yoy": -23.7,
    "streak": 0,
+   "ttm": 264504.0,
+   "ttm_yoy": -25.4,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "base_spike",
+    "lumpy"
+   ]
   },
   {
    "ticker": "108320",
@@ -11034,6 +11148,8 @@
    "q_avg_yoy": 39.6,
    "cum_yoy": 17.3,
    "streak": 0,
+   "ttm": 76755.0,
+   "ttm_yoy": -6.8,
    "ath": false,
    "high_12m": false,
    "flags": []
