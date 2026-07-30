@@ -845,6 +845,54 @@
       ],
       "label": "철강관",
       "seed_confidence": "mid"
+    },
+    {
+      "ticker": "080220",
+      "name": "제주반도체",
+      "sido": "50",
+      "sgg_hint": "제주",
+      "hs": [
+        "854231"
+      ],
+      "label": "집적회로(메모리 팹리스)",
+      "note": "KoAct ETF 편입. 실측 제주 1위 100% $21.3M — 팹리스지만 통관이 제주 본사 기준으로 잡힌다",
+      "seed_confidence": "high"
+    },
+    {
+      "ticker": "007660",
+      "name": "이수페타시스",
+      "sido": "27",
+      "sgg_hint": "달성",
+      "hs": [
+        "853400"
+      ],
+      "label": "인쇄회로기판(MLB)",
+      "note": "KoAct ETF 편입. 실측 달성 1위 100% $70.9M",
+      "seed_confidence": "high"
+    },
+    {
+      "ticker": "062040",
+      "name": "산일전기",
+      "sido": "41",
+      "sgg_hint": "안산",
+      "hs": [
+        "850434"
+      ],
+      "label": "변압기",
+      "note": "KoAct ETF 편입. 실측 안산 2위 44%, 균등 대비 13.8배",
+      "seed_confidence": "mid"
+    },
+    {
+      "ticker": "241710",
+      "name": "코스메카코리아",
+      "sido": "43",
+      "sgg_hint": "음성",
+      "hs": [
+        "330499"
+      ],
+      "label": "기초화장용 제품류(OEM)",
+      "note": "KoAct ETF 편입. 실측 음성 2위 35% $8.5M (1위 청주 63%)",
+      "seed_confidence": "mid"
     }
   ]
 }
