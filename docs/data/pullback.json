@@ -1,6 +1,6 @@
 {
- "updated": "2026-07-29 22:28",
- "snap_date": "2026-07-29",
+ "updated": "2026-07-30 16:26",
+ "snap_date": "2026-07-30",
  "history": [
   {
    "date": "2026-07-27",
@@ -339,12 +339,12 @@
   "status": "correction",
   "label": "조정 국면",
   "color": "red",
-  "kospi_close": 5663.24,
-  "ma200": 5707.68,
-  "ma200_ratio_pct": -0.78,
-  "dist_days": 8,
+  "kospi_close": 5668.85,
+  "ma200": 5718.9,
+  "ma200_ratio_pct": -0.88,
+  "dist_days": 7,
   "dist_window": 20,
-  "base_date": "2026-07-29"
+  "base_date": "2026-07-30"
  },
  "thresholds": {
   "pct_6m_min": 30.0,
@@ -360,7 +360,7 @@
   "score_max": 7,
   "note": "7점 만점(PER 가속은 컨센서스 제공 종목만 가점) — 권장 진입선 4점. 백테스트(2021-01~2026-05): score≥4 + 90일 보유 + 시장방향 필터."
  },
- "scanned": 33,
+ "scanned": 28,
  "count": 1,
  "candidates": [
   {
@@ -368,29 +368,29 @@
    "name": "인바디",
    "sector": null,
    "market": "KOSDAQ",
-   "pct_3m": 63.3,
-   "pct_6m": 52.0,
-   "pct_12m": 111.1,
+   "pct_3m": 58.1,
+   "pct_6m": 42.9,
+   "pct_12m": 94.8,
    "rs_kkangto": 91,
-   "per_trailing": 20.39,
-   "market_cap_억": 6660,
-   "current_price": 49400.0,
+   "per_trailing": 19.25,
+   "market_cap_억": 6289,
+   "current_price": 46650.0,
    "w52_high": 62000.0,
-   "proximity_52w": 0.7968,
-   "retrace_pct": 20.3,
+   "proximity_52w": 0.7524,
+   "retrace_pct": 24.8,
    "pivot": 62000.0,
-   "distance_to_pivot_pct": 25.5,
-   "consolidation_days": 19,
+   "distance_to_pivot_pct": 32.9,
+   "consolidation_days": 20,
    "vol_contracting": 1,
-   "vol_dry_ratio": 0.76,
+   "vol_dry_ratio": 0.66,
    "vol_drying": 1,
-   "vol_2x_bo": 1,
+   "vol_2x_bo": 0,
    "fwd_year1": "2026/12(E)",
    "fwd_year2": "2027/12(E)",
-   "per_fwd1": 13.8,
-   "per_fwd2": 12.9,
+   "per_fwd1": 13.1,
+   "per_fwd2": 12.2,
    "per_accel": 1,
-   "per_delta_pct": 6.5,
+   "per_delta_pct": 6.9,
    "pullback_score": 7,
    "score_bits": {
     "per_accel": 1,
@@ -404,7 +404,7 @@
    "rank": 1,
    "first_seen": "2026-07-24",
    "is_new": 0,
-   "days_in_list": 5
+   "days_in_list": 6
   }
  ]
 }
