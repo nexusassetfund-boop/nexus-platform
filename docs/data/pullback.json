@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30 16:26",
+ "updated": "2026-07-30 22:13",
  "snap_date": "2026-07-30",
  "history": [
   {
@@ -339,9 +339,9 @@
   "status": "correction",
   "label": "조정 국면",
   "color": "red",
-  "kospi_close": 5668.85,
-  "ma200": 5718.9,
-  "ma200_ratio_pct": -0.88,
+  "kospi_close": 5593.56,
+  "ma200": 5718.52,
+  "ma200_ratio_pct": -2.19,
   "dist_days": 7,
   "dist_window": 20,
   "base_date": "2026-07-30"
