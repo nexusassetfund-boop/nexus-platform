@@ -36,6 +36,20 @@ jobs:
         run: |
           python scanner/trade_stats.py
           python scanner/trade_discover.py || echo "발굴 실패 — 스캔 산출물은 유지"
+      - name: 발굴 품목 주석 준비 (전부 캐시돼 있으면 skip)
+        run: python -X utf8 scanner/trade_discover_annotate.py prepare || echo "주석 준비 실패 — 계속"
+      - name: Claude Code 설치
+        run: npm install -g @anthropic-ai/claude-code
+      - name: 발굴 품목 주석 (Claude — 품목 설명·후보 상장사, 수치 창작 금지)
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude -p "$(cat scanner/trade_discover_prompt.md)" \
+            --allowedTools "Read,Write" \
+            --permission-mode acceptEdits \
+            --max-turns 20 || echo "주석 생성 실패 — 기존 주석 유지"
+      - name: 주석 병합
+        run: python -X utf8 scanner/trade_discover_annotate.py publish || echo "병합 실패 — 계속"
       - name: 결과 커밋
         run: |
           test -f docs/data/trade.json || { echo "출력 없음 — 커밋 생략"; exit 0; }

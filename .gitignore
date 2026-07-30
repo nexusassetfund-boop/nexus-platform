@@ -23,3 +23,5 @@ earnings_output.json
 docs/data/trade_raw_cache.json
 trade_report_input.json
 trade_report_output.json
+discover_annotate_input.json
+discover_annotate_output.json
