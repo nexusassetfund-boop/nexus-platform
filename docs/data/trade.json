@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30 09:15",
+ "updated": "2026-07-30 12:12",
  "data_month": "202606",
  "stocks": [
   {
@@ -15,8 +15,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 1645.4,
-   "price": 7170.0,
-   "change_pct": -11.48,
+   "price": 7270.0,
+   "change_pct": 1.39,
    "pct_12m": null,
    "series": [
     {
@@ -824,8 +824,8 @@
    "shared": false,
    "note": "실측 강남 1위 35%",
    "yoy_krw": 226.3,
-   "price": 50100.0,
-   "change_pct": -8.58,
+   "price": 52600.0,
+   "change_pct": 4.99,
    "pct_12m": null,
    "series": [
     {
@@ -1095,8 +1095,8 @@
    "shared": false,
    "note": "강릉 단일공장. 리쥬란·콘쥬란",
    "yoy_krw": 169.5,
-   "price": 391000.0,
-   "change_pct": 4.13,
+   "price": 352000.0,
+   "change_pct": -9.97,
    "pct_12m": null,
    "series": [
     {
@@ -1366,8 +1366,8 @@
    "shared": false,
    "note": "춘천 거두 단일공장",
    "yoy_krw": 110.4,
-   "price": 229500.0,
-   "change_pct": -3.37,
+   "price": 228500.0,
+   "change_pct": -0.44,
    "pct_12m": null,
    "series": [
     {
@@ -1886,8 +1886,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 98.9,
-   "price": 97400.0,
-   "change_pct": -1.52,
+   "price": 95000.0,
+   "change_pct": -2.46,
    "pct_12m": null,
    "series": [
     {
@@ -2699,8 +2699,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 75.0,
-   "price": 40050.0,
-   "change_pct": -7.29,
+   "price": 39450.0,
+   "change_pct": -1.5,
    "pct_12m": null,
    "series": [
     {
@@ -2972,8 +2972,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 69.7,
-   "price": 167600.0,
-   "change_pct": -6.63,
+   "price": 173100.0,
+   "change_pct": 3.28,
    "pct_12m": null,
    "series": [
     {
@@ -3247,8 +3247,8 @@
    "shared": false,
    "note": "실측 경기 내 14% — 김포·성남 등과 혼재",
    "yoy_krw": 69.6,
-   "price": 184700.0,
-   "change_pct": 0.05,
+   "price": 185800.0,
+   "change_pct": 0.6,
    "pct_12m": null,
    "series": [
     {
@@ -3789,8 +3789,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 61.7,
-   "price": 65600.0,
-   "change_pct": -8.38,
+   "price": 70100.0,
+   "change_pct": 6.86,
    "pct_12m": null,
    "series": [
     {
@@ -4060,8 +4060,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 54.1,
-   "price": 58200.0,
-   "change_pct": -5.52,
+   "price": 57700.0,
+   "change_pct": -0.86,
    "pct_12m": null,
    "series": [
     {
@@ -4331,8 +4331,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 51.7,
-   "price": 5600.0,
-   "change_pct": -5.41,
+   "price": 6240.0,
+   "change_pct": 11.43,
    "pct_12m": null,
    "series": [
     {
@@ -5690,8 +5690,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 35.2,
-   "price": 29100.0,
-   "change_pct": -7.32,
+   "price": 29500.0,
+   "change_pct": 1.37,
    "pct_12m": null,
    "series": [
     {
@@ -5961,8 +5961,8 @@
    "shared": false,
    "note": "반월공장",
    "yoy_krw": 30.6,
-   "price": 90600.0,
-   "change_pct": -8.02,
+   "price": 87100.0,
+   "change_pct": -3.86,
    "pct_12m": null,
    "series": [
     {
@@ -6505,8 +6505,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 27.6,
-   "price": 3125.0,
-   "change_pct": -9.02,
+   "price": 3200.0,
+   "change_pct": 2.4,
    "pct_12m": null,
    "series": [
     {
@@ -6776,8 +6776,8 @@
    "shared": false,
    "note": "원주·익산·밀양 다공장 — 혼재 가능",
    "yoy_krw": 25.4,
-   "price": 1220000.0,
-   "change_pct": 3.13,
+   "price": 1237000.0,
+   "change_pct": 1.39,
    "pct_12m": null,
    "series": [
     {
@@ -7049,8 +7049,8 @@
    "shared": false,
    "note": "송파 본사·공장. 실측 송파 1위 61% — 382200이 아니라 382219가 맞다",
    "yoy_krw": 19.4,
-   "price": 25450.0,
-   "change_pct": -2.86,
+   "price": 26100.0,
+   "change_pct": 2.55,
    "pct_12m": null,
    "series": [
     {
@@ -7567,8 +7567,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 16.1,
-   "price": 34300.0,
-   "change_pct": -6.03,
+   "price": 35300.0,
+   "change_pct": 2.92,
    "pct_12m": null,
    "series": [
     {
@@ -7840,8 +7840,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 3.6,
-   "price": 29650.0,
-   "change_pct": -9.33,
+   "price": 30050.0,
+   "change_pct": 1.35,
    "pct_12m": null,
    "series": [
     {
@@ -8113,8 +8113,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 19400.0,
-   "change_pct": -6.28,
+   "price": 21350.0,
+   "change_pct": 10.05,
    "pct_12m": null,
    "series": [
     {
@@ -8363,8 +8363,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 74600.0,
-   "change_pct": -7.9,
+   "price": 83300.0,
+   "change_pct": 11.66,
    "pct_12m": null,
    "series": [
     {
@@ -8613,8 +8613,8 @@
    "shared": false,
    "note": "강남 본사(생산은 평택 자체공장이나 통관은 본사 기준으로 보임). 실측 강남 1위 58%. 마스크팩(330790)은 강남 40%·송파 40%로 갈린다",
    "yoy_krw": -17.9,
-   "price": 325000.0,
-   "change_pct": -2.55,
+   "price": 327500.0,
+   "change_pct": 0.77,
    "pct_12m": null,
    "series": [
     {
@@ -8887,8 +8887,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -29.9,
-   "price": 51500.0,
-   "change_pct": -8.04,
+   "price": 52400.0,
+   "change_pct": 1.75,
    "pct_12m": null,
    "series": [
     {
@@ -9407,8 +9407,8 @@
    "shared": false,
    "note": "청주·포항 다거점",
    "yoy_krw": -44.6,
-   "price": 92600.0,
-   "change_pct": -9.04,
+   "price": 102100.0,
+   "change_pct": 10.26,
    "pct_12m": null,
    "series": [
     {
@@ -9680,8 +9680,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -54.7,
-   "price": 25200.0,
-   "change_pct": -8.86,
+   "price": 26450.0,
+   "change_pct": 4.96,
    "pct_12m": null,
    "series": [
     {
@@ -9953,8 +9953,8 @@
    "shared": false,
    "note": "안성 단일공장. 실측 안성 1위 72% — SiC 링은 흑연제품(6815)이 아니라 내화물(6903)로 분류된다",
    "yoy_krw": -73.0,
-   "price": 149800.0,
-   "change_pct": -9.98,
+   "price": 148800.0,
+   "change_pct": -0.67,
    "pct_12m": null,
    "series": [
     {
@@ -10228,7 +10228,7 @@
    "note": null,
    "yoy_krw": -79.2,
    "price": 26400.0,
-   "change_pct": -9.28,
+   "change_pct": 0.0,
    "pct_12m": null,
    "series": [
     {
@@ -10501,8 +10501,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -86.7,
-   "price": 2006000.0,
-   "change_pct": -13.68,
+   "price": 2011000.0,
+   "change_pct": 0.25,
    "pct_12m": null,
    "series": [
     {
