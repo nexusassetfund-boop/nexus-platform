@@ -11,7 +11,7 @@
    "share": 100.0,
    "rank": 1,
    "of": 1,
-   "grade": "high",
+   "grade": "mid",
    "shared": false,
    "note": null,
    "yoy_krw": 1645.4,
@@ -262,12 +262,14 @@
    "q_avg_yoy": 1452.2,
    "cum_yoy": 2431.8,
    "streak": 1,
-   "ttm": 16383.0,
-   "ttm_yoy": 879.3,
+   "ttm": null,
+   "ttm_yoy": null,
+   "ttm_partial": true,
    "ath": true,
    "high_12m": true,
    "flags": [
     "base_effect",
+    "ttm_partial",
     "lumpy"
    ]
   },
@@ -529,6 +531,7 @@
    "streak": 17,
    "ttm": 423401.0,
    "ttm_yoy": 596.5,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
    "flags": [
@@ -801,6 +804,7 @@
    "streak": 1,
    "ttm": 11719.0,
    "ttm_yoy": 38.2,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
    "flags": [
@@ -1073,178 +1077,9 @@
    "streak": 1,
    "ttm": 58081.0,
    "ttm_yoy": 31.0,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
-   "flags": []
-  },
-  {
-   "ticker": "161390",
-   "name": "한국타이어앤테크놀로지",
-   "label": "고무타이어(버스·화물차용)",
-   "hs": "401120",
-   "region": "대전광역시 동구",
-   "share": 95.4,
-   "rank": 1,
-   "of": 3,
-   "grade": "high",
-   "shared": false,
-   "note": null,
-   "yoy_krw": 199.3,
-   "price": 65900.0,
-   "change_pct": -1.2,
-   "pct_12m": null,
-   "series": [
-    {
-     "m": "202107",
-     "amt": 0.0
-    },
-    {
-     "m": "202108",
-     "amt": 58.0
-    },
-    {
-     "m": "202109",
-     "amt": 56.0
-    },
-    {
-     "m": "202110",
-     "amt": 0.0
-    },
-    {
-     "m": "202111",
-     "amt": 57.0
-    },
-    {
-     "m": "202112",
-     "amt": 58.0
-    },
-    {
-     "m": "202201",
-     "amt": 0.0
-    },
-    {
-     "m": "202202",
-     "amt": 55.0
-    },
-    {
-     "m": "202203",
-     "amt": 0.0
-    },
-    {
-     "m": "202205",
-     "amt": 0.0
-    },
-    {
-     "m": "202206",
-     "amt": 0.0
-    },
-    {
-     "m": "202207",
-     "amt": 63.0
-    },
-    {
-     "m": "202208",
-     "amt": 0.0
-    },
-    {
-     "m": "202209",
-     "amt": 59.0
-    },
-    {
-     "m": "202302",
-     "amt": 65.0
-    },
-    {
-     "m": "202303",
-     "amt": 60.0
-    },
-    {
-     "m": "202306",
-     "amt": 61.0
-    },
-    {
-     "m": "202308",
-     "amt": 61.0
-    },
-    {
-     "m": "202310",
-     "amt": 61.0
-    },
-    {
-     "m": "202312",
-     "amt": 60.0
-    },
-    {
-     "m": "202402",
-     "amt": 60.0
-    },
-    {
-     "m": "202404",
-     "amt": 63.0
-    },
-    {
-     "m": "202407",
-     "amt": 59.0
-    },
-    {
-     "m": "202410",
-     "amt": 115.0
-    },
-    {
-     "m": "202501",
-     "amt": 61.0
-    },
-    {
-     "m": "202504",
-     "amt": 62.0
-    },
-    {
-     "m": "202506",
-     "amt": 62.0
-    },
-    {
-     "m": "202507",
-     "amt": 103.0
-    },
-    {
-     "m": "202509",
-     "amt": 107.0
-    },
-    {
-     "m": "202510",
-     "amt": 116.0
-    },
-    {
-     "m": "202512",
-     "amt": 61.0
-    },
-    {
-     "m": "202603",
-     "amt": 118.0
-    },
-    {
-     "m": "202604",
-     "amt": 107.0
-    },
-    {
-     "m": "202605",
-     "amt": 287.0
-    },
-    {
-     "m": "202606",
-     "amt": 165.0
-    }
-   ],
-   "amount": 165.0,
-   "yoy": 166.1,
-   "mom": -42.5,
-   "q_avg_yoy": 119.3,
-   "cum_yoy": 265.9,
-   "streak": 1,
-   "ttm": 1364.0,
-   "ttm_yoy": 103.0,
-   "ath": false,
-   "high_12m": false,
    "flags": []
   },
   {
@@ -1513,6 +1348,7 @@
    "streak": 4,
    "ttm": 110530.0,
    "ttm_yoy": 81.8,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -1759,6 +1595,7 @@
    "streak": 1,
    "ttm": 130999.0,
    "ttm_yoy": 54.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2029,6 +1866,7 @@
    "streak": 4,
    "ttm": 1279307.0,
    "ttm_yoy": 31.1,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -2044,7 +1882,7 @@
    "share": 100.0,
    "rank": 1,
    "of": 1,
-   "grade": "high",
+   "grade": "mid",
    "shared": false,
    "note": null,
    "yoy_krw": 98.9,
@@ -2301,6 +2139,7 @@
    "streak": 1,
    "ttm": 85484.0,
    "ttm_yoy": 20.6,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2571,6 +2410,7 @@
    "streak": 8,
    "ttm": 67984.0,
    "ttm_yoy": 67.4,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -2841,6 +2681,7 @@
    "streak": 6,
    "ttm": 372446.0,
    "ttm_yoy": 21.1,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -3111,6 +2952,7 @@
    "streak": 4,
    "ttm": 189089.0,
    "ttm_yoy": 34.9,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -3383,11 +3225,13 @@
    "streak": 1,
    "ttm": 28136.0,
    "ttm_yoy": 50.5,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
     "base_effect",
-    "lumpy"
+    "lumpy",
+    "small_scale"
    ]
   },
   {
@@ -3656,6 +3500,7 @@
    "streak": 5,
    "ttm": 249115.0,
    "ttm_yoy": 26.2,
+   "ttm_partial": false,
    "ath": true,
    "high_12m": true,
    "flags": []
@@ -3926,6 +3771,7 @@
    "streak": 1,
    "ttm": 109292.0,
    "ttm_yoy": -14.6,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -4196,6 +4042,7 @@
    "streak": 14,
    "ttm": 1807737.0,
    "ttm_yoy": 70.0,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -4466,6 +4313,7 @@
    "streak": 3,
    "ttm": 63896.0,
    "ttm_yoy": 23.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -4736,6 +4584,7 @@
    "streak": 1,
    "ttm": 385713.0,
    "ttm_yoy": -30.5,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": true,
    "flags": [
@@ -5008,6 +4857,7 @@
    "streak": 1,
    "ttm": 75358.0,
    "ttm_yoy": -5.2,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5278,6 +5128,7 @@
    "streak": 4,
    "ttm": 17283.0,
    "ttm_yoy": 17.9,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5548,6 +5399,7 @@
    "streak": 1,
    "ttm": 158255.0,
    "ttm_yoy": 0.8,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -5818,6 +5670,7 @@
    "streak": 1,
    "ttm": 91745.0,
    "ttm_yoy": 14.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -6090,6 +5943,7 @@
    "streak": 3,
    "ttm": 91945.0,
    "ttm_yoy": 5.0,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -6360,6 +6214,7 @@
    "streak": 1,
    "ttm": 215225.0,
    "ttm_yoy": 10.0,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -6632,6 +6487,7 @@
    "streak": 1,
    "ttm": 31238.0,
    "ttm_yoy": -39.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": true,
    "flags": []
@@ -6902,6 +6758,7 @@
    "streak": 2,
    "ttm": 47963.0,
    "ttm_yoy": 21.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7172,6 +7029,7 @@
    "streak": 1,
    "ttm": 449984.0,
    "ttm_yoy": 9.7,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -7420,6 +7278,7 @@
    "streak": 0,
    "ttm": 194555.0,
    "ttm_yoy": 6.6,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7690,6 +7549,7 @@
    "streak": 0,
    "ttm": 46093.0,
    "ttm_yoy": 10.8,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -7960,6 +7820,7 @@
    "streak": 0,
    "ttm": 127234.0,
    "ttm_yoy": 7.9,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -8232,6 +8093,7 @@
    "streak": 0,
    "ttm": 639256.0,
    "ttm_yoy": -8.4,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -8247,7 +8109,7 @@
    "share": 100.0,
    "rank": 1,
    "of": 1,
-   "grade": "high",
+   "grade": "mid",
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
@@ -8478,11 +8340,13 @@
    "q_avg_yoy": 122.1,
    "cum_yoy": 129.6,
    "streak": 0,
-   "ttm": 8772514.0,
-   "ttm_yoy": 122.1,
+   "ttm": null,
+   "ttm_yoy": null,
+   "ttm_partial": true,
    "ath": false,
    "high_12m": false,
    "flags": [
+    "ttm_partial",
     "lumpy"
    ]
   },
@@ -8495,7 +8359,7 @@
    "share": 100.0,
    "rank": 1,
    "of": 1,
-   "grade": "high",
+   "grade": "mid",
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
@@ -8726,11 +8590,13 @@
    "q_avg_yoy": 122.1,
    "cum_yoy": 129.6,
    "streak": 0,
-   "ttm": 8772514.0,
-   "ttm_yoy": 122.1,
+   "ttm": null,
+   "ttm_yoy": null,
+   "ttm_partial": true,
    "ath": false,
    "high_12m": false,
    "flags": [
+    "ttm_partial",
     "lumpy"
    ]
   },
@@ -9000,6 +8866,7 @@
    "streak": 0,
    "ttm": 365104.0,
    "ttm_yoy": 359.3,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -9273,9 +9140,12 @@
    "streak": 0,
    "ttm": 6772.0,
    "ttm_yoy": -13.5,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
-   "flags": []
+   "flags": [
+    "small_scale"
+   ]
   },
   {
    "ticker": "086900",
@@ -9519,6 +9389,7 @@
    "streak": 0,
    "ttm": 55328.0,
    "ttm_yoy": 14.0,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -9789,6 +9660,7 @@
    "streak": 0,
    "ttm": 457820.0,
    "ttm_yoy": -8.4,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -10061,6 +9933,7 @@
    "streak": 0,
    "ttm": 249744.0,
    "ttm_yoy": -18.2,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -10333,10 +10206,12 @@
    "streak": 0,
    "ttm": 7781.0,
    "ttm_yoy": -49.5,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
-    "lumpy"
+    "lumpy",
+    "small_scale"
    ]
   },
   {
@@ -10605,10 +10480,12 @@
    "streak": 0,
    "ttm": 33400.0,
    "ttm_yoy": -29.8,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
-    "lumpy"
+    "lumpy",
+    "small_scale"
    ]
   },
   {
@@ -10620,7 +10497,7 @@
    "share": 100.0,
    "rank": 1,
    "of": 1,
-   "grade": "high",
+   "grade": "mid",
    "shared": false,
    "note": null,
    "yoy_krw": -86.7,
@@ -10877,6 +10754,7 @@
    "streak": 0,
    "ttm": 264504.0,
    "ttm_yoy": -25.4,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": [
@@ -11150,6 +11028,7 @@
    "streak": 0,
    "ttm": 76755.0,
    "ttm_yoy": -6.8,
+   "ttm_partial": false,
    "ath": false,
    "high_12m": false,
    "flags": []
@@ -11276,8 +11155,8 @@
   "note": "공장 소재 시군구의 품목 수출액입니다. 그 기업의 확정 매출이 아니며, 같은 지역에 동종 업체가 있으면 섞입니다. 해외 생산분은 한국 통계에 잡히지 않고, 통관 시점과 매출 인식 시점에 시차가 있습니다. 금액 단위는 천USD입니다."
  },
  "coverage": {
-  "stocks": 42,
-  "mapped": 42,
+  "stocks": 41,
+  "mapped": 41,
   "failed": 0
  }
 }

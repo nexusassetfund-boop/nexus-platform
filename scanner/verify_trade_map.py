@@ -76,7 +76,11 @@ def grade(share: float, rank: int, n_sgg: int) -> str:
     반례: 이오테크닉스 안양 17%는 배수 1.3에 그친다 — 레이저 가공기를 수출하는
     시군구가 8개뿐이라 17%는 균등 수준이고, 몰려 있다고 볼 수 없다.
     """
-    conc = share * max(1, n_sgg) / 100.0
+    # 그 품목을 수출한 시군구가 하나뿐이면 점유율은 자동으로 100%다 — 변별력이 0인데
+    # 최고 신뢰도를 주면 안 된다. 지역이 맞다는 정보는 되므로 mid까지만 인정한다.
+    if n_sgg <= 1:
+        return "mid"
+    conc = share * n_sgg / 100.0
     if rank == 1 and (share >= 50 or conc >= 5):
         return "high"
     if rank <= 3 and (share >= 20 or conc >= 2.5):
@@ -153,7 +157,9 @@ def main():
         sys.exit(1)
 
     only = {a for a in sys.argv[1:] if a.isdigit()}
-    entries = [e for e in src["entries"] if not only or e.get("ticker") in only]
+    # disabled 항목은 검증 대상에서 뺀다(사유는 note에 남겨 둔다).
+    entries = [e for e in src["entries"]
+               if not e.get("disabled") and (not only or e.get("ticker") in only)]
 
     today = dt.datetime.now(tz=KST).date()
     back = 1 if today.day >= 16 else 2
@@ -193,6 +199,27 @@ def main():
             for r in adopted:
                 if (r["sgg"], r["hs_used"]) == key:
                     r["shared"] = True
+                    r["shared_with"] = [t for t in users if t != r["ticker"]]
+                    # 같은 셀을 쓰는 종목이 여럿이면 그 수치는 어느 쪽 것도 아니다
+                    # (거제 탱커 = 삼성중공업 + 한화오션 합계). 등급을 한 단계 낮춘다.
+                    if r["grade"] == "high":
+                        r["grade"] = "mid"
+
+    # 부분 실행(티커 인자)이면 기존 결과를 살려 해당 항목만 교체한다.
+    # 예전에는 통째로 덮어써서 "한 종목만 재확인"이 나머지 41개를 지웠다 —
+    # 그 파일이 커밋되면 다음 스캔이 1종목만 산출한다(50% 게이트도 통과해 버린다).
+    if only:
+        prev = (_load(OUT_PATH) or {}).get("entries") or []
+        keep = [e for e in prev if e.get("ticker") not in only]
+        merged = {e["ticker"]: e for e in keep}
+        for r in adopted:
+            merged[r["ticker"]] = r
+        # 이번 검증에서 탈락한 종목은 기존 항목도 제거한다(등급이 떨어졌다는 뜻).
+        for t in only:
+            if t not in {r["ticker"] for r in adopted}:
+                merged.pop(t, None)
+        adopted = list(merged.values())
+        print(f"부분 실행 — 기존 {len(prev)}개에 {len(only)}개 반영 → {len(adopted)}개")
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps({
