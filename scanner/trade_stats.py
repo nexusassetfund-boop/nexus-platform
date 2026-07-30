@@ -203,10 +203,19 @@ def compute_metrics(s: dict[str, dict], month: str) -> dict | None:
     if lumpy:
         flags.append("lumpy")
 
+    # 분기 합계 대 합계 — 실적은 분기 합계로 발표되므로 컨센서스 대조에는 이쪽이 맞다.
+    # q_avg_yoy(월별 증감률의 단순 평균)는 금액 가중이 아니라 값이 다르게 나온다.
+    q_ms = [m for m in _quarter_months(month) if m <= month]
+    q_sum = sum((s.get(m) or {}).get("amt") or 0.0 for m in q_ms)
+    q_sum_prev = sum((s.get(_prev_yymm(m, 12)) or {}).get("amt") or 0.0 for m in q_ms)
+
     return {
         "amount": round(amt, 1),
         "yoy": _pct(amt, prev_y), "mom": _pct(amt, prev_m),
         "q_avg_yoy": round(statistics.fmean(q_yoys), 1) if q_yoys else None,
+        "q_sum_yoy": _pct(q_sum, q_sum_prev),
+        "q_progress": f"{len(q_ms)}/3",
+        "q_sum": round(q_sum, 1),
         "cum_yoy": _pct(ytd, ytd_prev), "streak": streak,
         # 12개월 이동합계와 그 전년비 — 월 편차가 큰 품목의 진짜 추세
         "ttm": round(ttm, 1) if ttm is not None else None,
@@ -380,7 +389,77 @@ def build() -> dict | None:
         logger.error("수집 성공이 절반 미만 (%d/%d) — 기존 파일 보존", len(out), len(entries))
         return None
 
+    # ── 리포트 재료. LLM에게 카드 52장을 통째로 주지 않고 요리된 재료를 준다.
+    #    세종의 선별 기준(원문 공개)은 레벨이 아니라 **추세 변화**다 —
+    #    "최근 2~3개월 추이를 확인하고 추세 변화가 뚜렷한 기업을 고른다".
+    IND_GROUPS = {
+        "양극재·2차전지": ["양극재", "리튬염", "전해질", "축전지"],
+        "화장품·미용": ["기초화장", "메이크업", "미용기기", "마스크"],
+        "바이오·의료": ["독소", "면역", "의료기기", "치과", "올리고", "조제식료품", "진단"],
+        "반도체": ["집적회로", "반도체", "리드프레임", "검사장비", "제조용 장비", "내화물"],
+        "조선": ["탱커"],
+        "철강·금속": ["철강관", "알루미늄", "베어링"],
+        "기계·전력": ["개폐", "연료전지", "철도", "온수기", "레이저"],
+    }
+
+    def _q(stk, cur_q=True):
+        ser = {p["m"]: p["amt"] for p in stk["series"]}
+        ms = [m for m in _quarter_months(month) if m <= month]
+        if not cur_q:
+            ms = [_prev_yymm(m, 12) for m in ms]
+        return sum(ser.get(m, 0.0) for m in ms)
+
+    industries = []
+    grouped: set[str] = set()
+    for gname, kws in IND_GROUPS.items():
+        members = [x for x in out if any(k in (x.get("label") or "") for k in kws)]
+        if len(members) < 2:
+            continue
+        rows_g = []
+        for x in members:
+            grouped.add(x["ticker"])
+            a, b = _q(x), _q(x, False)
+            rows_g.append({"ticker": x["ticker"], "name": x["name"],
+                           "q_sum": round(a, 1), "q_sum_yoy": _pct(a, b),
+                           "ath": x.get("ath"), "flags": x.get("flags")})
+        rows_g.sort(key=lambda r: (r["q_sum_yoy"] is None, -(r["q_sum_yoy"] or 0)))
+        ga = sum(r["q_sum"] for r in rows_g)
+        gb = sum(_q(x, False) for x in members)
+        industries.append({"group": gname, "q_sum": round(ga, 1),
+                           "q_sum_yoy": _pct(ga, gb), "stocks": rows_g})
+
+    # 추세 변화 movers: 신규 ATH / 분기 상·하위 / 부호 전환(최근 3개월 vs 이전 3개월)
     history = _load_json(HISTORY_PATH, [])
+    prev_rec = next((h for h in reversed(history) if h.get("month") != month), {})
+    prev_ath = set(prev_rec.get("ath") or [])
+    prev_picks = set(prev_rec.get("picks") or [])
+
+    def _turn(stk):
+        ser = {p["m"]: p["amt"] for p in stk["series"]}
+        recent = sum(ser.get(_prev_yymm(month, k), 0.0) for k in range(3))
+        before = sum(ser.get(_prev_yymm(month, k), 0.0) for k in range(3, 6))
+        return _pct(recent, before, BASE_MIN * 3)
+
+    movers = {
+        "new_ath": [x["ticker"] for x in out
+                    if x.get("ath") and x["ticker"] not in prev_ath],
+        "q_top": [x["ticker"] for x in sorted(
+            (x for x in out if x.get("q_sum_yoy") is not None),
+            key=lambda x: -x["q_sum_yoy"])[:10]],
+        "q_bottom": [x["ticker"] for x in sorted(
+            (x for x in out if x.get("q_sum_yoy") is not None),
+            key=lambda x: x["q_sum_yoy"])[:5]],
+        "turning": {x["ticker"]: _turn(x) for x in out
+                    if _turn(x) is not None and abs(_turn(x)) >= 30},
+        "prev_picks": sorted(prev_picks),
+    }
+
+    report_input = {
+        "industries": industries,
+        "movers": movers,
+        "ungrouped": [x["ticker"] for x in out if x["ticker"] not in grouped],
+    }
+
     if not history or history[-1].get("month") != month:
         history.append({"month": month, "date": today.isoformat(),
                         "ath": [x["ticker"] for x in out if x.get("ath")]})
@@ -398,6 +477,7 @@ def build() -> dict | None:
         "data_month": month,
         "stocks": sorted(out, key=lambda x: (x.get("yoy") is None, -(x.get("yoy") or -1e9))),
         "macro": macro,
+        "report_input": report_input,
         "fx": {"usd_krw": fx.get(month), "months": len(fx)},
         "thresholds": {
             "streak_yoy": STREAK_YOY, "base_min": BASE_MIN,

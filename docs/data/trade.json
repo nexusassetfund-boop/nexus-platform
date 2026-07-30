@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30 12:36",
+ "updated": "2026-07-30 14:11",
  "data_month": "202606",
  "stocks": [
   {
@@ -15,8 +15,8 @@
    "shared": false,
    "note": "창원공장. 실측 100% $4.6M — 완성차(860300)가 아니라 부분품으로 나간다",
    "yoy_krw": 2696.5,
-   "price": 122700.0,
-   "change_pct": 2.16,
+   "price": 121600.0,
+   "change_pct": 1.25,
    "pct_12m": null,
    "series": [
     {
@@ -264,6 +264,9 @@
    "yoy": 2386.9,
    "mom": 137.5,
    "q_avg_yoy": 2386.9,
+   "q_sum_yoy": 5837.8,
+   "q_progress": "3/3",
+   "q_sum": 10985.0,
    "cum_yoy": 1655.2,
    "streak": 1,
    "ttm": 18101.0,
@@ -288,8 +291,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 1645.4,
-   "price": 6840.0,
-   "change_pct": -4.6,
+   "price": 6810.0,
+   "change_pct": -5.02,
    "pct_12m": null,
    "series": [
     {
@@ -533,6 +536,9 @@
    "yoy": 1452.2,
    "mom": 62.8,
    "q_avg_yoy": 1452.2,
+   "q_sum_yoy": 3050.0,
+   "q_progress": "3/3",
+   "q_sum": 7875.0,
    "cum_yoy": 2431.8,
    "streak": 1,
    "ttm": null,
@@ -800,6 +806,9 @@
    "yoy": 1080.0,
    "mom": 57.0,
    "q_avg_yoy": 1048.2,
+   "q_sum_yoy": 955.0,
+   "q_progress": "3/3",
+   "q_sum": 240973.0,
    "cum_yoy": 743.1,
    "streak": 17,
    "ttm": 423401.0,
@@ -1073,6 +1082,9 @@
    "yoy": 463.4,
    "mom": 327.5,
    "q_avg_yoy": 159.7,
+   "q_sum_yoy": 110.2,
+   "q_progress": "3/3",
+   "q_sum": 5092.0,
    "cum_yoy": 52.9,
    "streak": 1,
    "ttm": 11719.0,
@@ -1097,8 +1109,8 @@
    "shared": false,
    "note": "실측 강남 1위 35%",
    "yoy_krw": 226.3,
-   "price": 51000.0,
-   "change_pct": 1.8,
+   "price": 50400.0,
+   "change_pct": 0.6,
    "pct_12m": null,
    "series": [
     {
@@ -1346,6 +1358,9 @@
    "yoy": 190.2,
    "mom": 127.9,
    "q_avg_yoy": 46.0,
+   "q_sum_yoy": 16.6,
+   "q_progress": "3/3",
+   "q_sum": 17436.0,
    "cum_yoy": 28.4,
    "streak": 1,
    "ttm": 58081.0,
@@ -1368,8 +1383,8 @@
    "shared": false,
    "note": "강릉 단일공장. 리쥬란·콘쥬란",
    "yoy_krw": 169.5,
-   "price": 343500.0,
-   "change_pct": -12.15,
+   "price": 349000.0,
+   "change_pct": -10.74,
    "pct_12m": null,
    "series": [
     {
@@ -1617,6 +1632,9 @@
    "yoy": 139.6,
    "mom": 19.9,
    "q_avg_yoy": 90.6,
+   "q_sum_yoy": 86.5,
+   "q_progress": "3/3",
+   "q_sum": 40703.0,
    "cum_yoy": 67.0,
    "streak": 4,
    "ttm": 110530.0,
@@ -1639,8 +1657,8 @@
    "shared": false,
    "note": "세종공장. 실측 100%이나 해당 품목 수출 시군구가 1곳뿐이라 변별력은 없다",
    "yoy_krw": 119.5,
-   "price": 35500.0,
-   "change_pct": 0.42,
+   "price": 35350.0,
+   "change_pct": 0.0,
    "pct_12m": null,
    "series": [
     {
@@ -1888,6 +1906,9 @@
    "yoy": 95.2,
    "mom": 109.5,
    "q_avg_yoy": 61.4,
+   "q_sum_yoy": 51.6,
+   "q_progress": "3/3",
+   "q_sum": 10321.0,
    "cum_yoy": 55.5,
    "streak": 1,
    "ttm": 43322.0,
@@ -1910,8 +1931,8 @@
    "shared": false,
    "note": "춘천 거두 단일공장",
    "yoy_krw": 110.4,
-   "price": 224000.0,
-   "change_pct": -2.4,
+   "price": 225000.0,
+   "change_pct": -1.96,
    "pct_12m": null,
    "series": [
     {
@@ -2135,6 +2156,9 @@
    "yoy": 87.1,
    "mom": 44.1,
    "q_avg_yoy": 52.0,
+   "q_sum_yoy": 46.0,
+   "q_progress": "3/3",
+   "q_sum": 34440.0,
    "cum_yoy": 73.0,
    "streak": 1,
    "ttm": 130999.0,
@@ -2406,6 +2430,9 @@
    "yoy": 86.4,
    "mom": -20.6,
    "q_avg_yoy": 93.4,
+   "q_sum_yoy": 93.3,
+   "q_progress": "3/3",
+   "q_sum": 394208.0,
    "cum_yoy": 70.0,
    "streak": 4,
    "ttm": 1279307.0,
@@ -2430,8 +2457,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 98.9,
-   "price": 90900.0,
-   "change_pct": -6.67,
+   "price": 91900.0,
+   "change_pct": -5.65,
    "pct_12m": null,
    "series": [
     {
@@ -2679,6 +2706,9 @@
    "yoy": 76.9,
    "mom": 52.0,
    "q_avg_yoy": 31.3,
+   "q_sum_yoy": 27.3,
+   "q_progress": "3/3",
+   "q_sum": 24633.0,
    "cum_yoy": 28.1,
    "streak": 1,
    "ttm": 85484.0,
@@ -2950,6 +2980,9 @@
    "yoy": 64.0,
    "mom": 21.4,
    "q_avg_yoy": 104.2,
+   "q_sum_yoy": 95.5,
+   "q_progress": "3/3",
+   "q_sum": 17797.0,
    "cum_yoy": 105.5,
    "streak": 8,
    "ttm": 67984.0,
@@ -3221,6 +3254,9 @@
    "yoy": 60.2,
    "mom": 32.1,
    "q_avg_yoy": 32.0,
+   "q_sum_yoy": 31.3,
+   "q_progress": "3/3",
+   "q_sum": 109372.0,
    "cum_yoy": 33.3,
    "streak": 6,
    "ttm": 372446.0,
@@ -3243,8 +3279,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 75.0,
-   "price": 38450.0,
-   "change_pct": -4.0,
+   "price": 38150.0,
+   "change_pct": -4.74,
    "pct_12m": null,
    "series": [
     {
@@ -3492,6 +3528,9 @@
    "yoy": 55.6,
    "mom": 84.3,
    "q_avg_yoy": 34.2,
+   "q_sum_yoy": 38.0,
+   "q_progress": "3/3",
+   "q_sum": 52501.0,
    "cum_yoy": 34.6,
    "streak": 4,
    "ttm": 189089.0,
@@ -3516,8 +3555,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 69.7,
-   "price": 165200.0,
-   "change_pct": -1.43,
+   "price": 164400.0,
+   "change_pct": -1.91,
    "pct_12m": null,
    "series": [
     {
@@ -3765,6 +3804,9 @@
    "yoy": 50.9,
    "mom": -47.9,
    "q_avg_yoy": 500.0,
+   "q_sum_yoy": 56.2,
+   "q_progress": "3/3",
+   "q_sum": 7437.0,
    "cum_yoy": 146.0,
    "streak": 1,
    "ttm": 28136.0,
@@ -3791,8 +3833,8 @@
    "shared": false,
    "note": "실측 경기 내 14% — 김포·성남 등과 혼재",
    "yoy_krw": 69.6,
-   "price": 181600.0,
-   "change_pct": -1.68,
+   "price": 182500.0,
+   "change_pct": -1.19,
    "pct_12m": null,
    "series": [
     {
@@ -4040,6 +4082,9 @@
    "yoy": 50.8,
    "mom": 22.9,
    "q_avg_yoy": 36.5,
+   "q_sum_yoy": 36.1,
+   "q_progress": "3/3",
+   "q_sum": 76585.0,
    "cum_yoy": 42.2,
    "streak": 5,
    "ttm": 249115.0,
@@ -4062,8 +4107,8 @@
    "shared": false,
    "note": "금천 본사. 실측 금천 2위 30%, 균등 대비 6.7배 — 903180보다 903149가 맞다",
    "yoy_krw": 68.4,
-   "price": 22500.0,
-   "change_pct": -1.1,
+   "price": 22400.0,
+   "change_pct": -1.54,
    "pct_12m": null,
    "series": [
     {
@@ -4311,6 +4356,9 @@
    "yoy": 49.7,
    "mom": 23.3,
    "q_avg_yoy": 70.8,
+   "q_sum_yoy": 24.8,
+   "q_progress": "3/3",
+   "q_sum": 13846.0,
    "cum_yoy": -45.8,
    "streak": 2,
    "ttm": 40370.0,
@@ -4584,6 +4632,9 @@
    "yoy": 46.0,
    "mom": 156.7,
    "q_avg_yoy": -6.2,
+   "q_sum_yoy": -3.8,
+   "q_progress": "3/3",
+   "q_sum": 25534.0,
    "cum_yoy": -10.8,
    "streak": 1,
    "ttm": 109292.0,
@@ -4606,8 +4657,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 61.7,
-   "price": 66500.0,
-   "change_pct": 1.37,
+   "price": 66700.0,
+   "change_pct": 1.68,
    "pct_12m": null,
    "series": [
     {
@@ -4855,6 +4906,9 @@
    "yoy": 43.8,
    "mom": 12.2,
    "q_avg_yoy": 54.6,
+   "q_sum_yoy": 53.6,
+   "q_progress": "3/3",
+   "q_sum": 565823.0,
    "cum_yoy": 61.1,
    "streak": 14,
    "ttm": 1807737.0,
@@ -5126,6 +5180,9 @@
    "yoy": 41.4,
    "mom": -7.3,
    "q_avg_yoy": 53.9,
+   "q_sum_yoy": 52.1,
+   "q_progress": "3/3",
+   "q_sum": 7657.0,
    "cum_yoy": 37.2,
    "streak": 4,
    "ttm": 22708.0,
@@ -5148,8 +5205,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 90% — 변압기(850423)보다 배전기기로 더 잡힌다",
    "yoy_krw": 58.9,
-   "price": 589000.0,
-   "change_pct": 0.51,
+   "price": 584000.0,
+   "change_pct": -0.34,
    "pct_12m": null,
    "series": [
     {
@@ -5397,6 +5454,9 @@
    "yoy": 41.3,
    "mom": 10.7,
    "q_avg_yoy": 13.7,
+   "q_sum_yoy": 12.0,
+   "q_progress": "3/3",
+   "q_sum": 3731.0,
    "cum_yoy": 12.7,
    "streak": 1,
    "ttm": 12545.0,
@@ -5419,8 +5479,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 54.1,
-   "price": 55500.0,
-   "change_pct": -4.64,
+   "price": 55300.0,
+   "change_pct": -4.98,
    "pct_12m": null,
    "series": [
     {
@@ -5668,6 +5728,9 @@
    "yoy": 37.0,
    "mom": 6.0,
    "q_avg_yoy": 34.7,
+   "q_sum_yoy": 34.7,
+   "q_progress": "3/3",
+   "q_sum": 19659.0,
    "cum_yoy": 31.7,
    "streak": 3,
    "ttm": 63896.0,
@@ -5690,8 +5753,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 51.7,
-   "price": 6030.0,
-   "change_pct": 7.68,
+   "price": 6070.0,
+   "change_pct": 8.39,
    "pct_12m": null,
    "series": [
     {
@@ -5939,6 +6002,9 @@
    "yoy": 34.9,
    "mom": 3.5,
    "q_avg_yoy": 0.4,
+   "q_sum_yoy": -4.3,
+   "q_progress": "3/3",
+   "q_sum": 134988.0,
    "cum_yoy": -18.1,
    "streak": 1,
    "ttm": 385713.0,
@@ -6212,6 +6278,9 @@
    "yoy": 32.2,
    "mom": 182.1,
    "q_avg_yoy": 3.1,
+   "q_sum_yoy": 8.1,
+   "q_progress": "3/3",
+   "q_sum": 19574.0,
    "cum_yoy": 3.9,
    "streak": 1,
    "ttm": 75358.0,
@@ -6483,6 +6552,9 @@
    "yoy": 28.4,
    "mom": 8.2,
    "q_avg_yoy": 19.1,
+   "q_sum_yoy": 18.5,
+   "q_progress": "3/3",
+   "q_sum": 4795.0,
    "cum_yoy": 14.2,
    "streak": 4,
    "ttm": 17283.0,
@@ -6754,6 +6826,9 @@
    "yoy": 25.5,
    "mom": 186.6,
    "q_avg_yoy": -0.1,
+   "q_sum_yoy": 1.8,
+   "q_progress": "3/3",
+   "q_sum": 38964.0,
    "cum_yoy": -3.1,
    "streak": 1,
    "ttm": 158255.0,
@@ -7025,6 +7100,9 @@
    "yoy": 24.3,
    "mom": 29.2,
    "q_avg_yoy": 18.0,
+   "q_sum_yoy": 17.3,
+   "q_progress": "3/3",
+   "q_sum": 26795.0,
    "cum_yoy": 16.1,
    "streak": 1,
    "ttm": 91745.0,
@@ -7049,8 +7127,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 35.2,
-   "price": 28750.0,
-   "change_pct": -1.2,
+   "price": 28900.0,
+   "change_pct": -0.69,
    "pct_12m": null,
    "series": [
     {
@@ -7298,6 +7376,9 @@
    "yoy": 20.3,
    "mom": 16.0,
    "q_avg_yoy": 17.8,
+   "q_sum_yoy": 17.6,
+   "q_progress": "3/3",
+   "q_sum": 26892.0,
    "cum_yoy": 11.0,
    "streak": 3,
    "ttm": 91945.0,
@@ -7320,8 +7401,8 @@
    "shared": false,
    "note": "반월공장",
    "yoy_krw": 30.6,
-   "price": 85000.0,
-   "change_pct": -6.18,
+   "price": 85700.0,
+   "change_pct": -5.41,
    "pct_12m": null,
    "series": [
     {
@@ -7569,6 +7650,9 @@
    "yoy": 16.1,
    "mom": 1.4,
    "q_avg_yoy": -19.0,
+   "q_sum_yoy": -25.9,
+   "q_progress": "3/3",
+   "q_sum": 54338.0,
    "cum_yoy": 6.6,
    "streak": 1,
    "ttm": 215225.0,
@@ -7842,6 +7926,9 @@
    "yoy": 16.0,
    "mom": 43.8,
    "q_avg_yoy": -9.6,
+   "q_sum_yoy": -16.0,
+   "q_progress": "3/3",
+   "q_sum": 8739.0,
    "cum_yoy": -30.2,
    "streak": 1,
    "ttm": 31238.0,
@@ -7864,8 +7951,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 27.6,
-   "price": 3135.0,
-   "change_pct": 0.32,
+   "price": 3160.0,
+   "change_pct": 1.12,
    "pct_12m": null,
    "series": [
     {
@@ -8113,6 +8200,9 @@
    "yoy": 13.5,
    "mom": 29.9,
    "q_avg_yoy": 22.3,
+   "q_sum_yoy": 0.6,
+   "q_progress": "3/3",
+   "q_sum": 13020.0,
    "cum_yoy": 27.8,
    "streak": 2,
    "ttm": 47963.0,
@@ -8135,8 +8225,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 100% $33.1M — 391231이 아니라 391239",
    "yoy_krw": 27.2,
-   "price": 43600.0,
-   "change_pct": 1.63,
+   "price": 43300.0,
+   "change_pct": 0.93,
    "pct_12m": null,
    "series": [
     {
@@ -8380,6 +8470,9 @@
    "yoy": 13.1,
    "mom": 9.9,
    "q_avg_yoy": 9.3,
+   "q_sum_yoy": 9.3,
+   "q_progress": "3/3",
+   "q_sum": 99101.0,
    "cum_yoy": 11.0,
    "streak": 1,
    "ttm": 358355.0,
@@ -8402,8 +8495,8 @@
    "shared": false,
    "note": "원주·익산·밀양 다공장 — 혼재 가능",
    "yoy_krw": 25.4,
-   "price": 1228000.0,
-   "change_pct": 0.66,
+   "price": 1218000.0,
+   "change_pct": -0.16,
    "pct_12m": null,
    "series": [
     {
@@ -8651,6 +8744,9 @@
    "yoy": 11.5,
    "mom": 14.2,
    "q_avg_yoy": 12.6,
+   "q_sum_yoy": 12.7,
+   "q_progress": "3/3",
+   "q_sum": 134319.0,
    "cum_yoy": 8.5,
    "streak": 1,
    "ttm": 449984.0,
@@ -8924,6 +9020,9 @@
    "yoy": 7.8,
    "mom": -1.8,
    "q_avg_yoy": -12.6,
+   "q_sum_yoy": -13.7,
+   "q_progress": "3/3",
+   "q_sum": 3690.0,
    "cum_yoy": -11.5,
    "streak": 0,
    "ttm": 13240.0,
@@ -8946,8 +9045,8 @@
    "shared": false,
    "note": "송파 본사·공장. 실측 송파 1위 61% — 382200이 아니라 382219가 맞다",
    "yoy_krw": 19.4,
-   "price": 25700.0,
-   "change_pct": 0.98,
+   "price": 25650.0,
+   "change_pct": 0.79,
    "pct_12m": null,
    "series": [
     {
@@ -9171,6 +9270,9 @@
    "yoy": 6.2,
    "mom": -7.6,
    "q_avg_yoy": 13.9,
+   "q_sum_yoy": 12.1,
+   "q_progress": "3/3",
+   "q_sum": 50318.0,
    "cum_yoy": 8.2,
    "streak": 0,
    "ttm": 194555.0,
@@ -9442,6 +9544,9 @@
    "yoy": 3.3,
    "mom": -9.1,
    "q_avg_yoy": 20.6,
+   "q_sum_yoy": 9.5,
+   "q_progress": "3/3",
+   "q_sum": 12300.0,
    "cum_yoy": 4.4,
    "streak": 0,
    "ttm": 46093.0,
@@ -9464,8 +9569,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 16.1,
-   "price": 34100.0,
-   "change_pct": -0.58,
+   "price": 33750.0,
+   "change_pct": -1.6,
    "pct_12m": null,
    "series": [
     {
@@ -9713,6 +9818,9 @@
    "yoy": 3.2,
    "mom": -21.6,
    "q_avg_yoy": 21.5,
+   "q_sum_yoy": 22.4,
+   "q_progress": "3/3",
+   "q_sum": 33165.0,
    "cum_yoy": 13.9,
    "streak": 0,
    "ttm": 127234.0,
@@ -9737,8 +9845,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 3.6,
-   "price": 28550.0,
-   "change_pct": -3.71,
+   "price": 28850.0,
+   "change_pct": -2.7,
    "pct_12m": null,
    "series": [
     {
@@ -9986,6 +10094,9 @@
    "yoy": -7.9,
    "mom": 46.4,
    "q_avg_yoy": 20.0,
+   "q_sum_yoy": 10.6,
+   "q_progress": "3/3",
+   "q_sum": 193744.0,
    "cum_yoy": 7.6,
    "streak": 0,
    "ttm": 639256.0,
@@ -10010,8 +10121,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 20700.0,
-   "change_pct": 6.7,
+   "price": 20600.0,
+   "change_pct": 6.19,
    "pct_12m": null,
    "series": [
     {
@@ -10235,6 +10346,9 @@
    "yoy": -18.3,
    "mom": -66.1,
    "q_avg_yoy": 122.1,
+   "q_sum_yoy": 114.5,
+   "q_progress": "3/3",
+   "q_sum": 2510592.0,
    "cum_yoy": 129.6,
    "streak": 0,
    "ttm": null,
@@ -10260,8 +10374,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 80200.0,
-   "change_pct": 7.51,
+   "price": 79400.0,
+   "change_pct": 6.43,
    "pct_12m": null,
    "series": [
     {
@@ -10485,6 +10599,9 @@
    "yoy": -18.3,
    "mom": -66.1,
    "q_avg_yoy": 122.1,
+   "q_sum_yoy": 114.5,
+   "q_progress": "3/3",
+   "q_sum": 2510592.0,
    "cum_yoy": 129.6,
    "streak": 0,
    "ttm": null,
@@ -10510,8 +10627,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 100%이나 월 $261K로 규모가 작다 — 풍력타워 본체는 해외 생산 비중이 커서 국내 통관에 거의 안 잡히는 것으로 보인다",
    "yoy_krw": -9.7,
-   "price": 36200.0,
-   "change_pct": 3.28,
+   "price": 35900.0,
+   "change_pct": 2.43,
    "pct_12m": null,
    "series": [
     {
@@ -10759,6 +10876,9 @@
    "yoy": -19.7,
    "mom": 9.7,
    "q_avg_yoy": -8.0,
+   "q_sum_yoy": -8.7,
+   "q_progress": "3/3",
+   "q_sum": 785.0,
    "cum_yoy": -0.9,
    "streak": 0,
    "ttm": 3016.0,
@@ -10785,8 +10905,8 @@
    "shared": false,
    "note": "강남 본사(생산은 평택 자체공장이나 통관은 본사 기준으로 보임). 실측 강남 1위 58%. 마스크팩(330790)은 강남 40%·송파 40%로 갈린다",
    "yoy_krw": -17.9,
-   "price": 315500.0,
-   "change_pct": -2.92,
+   "price": 311500.0,
+   "change_pct": -4.15,
    "pct_12m": null,
    "series": [
     {
@@ -11034,6 +11154,9 @@
    "yoy": -27.0,
    "mom": 16.3,
    "q_avg_yoy": 312.6,
+   "q_sum_yoy": 89.9,
+   "q_progress": "3/3",
+   "q_sum": 89548.0,
    "cum_yoy": 221.5,
    "streak": 0,
    "ttm": 365104.0,
@@ -11059,8 +11182,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -29.9,
-   "price": 50500.0,
-   "change_pct": -1.94,
+   "price": 50100.0,
+   "change_pct": -2.72,
    "pct_12m": null,
    "series": [
     {
@@ -11308,6 +11431,9 @@
    "yoy": -37.6,
    "mom": 39.2,
    "q_avg_yoy": -47.9,
+   "q_sum_yoy": -48.1,
+   "q_progress": "3/3",
+   "q_sum": 1398.0,
    "cum_yoy": -30.8,
    "streak": 0,
    "ttm": 6772.0,
@@ -11557,6 +11683,9 @@
    "yoy": -39.4,
    "mom": 0.5,
    "q_avg_yoy": -1.4,
+   "q_sum_yoy": -4.4,
+   "q_progress": "3/3",
+   "q_sum": 14513.0,
    "cum_yoy": 8.1,
    "streak": 0,
    "ttm": 55328.0,
@@ -11579,8 +11708,8 @@
    "shared": false,
    "note": "아산 단일공장. 실측 아산 1위 95% $148.5M — 854290(부분품)이 아니라 854239가 맞다",
    "yoy_krw": -38.6,
-   "price": 25200.0,
-   "change_pct": -5.44,
+   "price": 25100.0,
+   "change_pct": -5.82,
    "pct_12m": null,
    "series": [
     {
@@ -11828,6 +11957,9 @@
    "yoy": -45.4,
    "mom": 16.3,
    "q_avg_yoy": -45.9,
+   "q_sum_yoy": -45.9,
+   "q_progress": "3/3",
+   "q_sum": 413708.0,
    "cum_yoy": -45.9,
    "streak": 0,
    "ttm": 1904565.0,
@@ -11850,8 +11982,8 @@
    "shared": false,
    "note": "청주·포항 다거점",
    "yoy_krw": -44.6,
-   "price": 96900.0,
-   "change_pct": 4.64,
+   "price": 96700.0,
+   "change_pct": 4.43,
    "pct_12m": null,
    "series": [
     {
@@ -12099,6 +12231,9 @@
    "yoy": -50.7,
    "mom": 39.3,
    "q_avg_yoy": -58.0,
+   "q_sum_yoy": -58.0,
+   "q_progress": "3/3",
+   "q_sum": 89841.0,
    "cum_yoy": -49.0,
    "streak": 0,
    "ttm": 457820.0,
@@ -12123,8 +12258,8 @@
    "shared": false,
    "note": "김해공장. 실측 김해 1위 50%",
    "yoy_krw": -50.4,
-   "price": 6000.0,
-   "change_pct": 0.84,
+   "price": 5980.0,
+   "change_pct": 0.5,
    "pct_12m": null,
    "series": [
     {
@@ -12372,6 +12507,9 @@
    "yoy": -55.9,
    "mom": 71.6,
    "q_avg_yoy": -48.3,
+   "q_sum_yoy": -49.7,
+   "q_progress": "3/3",
+   "q_sum": 678.0,
    "cum_yoy": -22.6,
    "streak": 0,
    "ttm": 5957.0,
@@ -12397,8 +12535,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -54.7,
-   "price": 25700.0,
-   "change_pct": 1.98,
+   "price": 25650.0,
+   "change_pct": 1.79,
    "pct_12m": null,
    "series": [
     {
@@ -12646,6 +12784,9 @@
    "yoy": -59.7,
    "mom": -36.9,
    "q_avg_yoy": -23.0,
+   "q_sum_yoy": -26.7,
+   "q_progress": "3/3",
+   "q_sum": 60863.0,
    "cum_yoy": -16.7,
    "streak": 0,
    "ttm": 249744.0,
@@ -12670,8 +12811,8 @@
    "shared": false,
    "note": "수원 본사. 실측 수원 1위 24%, 균등 대비 6.8배",
    "yoy_krw": -65.0,
-   "price": 230000.0,
-   "change_pct": -2.34,
+   "price": 228500.0,
+   "change_pct": -2.97,
    "pct_12m": null,
    "series": [
     {
@@ -12919,6 +13060,9 @@
    "yoy": -68.9,
    "mom": 263.2,
    "q_avg_yoy": -53.5,
+   "q_sum_yoy": -64.5,
+   "q_progress": "3/3",
+   "q_sum": 799.0,
    "cum_yoy": -53.0,
    "streak": 0,
    "ttm": 4665.0,
@@ -12945,8 +13089,8 @@
    "shared": false,
    "note": "안성 단일공장. 실측 안성 1위 72% — SiC 링은 흑연제품(6815)이 아니라 내화물(6903)로 분류된다",
    "yoy_krw": -73.0,
-   "price": 141000.0,
-   "change_pct": -5.87,
+   "price": 140000.0,
+   "change_pct": -6.54,
    "pct_12m": null,
    "series": [
     {
@@ -13194,6 +13338,9 @@
    "yoy": -76.0,
    "mom": 53.0,
    "q_avg_yoy": -80.1,
+   "q_sum_yoy": -80.1,
+   "q_progress": "3/3",
+   "q_sum": 697.0,
    "cum_yoy": -66.5,
    "streak": 0,
    "ttm": 7781.0,
@@ -13219,8 +13366,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -79.2,
-   "price": 25650.0,
-   "change_pct": -2.84,
+   "price": 25600.0,
+   "change_pct": -3.03,
    "pct_12m": null,
    "series": [
     {
@@ -13468,6 +13615,9 @@
    "yoy": -81.5,
    "mom": -57.0,
    "q_avg_yoy": 156.0,
+   "q_sum_yoy": -35.7,
+   "q_progress": "3/3",
+   "q_sum": 1441.0,
    "cum_yoy": -43.2,
    "streak": 0,
    "ttm": 33400.0,
@@ -13493,8 +13643,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -86.7,
-   "price": 1918000.0,
-   "change_pct": -4.39,
+   "price": 1896000.0,
+   "change_pct": -5.48,
    "pct_12m": null,
    "series": [
     {
@@ -13742,6 +13892,9 @@
    "yoy": -88.2,
    "mom": -33.7,
    "q_avg_yoy": 48.8,
+   "q_sum_yoy": -42.1,
+   "q_progress": "3/3",
+   "q_sum": 74630.0,
    "cum_yoy": -23.7,
    "streak": 0,
    "ttm": 264504.0,
@@ -14016,6 +14169,9 @@
    "yoy": 0.0,
    "mom": -25.0,
    "q_avg_yoy": 39.6,
+   "q_sum_yoy": 36.8,
+   "q_progress": "3/3",
+   "q_sum": 24041.0,
    "cum_yoy": 17.3,
    "streak": 0,
    "ttm": 76755.0,
@@ -14136,6 +14292,480 @@
   "total_yoy": 52.3,
   "import_total": 42714580.0,
   "import_total_yoy": 20.0
+ },
+ "report_input": {
+  "industries": [
+   {
+    "group": "양극재·2차전지",
+    "q_sum": 949201.0,
+    "q_sum_yoy": 48.9,
+    "stocks": [
+     {
+      "ticker": "093370",
+      "name": "후성",
+      "q_sum": 7875.0,
+      "q_sum_yoy": 3050.0,
+      "ath": true,
+      "flags": [
+       "base_effect",
+       "ttm_partial",
+       "lumpy"
+      ]
+     },
+     {
+      "ticker": "005070",
+      "name": "코스모신소재",
+      "q_sum": 240973.0,
+      "q_sum_yoy": 955.0,
+      "ath": true,
+      "flags": [
+       "lumpy"
+      ]
+     },
+     {
+      "ticker": "060720",
+      "name": "KH바텍",
+      "q_sum": 17797.0,
+      "q_sum_yoy": 95.5,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "066970",
+      "name": "엘앤에프",
+      "q_sum": 565823.0,
+      "q_sum_yoy": 53.6,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "278280",
+      "name": "천보",
+      "q_sum": 26892.0,
+      "q_sum_yoy": 17.6,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "247540",
+      "name": "에코프로비엠",
+      "q_sum": 89841.0,
+      "q_sum_yoy": -58.0,
+      "ath": false,
+      "flags": [
+       "lumpy"
+      ]
+     }
+    ]
+   },
+   {
+    "group": "화장품·미용",
+    "q_sum": 625677.0,
+    "q_sum_yoy": 79.5,
+    "stocks": [
+     {
+      "ticker": "950140",
+      "name": "잉글우드랩",
+      "q_sum": 394208.0,
+      "q_sum_yoy": 93.3,
+      "ath": false,
+      "flags": [
+       "base_effect"
+      ]
+     },
+     {
+      "ticker": "278470",
+      "name": "에이피알",
+      "q_sum": 89548.0,
+      "q_sum_yoy": 89.9,
+      "ath": false,
+      "flags": [
+       "base_spike",
+       "lumpy"
+      ]
+     },
+     {
+      "ticker": "214450",
+      "name": "파마리서치",
+      "q_sum": 40703.0,
+      "q_sum_yoy": 86.5,
+      "ath": true,
+      "flags": []
+     },
+     {
+      "ticker": "192820",
+      "name": "코스맥스",
+      "q_sum": 76585.0,
+      "q_sum_yoy": 36.1,
+      "ath": true,
+      "flags": []
+     },
+     {
+      "ticker": "161890",
+      "name": "한국콜마",
+      "q_sum": 24633.0,
+      "q_sum_yoy": 27.3,
+      "ath": false,
+      "flags": []
+     }
+    ]
+   },
+   {
+    "group": "바이오·의료",
+    "q_sum": 346713.0,
+    "q_sum_yoy": 6.0,
+    "stocks": [
+     {
+      "ticker": "145020",
+      "name": "휴젤",
+      "q_sum": 34440.0,
+      "q_sum_yoy": 46.0,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "214150",
+      "name": "클래시스",
+      "q_sum": 52501.0,
+      "q_sum_yoy": 38.0,
+      "ath": false,
+      "flags": [
+       "base_spike"
+      ]
+     },
+     {
+      "ticker": "336570",
+      "name": "원텍",
+      "q_sum": 26795.0,
+      "q_sum_yoy": 17.3,
+      "ath": false,
+      "flags": [
+       "base_spike"
+      ]
+     },
+     {
+      "ticker": "214370",
+      "name": "케어젠",
+      "q_sum": 17436.0,
+      "q_sum_yoy": 16.6,
+      "ath": true,
+      "flags": []
+     },
+     {
+      "ticker": "096530",
+      "name": "씨젠",
+      "q_sum": 50318.0,
+      "q_sum_yoy": 12.1,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "039840",
+      "name": "디오",
+      "q_sum": 12300.0,
+      "q_sum_yoy": 9.5,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "287410",
+      "name": "제이시스메디칼",
+      "q_sum": 19574.0,
+      "q_sum_yoy": 8.1,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "228670",
+      "name": "레이",
+      "q_sum": 38964.0,
+      "q_sum_yoy": 1.8,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "145720",
+      "name": "덴티움",
+      "q_sum": 25534.0,
+      "q_sum_yoy": -3.8,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "086900",
+      "name": "메디톡스",
+      "q_sum": 14513.0,
+      "q_sum_yoy": -4.4,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "237690",
+      "name": "에스티팜",
+      "q_sum": 54338.0,
+      "q_sum_yoy": -25.9,
+      "ath": false,
+      "flags": [
+       "lumpy"
+      ]
+     }
+    ]
+   },
+   {
+    "group": "반도체",
+    "q_sum": 750440.0,
+    "q_sum_yoy": -28.6,
+    "stocks": [
+     {
+      "ticker": "042700",
+      "name": "한미반도체",
+      "q_sum": 7437.0,
+      "q_sum_yoy": 56.2,
+      "ath": false,
+      "flags": [
+       "base_effect",
+       "lumpy",
+       "small_scale"
+      ]
+     },
+     {
+      "ticker": "108320",
+      "name": "실리콘웍스",
+      "q_sum": 24041.0,
+      "q_sum_yoy": 36.8,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "195870",
+      "name": "해성디에스",
+      "q_sum": 109372.0,
+      "q_sum_yoy": 31.3,
+      "ath": true,
+      "flags": []
+     },
+     {
+      "ticker": "403870",
+      "name": "HPSP",
+      "q_sum": 193744.0,
+      "q_sum_yoy": 10.6,
+      "ath": false,
+      "flags": [
+       "base_spike"
+      ]
+     },
+     {
+      "ticker": "348210",
+      "name": "넥스틴",
+      "q_sum": 1441.0,
+      "q_sum_yoy": -35.7,
+      "ath": false,
+      "flags": [
+       "lumpy",
+       "small_scale"
+      ]
+     },
+     {
+      "ticker": "067310",
+      "name": "하나마이크론",
+      "q_sum": 413708.0,
+      "q_sum_yoy": -45.9,
+      "ath": false,
+      "flags": []
+     },
+     {
+      "ticker": "064760",
+      "name": "티씨케이",
+      "q_sum": 697.0,
+      "q_sum_yoy": -80.1,
+      "ath": false,
+      "flags": [
+       "lumpy",
+       "small_scale"
+      ]
+     }
+    ]
+   },
+   {
+    "group": "조선",
+    "q_sum": 5021184.0,
+    "q_sum_yoy": 114.5,
+    "stocks": [
+     {
+      "ticker": "010140",
+      "name": "삼성중공업",
+      "q_sum": 2510592.0,
+      "q_sum_yoy": 114.5,
+      "ath": false,
+      "flags": [
+       "ttm_partial",
+       "lumpy"
+      ]
+     },
+     {
+      "ticker": "042660",
+      "name": "한화오션",
+      "q_sum": 2510592.0,
+      "q_sum_yoy": 114.5,
+      "ath": false,
+      "flags": [
+       "ttm_partial",
+       "lumpy"
+      ]
+     }
+    ]
+   },
+   {
+    "group": "철강·금속",
+    "q_sum": 14616.0,
+    "q_sum_yoy": 6.8,
+    "stocks": [
+     {
+      "ticker": "005010",
+      "name": "휴스틸",
+      "q_sum": 5092.0,
+      "q_sum_yoy": 110.2,
+      "ath": true,
+      "flags": [
+       "base_effect"
+      ]
+     },
+     {
+      "ticker": "112610",
+      "name": "씨에스윈드",
+      "q_sum": 785.0,
+      "q_sum_yoy": -8.7,
+      "ath": false,
+      "flags": [
+       "base_spike",
+       "lumpy",
+       "small_scale"
+      ]
+     },
+     {
+      "ticker": "306200",
+      "name": "세아제강",
+      "q_sum": 8739.0,
+      "q_sum_yoy": -16.0,
+      "ath": false,
+      "flags": []
+     }
+    ]
+   },
+   {
+    "group": "기계·전력",
+    "q_sum": 45201.0,
+    "q_sum_yoy": 47.5,
+    "stocks": [
+     {
+      "ticker": "064350",
+      "name": "현대로템",
+      "q_sum": 10985.0,
+      "q_sum_yoy": 5837.8,
+      "ath": true,
+      "flags": [
+       "lumpy"
+      ]
+     },
+     {
+      "ticker": "336570",
+      "name": "원텍",
+      "q_sum": 26795.0,
+      "q_sum_yoy": 17.3,
+      "ath": false,
+      "flags": [
+       "base_spike"
+      ]
+     },
+     {
+      "ticker": "267260",
+      "name": "HD현대일렉트릭",
+      "q_sum": 3731.0,
+      "q_sum_yoy": 12.0,
+      "ath": true,
+      "flags": []
+     },
+     {
+      "ticker": "336260",
+      "name": "두산퓨얼셀",
+      "q_sum": 3690.0,
+      "q_sum_yoy": -13.7,
+      "ath": false,
+      "flags": []
+     }
+    ]
+   }
+  ],
+  "movers": {
+   "new_ath": [
+    "214450",
+    "214370",
+    "192820",
+    "195870",
+    "267260",
+    "005070",
+    "093370",
+    "064350",
+    "005010"
+   ],
+   "q_top": [
+    "064350",
+    "093370",
+    "005070",
+    "010140",
+    "042660",
+    "005010",
+    "060720",
+    "950140",
+    "278470",
+    "214450"
+   ],
+   "q_bottom": [
+    "064760",
+    "140860",
+    "247540",
+    "222080",
+    "189300"
+   ],
+   "turning": {
+    "214450": 83.9,
+    "039840": 53.5,
+    "192820": 30.0,
+    "950140": 35.2,
+    "066970": 30.1,
+    "058470": 32.7,
+    "064760": -65.2,
+    "140860": 110.8,
+    "348210": -57.1,
+    "001820": 31.3,
+    "092190": 58.9,
+    "222080": -30.8,
+    "137400": 35.2,
+    "005070": 168.1,
+    "093370": 54.8,
+    "073240": 41.8,
+    "064350": 147.2,
+    "005010": 164.0
+   },
+   "prev_picks": []
+  },
+  "ungrouped": [
+   "003230",
+   "121600",
+   "058470",
+   "005290",
+   "098460",
+   "140860",
+   "001820",
+   "189300",
+   "092190",
+   "025320",
+   "222080",
+   "137400",
+   "298040",
+   "073240",
+   "004000"
+  ]
  },
  "fx": {
   "usd_krw": 1531.46,
