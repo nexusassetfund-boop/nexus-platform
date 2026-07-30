@@ -60,6 +60,9 @@ BASE_SPIKE_Q = 0.90       # 상위 10% 초과 → base_spike (감소율 과장)
 # 월 편차가 큰 품목(대형 수주품)은 월 단위 증감률이 노이즈다. 최대/최소 배수가
 # 이 값을 넘으면 lumpy로 표시하고 12개월 이동합계를 함께 본다.
 LUMPY_RATIO = 10.0
+# 월 수출 하한(천USD). 미만이면 small_scale로 표시한다 — 한국타이어처럼 연매출 9조원대
+# 회사가 월 $165K로 잡히면 그건 매출 프록시가 아니라 잔여 물량이다.
+SMALL_SCALE = 1000.0
 MONTHS = 60               # 수집 개월 수 — 역대 대비 위치를 보려면 장기간이 필요
 
 
@@ -121,7 +124,9 @@ def series_for(rows: list[dict], sgg: str) -> dict[str, dict]:
 
 def compute_metrics(s: dict[str, dict], month: str) -> dict | None:
     cur = s.get(month)
-    if not cur or not cur.get("amt"):
+    # 0은 유효한 값이다. falsy로 걸러내면 통관이 0이 된 종목 — 가장 강한 경고 신호 —
+    # 이 목록에서 통째로 사라져 사용자가 나쁜 소식을 못 본다. None(결측)만 걸러낸다.
+    if not cur or cur.get("amt") is None:
         return None
     amt = cur["amt"]
     prev_y = (s.get(_prev_yymm(month, 12)) or {}).get("amt")
@@ -149,29 +154,52 @@ def compute_metrics(s: dict[str, dict], month: str) -> dict | None:
         streak += 1
 
     # 역대/12개월 최고 — Y/Y·M/M만 보면 기저효과와 구분이 안 되는데 이 플래그가 보정한다.
-    ordered = [s[k]["amt"] for k in sorted(s) if s[k].get("amt") is not None]
+    # 창은 기준월을 기준으로 잡는다. 계열 끝을 쓰면 API가 기준월 이후의 부분집계월을
+    # 돌려줄 때 창이 어긋난다.
+    def _vals(n: int | None = None) -> list[float]:
+        keys = sorted(s) if n is None else [_prev_yymm(month, k) for k in range(n)]
+        return [s[k]["amt"] for k in keys
+                if k in s and k <= month and s[k].get("amt") is not None]
+
+    ordered = _vals()
     ath = bool(ordered) and amt >= max(ordered)
-    recent = [s[k]["amt"] for k in sorted(s)[-12:] if s[k].get("amt") is not None]
+    recent = _vals(12)
     high_12m = bool(recent) and amt >= max(recent)
 
     flags = []
-    amts = sorted(v.get("amt", 0.0) for v in s.values() if v.get("amt"))
+    if amt == 0:
+        flags.append("zero_month")   # 통관 없음 — 사라뜨리지 말고 드러낸다
+
+    # 분포는 0인 달도 포함해야 한다. 0을 빼면 간헐적으로 멈추는 품목의 분위수가 왜곡된다.
+    amts = sorted(v["amt"] for v in s.values() if v.get("amt") is not None)
     if prev_y is not None and amts:
         if prev_y <= amts[max(0, int(len(amts) * BASE_EFFECT_Q))]:
             flags.append("base_effect")
         elif prev_y >= amts[min(len(amts) - 1, int(len(amts) * BASE_SPIKE_Q))]:
             flags.append("base_spike")
 
-    # ── 12개월 이동합계 — 월 편차가 큰 품목은 이걸 봐야 추세가 보인다.
-    ordered_keys = sorted(s)
-    idx = ordered_keys.index(month) if month in ordered_keys else -1
-    ttm = ttm_prev = None
-    if idx >= 11:
-        ttm = sum(s[k].get("amt", 0.0) for k in ordered_keys[idx - 11:idx + 1])
-        if idx >= 23:
-            ttm_prev = sum(s[k].get("amt", 0.0) for k in ordered_keys[idx - 23:idx - 11])
-    recent24 = [s[k].get("amt", 0.0) for k in ordered_keys[-24:] if s[k].get("amt")]
-    lumpy = bool(recent24) and max(recent24) / max(1e-9, min(recent24)) >= LUMPY_RATIO
+    # ── 12개월 이동합계. **달력 기준**으로 창을 잡는다.
+    # 존재하는 행의 위치 인덱스로 자르면 결측월이 있을 때 창이 늘어난다 — 한국타이어는
+    # 60개월 중 25개월이 결측이라 '12개월 누적'이 실제로는 16~17개월 합이었다.
+    # 결측이 하나라도 있으면 값을 내지 않고 ttm_partial로 표시한다.
+    def _window_sum(end_month: str, n: int = 12):
+        keys = [_prev_yymm(end_month, k) for k in range(n)]
+        vals = [s[k]["amt"] for k in keys if k in s and s[k].get("amt") is not None]
+        return (sum(vals), len(vals) == n)
+
+    ttm, ttm_full = _window_sum(month)
+    ttm_prev, prev_full = _window_sum(_prev_yymm(month, 12))
+    ttm_partial = not (ttm_full and prev_full)
+    if ttm_partial:
+        flags.append("ttm_partial")
+        ttm = ttm_prev = None
+
+    # 변동성 판정도 0인 달을 포함한다. 0을 빼면 20/24개월이 0인 완전 간헐성 품목이
+    # 오히려 lumpy로 안 잡힌다(0이 아닌 최솟값끼리 비교하게 되므로).
+    recent24 = _vals(24)
+    nz = [v for v in recent24 if v > 0]
+    lumpy = bool(nz) and (max(recent24) / max(1e-9, min(recent24)) >= LUMPY_RATIO
+                          or len(nz) < len(recent24) * 0.75)
     if lumpy:
         flags.append("lumpy")
 
@@ -183,13 +211,19 @@ def compute_metrics(s: dict[str, dict], month: str) -> dict | None:
         # 12개월 이동합계와 그 전년비 — 월 편차가 큰 품목의 진짜 추세
         "ttm": round(ttm, 1) if ttm is not None else None,
         "ttm_yoy": _pct(ttm, ttm_prev),
+        "ttm_partial": ttm_partial,
         "ath": ath, "high_12m": high_12m, "flags": flags,
     }
 
 
 def latest_confirmed_month(today: dt.date) -> str:
-    """확정치 기준월. 매월 15일경 전월분이 현행화된다."""
-    return _prev_yymm(f"{today.year:04d}{today.month:02d}", 1 if today.day >= 16 else 2)
+    """확정치 기준월 후보(최신부터). 매월 15일경 전월분이 현행화된다.
+
+    day>=16에서만 M-1을 보면 **15일 실행이 11일 실행과 같은 결과**를 낸다 —
+    확정치가 그날 나오는데 6일을 버린다. M-1을 먼저 시도하고 데이터가 없으면
+    호출부에서 M-2로 물러난다.
+    """
+    return _prev_yymm(f"{today.year:04d}{today.month:02d}", 1)
 
 
 # 순별 잠정치 응답은 itemUsdAmt00~10 열로 오고 품목명이 없다. 순서는 실측으로 검증했다
@@ -254,17 +288,6 @@ def build() -> dict | None:
     month = latest_confirmed_month(today)
     chunks = capi.month_range(month, MONTHS)
 
-    fx = {}
-    for m in {month, _prev_yymm(month, 12)}:
-        try:
-            r = capi.fetch_fx_month(m, api_key, CACHE_PATH)
-        except capi.CustomsError as e:
-            logger.warning("관세환율 사용 불가(%s) — 원화 기준은 생략합니다", str(e)[:70])
-            fx = {}
-            break
-        if r:
-            fx[m] = r
-
     scan = _load_json(SCAN_PATH, {})
     prices = {str(r.get("ticker")).zfill(6): r for r in (scan.get("results") or [])}
 
@@ -284,6 +307,33 @@ def build() -> dict | None:
             continue
         raw[key] = rows
 
+    # 확정치 공개 직후에는 M-1이 아직 비어 있을 수 있다. 실제로 데이터가 들어온
+    # 최신월을 기준월로 삼는다 — 이렇게 해야 15일 실행이 새 확정치를 바로 집는다.
+    seen_months = {
+        "".join(c for c in str(r.get("period", "")) if c.isdigit())[:6]
+        for rows in raw.values() for r in rows
+    }
+    seen_months = {m for m in seen_months if len(m) == 6 and m <= month}
+    if seen_months:
+        newest = max(seen_months)
+        if newest != month:
+            logger.info("기준월 %s → %s (확정치 미공개로 한 달 물러남)", month, newest)
+            month = newest
+    else:
+        logger.error("수집 데이터에 유효한 기간이 없음 — 기존 파일 보존")
+        return None
+
+    fx: dict[str, float] = {}
+    for m in {month, _prev_yymm(month, 12)}:
+        try:
+            r = capi.fetch_fx_month(m, api_key, CACHE_PATH)
+        except capi.CustomsError as e:
+            logger.warning("관세환율 사용 불가(%s) — 원화 기준은 생략합니다", str(e)[:70])
+            fx = {}
+            break
+        if r:
+            fx[m] = r
+
     out, failed = [], 0
     for e in entries:
         rows = raw.get((e.get("sido"), e.get("hs_used")))
@@ -299,8 +349,18 @@ def build() -> dict | None:
         prev = _prev_yymm(month, 12)
         yoy_krw = None
         if fx.get(month) and fx.get(prev):
+            # 하한도 함께 환산해야 한다. 기본값(천USD 기준)을 그대로 두면 원화 금액에는
+            # 실효 하한이 환율배(약 1,500배) 느슨해져 USD 기준은 None인데 원화만 숫자가
+            # 찍히는 조합이 생긴다.
             yoy_krw = _pct((s.get(month) or {}).get("amt", 0.0) * fx[month],
-                           (s.get(prev) or {}).get("amt", 0.0) * fx[prev])
+                           (s.get(prev) or {}).get("amt", 0.0) * fx[prev],
+                           BASE_MIN * fx[prev])
+
+        # 회사 규모 대비 통관액이 미미하면 프록시 전제가 깨진 것이다(해외 생산 비중이
+        # 크거나 매핑이 어긋난 경우). 자동으로 빼지 않고 표시만 한다 — 규모 판단에는
+        # 회사 지식이 필요하고, 티씨케이처럼 매핑은 정확한데 회사가 작은 경우도 있다.
+        if (m.get("amount") or 0) < SMALL_SCALE:
+            m.setdefault("flags", []).append("small_scale")
 
         sc = prices.get(str(e.get("ticker")).zfill(6), {})
         out.append({

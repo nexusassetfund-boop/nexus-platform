@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30 08:15",
+ "updated": "2026-07-30 12:00",
  "base_month": "202606",
  "method": "종목별 공장 소재 시군구 × HS6 수출액을 매출 프록시로 사용. 시도 내 점유율·순위로 귀속 신뢰도를 표시한다.",
  "entries": [
@@ -298,7 +298,7 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high",
+   "grade": "mid",
    "conc": 1.0
   },
   {
@@ -624,7 +624,7 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high",
+   "grade": "mid",
    "conc": 1.0
   },
   {
@@ -660,26 +660,8 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high",
+   "grade": "mid",
    "conc": 1.0
-  },
-  {
-   "ticker": "161390",
-   "name": "한국타이어앤테크놀로지",
-   "sido": "30",
-   "sgg_hint": "대전",
-   "hs": [
-    "401120"
-   ],
-   "label": "고무타이어(버스·화물차용)",
-   "hs_used": "401120",
-   "sgg": "대전광역시 동구",
-   "amount": 165.0,
-   "rank": 1,
-   "of": 3,
-   "share": 95.4,
-   "grade": "high",
-   "conc": 2.9
   },
   {
    "ticker": "073240",
@@ -714,9 +696,12 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high",
+   "grade": "mid",
    "conc": 1.0,
-   "shared": true
+   "shared": true,
+   "shared_with": [
+    "042660"
+   ]
   },
   {
    "ticker": "042660",
@@ -733,9 +718,12 @@
    "rank": 1,
    "of": 1,
    "share": 100.0,
-   "grade": "high",
+   "grade": "mid",
    "conc": 1.0,
-   "shared": true
+   "shared": true,
+   "shared_with": [
+    "010140"
+   ]
   },
   {
    "ticker": "306200",
@@ -775,10 +763,10 @@
   }
  ],
  "coverage": {
-  "adopted": 42,
-  "checked": 72,
-  "high": 34,
-  "mid": 8,
+  "adopted": 41,
+  "checked": 71,
+  "high": 28,
+  "mid": 13,
   "low": 14
  }
 }

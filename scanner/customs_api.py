@@ -194,8 +194,26 @@ def fetch_district(hs: str, sido_cd: str, start_yymm: str, end_yymm: str, api_ke
                          api_key, cache_path, f"dist:{sido_cd}:{hs6}:{start_yymm}:{end_yymm}")
 
 
+def _is_recent(params: dict) -> bool:
+    """조회 구간이 최근 6개월에 걸치는가.
+
+    관세청은 확정치를 이후에도 소급 정정한다. 영구 캐시를 두면 그 정정이 영원히
+    반영되지 않는다. 실측 호출량이 월 800회(한도 10,000의 8%)라 아낄 이유도 없으므로
+    최근 구간은 캐시하지 않고 매번 새로 받는다. 과거 구간만 캐시한다.
+    """
+    end = str(params.get("endYymm") or params.get("strtYymm") or "")
+    if len(end) != 6 or not end.isdigit():
+        return True          # 판단 불가면 캐시하지 않는 쪽이 안전하다
+    import datetime as _dt
+    now = _dt.date.today()
+    cutoff = now.year * 12 + (now.month - 1) - 6
+    return int(end[:4]) * 12 + int(end[4:]) - 1 >= cutoff
+
+
 def _fetch_cached(endpoint: str, params: dict, api_key: str,
                   cache_path: Path | None, cache_key: str) -> list[dict]:
+    if _is_recent(params):
+        cache_path = None     # 최근 구간은 캐시를 읽지도 쓰지도 않는다
     cache = _cache_load(cache_path) if cache_path else {}
     if cache_key in cache:
         return cache[cache_key]
