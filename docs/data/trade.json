@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30 12:29",
+ "updated": "2026-07-30 12:36",
  "data_month": "202606",
  "stocks": [
   {
@@ -15,8 +15,8 @@
    "shared": false,
    "note": "창원공장. 실측 100% $4.6M — 완성차(860300)가 아니라 부분품으로 나간다",
    "yoy_krw": 2696.5,
-   "price": 126000.0,
-   "change_pct": 4.91,
+   "price": 122700.0,
+   "change_pct": 2.16,
    "pct_12m": null,
    "series": [
     {
@@ -288,8 +288,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 1645.4,
-   "price": 7270.0,
-   "change_pct": 1.39,
+   "price": 6840.0,
+   "change_pct": -4.6,
    "pct_12m": null,
    "series": [
     {
@@ -1097,8 +1097,8 @@
    "shared": false,
    "note": "실측 강남 1위 35%",
    "yoy_krw": 226.3,
-   "price": 52600.0,
-   "change_pct": 4.99,
+   "price": 51000.0,
+   "change_pct": 1.8,
    "pct_12m": null,
    "series": [
     {
@@ -1368,8 +1368,8 @@
    "shared": false,
    "note": "강릉 단일공장. 리쥬란·콘쥬란",
    "yoy_krw": 169.5,
-   "price": 352000.0,
-   "change_pct": -9.97,
+   "price": 343500.0,
+   "change_pct": -12.15,
    "pct_12m": null,
    "series": [
     {
@@ -1639,8 +1639,8 @@
    "shared": false,
    "note": "세종공장. 실측 100%이나 해당 품목 수출 시군구가 1곳뿐이라 변별력은 없다",
    "yoy_krw": 119.5,
-   "price": 37050.0,
-   "change_pct": 4.81,
+   "price": 35500.0,
+   "change_pct": 0.42,
    "pct_12m": null,
    "series": [
     {
@@ -1910,8 +1910,8 @@
    "shared": false,
    "note": "춘천 거두 단일공장",
    "yoy_krw": 110.4,
-   "price": 228500.0,
-   "change_pct": -0.44,
+   "price": 224000.0,
+   "change_pct": -2.4,
    "pct_12m": null,
    "series": [
     {
@@ -2430,8 +2430,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 98.9,
-   "price": 95000.0,
-   "change_pct": -2.46,
+   "price": 90900.0,
+   "change_pct": -6.67,
    "pct_12m": null,
    "series": [
     {
@@ -3243,8 +3243,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 75.0,
-   "price": 39450.0,
-   "change_pct": -1.5,
+   "price": 38450.0,
+   "change_pct": -4.0,
    "pct_12m": null,
    "series": [
     {
@@ -3516,8 +3516,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 69.7,
-   "price": 173100.0,
-   "change_pct": 3.28,
+   "price": 165200.0,
+   "change_pct": -1.43,
    "pct_12m": null,
    "series": [
     {
@@ -3791,8 +3791,8 @@
    "shared": false,
    "note": "실측 경기 내 14% — 김포·성남 등과 혼재",
    "yoy_krw": 69.6,
-   "price": 185800.0,
-   "change_pct": 0.6,
+   "price": 181600.0,
+   "change_pct": -1.68,
    "pct_12m": null,
    "series": [
     {
@@ -4062,8 +4062,8 @@
    "shared": false,
    "note": "금천 본사. 실측 금천 2위 30%, 균등 대비 6.7배 — 903180보다 903149가 맞다",
    "yoy_krw": 68.4,
-   "price": 23400.0,
-   "change_pct": 2.86,
+   "price": 22500.0,
+   "change_pct": -1.1,
    "pct_12m": null,
    "series": [
     {
@@ -4606,8 +4606,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 61.7,
-   "price": 70100.0,
-   "change_pct": 6.86,
+   "price": 66500.0,
+   "change_pct": 1.37,
    "pct_12m": null,
    "series": [
     {
@@ -5148,8 +5148,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 90% — 변압기(850423)보다 배전기기로 더 잡힌다",
    "yoy_krw": 58.9,
-   "price": 612000.0,
-   "change_pct": 4.44,
+   "price": 589000.0,
+   "change_pct": 0.51,
    "pct_12m": null,
    "series": [
     {
@@ -5419,8 +5419,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 54.1,
-   "price": 57700.0,
-   "change_pct": -0.86,
+   "price": 55500.0,
+   "change_pct": -4.64,
    "pct_12m": null,
    "series": [
     {
@@ -5690,8 +5690,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 51.7,
-   "price": 6240.0,
-   "change_pct": 11.43,
+   "price": 6030.0,
+   "change_pct": 7.68,
    "pct_12m": null,
    "series": [
     {
@@ -7049,8 +7049,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 35.2,
-   "price": 29500.0,
-   "change_pct": 1.37,
+   "price": 28750.0,
+   "change_pct": -1.2,
    "pct_12m": null,
    "series": [
     {
@@ -7320,8 +7320,8 @@
    "shared": false,
    "note": "반월공장",
    "yoy_krw": 30.6,
-   "price": 87100.0,
-   "change_pct": -3.86,
+   "price": 85000.0,
+   "change_pct": -6.18,
    "pct_12m": null,
    "series": [
     {
@@ -7864,8 +7864,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 27.6,
-   "price": 3200.0,
-   "change_pct": 2.4,
+   "price": 3135.0,
+   "change_pct": 0.32,
    "pct_12m": null,
    "series": [
     {
@@ -8135,8 +8135,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 100% $33.1M — 391231이 아니라 391239",
    "yoy_krw": 27.2,
-   "price": 44300.0,
-   "change_pct": 3.26,
+   "price": 43600.0,
+   "change_pct": 1.63,
    "pct_12m": null,
    "series": [
     {
@@ -8402,8 +8402,8 @@
    "shared": false,
    "note": "원주·익산·밀양 다공장 — 혼재 가능",
    "yoy_krw": 25.4,
-   "price": 1237000.0,
-   "change_pct": 1.39,
+   "price": 1228000.0,
+   "change_pct": 0.66,
    "pct_12m": null,
    "series": [
     {
@@ -8946,8 +8946,8 @@
    "shared": false,
    "note": "송파 본사·공장. 실측 송파 1위 61% — 382200이 아니라 382219가 맞다",
    "yoy_krw": 19.4,
-   "price": 26100.0,
-   "change_pct": 2.55,
+   "price": 25700.0,
+   "change_pct": 0.98,
    "pct_12m": null,
    "series": [
     {
@@ -9464,8 +9464,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 16.1,
-   "price": 35300.0,
-   "change_pct": 2.92,
+   "price": 34100.0,
+   "change_pct": -0.58,
    "pct_12m": null,
    "series": [
     {
@@ -9737,8 +9737,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": 3.6,
-   "price": 30050.0,
-   "change_pct": 1.35,
+   "price": 28550.0,
+   "change_pct": -3.71,
    "pct_12m": null,
    "series": [
     {
@@ -10010,8 +10010,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 21350.0,
-   "change_pct": 10.05,
+   "price": 20700.0,
+   "change_pct": 6.7,
    "pct_12m": null,
    "series": [
     {
@@ -10260,8 +10260,8 @@
    "shared": true,
    "note": null,
    "yoy_krw": -8.1,
-   "price": 83300.0,
-   "change_pct": 11.66,
+   "price": 80200.0,
+   "change_pct": 7.51,
    "pct_12m": null,
    "series": [
     {
@@ -10510,8 +10510,8 @@
    "shared": false,
    "note": "울산공장. 실측 울산 1위 100%이나 월 $261K로 규모가 작다 — 풍력타워 본체는 해외 생산 비중이 커서 국내 통관에 거의 안 잡히는 것으로 보인다",
    "yoy_krw": -9.7,
-   "price": 37200.0,
-   "change_pct": 6.13,
+   "price": 36200.0,
+   "change_pct": 3.28,
    "pct_12m": null,
    "series": [
     {
@@ -10785,8 +10785,8 @@
    "shared": false,
    "note": "강남 본사(생산은 평택 자체공장이나 통관은 본사 기준으로 보임). 실측 강남 1위 58%. 마스크팩(330790)은 강남 40%·송파 40%로 갈린다",
    "yoy_krw": -17.9,
-   "price": 327500.0,
-   "change_pct": 0.77,
+   "price": 315500.0,
+   "change_pct": -2.92,
    "pct_12m": null,
    "series": [
     {
@@ -11059,8 +11059,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -29.9,
-   "price": 52400.0,
-   "change_pct": 1.75,
+   "price": 50500.0,
+   "change_pct": -1.94,
    "pct_12m": null,
    "series": [
     {
@@ -11579,8 +11579,8 @@
    "shared": false,
    "note": "아산 단일공장. 실측 아산 1위 95% $148.5M — 854290(부분품)이 아니라 854239가 맞다",
    "yoy_krw": -38.6,
-   "price": 26250.0,
-   "change_pct": -1.5,
+   "price": 25200.0,
+   "change_pct": -5.44,
    "pct_12m": null,
    "series": [
     {
@@ -11850,8 +11850,8 @@
    "shared": false,
    "note": "청주·포항 다거점",
    "yoy_krw": -44.6,
-   "price": 102100.0,
-   "change_pct": 10.26,
+   "price": 96900.0,
+   "change_pct": 4.64,
    "pct_12m": null,
    "series": [
     {
@@ -12123,8 +12123,8 @@
    "shared": false,
    "note": "김해공장. 실측 김해 1위 50%",
    "yoy_krw": -50.4,
-   "price": 6200.0,
-   "change_pct": 4.2,
+   "price": 6000.0,
+   "change_pct": 0.84,
    "pct_12m": null,
    "series": [
     {
@@ -12397,8 +12397,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -54.7,
-   "price": 26450.0,
-   "change_pct": 4.96,
+   "price": 25700.0,
+   "change_pct": 1.98,
    "pct_12m": null,
    "series": [
     {
@@ -12670,8 +12670,8 @@
    "shared": false,
    "note": "수원 본사. 실측 수원 1위 24%, 균등 대비 6.8배",
    "yoy_krw": -65.0,
-   "price": 235500.0,
-   "change_pct": 0.0,
+   "price": 230000.0,
+   "change_pct": -2.34,
    "pct_12m": null,
    "series": [
     {
@@ -12945,8 +12945,8 @@
    "shared": false,
    "note": "안성 단일공장. 실측 안성 1위 72% — SiC 링은 흑연제품(6815)이 아니라 내화물(6903)로 분류된다",
    "yoy_krw": -73.0,
-   "price": 148800.0,
-   "change_pct": -0.67,
+   "price": 141000.0,
+   "change_pct": -5.87,
    "pct_12m": null,
    "series": [
     {
@@ -13219,8 +13219,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -79.2,
-   "price": 26400.0,
-   "change_pct": 0.0,
+   "price": 25650.0,
+   "change_pct": -2.84,
    "pct_12m": null,
    "series": [
     {
@@ -13493,8 +13493,8 @@
    "shared": false,
    "note": null,
    "yoy_krw": -86.7,
-   "price": 2011000.0,
-   "change_pct": 0.25,
+   "price": 1918000.0,
+   "change_pct": -4.39,
    "pct_12m": null,
    "series": [
     {
