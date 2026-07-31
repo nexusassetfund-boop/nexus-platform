@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-31 16:26",
+ "updated": "2026-07-31 19:02",
  "snap_date": "2026-07-31",
  "history": [
   {
@@ -339,9 +339,9 @@
   "status": "correction",
   "label": "조정 국면",
   "color": "red",
-  "kospi_close": 6542.82,
-  "ma200": 5733.96,
-  "ma200_ratio_pct": 14.11,
+  "kospi_close": 6595.45,
+  "ma200": 5734.22,
+  "ma200_ratio_pct": 15.02,
   "dist_days": 6,
   "dist_window": 20,
   "base_date": "2026-07-31"
@@ -409,7 +409,7 @@
   {
    "ticker": "028050",
    "name": "삼성E&A",
-   "sector": null,
+   "sector": "건축기술, 엔지니어링 및 관련 기술 서비스업",
    "market": "KOSPI",
    "pct_3m": -20.4,
    "pct_6m": 42.2,
@@ -452,7 +452,7 @@
   {
    "ticker": "005930",
    "name": "삼성전자",
-   "sector": null,
+   "sector": "통신 및 방송 장비 제조업",
    "market": "KOSPI",
    "pct_3m": 12.9,
    "pct_6m": 74.5,
@@ -532,7 +532,7 @@
   {
    "ticker": "131290",
    "name": "티에스이",
-   "sector": null,
+   "sector": "측정, 시험, 항해, 제어 및 기타 정밀기기 제조업; 광학기기 제외",
    "market": "KOSDAQ",
    "pct_3m": 11.2,
    "pct_6m": 140.8,
@@ -551,9 +551,15 @@
    "vol_dry_ratio": 0.97,
    "vol_drying": 0,
    "vol_2x_bo": 0,
-   "pullback_score": 3,
+   "fwd_year1": "2026/12(E)",
+   "fwd_year2": "2027/12(E)",
+   "per_fwd1": 15.4,
+   "per_fwd2": 12.0,
+   "per_accel": 1,
+   "per_delta_pct": 22.1,
+   "pullback_score": 4,
    "score_bits": {
-    "per_accel": 0,
+    "per_accel": 1,
     "deep_pullback": 1,
     "base_short": 1,
     "base_tight": 0,
