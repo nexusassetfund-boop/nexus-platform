@@ -34,6 +34,7 @@ from data_provider import (
     is_market_hours,
     load_config,
 )
+import sector_rrg
 from stage_detector import analyze_stock
 from drawdown_metrics import derive_drawdown_metrics
 
@@ -72,9 +73,8 @@ SECTOR_ETFS = {
 }
 
 
-async def _compute_sector_etf_rs() -> dict:
-    """섹터 대표 ETF의 장기 RS(1/3/6개월 가중 수익률 백분위)와 단기 모멘텀(5일 수익률 백분위).
-    사분면(부상/주도/과열/소외)용. trail = 1주/2주/3주 전 시점의 스냅샷 — '최근 흐름' 궤적 표시용."""
+async def _fetch_sector_closes() -> dict:
+    """섹터 대표 ETF 일간 종가 1회 조회 — 레거시 사분면과 RRG가 공유."""
     closes_map = {}
     for slug, (code, name) in SECTOR_ETFS.items():
         try:
@@ -83,6 +83,26 @@ async def _compute_sector_etf_rs() -> dict:
                 closes_map[slug] = (code, name, df["close"])
         except Exception:
             continue
+    return closes_map
+
+
+def _compute_sector_rrg(closes_map: dict) -> dict:
+    """주간 RRG(계획안 v1) — sector_rrg 모듈에 위임하고 ETF 메타를 부착.
+    확정 금요일 종가만 쓰므로 장중 재실행에도 좌표는 불변(주 1회 갱신과 동치)."""
+    rrg = sector_rrg.compute_rrg(
+        {slug: closes for slug, (_c, _n, closes) in closes_map.items()},
+        dt.datetime.now(tz=KST).replace(tzinfo=None),
+    )
+    for slug, sec in rrg["sectors"].items():
+        code, name, closes = closes_map[slug]
+        sec["etf"] = code
+        sec["etf_name"] = name
+    return rrg
+
+
+def _compute_sector_etf_rs(closes_map: dict) -> dict:
+    """[레거시 — 구버전 프론트 폴백용] 장기 RS(1/3/6개월 가중 수익률 백분위) ×
+    단기 모멘텀(5일 수익률 백분위) 사분면. 신규 프론트는 rrg 필드를 사용한다."""
 
     def pct_rank(vals):
         order = sorted(vals)
@@ -1081,13 +1101,21 @@ async def main():
     except Exception as e:
         logger.warning("시가총액 조회 실패 (섹터 맵은 표시 생략): %s", e)
 
-    # 섹터 대표 ETF RS (섹터 맵 사분면용 — 17개 ETF, KIS 우선이라 KRX 차단 무관)
+    # 섹터 맵 (17개 ETF, KIS 우선이라 KRX 차단 무관)
+    # rrg = 주간 RRG(신규, schema v2) / sector_etf_rs = 레거시 사분면(구프론트 폴백)
     sector_etf_rs = {}
+    sector_rrg_out = {}
     try:
-        sector_etf_rs = await _compute_sector_etf_rs()
-        logger.info("섹터 ETF RS: %d/%d 섹터", len(sector_etf_rs), len(SECTOR_ETFS))
+        sector_closes = await _fetch_sector_closes()
+        sector_etf_rs = _compute_sector_etf_rs(sector_closes)
+        sector_rrg_out = _compute_sector_rrg(sector_closes)
+        if sector_rrg_out.get("data_flags"):
+            logger.warning("섹터 ETF 가격 이상치 감지(좌표 계산 제외): %s", sector_rrg_out["data_flags"])
+        logger.info("섹터 맵: 레거시 %d / RRG %d 섹터 (as_of %s)",
+                    len(sector_etf_rs), len(sector_rrg_out.get("sectors", {})),
+                    sector_rrg_out.get("as_of"))
     except Exception as e:
-        logger.warning("섹터 ETF RS 실패 (섹터 맵 사분면 생략): %s", e)
+        logger.warning("섹터 맵 계산 실패 (사분면 생략): %s", e)
 
     # 5) KOSPI 상태 + 히스토리 + 원장
     kospi = await fetch_kospi_status()
@@ -1132,11 +1160,13 @@ async def main():
 
     # 상세 모달이 MA/MTT 필드까지 쓰므로 전체 필드를 그대로 내보낸다
     _save_json(SCAN_PATH, {
+        "schema_version": 2,          # v2: rrg 추가 — 구프론트는 sector_etf_rs 폴백
         "scan_time": now_str,
         "universe_size": len(scan_targets),
         "scanned": len(results),
         "kospi": kospi,
         "sector_etf_rs": sector_etf_rs,
+        "rrg": sector_rrg_out,
         "results": results,
     })
     # tracking.json은 거래일이면 매 스캔 갱신 — 장중엔 표시용 뷰(ledger_view), 마감엔 확정 원장.
