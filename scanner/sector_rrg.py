@@ -78,7 +78,8 @@ def _quadrant(x: float, y: float) -> tuple[str, str]:
     return QUADRANTS[("hi" if x >= 100 else "lo", "hi" if y >= 100 else "lo")]
 
 
-def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date
+def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
+             sma_days: int = SMA_DAYS, roc_days: int = ROC_DAYS
              ) -> tuple[dict[str, pd.DataFrame], pd.Series, dict[str, list[str]]]:
     """이상치 정제 → cutoff까지의 일봉 → RS-Ratio(x)/RS-Momentum(y) 일간 시계열.
 
@@ -114,8 +115,8 @@ def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date
     for slug in aligned.columns:
         norm = aligned[slug] / aligned[slug].iloc[0]
         rs = 100.0 * norm / benchmark
-        ratio = 100.0 * rs / rs.rolling(SMA_DAYS).mean()
-        mom = 100.0 + ratio.pct_change(ROC_DAYS) * 100.0
+        ratio = 100.0 * rs / rs.rolling(sma_days).mean()
+        mom = 100.0 + ratio.pct_change(roc_days) * 100.0
         xy = pd.DataFrame({"x": ratio, "y": mom}).dropna()
         if len(xy) >= TAIL_STEP * TAIL_POINTS:
             out[slug] = xy
