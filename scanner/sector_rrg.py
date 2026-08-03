@@ -180,11 +180,17 @@ def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime) -> dict:
             "sectors": sectors, "data_flags": data_flags}
 
 
-def build_insight(rrg: dict, names: dict[str, str], generated_at: str) -> dict:
+def build_insight(rrg: dict, names: dict[str, str], generated_at: str,
+                  d5: dict[str, float] | None = None, kospi: dict | None = None,
+                  stats: dict | None = None) -> dict:
     """장마감 시 1회 생성하는 규칙 기반 로테이션 인사이트 (장중 스캔은 직전 값 유지).
 
-    관찰 언어만 사용한다 — 리플레이 검증(Phase 4)에서 사분면 진입 단독의 초과수익이
-    확인되지 않았으므로 "매수/매도/비중" 등 판단어는 금지.
+    관찰 언어만 사용한다 — 리플레이·백테스트에서 사분면 전환 추종의 초과수익이
+    확인되지 않았으므로 "매수/매도/비중" 등 판단어는 금지. 대신 과거 통계를 병기해
+    각 서술이 실제로 어떤 의미였는지 스스로 판단할 근거를 준다.
+
+    d5: {slug: 최근 5일 수익률 %} (선택) / kospi: fetch_kospi_status 결과 (선택)
+    stats: 리플레이 전이 통계 (선택 — rrg["stats"]와 동일 구조)
     """
     secs = rrg.get("sectors", {})
     nm = lambda slug: names.get(slug, slug)
@@ -193,36 +199,88 @@ def build_insight(rrg: dict, names: dict[str, str], generated_at: str) -> dict:
         return sorted((s for s in secs.items() if pred(s[1])),
                       key=lambda kv: -kv[1]["heading_weeks"])
 
+    def stat_note(key):
+        s = ((stats or {}).get("transitions") or {}).get(key) or {}
+        if s.get("fwd8w_mean") is None:
+            return ""
+        return f" [과거 이 전이 후 8주 평균 {s['fwd8w_mean']:+.1f}%p·승률 {s['fwd8w_win']}%]"
+
     lines: list[str] = []
+
+    # ① 시장 맥락 + 사분면 구도
     leading_n = sum(1 for v in secs.values() if v["quadrant"] == "leading")
     transitions = [(k, v) for k, v in secs.items() if v["quadrant"] != v["prev_quadrant"]]
-    lines.append(f"주도 사분면 {leading_n}개 섹터, 최근 1주 사분면 전환 {len(transitions)}건.")
+    ctx = ""
+    if kospi and kospi.get("above_ma200") is not None:
+        ctx = ("KOSPI 200일선 위 — 상대 강세 = 실제 강세로 읽을 수 있는 국면. "
+               if kospi["above_ma200"] else
+               "KOSPI 200일선 아래 — 지금 '주도'는 덜 빠지는 섹터라는 뜻이므로 절대수익 기대는 금물. ")
+    lines.append(f"{ctx}주도 {leading_n}개 / 전체 {len(secs)}개 섹터, 최근 1주 사분면 전환 {len(transitions)}건.")
 
+    # ② 신규 진입 (과거 통계 병기 — "쫓아가기 전에 확인" 근거)
     new_lead = pick(lambda v: v["quadrant"] == "leading" and v["prev_quadrant"] == "improving")
     if new_lead:
         d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 우상향)" if v["heading"] == "NE" and v["heading_weeks"] >= 2
                       else nm(k) for k, v in new_lead)
-        lines.append(f"부상→주도 진입: {d} — 신규 리더십 후보, 지속 여부 관찰.")
+        lines.append(f"부상→주도 진입: {d} — 신규 리더십 후보.{stat_note('improving>leading')} "
+                     f"과거엔 진입 직후 추격이 불리했던 전이 — 눌림 후 재확인이 관찰 포인트.")
 
+    # ③ 주도 이탈
     exits = pick(lambda v: v["prev_quadrant"] == "leading" and v["quadrant"] in ("weakening", "lagging"))
     if exits:
-        lines.append(f"주도 이탈: {', '.join(nm(k) for k, _ in exits)} — 상대 모멘텀 둔화 진행.")
+        lines.append(f"주도 이탈: {', '.join(nm(k) for k, _ in exits)} — 상대 모멘텀 둔화 진행.{stat_note('leading>weakening')}")
 
+    # ④ 경계 근접 관찰 포인트 — 다음 주 전환 후보를 미리 짚는다
+    near_lead = [(k, v) for k, v in secs.items()
+                 if v["quadrant"] == "improving" and 100 - 1.5 <= v["x"] < 100 and v["heading"] in ("NE", "E")]
+    near_exit = [(k, v) for k, v in secs.items()
+                 if v["quadrant"] == "leading" and 100 <= v["x"] < 100 + 1.5 and v["heading"] in ("SW", "W", "S")]
+    if near_lead or near_exit:
+        parts = []
+        if near_lead:
+            d_near = ", ".join(f"{nm(k)}(x={v['x']:.1f})" for k, v in near_lead)
+            parts.append(f"주도 진입 직전: {d_near}")
+        if near_exit:
+            parts.append(f"주도 이탈 임박: {', '.join(nm(k) for k, _ in near_exit)}")
+        lines.append("경계 관찰: " + " / ".join(parts) + " — 다음 주 전환 가능성이 높은 자리.")
+
+    # ⑤ 회전 진행/약세 지속
     rising = pick(lambda v: v["quadrant"] == "improving" and v["heading"] == "NE" and v["heading_weeks"] >= 3)
     if rising:
         d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 우상향)" for k, v in rising)
         lines.append(f"부상 지속: {d} — 소외→부상 회전 진행 중, 주도 진입 여부가 관찰 포인트.")
-
     weakest = pick(lambda v: v["quadrant"] == "lagging" and v["heading"] == "SW" and v["heading_weeks"] >= 3)
     if weakest:
         d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 좌하향)" for k, v in weakest)
-        lines.append(f"소외 지속: {d} — 상대 약세 추세 유지.")
+        lines.append(f"소외 지속: {d} — 상대 약세 추세 유지.{stat_note('weakening>lagging')}")
 
+    # ⑥ 4주 순위 급변 — 랭킹 테이블의 ▲▼를 문장으로
+    def rank_map(get):
+        order = sorted(secs, key=get, reverse=True)
+        return {k: i + 1 for i, k in enumerate(order)}
+    now_r = rank_map(lambda k: secs[k]["x"])
+    old_r = rank_map(lambda k: secs[k]["tail"][0]["x"] if secs[k]["tail"] else secs[k]["x"])
+    movers = sorted(((k, old_r[k] - now_r[k]) for k in secs), key=lambda t: -abs(t[1]))
+    big = [(k, d) for k, d in movers if abs(d) >= 4][:3]
+    if big:
+        d = ", ".join(f"{nm(k)} {'+' if d_ > 0 else ''}{d_}계단" for k, d_ in big)
+        lines.append(f"순위 급변(약 {len(secs[list(secs)[0]]['tail'])}주 전 대비): {d} — 로테이션의 실제 이동 경로.")
+
+    # ⑦ 맵 위치와 단기 수익률의 괴리 — 추세와 단기 흐름이 반대인 섹터
+    if d5:
+        div = [(k, v, d5[k]) for k, v in secs.items() if k in d5
+               and ((v["quadrant"] == "leading" and d5[k] <= -5) or (v["quadrant"] == "lagging" and d5[k] >= 5))]
+        if div:
+            d = ", ".join(f"{nm(k)}({'주도인데' if v['quadrant'] == 'leading' else '소외인데'} 5일 {r:+.1f}%)"
+                          for k, v, r in div[:3])
+            lines.append(f"추세·단기 괴리: {d} — 추세 전환의 초기 신호인지 일시 반락인지 다음 주 확인 필요.")
+
+    # ⑧ 데이터 품질
     flags = rrg.get("data_flags", {})
     if flags:
-        lines.append(f"데이터 이상치 필터 적용 섹터 {len(flags)}개({', '.join(nm(k) for k in flags)}) — 해당 봉은 좌표 계산에서 제외됨.")
+        lines.append(f"데이터 이상치 필터 적용 {len(flags)}개 섹터({', '.join(nm(k) for k in flags)}) — 해당 봉은 좌표 계산에서 제외됨.")
 
-    return {"generated_at": generated_at, "as_of": rrg.get("as_of"), "lines": lines[:6]}
+    return {"generated_at": generated_at, "as_of": rrg.get("as_of"), "lines": lines[:9]}
 
 
 # 판단어("매수/매도/관심/비중" 등)는 쓰지 않는다 — 상태 서술만 (Phase 3, 리플레이 검증 전).
