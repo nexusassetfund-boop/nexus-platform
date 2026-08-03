@@ -1158,6 +1158,25 @@ async def main():
     now_str = dt.datetime.now(tz=KST).isoformat(timespec="seconds")
     results.sort(key=lambda x: (-(x.get("stage") or 0), -x.get("confidence", 0)))
 
+    # RRG 인사이트 — 장마감 실행에서만 새로 생성, 장중 스캔은 직전 값 유지
+    if sector_rrg_out.get("sectors"):
+        if is_close_run:
+            try:
+                names = {s["key"]: s["name"] for s in json.loads(
+                    (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
+                sector_rrg_out["insight"] = sector_rrg.build_insight(sector_rrg_out, names, now_str)
+                logger.info("RRG 인사이트 생성: %d줄", len(sector_rrg_out["insight"]["lines"]))
+            except Exception as e:
+                logger.warning("RRG 인사이트 생성 실패(무시): %s", e)
+        else:
+            try:
+                prev = json.loads(SCAN_PATH.read_text(encoding="utf-8"))
+                pi = (prev.get("rrg") or {}).get("insight")
+                if pi:
+                    sector_rrg_out["insight"] = pi
+            except Exception:
+                pass
+
     # 상세 모달이 MA/MTT 필드까지 쓰므로 전체 필드를 그대로 내보낸다
     _save_json(SCAN_PATH, {
         "schema_version": 2,          # v2: rrg 추가 — 구프론트는 sector_etf_rs 폴백

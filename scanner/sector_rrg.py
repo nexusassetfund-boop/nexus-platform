@@ -172,6 +172,51 @@ _HEADING_KO = {"NE": "우상향", "SE": "우하향", "SW": "좌하향", "NW": "�
                "N": "상승", "S": "하락", "E": "우측 이동", "W": "좌측 이동", "flat": "정체"}
 
 
+def build_insight(rrg: dict, names: dict[str, str], generated_at: str) -> dict:
+    """장마감 시 1회 생성하는 규칙 기반 로테이션 인사이트 (장중 스캔은 직전 값 유지).
+
+    관찰 언어만 사용한다 — 리플레이 검증(Phase 4)에서 사분면 진입 단독의 초과수익이
+    확인되지 않았으므로 "매수/매도/비중" 등 판단어는 금지.
+    """
+    secs = rrg.get("sectors", {})
+    nm = lambda slug: names.get(slug, slug)
+
+    def pick(pred):
+        return sorted((s for s in secs.items() if pred(s[1])),
+                      key=lambda kv: -kv[1]["heading_weeks"])
+
+    lines: list[str] = []
+    leading_n = sum(1 for v in secs.values() if v["quadrant"] == "leading")
+    transitions = [(k, v) for k, v in secs.items() if v["quadrant"] != v["prev_quadrant"]]
+    lines.append(f"주도 사분면 {leading_n}개 섹터, 이번 주 사분면 전환 {len(transitions)}건.")
+
+    new_lead = pick(lambda v: v["quadrant"] == "leading" and v["prev_quadrant"] == "improving")
+    if new_lead:
+        d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 우상향)" if v["heading"] == "NE" and v["heading_weeks"] >= 2
+                      else nm(k) for k, v in new_lead)
+        lines.append(f"부상→주도 진입: {d} — 신규 리더십 후보, 지속 여부 관찰.")
+
+    exits = pick(lambda v: v["prev_quadrant"] == "leading" and v["quadrant"] in ("weakening", "lagging"))
+    if exits:
+        lines.append(f"주도 이탈: {', '.join(nm(k) for k, _ in exits)} — 상대 모멘텀 둔화 진행.")
+
+    rising = pick(lambda v: v["quadrant"] == "improving" and v["heading"] == "NE" and v["heading_weeks"] >= 3)
+    if rising:
+        d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 우상향)" for k, v in rising)
+        lines.append(f"부상 지속: {d} — 소외→부상 회전 진행 중, 주도 진입 여부가 관찰 포인트.")
+
+    weakest = pick(lambda v: v["quadrant"] == "lagging" and v["heading"] == "SW" and v["heading_weeks"] >= 3)
+    if weakest:
+        d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 좌하향)" for k, v in weakest)
+        lines.append(f"소외 지속: {d} — 상대 약세 추세 유지.")
+
+    flags = rrg.get("data_flags", {})
+    if flags:
+        lines.append(f"데이터 이상치 필터 적용 섹터 {len(flags)}개({', '.join(nm(k) for k in flags)}) — 해당 봉은 좌표 계산에서 제외됨.")
+
+    return {"generated_at": generated_at, "as_of": rrg.get("as_of"), "lines": lines[:6]}
+
+
 def _comment(q_ko: str, prev_ko: str, transitioned: bool, heading: str, streak: int) -> str:
     h_ko = _HEADING_KO.get(heading, heading)
     if transitioned:
