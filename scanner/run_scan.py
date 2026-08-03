@@ -70,7 +70,12 @@ SECTOR_ETFS = {
     "retail-fashion-beauty": ("228790", "TIGER 화장품"),
     "chem-materials": ("117460", "KODEX 에너지화학"),
     "food-agri-fishery": ("266410", "KODEX 필수소비재"),
+    # nuclear는 sector_map.json에 없는 RRG 전용 섹터 — 이름은 RRG_EXTRA_NAMES로 보충
+    "nuclear": ("433500", "ACE 원자력TOP10"),
 }
+
+# sector_map.json에 없는 RRG 전용 섹터의 표시 이름
+RRG_EXTRA_NAMES = {"nuclear": "원전·원자력"}
 
 
 async def _fetch_sector_closes() -> dict:
@@ -1169,6 +1174,7 @@ async def main():
                 logger.warning("섹터 ETF 가격 이상치 감지(좌표 계산 제외): %s", sector_rrg_out["data_flags"])
             names = {s["key"]: s["name"] for s in json.loads(
                 (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
+            names.update(RRG_EXTRA_NAMES)
             sector_rrg_out["insight"] = sector_rrg.build_insight(sector_rrg_out, names, now_str)
             # 리플레이 통계(replay_rrg.py 산출물) — 화면에 forward return 상시 병기용
             try:
