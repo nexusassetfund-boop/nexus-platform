@@ -1,6 +1,6 @@
 {
  "schema_version": 2,
- "scan_time": "2026-08-03T15:46:40+09:00",
+ "scan_time": "2026-08-03T15:49:45+09:00",
  "universe_size": 350,
  "scanned": 350,
  "kospi": {
@@ -12,7 +12,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-03T15:46:39+09:00"
+  "updated": "2026-08-03T15:49:45+09:00"
  },
  "sector_etf_rs": {
   "semiconductor": {
@@ -1428,7 +1428,7 @@
    ]
   },
   "insight": {
-   "generated_at": "2026-08-03T15:46:40+09:00",
+   "generated_at": "2026-08-03T15:49:45+09:00",
    "as_of": "2026-08-03",
    "lines": [
     "주도 사분면 8개 섹터, 최근 1주 사분면 전환 4건.",
@@ -8722,7 +8722,7 @@
    "range_contraction_pct": 9.3,
    "breakout_detected": false,
    "near_high": false,
-   "volume_surge_ratio": 0.71,
+   "volume_surge_ratio": 0.72,
    "gap_up": false,
    "climax_warning": false,
    "suggested_stop_pct": -10.0,
@@ -10261,7 +10261,7 @@
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
-   "wedge_vol_surge": 3.03,
+   "wedge_vol_surge": 3.04,
    "ema_tight": true,
    "higher_low": true,
    "reversal_ext": true,
@@ -13705,7 +13705,7 @@
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
-   "wedge_vol_surge": 0.8,
+   "wedge_vol_surge": 0.82,
    "ema_tight": true,
    "higher_low": true,
    "reversal_ext": true,
@@ -13720,7 +13720,7 @@
    "range_contraction_pct": 52.4,
    "breakout_detected": false,
    "near_high": false,
-   "volume_surge_ratio": 0.79,
+   "volume_surge_ratio": 0.81,
    "gap_up": false,
    "climax_warning": false,
    "suggested_stop_pct": -10.0,
@@ -16241,7 +16241,7 @@
    "range_contraction_pct": -128.6,
    "breakout_detected": false,
    "near_high": false,
-   "volume_surge_ratio": 0.56,
+   "volume_surge_ratio": 0.57,
    "gap_up": false,
    "climax_warning": false,
    "suggested_stop_pct": -10.0,
@@ -16741,7 +16741,7 @@
    "range_contraction_pct": 4.4,
    "breakout_detected": false,
    "near_high": false,
-   "volume_surge_ratio": 1.67,
+   "volume_surge_ratio": 1.68,
    "gap_up": false,
    "climax_warning": false,
    "suggested_stop_pct": -10.0,

@@ -1,12 +1,12 @@
 {
- "updated": "2026-08-03T15:47:36+09:00",
+ "updated": "2026-08-03T15:49:48+09:00",
  "items": {
   "000660": {
    "price": 1567000,
    "change_pct": -8.79,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "26.6x",
+   "mktcap": "11,446,815억",
+   "pbr": 9.12,
    "div": null,
    "eps": null,
    "bps": null,
@@ -18,11 +18,9 @@
    "high52": 2987000,
    "low52": 245000,
    "upside": 90.7,
-   "margin": null,
+   "margin": -554.1,
    "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
+   "watch": [],
    "ma20": 1857500,
    "ma60": 2105800,
    "gap20": -15.6,
@@ -38,9 +36,9 @@
   "004170": {
    "price": 405500,
    "change_pct": -4.14,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "281.6x",
+   "mktcap": "38,300억",
+   "pbr": 0.8,
    "div": null,
    "eps": null,
    "bps": null,
@@ -52,7 +50,7 @@
    "high52": 792000,
    "low52": 160800,
    "upside": 68.7,
-   "margin": null,
+   "margin": 0.6,
    "near_low": false,
    "watch": [
     "목표가 대비 저평가"
@@ -72,9 +70,9 @@
   "483650": {
    "price": 223500,
    "change_pct": 1.13,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "33.9x",
+   "mktcap": "27,924억",
+   "pbr": 13.95,
    "div": null,
    "eps": null,
    "bps": null,
@@ -86,11 +84,9 @@
    "high52": 275500,
    "low52": 116200,
    "upside": 34.2,
-   "margin": null,
+   "margin": -900.1,
    "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
+   "watch": [],
    "ma20": 224080,
    "ma60": 217788,
    "gap20": -0.3,
@@ -106,9 +102,9 @@
   "000270": {
    "price": 129600,
    "change_pct": -1.74,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "6.8x",
+   "mktcap": "505,975억",
+   "pbr": 0.82,
    "div": null,
    "eps": null,
    "bps": null,
@@ -120,7 +116,7 @@
    "high52": 212500,
    "low52": 100000,
    "upside": 79.0,
-   "margin": null,
+   "margin": 23.9,
    "near_low": false,
    "watch": [
     "목표가 대비 저평가"
@@ -140,9 +136,9 @@
   "105560": {
    "price": 169500,
    "change_pct": 0.59,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "11.2x",
+   "mktcap": "601,196억",
+   "pbr": 1.03,
    "div": null,
    "eps": null,
    "bps": null,
@@ -154,11 +150,9 @@
    "high52": 194500,
    "low52": 105800,
    "upside": 29.2,
-   "margin": null,
+   "margin": -1.4,
    "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
+   "watch": [],
    "ma20": 173440,
    "ma60": 162782,
    "gap20": -2.3,
@@ -174,9 +168,9 @@
   "033780": {
    "price": 175600,
    "change_pct": -1.95,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "19.6x",
+   "mktcap": "182,291억",
+   "pbr": 1.96,
    "div": null,
    "eps": null,
    "bps": null,
@@ -188,11 +182,9 @@
    "high52": 192400,
    "low52": 128100,
    "upside": 31.5,
-   "margin": null,
+   "margin": -83.7,
    "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
+   "watch": [],
    "ma20": 178585,
    "ma60": 179140,
    "gap20": -1.7,
@@ -208,9 +200,9 @@
   "028260": {
    "price": 329000,
    "change_pct": -6.4,
-   "per": null,
-   "mktcap": null,
-   "pbr": null,
+   "per": "23.2x",
+   "mktcap": "533,531억",
+   "pbr": 1.08,
    "div": null,
    "eps": null,
    "bps": null,
@@ -222,11 +214,9 @@
    "high52": 565000,
    "low52": 155300,
    "upside": 77.8,
-   "margin": null,
+   "margin": -14.1,
    "near_low": false,
-   "watch": [
-    "목표가 대비 저평가"
-   ],
+   "watch": [],
    "ma20": 354425,
    "ma60": 414642,
    "gap20": -7.2,
