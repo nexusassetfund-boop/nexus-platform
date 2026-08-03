@@ -1172,17 +1172,20 @@ async def main():
             sector_rrg_out = _compute_sector_rrg(sector_closes)
             if sector_rrg_out.get("data_flags"):
                 logger.warning("섹터 ETF 가격 이상치 감지(좌표 계산 제외): %s", sector_rrg_out["data_flags"])
-            names = {s["key"]: s["name"] for s in json.loads(
-                (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
-            names.update(RRG_EXTRA_NAMES)
-            sector_rrg_out["insight"] = sector_rrg.build_insight(sector_rrg_out, names, now_str)
-            # 리플레이 통계(replay_rrg.py 산출물) — 화면에 forward return 상시 병기용
+            # 리플레이 통계(replay_rrg.py 산출물) — 화면 병기 + 인사이트 근거 병기용
             try:
                 stats_path = ROOT / "reports" / "rrg_replay_stats.json"
                 if stats_path.exists():
                     sector_rrg_out["stats"] = json.loads(stats_path.read_text(encoding="utf-8"))
             except Exception:
                 pass
+            names = {s["key"]: s["name"] for s in json.loads(
+                (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
+            names.update(RRG_EXTRA_NAMES)
+            d5 = {k: v.get("ret_d5") for k, v in sector_etf_rs.items() if v.get("ret_d5") is not None}
+            sector_rrg_out["insight"] = sector_rrg.build_insight(
+                sector_rrg_out, names, now_str,
+                d5=d5, kospi=kospi, stats=sector_rrg_out.get("stats"))
             logger.info("RRG 갱신: %d 섹터 (as_of %s), 인사이트 %d줄",
                         len(sector_rrg_out.get("sectors", {})), sector_rrg_out.get("as_of"),
                         len(sector_rrg_out["insight"]["lines"]))

@@ -157,8 +157,8 @@ def test_build_insight():
     names = {k: f"섹터{k[-1]}" for k in rrg["sectors"]}
     ins = sr.build_insight(rrg, names, "2027-01-18T15:40:00+09:00")
     assert ins["as_of"] == rrg["as_of"]
-    assert 1 <= len(ins["lines"]) <= 6
-    assert "주도 사분면" in ins["lines"][0]
+    assert 1 <= len(ins["lines"]) <= 9
+    assert "사분면 전환" in ins["lines"][0]
     joined = " ".join(ins["lines"])
     for word in ("매수", "매도", "비중"):  # 판단어 금지 (Phase 4 게이트 미통과)
         assert word not in joined
