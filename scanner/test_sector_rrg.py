@@ -19,21 +19,21 @@ def _daily_series(days=420, daily_ret=0.0, start="2025-06-02", seed=None):
     return pd.Series(100.0 * np.cumprod(1 + rets), index=idx)
 
 
-NOW = dt.datetime(2027, 1, 18, 17, 0)  # 월요일 — 직전 금요일 = 2027-01-15
+NOW = dt.datetime(2027, 1, 18, 17, 0)  # 월요일 장마감 후 — 확정 종가 = 2027-01-18
 
 
-def test_last_confirmed_friday_monday():
-    assert sr.last_confirmed_friday(NOW) == dt.date(2027, 1, 15)
+def test_last_confirmed_close_after():
+    assert sr.last_confirmed_close(NOW) == dt.date(2027, 1, 18)
 
 
-def test_last_confirmed_friday_friday_before_close():
-    now = dt.datetime(2027, 1, 15, 10, 0)  # 금요일 장중 → 이번 주 미확정
-    assert sr.last_confirmed_friday(now) == dt.date(2027, 1, 8)
+def test_last_confirmed_close_before():
+    now = dt.datetime(2027, 1, 18, 10, 0)  # 장중 → 전 거래일(금 1/15)
+    assert sr.last_confirmed_close(now) == dt.date(2027, 1, 15)
 
 
-def test_last_confirmed_friday_friday_after_close():
-    now = dt.datetime(2027, 1, 15, 16, 0)
-    assert sr.last_confirmed_friday(now) == dt.date(2027, 1, 15)
+def test_last_confirmed_close_weekend():
+    now = dt.datetime(2027, 1, 17, 12, 0)  # 일요일 → 금 1/15
+    assert sr.last_confirmed_close(now) == dt.date(2027, 1, 15)
 
 
 def test_clean_daily_flags_outlier():
@@ -61,11 +61,12 @@ def _universe(n=6, strong=0, noise=False):
 
 
 def test_compute_rrg_basic():
-    res = sr.compute_rrg(_universe(), NOW)
-    assert res["as_of"] == "2027-01-15"
+    uni = _universe()
+    res = sr.compute_rrg(uni, NOW)
+    assert res["as_of"] == uni["s0"].index[-1].strftime("%Y-%m-%d")  # 데이터 마지막 영업일
     assert len(res["sectors"]) == 6
     s0 = res["sectors"]["s0"]
-    assert len(s0["tail"]) == sr.TAIL_WEEKS
+    assert len(s0["tail"]) == sr.TAIL_POINTS
     assert s0["tail"][-1]["x"] == s0["x"]
     # 지속적 강세 섹터는 벤치마크 대비 RS-Ratio > 100 (주도/약화 어느 쪽이든 우측)
     assert s0["x"] > 100
@@ -79,13 +80,25 @@ def test_compute_rrg_basic():
 
 
 def test_compute_rrg_idempotent_intraday():
-    """장중 어느 시각에 다시 계산해도 (같은 일봉 데이터면) 좌표 동일 — 주 1회 갱신 보장."""
+    """같은 확정 종가 데이터면 어느 시각에 계산해도 좌표 동일 — 장중 재실행 안전."""
     uni = _universe()
-    r1 = sr.compute_rrg(uni, dt.datetime(2027, 1, 18, 10, 0))
-    r2 = sr.compute_rrg(uni, dt.datetime(2027, 1, 21, 15, 0))
-    assert r1["as_of"] == r2["as_of"]
+    r1 = sr.compute_rrg(uni, dt.datetime(2027, 1, 18, 16, 0))
+    r2 = sr.compute_rrg(uni, dt.datetime(2027, 1, 19, 16, 0))
     assert r1["sectors"]["s0"]["x"] == r2["sectors"]["s0"]["x"]
     assert r1["sectors"]["s0"]["tail"] == r2["sectors"]["s0"]["tail"]
+
+
+def test_compute_rrg_daily_smoothness():
+    """하루 추가돼도 좌표가 완만하게만 움직여야 함 — '급변' 재발 방지의 핵심 성질."""
+    uni_full = _universe(noise=True)
+    uni_prev = {k: v.iloc[:-1] for k, v in uni_full.items()}  # 하루 전까지
+    r_full = sr.compute_rrg(uni_full, NOW)
+    r_prev = sr.compute_rrg(uni_prev, NOW)
+    for k in r_full["sectors"]:
+        dx = abs(r_full["sectors"][k]["x"] - r_prev["sectors"][k]["x"])
+        dy = abs(r_full["sectors"][k]["y"] - r_prev["sectors"][k]["y"])
+        # 구 방식은 하루에 백분위 수십 점씩 튀었다 — 좌표 단위 수 점 이내면 '완만'
+        assert dx < 3.0 and dy < 4.0, f"{k}: 1일 변화 dx={dx:.2f} dy={dy:.2f}"
 
 
 def test_compute_rrg_outlier_does_not_move_coords():
@@ -101,7 +114,7 @@ def test_compute_rrg_outlier_does_not_move_coords():
 
 
 def test_compute_rrg_insufficient_data():
-    uni = {f"s{i}": _daily_series(days=60, seed=i) for i in range(6)}  # ≈12주 < MIN_WEEKS
+    uni = {f"s{i}": _daily_series(days=60, seed=i) for i in range(6)}  # < MIN_DAYS
     res = sr.compute_rrg(uni, NOW)
     assert res["sectors"] == {}
 

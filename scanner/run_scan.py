@@ -1102,18 +1102,13 @@ async def main():
         logger.warning("시가총액 조회 실패 (섹터 맵은 표시 생략): %s", e)
 
     # 섹터 맵 (17개 ETF, KIS 우선이라 KRX 차단 무관)
-    # rrg = 주간 RRG(신규, schema v2) / sector_etf_rs = 레거시 사분면(구프론트 폴백)
+    # rrg = 일간 RRG(schema v2) / sector_etf_rs = 레거시 사분면(구프론트 폴백)
+    # rrg 좌표·인사이트 갱신은 장마감 실행에서만 — is_close_run 확정 후(아래 출력부)에서 처리.
     sector_etf_rs = {}
-    sector_rrg_out = {}
+    sector_closes = {}
     try:
         sector_closes = await _fetch_sector_closes()
         sector_etf_rs = _compute_sector_etf_rs(sector_closes)
-        sector_rrg_out = _compute_sector_rrg(sector_closes)
-        if sector_rrg_out.get("data_flags"):
-            logger.warning("섹터 ETF 가격 이상치 감지(좌표 계산 제외): %s", sector_rrg_out["data_flags"])
-        logger.info("섹터 맵: 레거시 %d / RRG %d 섹터 (as_of %s)",
-                    len(sector_etf_rs), len(sector_rrg_out.get("sectors", {})),
-                    sector_rrg_out.get("as_of"))
     except Exception as e:
         logger.warning("섹터 맵 계산 실패 (사분면 생략): %s", e)
 
@@ -1158,24 +1153,29 @@ async def main():
     now_str = dt.datetime.now(tz=KST).isoformat(timespec="seconds")
     results.sort(key=lambda x: (-(x.get("stage") or 0), -x.get("confidence", 0)))
 
-    # RRG 인사이트 — 장마감 실행에서만 새로 생성, 장중 스캔은 직전 값 유지
-    if sector_rrg_out.get("sectors"):
-        if is_close_run:
-            try:
-                names = {s["key"]: s["name"] for s in json.loads(
-                    (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
-                sector_rrg_out["insight"] = sector_rrg.build_insight(sector_rrg_out, names, now_str)
-                logger.info("RRG 인사이트 생성: %d줄", len(sector_rrg_out["insight"]["lines"]))
-            except Exception as e:
-                logger.warning("RRG 인사이트 생성 실패(무시): %s", e)
-        else:
-            try:
-                prev = json.loads(SCAN_PATH.read_text(encoding="utf-8"))
-                pi = (prev.get("rrg") or {}).get("insight")
-                if pi:
-                    sector_rrg_out["insight"] = pi
-            except Exception:
-                pass
+    # RRG 좌표 + 인사이트 — 매 거래일 장마감 실행에서 갱신, 장중 스캔은 직전 값 유지.
+    # (스무딩 60일 SMA + 20일 ROC이 급변을 막고, 갱신 주기는 표·인사이트와 동일하게 일간)
+    prev_rrg = {}
+    try:
+        prev_rrg = (json.loads(SCAN_PATH.read_text(encoding="utf-8")).get("rrg") or {})
+    except Exception:
+        pass
+    sector_rrg_out = prev_rrg  # 기본: 직전 장마감 좌표·인사이트 유지
+    if sector_closes and (is_close_run or not prev_rrg.get("sectors")):
+        # 장마감 확정 실행 또는 부트스트랩(직전 rrg 없음 — 이때도 확정 종가 기준이라 결정론적)
+        try:
+            sector_rrg_out = _compute_sector_rrg(sector_closes)
+            if sector_rrg_out.get("data_flags"):
+                logger.warning("섹터 ETF 가격 이상치 감지(좌표 계산 제외): %s", sector_rrg_out["data_flags"])
+            names = {s["key"]: s["name"] for s in json.loads(
+                (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
+            sector_rrg_out["insight"] = sector_rrg.build_insight(sector_rrg_out, names, now_str)
+            logger.info("RRG 갱신: %d 섹터 (as_of %s), 인사이트 %d줄",
+                        len(sector_rrg_out.get("sectors", {})), sector_rrg_out.get("as_of"),
+                        len(sector_rrg_out["insight"]["lines"]))
+        except Exception as e:
+            logger.warning("RRG 계산 실패 — 직전 값 유지: %s", e)
+            sector_rrg_out = prev_rrg
 
     # 상세 모달이 MA/MTT 필드까지 쓰므로 전체 필드를 그대로 내보낸다
     _save_json(SCAN_PATH, {

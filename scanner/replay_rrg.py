@@ -26,7 +26,7 @@ import pandas as pd
 
 from data_provider import fetch_ohlcv
 from run_scan import SECTOR_ETFS
-from sector_rrg import TAIL_WEEKS, _quadrant, last_confirmed_friday, weekly_xy
+from sector_rrg import _quadrant, clean_daily, daily_xy, last_confirmed_close
 
 REPORT_PATH = Path(__file__).parent.parent / "reports" / "rrg_replay.md"
 
@@ -79,17 +79,20 @@ async def main():
     print(f"조회 완료: {len(daily)}/{len(SECTOR_ETFS)} 섹터, "
           f"최장 {max(len(s) for s in daily.values())}일")
 
-    cutoff = last_confirmed_friday(dt.datetime.now())
-    xy_map, benchmark, data_flags = weekly_xy(daily, cutoff)
-    if not xy_map:
-        print("주간 데이터 부족 — 리플레이 불가")
+    cutoff = last_confirmed_close(dt.datetime.now())
+    xy_daily, benchmark, data_flags = daily_xy(daily, cutoff)
+    if not xy_daily:
+        print("데이터 부족 — 리플레이 불가")
         return
+    # 주간 격자(5거래일 간격)로 샘플링 — 전환·이벤트 판정 단위는 주간 유지
+    xy_map = {slug: xy.iloc[list(range(len(xy) - 1, -1, -5))[::-1]] for slug, xy in xy_daily.items()}
 
     # 벤치마크와 정렬된 주간 종가 (forward return 계산용)
-    from sector_rrg import clean_daily, weekly_confirmed
-    weekly_closes = pd.DataFrame({
-        slug: weekly_confirmed(clean_daily(daily[slug])[0], cutoff) for slug in xy_map
+    daily_closes_df = pd.DataFrame({
+        slug: clean_daily(daily[slug])[0][clean_daily(daily[slug])[0].index.date <= cutoff]
+        for slug in xy_map
     }).dropna()
+    weekly_closes = daily_closes_df.iloc[list(range(len(daily_closes_df) - 1, -1, -5))[::-1]]
 
     # ── 1) 전환 빈도: 신 vs 구 ──
     new_rates, old_rates = [], []
