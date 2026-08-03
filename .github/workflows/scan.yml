@@ -47,3 +47,14 @@ jobs:
       - name: 결과 커밋
         run: |
           bash .github/scripts/commit-data.sh "scan: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data
+
+      # 커밋 직후 Worker KV 즉시 동기화 — 크론 대기(레이스 시 다음 영업일) 제거.
+      # raw CDN 전파 지연 대비 30초 대기 후 호출, 실패해도 크론이 폴백.
+      - name: Worker 동기화
+        if: success()
+        env:
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: |
+          sleep 30
+          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/sync" \
+            -H "authorization: Bearer $NEXUS_ADMIN_TOKEN" || echo "sync 실패 (크론 폴백)"
