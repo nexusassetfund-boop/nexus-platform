@@ -16,6 +16,7 @@
 import argparse
 import asyncio
 import datetime as dt
+import json
 import sys
 from pathlib import Path
 
@@ -29,6 +30,7 @@ from run_scan import SECTOR_ETFS
 from sector_rrg import _quadrant, clean_daily, daily_xy, last_confirmed_close
 
 REPORT_PATH = Path(__file__).parent.parent / "reports" / "rrg_replay.md"
+STATS_PATH = Path(__file__).parent.parent / "reports" / "rrg_replay_stats.json"
 
 
 def _legacy_quadrant_series(weekly_closes: pd.DataFrame) -> dict[str, pd.Series]:
@@ -105,25 +107,46 @@ async def main():
     avg_new = sum(new_rates) / len(new_rates)
     avg_old = sum(old_rates) / len(old_rates) if old_rates else float("nan")
 
-    # ── 2) 부상→주도 진입 이벤트의 forward 상대수익률 ──
+    # ── 2) 사분면 전이별 forward 상대수익률 — 역신호 가설 포함 전 유형 검증 ──
     horizons = (4, 8, 12)
-    events = []
+    TRANSITIONS = {
+        "improving>leading": ("improving", "leading"),    # 통상 "매수 신호"로 통용되는 전이
+        "leading>weakening": ("leading", "weakening"),    # 통상 "축소 신호"
+        "weakening>lagging": ("weakening", "lagging"),
+        "lagging>improving": ("lagging", "improving"),
+    }
+    bm = benchmark.reindex(weekly_closes.index)
+    events_by = {k: [] for k in TRANSITIONS}
     for slug, xy in xy_map.items():
         quads = pd.Series([_quadrant(r.x, r.y)[0] for _, r in xy.iterrows()], index=xy.index)
         for i in range(1, len(quads)):
-            if quads.iloc[i] == "leading" and quads.iloc[i - 1] == "improving":
-                t = quads.index[i]
-                if t not in weekly_closes.index:
-                    continue
-                ti = weekly_closes.index.get_loc(t)
-                row = {"slug": slug, "date": t.strftime("%Y-%m-%d")}
-                for h in horizons:
-                    if ti + h < len(weekly_closes):
-                        sec_r = weekly_closes[slug].iloc[ti + h] / weekly_closes[slug].iloc[ti] - 1
-                        bm = benchmark.reindex(weekly_closes.index)
-                        bm_r = bm.iloc[ti + h] / bm.iloc[ti] - 1
-                        row[f"fwd{h}w"] = (sec_r - bm_r) * 100
-                events.append(row)
+            for key, (frm, to) in TRANSITIONS.items():
+                if quads.iloc[i] == to and quads.iloc[i - 1] == frm:
+                    t = quads.index[i]
+                    if t not in weekly_closes.index:
+                        continue
+                    ti = weekly_closes.index.get_loc(t)
+                    row = {"slug": slug, "date": t.strftime("%Y-%m-%d")}
+                    for h in horizons:
+                        if ti + h < len(weekly_closes):
+                            sec_r = weekly_closes[slug].iloc[ti + h] / weekly_closes[slug].iloc[ti] - 1
+                            bm_r = bm.iloc[ti + h] / bm.iloc[ti] - 1
+                            row[f"fwd{h}w"] = (sec_r - bm_r) * 100
+                    events_by[key].append(row)
+    events = events_by["improving>leading"]
+
+    # 화면 병기용 통계 JSON — run_scan이 rrg.stats로 scan.json에 부착
+    stats = {"generated": dt.date.today().isoformat(), "weeks": len(weekly_closes), "transitions": {}}
+    for key, evs in events_by.items():
+        s = {"n": len(evs)}
+        for h in horizons:
+            vals = [e[f"fwd{h}w"] for e in evs if f"fwd{h}w" in e]
+            if vals:
+                s[f"fwd{h}w_mean"] = round(sum(vals) / len(vals), 2)
+                s[f"fwd{h}w_win"] = round(100 * sum(1 for v in vals if v > 0) / len(vals))
+        stats["transitions"][key] = s
+    STATS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATS_PATH.write_text(json.dumps(stats, ensure_ascii=False, indent=1), encoding="utf-8")
 
     lines = [
         "# RRG 리플레이 검증 리포트 (Phase 4)",
@@ -133,17 +156,14 @@ async def main():
         "\n## 1. 사분면 전환 빈도 (10주당 평균 전환 횟수, 낮을수록 안정)",
         f"- 신 방식(주간 RRG): **{avg_new:.2f}회**",
         f"- 구 방식(수익률 백분위, 주간 등가 재현): **{avg_old:.2f}회**",
-        "\n## 2. 부상→주도 진입 후 forward 상대수익률 (vs 동일가중 벤치마크, %p)",
-        f"- 이벤트 수: {len(events)}건",
+        "\n## 2. 사분면 전이별 forward 상대수익률 (vs 동일가중 벤치마크, %p)",
     ]
-    for h in horizons:
-        vals = [e[f"fwd{h}w"] for e in events if f"fwd{h}w" in e]
-        if vals:
-            mean = sum(vals) / len(vals)
-            win = 100 * sum(1 for v in vals if v > 0) / len(vals)
-            lines.append(f"- +{h}주: 평균 {mean:+.2f}%p, 승률 {win:.0f}% (n={len(vals)})")
-        else:
-            lines.append(f"- +{h}주: 표본 없음")
+    for key, s in stats["transitions"].items():
+        parts = [f"+{h}주 {s.get(f'fwd{h}w_mean', float('nan')):+.2f}%p(승률 {s.get(f'fwd{h}w_win', 0)}%)"
+                 for h in horizons if f"fwd{h}w_mean" in s]
+        lines.append(f"- **{key}** (n={s['n']}): {', '.join(parts) or '표본 없음'}")
+    lines.append("- 역신호 판정: improving>leading이 유의하게 음(-)이고 leading>weakening이 "
+                 "유의하게 양(+)이면 평균회귀(역신호) 구조 — 인사이트 문구에 반영 검토.")
     lines.append("\n## 이벤트 상세")
     for e in events:
         fwd = ", ".join(f"+{h}w {e.get(f'fwd{h}w', float('nan')):+.1f}%p"
