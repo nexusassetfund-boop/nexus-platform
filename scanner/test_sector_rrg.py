@@ -106,6 +106,20 @@ def test_compute_rrg_insufficient_data():
     assert res["sectors"] == {}
 
 
+def test_build_insight():
+    rrg = sr.compute_rrg(_universe(), NOW)
+    names = {k: f"섹터{k[-1]}" for k in rrg["sectors"]}
+    ins = sr.build_insight(rrg, names, "2027-01-18T15:40:00+09:00")
+    assert ins["as_of"] == rrg["as_of"]
+    assert 1 <= len(ins["lines"]) <= 6
+    assert "주도 사분면" in ins["lines"][0]
+    joined = " ".join(ins["lines"])
+    for word in ("매수", "매도", "비중"):  # 판단어 금지 (Phase 4 게이트 미통과)
+        assert word not in joined
+    # 이름 매핑이 적용됐는지 (슬러그 원문이 그대로 노출되지 않아야 함)
+    assert "s0" not in joined.replace("섹터0", "")
+
+
 def test_quadrant_labels():
     assert sr._quadrant(101, 101) == ("leading", "주도")
     assert sr._quadrant(101, 99) == ("weakening", "약화")
