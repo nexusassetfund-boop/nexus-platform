@@ -51,6 +51,24 @@ def test_clean_daily_no_false_positive():
     assert flags == []
 
 
+def test_clean_daily_preserves_real_crash():
+    """진짜 급락(새 가격 수준 유지)은 보존 — 변동성 장세의 실제 ±15%+ 움직임을 지우면 안 된다."""
+    s = _daily_series(60)
+    s.iloc[30:] *= 0.8  # -20% 하락 후 그 수준 유지 (레벨 시프트 = 실제 시장 이벤트)
+    cleaned, flags = sr.clean_daily(s)
+    assert flags == []
+    assert cleaned.iloc[30] == pytest.approx(s.iloc[30])
+
+
+def test_clean_daily_preserves_last_bar():
+    """마지막 봉은 다음 날 데이터가 없어 판정 불가 — 오늘의 진짜 폭락을 지우지 않는다."""
+    s = _daily_series(60)
+    s.iloc[-1] = s.iloc[-2] * 0.8  # 오늘 -20%
+    cleaned, flags = sr.clean_daily(s)
+    assert flags == []
+    assert cleaned.iloc[-1] == pytest.approx(s.iloc[-1])
+
+
 def _universe(n=6, strong=0, noise=False):
     """n개 섹터, strong번째만 추세 강세. noise=False면 결정론적(사분면 단언 가능)."""
     out = {}

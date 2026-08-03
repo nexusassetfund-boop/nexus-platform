@@ -39,18 +39,31 @@ QUADRANTS = {
 }
 
 
+MEDIAN_WINDOW = 7  # 국소 중앙값 창 (전후 3일 + 자신)
+
+
 def clean_daily(closes: pd.Series) -> tuple[pd.Series, list[str]]:
-    """|일간 수익률| > OUTLIER_PCT 봉의 종가를 직전 종가로 대체. (정제 시리즈, 플래그 날짜) 반환."""
+    """데이터 오류 봉 필터 — '일간 수익률 크기'가 아니라 '전후 7일 중앙값 대비 이탈'로 판정.
+
+    변동성 장세의 진짜 ±15%+ 급등락은 새 가격 수준이 유지되어 중앙값이 따라가므로
+    보존된다. 반면 소스 오류는 (a) 하루짜리 왕복 스파이크든 (b) 며칠짜리 잘못된
+    구간이든 국소 중앙값에서 크게 벗어나므로 잡힌다 — 실측 사례: 반도체 ETF가
+    3일간 -25% 잘못된 가격 후 +29% '복귀'한 구간(오류는 하락 3일 쪽).
+    한계: 극단적 V자 폭락의 최저점 1~2봉이 오탐될 수 있음 — 배지로 노출되므로 검증 가능.
+    마지막 2봉은 미래 창이 없어 판정 불가 — 보수적으로 보존(다음 날 재판정).
+    """
     closes = closes.dropna()
-    if len(closes) < 2:
+    if len(closes) < MEDIAN_WINDOW + 2:
         return closes, []
-    ret = closes.pct_change().abs() * 100
-    bad = ret > OUTLIER_PCT
+    med = closes.rolling(MEDIAN_WINDOW, center=True, min_periods=4).median()
+    dev = (closes / med - 1).abs() * 100
+    bad = dev > OUTLIER_PCT
+    bad.iloc[-2:] = False  # 판정 유보 (미래 데이터 부족)
     flags = [d.strftime("%Y-%m-%d") for d in closes.index[bad]]
     if flags:
         cleaned = closes.copy()
         cleaned[bad] = float("nan")
-        cleaned = cleaned.ffill()
+        cleaned = cleaned.ffill().bfill()
         return cleaned, flags
     return closes, flags
 
