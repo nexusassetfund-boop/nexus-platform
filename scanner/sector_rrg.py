@@ -138,26 +138,34 @@ def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime) -> dict:
     sectors: dict[str, dict] = {}
     as_of = cutoff.isoformat()
     for slug, xy in xy_map.items():
-        # tail = 5거래일 간격 8개 점 (마지막 점 = 최신 확정 종가)
-        idx = list(range(len(xy) - 1, -1, -TAIL_STEP))[:TAIL_POINTS][::-1]
-        tail_df = xy.iloc[idx]
-        tail = [{"d": d.strftime("%m-%d"), "x": round(r.x, 2), "y": round(r.y, 2)}
-                for d, r in tail_df.iterrows()]
-        if len(tail) < 2:
+        # tail 앵커 = 완결된 주(W-FRI)의 마지막 거래일 — 금요일 고정 앵커라서
+        # 어느 요일에 갱신해도 heading·"N주 연속" 카운트가 흔들리지 않는다(위상 안정).
+        weekly = xy.resample("W-FRI").last().dropna()
+        completed = weekly[weekly.index.date <= cutoff]
+        if len(completed) < 2:
             continue
-        as_of = xy.index[-1].strftime("%Y-%m-%d")
-        x, y = tail[-1]["x"], tail[-1]["y"]
-        px, py = tail[-2]["x"], tail[-2]["y"]
-        quadrant, quadrant_ko = _quadrant(x, y)
-        prev_q, prev_q_ko = _quadrant(px, py)
-        heading = _heading(x - px, y - py)
-        # heading 지속 주 수 (tail 한 스텝 = 5거래일 = 1주)
+        anchors = completed.iloc[-(TAIL_POINTS - 1):]
+        tail = [{"d": d.strftime("%m-%d"), "x": round(r.x, 2), "y": round(r.y, 2)}
+                for d, r in anchors.iterrows()]
+        # 현재점(최신 확정 종가)은 주중이면 앵커와 별도로 마지막에 추가
+        cur_d = xy.index[-1]
+        x, y = round(float(xy["x"].iloc[-1]), 2), round(float(xy["y"].iloc[-1]), 2)
+        if cur_d.strftime("%m-%d") != tail[-1]["d"]:
+            tail.append({"d": cur_d.strftime("%m-%d"), "x": x, "y": y})
+        as_of = cur_d.strftime("%Y-%m-%d")
+        # heading·연속 카운트는 주간 앵커 점들로만 계산 (현재점 제외 → 요일 무관 안정)
+        ax = [{"x": round(r.x, 2), "y": round(r.y, 2)} for _, r in anchors.iterrows()]
+        heading = _heading(ax[-1]["x"] - ax[-2]["x"], ax[-1]["y"] - ax[-2]["y"])
         streak = 1
-        for i in range(len(tail) - 2, 0, -1):
-            h = _heading(tail[i]["x"] - tail[i - 1]["x"], tail[i]["y"] - tail[i - 1]["y"])
+        for i in range(len(ax) - 2, 0, -1):
+            h = _heading(ax[i]["x"] - ax[i - 1]["x"], ax[i]["y"] - ax[i - 1]["y"])
             if h != heading:
                 break
             streak += 1
+        quadrant, quadrant_ko = _quadrant(x, y)
+        # 전이 비교 기준 = 현재점 직전의 주간 앵커 (현재점이 금요일 앵커 자신이면 그 전 앵커)
+        prev_pt = ax[-2] if cur_d.date() == anchors.index[-1].date() else ax[-1]
+        prev_q, prev_q_ko = _quadrant(prev_pt["x"], prev_pt["y"])
         sectors[slug] = {
             "x": x, "y": y,
             "quadrant": quadrant, "quadrant_ko": quadrant_ko,

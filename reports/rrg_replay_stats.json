@@ -1,0 +1,42 @@
+{
+ "generated": "2026-08-03",
+ "weeks": 106,
+ "transitions": {
+  "improving>leading": {
+   "n": 59,
+   "fwd4w_mean": -1.25,
+   "fwd4w_win": 42,
+   "fwd8w_mean": -2.51,
+   "fwd8w_win": 36,
+   "fwd12w_mean": -4.74,
+   "fwd12w_win": 32
+  },
+  "leading>weakening": {
+   "n": 49,
+   "fwd4w_mean": -1.25,
+   "fwd4w_win": 43,
+   "fwd8w_mean": -3.08,
+   "fwd8w_win": 30,
+   "fwd12w_mean": -0.6,
+   "fwd12w_win": 38
+  },
+  "weakening>lagging": {
+   "n": 38,
+   "fwd4w_mean": 1.21,
+   "fwd4w_win": 50,
+   "fwd8w_mean": 2.89,
+   "fwd8w_win": 61,
+   "fwd12w_mean": 3.61,
+   "fwd12w_win": 56
+  },
+  "lagging>improving": {
+   "n": 112,
+   "fwd4w_mean": -2.25,
+   "fwd4w_win": 28,
+   "fwd8w_mean": -3.93,
+   "fwd8w_win": 29,
+   "fwd12w_mean": -5.51,
+   "fwd12w_win": 29
+  }
+ }
+}

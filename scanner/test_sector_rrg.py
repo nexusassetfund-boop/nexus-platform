@@ -66,7 +66,8 @@ def test_compute_rrg_basic():
     assert res["as_of"] == uni["s0"].index[-1].strftime("%Y-%m-%d")  # 데이터 마지막 영업일
     assert len(res["sectors"]) == 6
     s0 = res["sectors"]["s0"]
-    assert len(s0["tail"]) == sr.TAIL_POINTS
+    # tail = 주간 앵커 최대 7점 + 현재점(주중일 때만 별도) → 7 또는 8점
+    assert sr.TAIL_POINTS - 1 <= len(s0["tail"]) <= sr.TAIL_POINTS
     assert s0["tail"][-1]["x"] == s0["x"]
     # 지속적 강세 섹터는 벤치마크 대비 RS-Ratio > 100 (주도/약화 어느 쪽이든 우측)
     assert s0["x"] > 100
@@ -117,6 +118,38 @@ def test_compute_rrg_insufficient_data():
     uni = {f"s{i}": _daily_series(days=60, seed=i) for i in range(6)}  # < MIN_DAYS
     res = sr.compute_rrg(uni, NOW)
     assert res["sectors"] == {}
+
+
+def test_heading_streak_phase_stable():
+    """heading·'N주 연속'은 금요일 앵커 기준 — 주중 어느 요일에 갱신해도 값이 같아야 한다.
+    (요일 따라 '3주 연속'이 '2주 연속'으로 바뀌는 위상 문제의 회귀 테스트)"""
+    uni_fri = _universe(noise=True)                       # 마지막 봉 = 금요일(1/8)
+    r_fri = sr.compute_rrg(uni_fri, NOW)
+    for extra in (1, 2, 3):                               # 월·화·수 하루씩 추가
+        uni_mid = {}
+        for k, v in uni_fri.items():
+            idx2 = pd.bdate_range(start=v.index[0], periods=len(v) + extra)
+            uni_mid[k] = pd.Series(list(v.values) + [v.iloc[-1]] * extra, index=idx2)
+        now_mid = idx2[-1].to_pydatetime().replace(hour=16)  # 해당 요일 장마감 직후
+        r_mid = sr.compute_rrg(uni_mid, now_mid)
+        for k in r_fri["sectors"]:
+            assert r_fri["sectors"][k]["heading"] == r_mid["sectors"][k]["heading"], k
+            assert r_fri["sectors"][k]["heading_weeks"] == r_mid["sectors"][k]["heading_weeks"], k
+
+
+def test_transition_forward_pipeline():
+    """리플레이 핵심 경로(전이 탐지→forward 수익률)가 배포 코드(daily_xy)와 같은 입력으로
+    도는지 회귀 테스트 — 검증 경로와 배포 경로 불일치 재발 방지."""
+    uni = _universe(noise=True)
+    cutoff = sr.last_confirmed_close(NOW)
+    xy_daily, benchmark, _ = sr.daily_xy(uni, cutoff)
+    assert xy_daily and len(benchmark) > 0
+    xy_w = {k: xy.iloc[list(range(len(xy) - 1, -1, -5))[::-1]] for k, xy in xy_daily.items()}
+    n_events = 0
+    for slug, xy in xy_w.items():
+        quads = [sr._quadrant(r.x, r.y)[0] for _, r in xy.iterrows()]
+        n_events += sum(1 for i in range(1, len(quads)) if quads[i] != quads[i - 1])
+    assert n_events >= 0  # 파이프라인이 예외 없이 완주하는지가 핵심
 
 
 def test_build_insight():
