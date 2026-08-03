@@ -50,7 +50,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from backtest import BUY_SLIP, SELL_SLIP, SELL_TAX, COMMISSION_RT, CACHE_DIR, load_kospi
 from run_scan import _calc_fair_value, _fnum
 from value_screen import (MIN_CAP, PER_MAX, PBR_MAX, MARGIN_MIN, FSCORE_MIN, TOP_FSCORE, TOP_OUT,
-                          MOM_WIN, MOM_SKIP)
+                          MOM_WIN, MOM_SKIP, _FIN_KEYWORDS)
 import fetch_value
 
 logger = logging.getLogger("value_backtest")
@@ -72,6 +72,8 @@ def _base_params() -> dict:
         # mom_win/skip은 실서비스(value_screen.py)의 12-1 모멘텀과 동일하게 맞춤 —
         # --sort momentum 시 별도 플래그 없이도 라이브 전략을 그대로 재현.
         "sort": "fscore_margin", "mom_win": MOM_WIN, "mom_skip": MOM_SKIP,
+        # 섹터 쏠림 검증용 변형 축 (실서비스 미사용): pbr_min=PBR 하한, exclude_fin=금융·지주 제외
+        "pbr_min": 0.0, "exclude_fin": False,
     }
 
 
@@ -222,6 +224,8 @@ def _value_gate(universe, fund, cap, p) -> list[dict]:
     """1차 밸류 관문 — 시총·흑자·PER/PBR·안전마진. 정렬 없이 통과 종목 반환."""
     prelim = []
     for code, name in universe:
+        if p.get("exclude_fin") and any(k in name for k in _FIN_KEYWORDS):
+            continue
         f = fund.get(code)
         c = cap.get(code, {})
         if not f or not c.get("close"):
@@ -234,7 +238,7 @@ def _value_gate(universe, fund, cap, p) -> list[dict]:
         price = c["close"]
         per = per or round(price / eps, 1)
         pbr = pbr or round(price / bps, 2)
-        if per > p["per_max"] or pbr > p["pbr_max"]:
+        if per > p["per_max"] or pbr > p["pbr_max"] or pbr < p.get("pbr_min", 0.0):
             continue
         roe = round(eps / bps * 100, 1)
         fair, _, _ = _calc_fair_value(eps, bps, roe)
@@ -657,6 +661,8 @@ def main():
     ap.add_argument("--top", type=int, default=TOP_OUT)
     ap.add_argument("--per-max", type=float, default=PER_MAX)
     ap.add_argument("--pbr-max", type=float, default=PBR_MAX)
+    ap.add_argument("--pbr-min", type=float, default=0.0, help="PBR 하한 (검증용 — 예: 2.0)")
+    ap.add_argument("--exclude-fin", action="store_true", help="금융·지주 키워드 종목 제외 (검증용)")
     ap.add_argument("--margin-min", type=float, default=MARGIN_MIN)
     ap.add_argument("--fscore-min", type=int, default=FSCORE_MIN)
     ap.add_argument("--no-fscore", action="store_true")
@@ -687,7 +693,8 @@ def main():
     p.update({"top": args.top, "per_max": args.per_max, "pbr_max": args.pbr_max,
               "margin_min": args.margin_min, "fscore_min": args.fscore_min,
               "report_month": args.report_month, "use_fscore": not args.no_fscore,
-              "sort": args.sort, "mom_win": args.mom_win, "mom_skip": args.mom_skip})
+              "sort": args.sort, "mom_win": args.mom_win, "mom_skip": args.mom_skip,
+              "pbr_min": args.pbr_min, "exclude_fin": args.exclude_fin})
     if p["use_fscore"] and not fetch_value.DART_KEY:
         logger.warning("DART_API_KEY 없음 — F-Score 없이 진행 (--no-fscore와 동일)")
         p["use_fscore"] = False
