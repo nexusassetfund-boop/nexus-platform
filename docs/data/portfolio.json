@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-03T15:49:51+09:00",
+ "updated": "2026-08-03T16:04:49+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 136140723.0,
@@ -37,8 +37,8 @@
     "change": 52.1
    },
    "usdkrw": {
-    "value": 1431.4,
-    "change": 8.5
+    "value": 1430.9,
+    "change": 9.3
    }
   }
  },
@@ -151,7 +151,7 @@
    "target_price": null,
    "upside_pct": -100.0,
    "mktcap": "22,826억",
-   "per": "14.5x",
+   "per": "14.6x",
    "eps": "6,652원",
    "high52": 124600.0,
    "low52": 60600.0,
@@ -183,7 +183,7 @@
    "subclass": "브랜드",
    "name": "달바글로벌",
    "price": 223500.0,
-   "change_pct": 0.9,
+   "change_pct": 1.13,
    "target_price": 300000.0,
    "upside_pct": 34.23,
    "mktcap": "27,924억",
@@ -223,7 +223,7 @@
    "target_price": 680000.0,
    "upside_pct": 69.36,
    "mktcap": "37,922억",
-   "per": "46.0x",
+   "per": "46.4x",
    "eps": "8,737원",
    "high52": 792000.0,
    "low52": 160800.0,
