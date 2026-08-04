@@ -73,6 +73,7 @@ SECTOR_ETFS = {
     "machinery-industrial": ("102960", "KODEX 기계장비"),
     "transport-logistics": ("140710", "KODEX 운송"),
     "travel-leisure": ("228800", "TIGER 여행레저"),
+    "holdings-company": ("307520", "TIGER 지주회사"),
     "nuclear": ("433500", "ACE 원자력TOP10"),
 }
 
