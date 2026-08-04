@@ -1,44 +1,44 @@
 {
- "updated": "2026-08-03T20:56:41+09:00",
+ "updated": "2026-08-04T10:09:58+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": 136163123.0,
+  "portfolio_value": 138790723.0,
   "cash": 88406096.0,
-  "eval_pnl": -2000499.88,
-  "eval_pnl_pct": -4.01,
-  "cum_pnl": -13836877.0,
-  "cum_pnl_pct": -9.22,
-  "day_change": 1280100.0,
-  "day_change_pct": 0.95,
+  "eval_pnl": 627100.12,
+  "eval_pnl_pct": 1.26,
+  "cum_pnl": -11209277.0,
+  "cum_pnl_pct": -7.47,
+  "day_change": 2627600.0,
+  "day_change_pct": 1.93,
   "realized_pnl": 11669204.0,
-  "nav_index": 907.75,
+  "nav_index": 925.27,
   "n_stocks": 5.0,
   "n_win": 5.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6257.5,
-    "change": -338.0
+    "value": 6172.4,
+    "change": -85.0
    },
    "kosdaq": {
-    "value": 737.4,
-    "change": 17.6
+    "value": 758.9,
+    "change": 21.6
    },
    "dow": {
-    "value": 52485.0,
-    "change": 277.0
+    "value": 53178.4,
+    "change": 693.4
    },
    "nasdaq": {
-    "value": 25373.9,
-    "change": 251.7
+    "value": 25913.9,
+    "change": 540.0
    },
    "sp500": {
-    "value": 7489.7,
-    "change": 52.1
+    "value": 7600.5,
+    "change": 110.8
    },
    "usdkrw": {
-    "value": 1426.8,
-    "change": 12.9
+    "value": 1422.9,
+    "change": 8.2
    }
   }
  },
@@ -48,17 +48,17 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 86.0,
-   "price": 223500.0,
-   "change_pct": 1.13,
+   "price": 245500.0,
+   "change_pct": 9.84,
    "avg_price": 232453.0,
-   "eval_pnl": -770000.0,
-   "return_pct": -3.85,
-   "contrib_pct": -0.77,
-   "eval_amount": 19221000.0,
+   "eval_pnl": 1122000.0,
+   "return_pct": 5.61,
+   "contrib_pct": 1.12,
+   "eval_amount": 21113000.0,
    "buy_amount": 19991000.0,
    "target_price": null,
    "buy_date": "2026-07-01",
-   "hold_days": 33.0,
+   "hold_days": 34.0,
    "weight": "40.0%",
    "memo": ""
   },
@@ -67,17 +67,17 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 5.0,
-   "price": 1567000.0,
-   "change_pct": -8.79,
+   "price": 1519000.0,
+   "change_pct": -3.06,
    "avg_price": 2025000.0,
-   "eval_pnl": -2290000.0,
-   "return_pct": -22.62,
-   "contrib_pct": -2.29,
-   "eval_amount": 7835000.0,
+   "eval_pnl": -2530000.0,
+   "return_pct": -24.99,
+   "contrib_pct": -2.53,
+   "eval_amount": 7595000.0,
    "buy_amount": 10125000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
-   "hold_days": 26.0,
+   "hold_days": 27.0,
    "weight": "20.3%",
    "memo": ""
   },
@@ -86,17 +86,17 @@
    "code": "340570",
    "name": "티앤엘",
    "qty": 44.0,
-   "price": 57700.0,
-   "change_pct": 3.78,
+   "price": 60600.0,
+   "change_pct": 5.03,
    "avg_price": 55057.0,
-   "eval_pnl": 116300.0,
-   "return_pct": 4.8,
-   "contrib_pct": 0.12,
-   "eval_amount": 2538800.0,
+   "eval_pnl": 243900.0,
+   "return_pct": 10.07,
+   "contrib_pct": 0.24,
+   "eval_amount": 2666400.0,
    "buy_amount": 2422500.0,
    "target_price": null,
    "buy_date": "2026-07-23",
-   "hold_days": 11.0,
+   "hold_days": 12.0,
    "weight": "4.9%",
    "memo": ""
   },
@@ -105,17 +105,17 @@
    "code": "214450",
    "name": "파마리서치",
    "qty": 41.0,
-   "price": 372000.0,
-   "change_pct": 9.9,
+   "price": 391000.0,
+   "change_pct": 5.11,
    "avg_price": 363244.0,
-   "eval_pnl": 359000.0,
-   "return_pct": 2.41,
-   "contrib_pct": 0.36,
-   "eval_amount": 15252000.0,
+   "eval_pnl": 1138000.0,
+   "return_pct": 7.64,
+   "contrib_pct": 1.14,
+   "eval_amount": 16031000.0,
    "buy_amount": 14893000.0,
    "target_price": null,
    "buy_date": "2026-07-28",
-   "hold_days": 6.0,
+   "hold_days": 7.0,
    "weight": "29.8%",
    "memo": ""
   },
@@ -124,17 +124,17 @@
    "code": "153890",
    "name": "져스텍",
    "qty": 460.0,
-   "price": 6690.0,
-   "change_pct": 13.01,
+   "price": 6840.0,
+   "change_pct": 2.24,
    "avg_price": 5420.0,
-   "eval_pnl": 584200.0,
-   "return_pct": 23.43,
-   "contrib_pct": 0.58,
-   "eval_amount": 3077400.0,
+   "eval_pnl": 653200.0,
+   "return_pct": 26.2,
+   "contrib_pct": 0.65,
+   "eval_amount": 3146400.0,
    "buy_amount": 2493200.0,
    "target_price": null,
    "buy_date": "2026-07-30",
-   "hold_days": 4.0,
+   "hold_days": 5.0,
    "weight": "5.0%",
    "memo": ""
   }
@@ -901,6 +901,12 @@
    }
   ],
   "value": [
+   {
+    "date": "2026-8-4",
+    "portfolio_value": 138790723.0,
+    "total_value": 50551800.0,
+    "eval_pnl": 627100.12
+   },
    {
     "date": "2026-8-3",
     "portfolio_value": 136163123.0,
