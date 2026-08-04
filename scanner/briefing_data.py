@@ -161,28 +161,9 @@ def _prev_trading_day(today_str):
     return get_nearest_business_day_in_a_week(prev)
 
 
-def _naver_stock_flows(code):
-    """종목별 외국인/기관 순매수 근사 (억원) — 네이버 frgn 페이지 최신 거래일 행.
-
-    페이지는 순매매 '수량'만 제공하므로 종가를 곱해 금액을 근사한다.
-    """
-    import pandas as pd
-    from io import StringIO
-    html = requests.get(f"https://finance.naver.com/item/frgn.naver?code={code}",
-                        headers={"user-agent": "Mozilla/5.0"}, timeout=15).content.decode("euc-kr", "ignore")
-    df = max(pd.read_html(StringIO(html)), key=lambda d: d.shape[0] * d.shape[1])
-    df.columns = ["날짜", "종가", "전일비", "등락률", "거래량", "기관", "외국인", "보유주수", "보유율"][:len(df.columns)]
-    df = df.dropna(subset=["날짜"])
-    r0 = df.iloc[0]
-    close = _num(r0["종가"])
-    return {"foreign_bn": round(_num(r0["외국인"]) * close / 1e8, 0),
-            "inst_bn": round(_num(r0["기관"]) * close / 1e8, 0)}
-
-
-def _top_caps_naver(n=15):
-    """폴백 — 네이버 시총 상위 페이지 + 종목별 frgn 수급 근사"""
+def _top_caps_rank_naver(n=15):
+    """시총 순위·등락률 폴백 — 네이버 시총 상위 페이지 (순위·등락률은 정확값)"""
     import re
-    import time
     out = {}
     for mkt, sosok in (("KOSPI", "0"), ("KOSDAQ", "1")):
         t = requests.get(f"https://finance.naver.com/sise/sise_market_sum.naver?sosok={sosok}&page=1",
@@ -190,58 +171,101 @@ def _top_caps_naver(n=15):
         rows = re.findall(r'href="/item/main\.naver\?code=(\d{6})"[^>]*>([^<]+)</a>.*?'
                           r'<td class="number">[\d,]+</td>.*?([+-][\d,]+|0).*?([+-]?[\d.]+)%',
                           t, re.S)
-        items = [{"code": c, "name": nm.strip(), "change_pct": _num(pct)} for c, nm, _, pct in rows[:n]]
-        for it in items:
+        out[mkt] = [{"code": c, "name": nm.strip(), "change_pct": _num(pct)} for c, nm, _, pct in rows[:n]]
+    return out
+
+
+def _kis_flows(codes, base_ymd):
+    """KIS inquire-investor — 종목별 외국인/기관 순매수 거래대금(백만원 → 억원 환산, 정확값).
+
+    응답에서 base_ymd(YYYYMMDD) 날짜 행을 골라 다른 세션 값이 섞이지 않게 한다.
+    """
+    import asyncio
+    sys.path.insert(0, str(Path(__file__).parent))
+    from data_provider import load_config, kis_get
+
+    async def run():
+        cfg = load_config()
+        out = {}
+        for code in codes:
             try:
-                it.update(_naver_stock_flows(it["code"]))
+                data = await kis_get(cfg, "/uapi/domestic-stock/v1/quotations/inquire-investor",
+                                     "FHKST01010900",
+                                     {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": code})
+                for row in (data or {}).get("output") or []:
+                    if row.get("stck_bsop_date") == base_ymd:
+                        out[code] = {
+                            "foreign_bn": round(float(row.get("frgn_ntby_tr_pbmn") or 0) / 100, 1),
+                            "inst_bn": round(float(row.get("orgn_ntby_tr_pbmn") or 0) / 100, 1),
+                        }
+                        break
             except Exception:
                 pass
-            time.sleep(0.2)
-        out[mkt] = items
-    return out
+            await asyncio.sleep(0.15)  # KIS 레이트리밋
+        return out
+    return asyncio.run(run())
 
 
 def collect_top_caps(today_str, n=15):
     """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
 
-    pykrx(KRX)가 기본. KRX 인증 이슈로 실패하면 네이버 폴백(수급 없이 등락률만).
+    순위·등락률: pykrx(KRX) 기본, 실패 시 네이버 시총 페이지.
+    수급: pykrx 투자자별 거래대금 기본, 실패 시 KIS inquire-investor 거래대금 — 둘 다 정확값.
+    둘 다 실패하면 수급 열은 비워 두고 오류를 기록한다 (근사치는 쓰지 않는다).
     """
     out = {}
+    prev = None
+    try:
+        prev = _prev_trading_day(today_str)
+    except Exception:
+        pass
+    # 1) 시총 순위 + 등락률
     try:
         from pykrx import stock
-        prev = _prev_trading_day(today_str)
-        out["base_date"] = f"{prev[:4]}-{prev[4:6]}-{prev[6:]}"
+        if not prev:
+            raise RuntimeError("직전 거래일 산출 실패")
         for mkt in ("KOSPI", "KOSDAQ"):
             caps = stock.get_market_cap_by_ticker(prev, market=mkt)
             ohlcv = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
             top = caps.sort_values("시가총액", ascending=False).head(n)
-            rows = []
-            for code, cap in top.iterrows():
-                row = {
-                    "code": code,
-                    "name": stock.get_market_ticker_name(code),
-                    "mktcap_tr": round(cap["시가총액"] / 1e12, 2),  # 조원
-                    "change_pct": round(float(ohlcv.loc[code, "등락률"]), 2) if code in ohlcv.index else None,
-                }
-                try:  # 종목별 투자자 순매수 거래대금 (원) → 억원
-                    tv = stock.get_market_trading_value_by_date(prev, prev, code)
-                    r0 = tv.iloc[0]
-                    row["foreign_bn"] = round(float(r0["외국인합계"]) / 1e8, 0)
-                    row["inst_bn"] = round(float(r0["기관합계"]) / 1e8, 0)
-                except Exception:
-                    pass
-                rows.append(row)
-            out[mkt] = rows
-        out["unit"] = "foreign_bn/inst_bn=억원 순매수, mktcap_tr=조원"
+            out[mkt] = [{
+                "code": code,
+                "name": stock.get_market_ticker_name(code),
+                "mktcap_tr": round(cap["시가총액"] / 1e12, 2),  # 조원
+                "change_pct": round(float(ohlcv.loc[code, "등락률"]), 2) if code in ohlcv.index else None,
+            } for code, cap in top.iterrows()]
     except Exception as e:
-        out["pykrx_error"] = str(e)[:100]
+        out["pykrx_rank_error"] = str(e)[:100]
         try:
-            out.update(_top_caps_naver(n))
-            out["base_date"] = today_str
-            out["note"] = "pykrx 실패 → 네이버 폴백 (수급은 순매매수량×종가 근사, 억원)"
-            out["unit"] = "foreign_bn/inst_bn=억원 순매수(근사)"
+            out.update(_top_caps_rank_naver(n))
         except Exception as e2:
-            out["fallback_error"] = str(e2)[:100]
+            out["rank_fallback_error"] = str(e2)[:100]
+            return out
+    if not prev:  # pykrx 캘린더 실패 시 네이버 순위는 최신 거래일 기준
+        prev = today_str.replace("-", "")
+    out["base_date"] = f"{prev[:4]}-{prev[4:6]}-{prev[6:]}"
+    # 2) 수급 — pykrx 우선, 실패 종목은 KIS로 보충
+    codes = [r["code"] for mkt in ("KOSPI", "KOSDAQ") for r in out.get(mkt) or []]
+    flows = {}
+    try:
+        from pykrx import stock
+        for code in codes:
+            tv = stock.get_market_trading_value_by_date(prev, prev, code)
+            r0 = tv.iloc[0]
+            flows[code] = {"foreign_bn": round(float(r0["외국인합계"]) / 1e8, 1),
+                           "inst_bn": round(float(r0["기관합계"]) / 1e8, 1)}
+    except Exception as e:
+        out["pykrx_flow_error"] = str(e)[:100]
+    missing = [c for c in codes if c not in flows]
+    if missing:
+        try:
+            flows.update(_kis_flows(missing, prev))
+        except Exception as e:
+            out["kis_flow_error"] = str(e)[:100]
+    for mkt in ("KOSPI", "KOSDAQ"):
+        for r in out.get(mkt) or []:
+            r.update(flows.get(r["code"], {}))
+    out["unit"] = "foreign_bn/inst_bn=억원 순매수, mktcap_tr=조원"
     return out
 
 
