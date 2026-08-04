@@ -74,6 +74,7 @@ def _base_params() -> dict:
         "sort": "fscore_margin", "mom_win": MOM_WIN, "mom_skip": MOM_SKIP,
         # 섹터 쏠림 검증용 변형 축 (실서비스 미사용): pbr_min=PBR 하한, exclude_fin=금융·지주 제외
         "pbr_min": 0.0, "exclude_fin": False, "fin_cap": None,  # fin_cap=top 내 금융·지주 최대 수
+        "roe_min": None,  # ROE 하한 % (밸류 트랩 검증용, 실서비스 미사용)
     }
 
 
@@ -241,13 +242,15 @@ def _value_gate(universe, fund, cap, p) -> list[dict]:
         if per > p["per_max"] or pbr > p["pbr_max"] or pbr < p.get("pbr_min", 0.0):
             continue
         roe = round(eps / bps * 100, 1)
+        if p.get("roe_min") is not None and roe < p["roe_min"]:
+            continue
         fair, _, _ = _calc_fair_value(eps, bps, roe)
         if not fair:
             continue
         margin = round((fair - price) / fair * 100, 1)
         if margin < p["margin_min"]:
             continue
-        prelim.append({"code": code, "name": name, "margin": margin, "per": per, "pbr": pbr})
+        prelim.append({"code": code, "name": name, "margin": margin, "per": per, "pbr": pbr, "roe": roe})
     return prelim
 
 
@@ -681,6 +684,7 @@ def main():
     ap.add_argument("--pbr-min", type=float, default=0.0, help="PBR 하한 (검증용 — 예: 2.0)")
     ap.add_argument("--exclude-fin", action="store_true", help="금융·지주 키워드 종목 제외 (검증용)")
     ap.add_argument("--fin-cap", type=int, default=None, help="top 내 금융·지주 최대 수 (검증용)")
+    ap.add_argument("--roe-min", type=float, default=None, help="ROE 하한 %% (검증용 — 예: 8)")
     ap.add_argument("--margin-min", type=float, default=MARGIN_MIN)
     ap.add_argument("--fscore-min", type=int, default=FSCORE_MIN)
     ap.add_argument("--no-fscore", action="store_true")
@@ -712,7 +716,8 @@ def main():
               "margin_min": args.margin_min, "fscore_min": args.fscore_min,
               "report_month": args.report_month, "use_fscore": not args.no_fscore,
               "sort": args.sort, "mom_win": args.mom_win, "mom_skip": args.mom_skip,
-              "pbr_min": args.pbr_min, "exclude_fin": args.exclude_fin, "fin_cap": args.fin_cap})
+              "pbr_min": args.pbr_min, "exclude_fin": args.exclude_fin, "fin_cap": args.fin_cap,
+              "roe_min": args.roe_min})
     if p["use_fscore"] and not fetch_value.DART_KEY:
         logger.warning("DART_API_KEY 없음 — F-Score 없이 진행 (--no-fscore와 동일)")
         p["use_fscore"] = False
