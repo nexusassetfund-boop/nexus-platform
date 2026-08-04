@@ -73,7 +73,7 @@ def _base_params() -> dict:
         # --sort momentum 시 별도 플래그 없이도 라이브 전략을 그대로 재현.
         "sort": "fscore_margin", "mom_win": MOM_WIN, "mom_skip": MOM_SKIP,
         # 섹터 쏠림 검증용 변형 축 (실서비스 미사용): pbr_min=PBR 하한, exclude_fin=금융·지주 제외
-        "pbr_min": 0.0, "exclude_fin": False,
+        "pbr_min": 0.0, "exclude_fin": False, "fin_cap": None,  # fin_cap=top 내 금융·지주 최대 수
     }
 
 
@@ -251,6 +251,23 @@ def _value_gate(universe, fund, cap, p) -> list[dict]:
     return prelim
 
 
+def _take_top(ranked: list[dict], p) -> list[dict]:
+    """상위 top 선정 — fin_cap 지정 시 금융·지주 키워드 종목을 최대 fin_cap개로 제한(초과분은 다음 순위로 대체)."""
+    cap = p.get("fin_cap")
+    if cap is None:
+        return ranked[:p["top"]]
+    out, n_fin = [], 0
+    for r in ranked:
+        is_fin = any(k in r["name"] for k in _FIN_KEYWORDS)
+        if is_fin and n_fin >= cap:
+            continue
+        out.append(r)
+        n_fin += is_fin
+        if len(out) >= p["top"]:
+            break
+    return out
+
+
 def _apply_fscore_cut(sig_date, shortlist, p, fstore: FScoreStore | None) -> list[dict]:
     """F-Score < fscore_min 탈락 (미산출 통과). rec['f_score'] 부여."""
     if p["use_fscore"] and fstore and fstore.corp_map:
@@ -281,7 +298,7 @@ def screen_at(sig_date, universe, fund, cap, p, fstore: FScoreStore | None, mom=
         ranked = sorted((r for r in prelim if r["mom"] is not None),
                         key=lambda r: r["mom"], reverse=True)
         survivors = _apply_fscore_cut(sig_date, ranked[:p["top_fscore"]], p, fstore)
-        return survivors[:p["top"]], len(prelim)
+        return _take_top(survivors, p), len(prelim)
 
     if p["sort"] == "qvm":
         # 복합 랭크 — 밸류(안전마진)·퀄리티(F-Score)·모멘텀(12-1) 백분위 평균. 컷 없음, 결측은 중립(0.5).
@@ -663,6 +680,7 @@ def main():
     ap.add_argument("--pbr-max", type=float, default=PBR_MAX)
     ap.add_argument("--pbr-min", type=float, default=0.0, help="PBR 하한 (검증용 — 예: 2.0)")
     ap.add_argument("--exclude-fin", action="store_true", help="금융·지주 키워드 종목 제외 (검증용)")
+    ap.add_argument("--fin-cap", type=int, default=None, help="top 내 금융·지주 최대 수 (검증용)")
     ap.add_argument("--margin-min", type=float, default=MARGIN_MIN)
     ap.add_argument("--fscore-min", type=int, default=FSCORE_MIN)
     ap.add_argument("--no-fscore", action="store_true")
@@ -694,7 +712,7 @@ def main():
               "margin_min": args.margin_min, "fscore_min": args.fscore_min,
               "report_month": args.report_month, "use_fscore": not args.no_fscore,
               "sort": args.sort, "mom_win": args.mom_win, "mom_skip": args.mom_skip,
-              "pbr_min": args.pbr_min, "exclude_fin": args.exclude_fin})
+              "pbr_min": args.pbr_min, "exclude_fin": args.exclude_fin, "fin_cap": args.fin_cap})
     if p["use_fscore"] and not fetch_value.DART_KEY:
         logger.warning("DART_API_KEY 없음 — F-Score 없이 진행 (--no-fscore와 동일)")
         p["use_fscore"] = False
