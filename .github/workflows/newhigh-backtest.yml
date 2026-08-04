@@ -31,4 +31,4 @@ jobs:
       - name: Worker KV 게시
         env:
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
-        run: python scanner/post_newhigh_backtest.py
+        run: python scanner/kv_push.py docs/data/newhigh_backtest.json --list-key events --min 400 --check-prices

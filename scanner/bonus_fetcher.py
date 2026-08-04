@@ -7,7 +7,7 @@
 2. DART fricDecsn.json → 1주당 신주배정 주식수·신주배정기준일·신주상장예정일 보강
 3. pykrx(KRX 정보데이터시스템) → 수정주가 일봉 OHLC (실패 시 FinanceDataReader 폴백)
    - 수정주가라 권리락 전후 가격이 연속적 → 발표일 매수 수익률 계산이 왜곡되지 않음
-결과: docs/data/bonus_backtest.json (repo 커밋 안 함 — post_bonus_backtest.py가 Worker KV로 게시)
+결과: docs/data/bonus_backtest.json (repo 커밋 안 함 — kv_push.py가 Worker KV로 게시)
 
 환경변수: DART_API_KEY (필수)
 """

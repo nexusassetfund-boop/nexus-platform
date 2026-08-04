@@ -47,8 +47,4 @@ jobs:
       - name: KV 반영
         env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
         run: |
-          test -f docs/data/earnings_calendar.json || { echo "생성 파일 없음 — 실패"; exit 1; }
-          python -c "import json; print(json.dumps({'files': {'earnings_calendar.json': json.load(open('docs/data/earnings_calendar.json'))}}))" > /tmp/push.json
-          curl -sf -X POST "https://nexus-platform.nexusassetfund.workers.dev/api/push" \
-            -H "Authorization: Bearer $NEXUS_ADMIN_TOKEN" -H "Content-Type: application/json" \
-            --data @/tmp/push.json
+          python scanner/kv_push.py docs/data/earnings_calendar.json

@@ -32,4 +32,4 @@ jobs:
       - name: Worker KV 게시
         env:
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
-        run: python scanner/post_ipo_backtest.py
+        run: python scanner/kv_push.py docs/data/ipo_backtest.json --list-key stocks --min 200

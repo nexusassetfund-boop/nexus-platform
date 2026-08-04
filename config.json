@@ -47,14 +47,6 @@
     "tp_partial_frac": 0.5,
     "exhaustion_ext_pct": 20,
     "tp_min_frac": 0.1,
-    "ma_periods": [
-      5,
-      20,
-      60,
-      120,
-      150,
-      200
-    ],
     "climax_volume_ratio": 3.0,
     "climax_drop_pct": -10
   },

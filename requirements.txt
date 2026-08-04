@@ -6,5 +6,3 @@ pykrx>=1.0.45
 finance-datareader>=0.9.90
 # ipo-backtest.yml (ipo_fetcher.py) 용
 requests>=2.31
-beautifulsoup4>=4.12
-lxml>=5.0

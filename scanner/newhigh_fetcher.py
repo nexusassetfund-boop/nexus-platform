@@ -13,7 +13,7 @@
   프론트가 매수 필터(거래대금·시총 순위)를 조절할 수 있도록 검증 전략(10위/30~50위)보다
   넓게(거래대금 ≤30위, 시총 ≤200위) 담고, 매매 시뮬레이션은 전부 클라이언트에서 수행한다.
 
-산출: docs/data/newhigh_backtest.json (repo 커밋 안 함 — post_newhigh_backtest.py가 KV 게시)
+산출: docs/data/newhigh_backtest.json (repo 커밋 안 함 — kv_push.py가 KV 게시)
   events[] = 후보 이벤트(코드·이름·진입일·진입가·순위) — 시뮬레이션은 안 함
   prices{} = 코드 → [[날짜, 수정고가, 수정저가, 수정종가], ...] — 종목당 1회(이벤트 간 중복 제거)
 """
