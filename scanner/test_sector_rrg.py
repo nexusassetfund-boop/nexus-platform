@@ -184,6 +184,78 @@ def test_build_insight():
     assert "s0" not in joined.replace("섹터0", "")
 
 
+def test_y_only_flag_logic():
+    """2026-08 2차전지 사례: 부상·NE 4주인데 x 91대 제자리 → Y축 단독 신호."""
+    assert sr._y_only("improving", "NE", 4, 91.8, 0.5) is True
+    # X가 동반 상승하면(이동 ≥1.5) 진짜 회전 — 플래그 없음
+    assert sr._y_only("improving", "NE", 4, 91.8, 2.0) is False
+    # 경계(x≥95)나 짧은 streak, 하방 heading은 대상 아님
+    assert sr._y_only("improving", "NE", 4, 97.0, 0.5) is False
+    assert sr._y_only("improving", "NE", 2, 91.8, 0.5) is False
+    assert sr._y_only("improving", "SE", 4, 91.8, 0.5) is False
+    assert sr._y_only("leading", "NE", 4, 91.8, 0.5) is False
+
+
+def test_entry_gate_checks():
+    up = _daily_series(200, daily_ret=0.004)     # 강한 상승 추세 → MA60 위
+    g = sr._entry_gate(up, "leading", "NE", False)
+    assert g["ma60_ok"] is True and g["d5_ok"] is True and g["trend_ok"] is True
+    assert g["passed"] is True and g["n_ok"] == 3
+    down = _daily_series(200, daily_ret=-0.004)  # 하락 추세 → MA60 아래
+    g2 = sr._entry_gate(down, "improving", "NE", False)
+    assert g2["ma60_ok"] is False and g2["passed"] is False
+    # 5일 급락 (-2%/일 × 5일 ≈ -9.6%)
+    crash = _daily_series(200, daily_ret=0.004)
+    crash.iloc[-5:] = crash.iloc[-6] * np.cumprod(np.full(5, 0.98))
+    g3 = sr._entry_gate(crash, "leading", "NE", False)
+    assert g3["d5_ok"] is False and g3["passed"] is False
+    # Y축 단독이면 trend_ok 탈락
+    g4 = sr._entry_gate(up, "improving", "NE", True)
+    assert g4["trend_ok"] is False and g4["passed"] is False
+    # 데이터 부족 → 판정 유보(None), passed False
+    g5 = sr._entry_gate(_daily_series(30), "leading", "NE", False)
+    assert g5["ma60_ok"] is None and g5["passed"] is False
+
+
+def test_compute_rrg_new_fields():
+    res = sr.compute_rrg(_universe(), NOW)
+    assert "signal_lag" in res
+    for sec in res["sectors"].values():
+        assert "y_only" in sec and "x_move" in sec
+        gate = sec["gate"]
+        assert set(gate) >= {"trend_ok", "ma60_ok", "d5_ok", "passed", "n_ok"}
+        # 게이트·코멘트에 판단어 없음 (백테스트 검증 전 원칙 유지)
+        for word in ("매수", "매도", "관심", "비중"):
+            assert word not in sec["comment"]
+
+
+def _fake_sector(**kw):
+    base = {"x": 100.0, "y": 100.0, "quadrant": "leading", "quadrant_ko": "주도",
+            "prev_quadrant": "leading", "heading": "E", "heading_weeks": 1,
+            "x_move": 0.0, "y_only": False,
+            "gate": {"trend_ok": True, "ma60_ok": True, "d5_ok": True,
+                     "d5": 0.0, "passed": True, "n_ok": 3},
+            "tail": [{"d": "01-01", "x": 100.0, "y": 100.0}], "comment": "주도 유지"}
+    base.update(kw)
+    return base
+
+
+def test_build_insight_divergence_any_quadrant():
+    """부상 사분면 + 상방 4주 + 5일 급락(2차전지 사례)도 괴리 라인에 잡혀야 한다 (기존 구멍 회귀)."""
+    rrg = {"as_of": "2026-08-03", "sectors": {
+        "battery": _fake_sector(x=91.8, y=105.3, quadrant="improving", quadrant_ko="부상",
+                                prev_quadrant="improving", heading="NE", heading_weeks=4,
+                                x_move=0.5, y_only=True),
+        "semi": _fake_sector(), "auto": _fake_sector(), "bank": _fake_sector()}}
+    ins = sr.build_insight(rrg, {"battery": "2차전지"}, "2026-08-03T15:40:00+09:00",
+                           d5={"battery": -7.6, "semi": 0.0, "auto": 0.0, "bank": 0.0})
+    joined = " ".join(ins["lines"])
+    assert "추세·단기 괴리" in joined and "2차전지" in joined
+    assert "Y축 단독" in joined  # ⑤-b 라인도 함께
+    # y_only 섹터는 "부상 지속" 라인에서 제외
+    assert "부상 지속" not in joined
+
+
 def test_quadrant_labels():
     assert sr._quadrant(101, 101) == ("leading", "주도")
     assert sr._quadrant(101, 99) == ("weakening", "약화")

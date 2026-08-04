@@ -32,7 +32,8 @@ if sys.stdout and hasattr(sys.stdout, "reconfigure"):
 
 from data_provider import fetch_ohlcv
 from run_scan import SECTOR_ETFS
-from sector_rrg import _quadrant, clean_daily, daily_xy, last_confirmed_close
+from sector_rrg import (GATE_D5_MIN, GATE_MA_DAYS, _heading, _quadrant, _y_only,
+                        clean_daily, daily_xy, last_confirmed_close)
 
 REPORT_PATH = Path(__file__).parent.parent / "reports" / "rrg_backtest.md"
 WEEK = 5  # 거래일
@@ -107,6 +108,70 @@ def run_h2(xy_w, closes_w, hold_weeks, cost_bp):
     return pd.Series(rets, index=dates[1:]), trades
 
 
+def _trend_pass(xy_w_sec, i_w):
+    """주간 xy 격자에서 i_w 시점의 RRG 트렌드 조건 (운영 코드와 동일 규칙).
+
+    부상/주도 + 상방 heading + Y축 단독 아님. 룩어헤드 없음 — i_w까지의 점만 사용."""
+    pts = xy_w_sec.iloc[: i_w + 1]
+    if len(pts) < 2:
+        return False
+    x, y = float(pts["x"].iloc[-1]), float(pts["y"].iloc[-1])
+    quadrant = _quadrant(x, y)[0]
+    heading = _heading(x - float(pts["x"].iloc[-2]), y - float(pts["y"].iloc[-2]))
+    streak = 1
+    for j in range(len(pts) - 2, 0, -1):
+        h = _heading(float(pts["x"].iloc[j]) - float(pts["x"].iloc[j - 1]),
+                     float(pts["y"].iloc[j]) - float(pts["y"].iloc[j - 1]))
+        if h != heading:
+            break
+        streak += 1
+    win = pts.iloc[-7:]
+    x_move = float(win["x"].iloc[-1]) - float(win["x"].iloc[0])
+    y_only = _y_only(quadrant, heading, streak, x, x_move)
+    return quadrant in ("improving", "leading") and "N" in heading and not y_only
+
+
+def run_h3(xy_w, closes_w, daily_clean, cost_bp, use_gate):
+    """H3 게이트 전략: 매주 [RRG 트렌드 조건 (+ 절대가격 게이트)] 통과 섹터 동일가중.
+
+    use_gate=False → RRG 조건 단독(H3a), True → +MA60 위·5일 > -5% (H3b).
+    무통과 주는 현금(0%). 게이트의 독립 기여를 a/b 비교로 분리한다."""
+    dates = closes_w.index
+    rets, prev_hold, n_rebalance = [], set(), 0
+    for i in range(len(dates) - 1):
+        t = dates[i]
+        hold = set()
+        for s, xy in xy_w.items():
+            if t not in xy.index:
+                continue
+            i_w = xy.index.get_loc(t)
+            if not _trend_pass(xy, i_w):
+                continue
+            if use_gate:
+                dc = daily_clean[s]
+                hist = dc[dc.index <= t]
+                if len(hist) < GATE_MA_DAYS + 6:
+                    continue
+                cur = float(hist.iloc[-1])
+                if cur <= float(hist.iloc[-GATE_MA_DAYS:].mean()):
+                    continue
+                if (cur / float(hist.iloc[-6]) - 1) * 100 <= GATE_D5_MIN:
+                    continue
+            hold.add(s)
+        if not hold:
+            rets.append(0.0)
+            prev_hold = set()
+            continue
+        week_ret = np.mean([closes_w[s].iloc[i + 1] / closes_w[s].iloc[i] - 1 for s in hold])
+        changed = len(hold - prev_hold) / len(hold) if prev_hold else 1.0
+        cost = changed * 2 * cost_bp / 10000
+        if hold != prev_hold:
+            n_rebalance += 1
+        prev_hold = hold
+        rets.append(week_ret - cost)
+    return pd.Series(rets, index=dates[1:]), n_rebalance
+
+
 async def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=1500)
@@ -154,6 +219,13 @@ async def main():
                 m = _metrics(r)
                 if m:
                     lines.append(f"- H2 평균회귀 hold{h}주 (비용 {cost}bp, 진입 {ntr}건): "
+                                 f"CAGR {m['cagr']:+.1f}% · Sharpe {m['sharpe']:.2f} · MDD {m['mdd']:.1f}% · 연도별 {m['yearly']}")
+            daily_clean = {s: clean_daily(daily[s])[0] for s in xy_w}
+            for use_gate, tag in ((False, "H3a RRG조건 단독"), (True, "H3b RRG+절대가격 게이트")):
+                r, nreb = run_h3(xy_w, closes_w, daily_clean, cost, use_gate)
+                m = _metrics(r)
+                if m:
+                    lines.append(f"- {tag} (비용 {cost}bp, 리밸런스 {nreb}회): "
                                  f"CAGR {m['cagr']:+.1f}% · Sharpe {m['sharpe']:.2f} · MDD {m['mdd']:.1f}% · 연도별 {m['yearly']}")
 
     lines.append("\n## 판정 기준 (backtest-expert)")

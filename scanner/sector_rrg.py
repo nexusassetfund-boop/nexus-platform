@@ -41,6 +41,20 @@ QUADRANTS = {
 
 MEDIAN_WINDOW = 7  # 국소 중앙값 창 (전후 3일 + 자신)
 
+# Y축 단독 신호 판별 — 2026-08 2차전지 사례(부상·4주 NE인데 x 91대 제자리 + 5일 -7.6%):
+# Y(RS-Momentum)는 하락 속도 둔화만으로 오르므로, X가 깊은 소외에 못박힌 채 Y만
+# 끌어올린 "우상향"은 상대 지위 개선이 아니라 낙폭 둔화의 통계적 반등이다.
+Y_ONLY_X_MAX = 95.0       # 깊은 소외 판정 (x < 95)
+Y_ONLY_X_MOVE = 1.5       # 앵커 구간(≈7주) X 이동이 이 미만이면 "제자리"
+Y_ONLY_MIN_WEEKS = 3      # 연속 상방 주 수
+
+# 절대가격 게이트 — RRG(상대강도)는 "언제 살 것인가"에 답하지 못하므로,
+# 섹터 ETF 자체의 절대 추세 조건을 병기한다 (표시용 체크리스트 — 백테스트 검증 전).
+GATE_MA_DAYS = 60         # 추세 기준선
+GATE_D5_MIN = -5.0        # 최근 5일 수익률 하한(%) — 급락 중 진입 배제
+
+SIGNAL_LAG_NOTE = "좌표는 60일 SMA·20일 ROC 스무딩 — 최근 2~4주 급변은 아직 미반영"
+
 
 def clean_daily(closes: pd.Series) -> tuple[pd.Series, list[str]]:
     """데이터 오류 봉 필터 — '일간 수익률 크기'가 아니라 '전후 7일 중앙값 대비 이탈'로 판정.
@@ -89,6 +103,39 @@ def _heading(dx: float, dy: float) -> str:
 
 def _quadrant(x: float, y: float) -> tuple[str, str]:
     return QUADRANTS[("hi" if x >= 100 else "lo", "hi" if y >= 100 else "lo")]
+
+
+def _y_only(quadrant: str, heading: str, streak: int, x: float, x_move: float) -> bool:
+    """"N주 연속 우상향"이 Y축 혼자 만든 신호인지 판별 (순수 함수 — 단위 테스트 대상).
+
+    조건: 부상 사분면 + 상방 heading(N 포함) 연속 ≥3주인데,
+    X가 깊은 소외(<95)에서 앵커 구간 내 사실상 제자리(|이동| < 1.5)."""
+    return (quadrant == "improving" and "N" in heading and streak >= Y_ONLY_MIN_WEEKS
+            and x < Y_ONLY_X_MAX and abs(x_move) < Y_ONLY_X_MOVE)
+
+
+def _entry_gate(closes: pd.Series, quadrant: str, heading: str, y_only: bool) -> dict:
+    """절대가격 게이트 체크리스트 — 관찰 서술만, 판단어 없음 (백테스트 검증 전).
+
+    trend_ok: RRG상 부상/주도 + 상방 heading + Y축 단독 아님 (상대강도 조건)
+    ma60_ok : 종가 > 60일 이동평균 (절대 추세 조건)
+    d5_ok   : 최근 5일 수익률 > -5% (급락 중 아님)
+    """
+    ma_ok = d5_ok = None
+    d5 = None
+    if len(closes) >= GATE_MA_DAYS + 1:
+        cur = float(closes.iloc[-1])
+        ma_ok = cur > float(closes.iloc[-GATE_MA_DAYS:].mean())
+        d5 = (cur / float(closes.iloc[-6]) - 1) * 100
+        d5_ok = d5 > GATE_D5_MIN
+    trend_ok = quadrant in ("improving", "leading") and "N" in heading and not y_only
+    checks = [trend_ok, ma_ok, d5_ok]
+    return {
+        "trend_ok": trend_ok, "ma60_ok": ma_ok, "d5_ok": d5_ok,
+        "d5": None if d5 is None else round(d5, 2),
+        "passed": all(c is True for c in checks),
+        "n_ok": sum(1 for c in checks if c is True),
+    }
 
 
 def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
@@ -180,16 +227,27 @@ def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime) -> dict:
         # 전이 비교 기준 = 현재점 직전의 주간 앵커 (현재점이 금요일 앵커 자신이면 그 전 앵커)
         prev_pt = ax[-2] if cur_d.date() == anchors.index[-1].date() else ax[-1]
         prev_q, prev_q_ko = _quadrant(prev_pt["x"], prev_pt["y"])
+        x_move = round(ax[-1]["x"] - ax[0]["x"], 2)  # 앵커 구간(≈7주) X 순이동
+        y_only = _y_only(quadrant, heading, streak, x, x_move)
+        closes_g, _ = clean_daily(daily_closes[slug])
+        closes_g = closes_g[closes_g.index.date <= cutoff]
+        gate = _entry_gate(closes_g, quadrant, heading, y_only)
+        comment = _comment(quadrant_ko, prev_q_ko, quadrant != prev_q, heading, streak)
+        if y_only:
+            comment += " · Y축 단독(상대 지위 개선 없는 낙폭 둔화)"
         sectors[slug] = {
             "x": x, "y": y,
             "quadrant": quadrant, "quadrant_ko": quadrant_ko,
             "prev_quadrant": prev_q,
             "heading": heading, "heading_weeks": streak,
+            "x_move": x_move, "y_only": y_only,
+            "gate": gate,
             "tail": tail,
-            "comment": _comment(quadrant_ko, prev_q_ko, quadrant != prev_q, heading, streak),
+            "comment": comment,
         }
 
     return {"as_of": as_of, "benchmark": "sector-eq",
+            "signal_lag": SIGNAL_LAG_NOTE,
             "sectors": sectors, "data_flags": data_flags}
 
 
@@ -258,10 +316,18 @@ def build_insight(rrg: dict, names: dict[str, str], generated_at: str,
         lines.append("경계 관찰: " + " / ".join(parts) + " — 다음 주 전환 가능성이 높은 자리.")
 
     # ⑤ 회전 진행/약세 지속
-    rising = pick(lambda v: v["quadrant"] == "improving" and v["heading"] == "NE" and v["heading_weeks"] >= 3)
+    rising = pick(lambda v: v["quadrant"] == "improving" and v["heading"] == "NE"
+                  and v["heading_weeks"] >= 3 and not v.get("y_only"))
     if rising:
         d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 우상향)" for k, v in rising)
         lines.append(f"부상 지속: {d} — 소외→부상 회전 진행 중, 주도 진입 여부가 관찰 포인트.")
+    # ⑤-b Y축 단독 신호 — "N주 연속 우상향"이 X 제자리 + Y(낙폭 둔화) 혼자 만든 경우
+    y_only_secs = pick(lambda v: v.get("y_only"))
+    if y_only_secs:
+        d = ", ".join(f"{nm(k)}(x {v['x']:.1f} 제자리, {v['heading_weeks']}주 우상향)"
+                      for k, v in y_only_secs)
+        lines.append(f"Y축 단독 신호: {d} — 상대 지위 개선 없는 낙폭 둔화. "
+                     f"X축 동반 상승 전까지는 회전으로 보기 어려움.")
     weakest = pick(lambda v: v["quadrant"] == "lagging" and v["heading"] == "SW" and v["heading_weeks"] >= 3)
     if weakest:
         d = ", ".join(f"{nm(k)}({v['heading_weeks']}주 연속 좌하향)" for k, v in weakest)
@@ -279,21 +345,25 @@ def build_insight(rrg: dict, names: dict[str, str], generated_at: str,
         d = ", ".join(f"{nm(k)} {'+' if d_ > 0 else ''}{d_}계단" for k, d_ in big)
         lines.append(f"순위 급변(약 {len(secs[list(secs)[0]]['tail'])}주 전 대비): {d} — 로테이션의 실제 이동 경로.")
 
-    # ⑦ 맵 위치와 단기 수익률의 괴리 — 추세와 단기 흐름이 반대인 섹터
+    # ⑦ 맵 위치와 단기 수익률의 괴리 — 추세와 단기 흐름이 반대인 섹터.
+    # 사분면 무관: 상방 heading ≥3주 + 5일 급락(2026-08 2차전지: 부상·4주 NE + 5일 -7.6%)도 포함.
     if d5:
         div = [(k, v, d5[k]) for k, v in secs.items() if k in d5
-               and ((v["quadrant"] == "leading" and d5[k] <= -5) or (v["quadrant"] == "lagging" and d5[k] >= 5))]
+               and ((v["quadrant"] == "leading" and d5[k] <= -5)
+                    or (v["quadrant"] == "lagging" and d5[k] >= 5)
+                    or ("N" in v["heading"] and v["heading_weeks"] >= 3 and d5[k] <= -5))]
         if div:
-            d = ", ".join(f"{nm(k)}({'주도인데' if v['quadrant'] == 'leading' else '소외인데'} 5일 {r:+.1f}%)"
+            d = ", ".join(f"{nm(k)}({v['quadrant_ko']} 사분면인데 5일 {r:+.1f}%)"
                           for k, v, r in div[:3])
-            lines.append(f"추세·단기 괴리: {d} — 추세 전환의 초기 신호인지 일시 반락인지 다음 주 확인 필요.")
+            lines.append(f"추세·단기 괴리: {d} — 좌표는 스무딩으로 2~4주 후행하므로 "
+                         f"급락이 아직 미반영. 추세 전환인지 일시 반락인지 다음 주 확인 필요.")
 
     # ⑧ 데이터 품질
     flags = rrg.get("data_flags", {})
     if flags:
         lines.append(f"데이터 이상치 필터 적용 {len(flags)}개 섹터({', '.join(nm(k) for k in flags)}) — 해당 봉은 좌표 계산에서 제외됨.")
 
-    return {"generated_at": generated_at, "as_of": rrg.get("as_of"), "lines": lines[:9]}
+    return {"generated_at": generated_at, "as_of": rrg.get("as_of"), "lines": lines[:10]}
 
 
 # 판단어("매수/매도/관심/비중" 등)는 쓰지 않는다 — 상태 서술만 (Phase 3, 리플레이 검증 전).
