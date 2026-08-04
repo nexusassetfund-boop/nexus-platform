@@ -75,33 +75,28 @@ SECTOR_ETFS = {
     "travel-leisure": ("228800", "TIGER 여행레저"),
     "holdings-company": ("307520", "TIGER 지주회사"),
     "nuclear": ("433500", "ACE 원자력TOP10"),
+    "banks": ("091170", "KODEX 은행"),
+    "securities": ("102970", "KODEX 증권"),
 }
 
-# sector_map.json에 없는 RRG 전용 섹터의 표시 이름
-RRG_EXTRA_NAMES = {"nuclear": "원전·원자력"}
+# sector_map.json에 없는 RRG 전용 섹터의 표시 이름 (금융 하위는 세분 표시용)
+RRG_EXTRA_NAMES = {"nuclear": "원전·원자력", "banks": "은행", "securities": "증권"}
 
-# 대표 ETF의 상장 이력이 150거래일 미만이면 쓰는 임시 폴백 — 이력이 쌓이면 자동으로 본 ETF로 전환
-# (robotics: 0148J0 상장 2026-01-06, 2026-08 시점 약 145거래일)
-SECTOR_ETF_FALLBACKS = {
-    "robotics": ("445290", "KODEX K-로봇액티브"),
-}
+# 신규 상장 ETF의 최소 이력 예외 (기본 150거래일)
+# robotics: 0148J0 상장 2026-01-06 — RS 산출에 필요한 m3(63일)만 넘으면 편입
+SECTOR_ETF_MIN_DAYS = {"robotics": 70}
 
 
 async def _fetch_sector_closes() -> dict:
     """섹터 대표 ETF 일간 종가 1회 조회 — 레거시 사분면과 RRG가 공유."""
     closes_map = {}
     for slug, (code, name) in SECTOR_ETFS.items():
-        candidates = [(code, name)]
-        if slug in SECTOR_ETF_FALLBACKS:
-            candidates.append(SECTOR_ETF_FALLBACKS[slug])
-        for c, n in candidates:
-            try:
-                df = await fetch_ohlcv(c, days=300)
-                if df is not None and len(df) >= 150:
-                    closes_map[slug] = (c, n, df["close"])
-                    break
-            except Exception:
-                continue
+        try:
+            df = await fetch_ohlcv(code, days=300)
+            if df is not None and len(df) >= SECTOR_ETF_MIN_DAYS.get(slug, 150):
+                closes_map[slug] = (code, name, df["close"])
+        except Exception:
+            continue
     return closes_map
 
 
@@ -132,7 +127,7 @@ def _compute_sector_etf_rs(closes_map: dict) -> dict:
         rows = {}
         for slug, (code, name, closes) in closes_map.items():
             c = closes.iloc[:-offset] if offset else closes
-            if len(c) < 130:
+            if len(c) < SECTOR_ETF_MIN_DAYS.get(slug, 130):
                 continue
             cur = float(c.iloc[-1])
             rets = {}
