@@ -367,12 +367,22 @@ def collect_prev_briefings(mode, today_str):
     return out
 
 
-def is_trading_day(today_str):
+def is_trading_day(today_str, mode="pm"):
+    """당일이 거래일인지.
+
+    pykrx 판정은 '당일 지수 데이터가 이미 존재하는가'라서 장전(07:20)에는 항상 전 거래일을
+    돌려준다 — 즉 am에는 쓸 수 없다. am은 요일만 보고, 휴장일 정밀 판정은 pm에서만 한다.
+    """
+    weekday_ok = datetime.strptime(today_str, "%Y-%m-%d").weekday() < 5
+    if mode == "am" or not weekday_ok:
+        # ponytail: am은 요일 게이트만 — 공휴일 아침에도 브리핑이 나간다.
+        # 신뢰할 만한 KRX 휴장일 캘린더 소스가 생기면 그때 정밀 판정.
+        return weekday_ok
     try:
         from pykrx.stock import get_nearest_business_day_in_a_week
         return get_nearest_business_day_in_a_week(today_str.replace("-", "")) == today_str.replace("-", "")
     except Exception:
-        return datetime.now(KST).weekday() < 5  # 판별 실패 시 주중이면 진행
+        return True  # 판별 실패 시 주중이면 진행
 
 
 def main():
@@ -384,7 +394,7 @@ def main():
     mode = args.mode or ("am" if now.hour < 12 else "pm")
     today_str = args.date or now.strftime("%Y-%m-%d")
 
-    if not is_trading_day(today_str):
+    if not is_trading_day(today_str, mode):
         print(f"휴장일({today_str}) — 브리핑 생성 건너뜀")
         OUT.write_text(json.dumps({"skip": True, "reason": "휴장일"}, ensure_ascii=False), "utf-8")
         sys.exit(0)
