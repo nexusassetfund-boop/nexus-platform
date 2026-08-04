@@ -80,17 +80,28 @@ SECTOR_ETFS = {
 # sector_map.json에 없는 RRG 전용 섹터의 표시 이름
 RRG_EXTRA_NAMES = {"nuclear": "원전·원자력"}
 
+# 대표 ETF의 상장 이력이 150거래일 미만이면 쓰는 임시 폴백 — 이력이 쌓이면 자동으로 본 ETF로 전환
+# (robotics: 0148J0 상장 2026-01-06, 2026-08 시점 약 145거래일)
+SECTOR_ETF_FALLBACKS = {
+    "robotics": ("445290", "KODEX K-로봇액티브"),
+}
+
 
 async def _fetch_sector_closes() -> dict:
     """섹터 대표 ETF 일간 종가 1회 조회 — 레거시 사분면과 RRG가 공유."""
     closes_map = {}
     for slug, (code, name) in SECTOR_ETFS.items():
-        try:
-            df = await fetch_ohlcv(code, days=300)
-            if df is not None and len(df) >= 150:
-                closes_map[slug] = (code, name, df["close"])
-        except Exception:
-            continue
+        candidates = [(code, name)]
+        if slug in SECTOR_ETF_FALLBACKS:
+            candidates.append(SECTOR_ETF_FALLBACKS[slug])
+        for c, n in candidates:
+            try:
+                df = await fetch_ohlcv(c, days=300)
+                if df is not None and len(df) >= 150:
+                    closes_map[slug] = (c, n, df["close"])
+                    break
+            except Exception:
+                continue
     return closes_map
 
 
