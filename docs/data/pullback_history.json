@@ -61,5 +61,131 @@
     "last_price": 164000.0
    }
   ]
+ },
+ {
+  "date": "2026-08-04",
+  "added": [
+   {
+    "code": "005090",
+    "name": "SGC에너지",
+    "score": 5
+   },
+   {
+    "code": "278470",
+    "name": "에이피알",
+    "score": 5
+   },
+   {
+    "code": "007340",
+    "name": "DN오토모티브",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "004170",
+    "name": "004170",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "010950",
+    "name": "010950",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "017670",
+    "name": "017670",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "031980",
+    "name": "031980",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "034730",
+    "name": "034730",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "041830",
+    "name": "인바디",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": 6,
+    "last_price": 50000.0
+   },
+   {
+    "code": "053610",
+    "name": "053610",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "069960",
+    "name": "069960",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "095610",
+    "name": "095610",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "127120",
+    "name": "127120",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "252990",
+    "name": "252990",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "281820",
+    "name": "281820",
+    "first_seen": "2026-07-27",
+    "days": 8,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "319660",
+    "name": "319660",
+    "first_seen": "2026-07-24",
+    "days": 11,
+    "last_score": null,
+    "last_price": null
+   }
+  ]
  }
 ]
