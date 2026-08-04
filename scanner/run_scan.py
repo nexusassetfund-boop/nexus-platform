@@ -54,7 +54,7 @@ RS_PERIODS = [("q1", 63, 0.4), ("q2", 126, 0.2), ("q3", 189, 0.2), ("q4", 252, 0
 # 섹터는 사분면에서 제외된다(프론트가 있는 것만 그림).
 SECTOR_ETFS = {
     "semiconductor": ("091160", "KODEX 반도체"),
-    "robotics": ("445290", "KODEX K-로봇액티브"),
+    "robotics": ("0148J0", "TIGER 코리아휴머노이드로봇산업"),
     "it-service-sw": ("157490", "TIGER 소프트웨어"),
     "auto-mobility": ("091180", "KODEX 자동차"),
     "energy": ("377990", "TIGER Fn신재생에너지"),
@@ -70,7 +70,9 @@ SECTOR_ETFS = {
     "retail-fashion-beauty": ("228790", "TIGER 화장품"),
     "chem-materials": ("117460", "KODEX 에너지화학"),
     "food-agri-fishery": ("266410", "KODEX 필수소비재"),
-    # nuclear는 sector_map.json에 없는 RRG 전용 섹터 — 이름은 RRG_EXTRA_NAMES로 보충
+    "machinery-industrial": ("102960", "KODEX 기계장비"),
+    "transport-logistics": ("140710", "KODEX 운송"),
+    "travel-leisure": ("228800", "TIGER 여행레저"),
     "nuclear": ("433500", "ACE 원자력TOP10"),
 }
 
