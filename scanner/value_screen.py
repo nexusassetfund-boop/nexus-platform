@@ -46,6 +46,7 @@ MIN_CAP = 300_000_000_000   # 시총 3,000억 이상 (마이크로캡 밸류트�
 PER_MAX = 15.0
 PBR_MAX = 1.5
 MARGIN_MIN = 15.0           # 자체 적정가 대비 안전마진 15% 이상
+ROE_MIN = 5.0               # ROE 하한 % — 저ROE 밸류트랩 컷 (백테스트: CAGR +1.0%p, MDD +3.8%p 개선)
 FSCORE_MIN = 5              # 표시 기준선 (백테스트상 컷·정렬 사용 시 성과 악화 → 참고용)
 TOP_FSCORE = 40             # (구) F-Score 컷 대상 — 현재는 미사용, 백테스트 재현용 보존
 TOP_OUT = 20                # 최종 출력 종목 수
@@ -253,6 +254,8 @@ async def build() -> dict | None:
         if per > PER_MAX or pbr > PBR_MAX:
             continue
         roe = round(eps / bps * 100, 1)
+        if roe < ROE_MIN:
+            continue
         fair, fair_rim, fair_rim_cons = _calc_fair_value(eps, bps, roe)
         if not fair:
             continue
@@ -363,7 +366,7 @@ async def build() -> dict | None:
         "dart": dart_ok,
         "criteria": {
             "min_cap": "시총 3,000억↑", "per_max": PER_MAX, "pbr_max": PBR_MAX,
-            "margin_min": MARGIN_MIN,
+            "margin_min": MARGIN_MIN, "roe_min": ROE_MIN,
             "sort": "12-1 모멘텀 내림차순 (밸류는 관문, 순서는 추세)",
             "fscore_note": f"F-Score는 참고 표시 전용 ({FSCORE_MIN}점 미만 주의) — 컷·정렬 미사용",
             "fair_note": "적정가 = fade RIM(초과ROE 10년/보수 5년 소멸·Ke 9%·ROE 상한 25%) — 정상화 ROE(3개년 평균) 기준·Graham 폐지",
