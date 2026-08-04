@@ -84,7 +84,7 @@
   "removed": [
    {
     "code": "004170",
-    "name": "004170",
+    "name": "신세계",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -92,7 +92,7 @@
    },
    {
     "code": "010950",
-    "name": "010950",
+    "name": "S-Oil",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -100,7 +100,7 @@
    },
    {
     "code": "017670",
-    "name": "017670",
+    "name": "SK텔레콤",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
@@ -108,7 +108,7 @@
    },
    {
     "code": "031980",
-    "name": "031980",
+    "name": "피에스케이홀딩스",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -116,7 +116,7 @@
    },
    {
     "code": "034730",
-    "name": "034730",
+    "name": "SK",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
@@ -132,7 +132,7 @@
    },
    {
     "code": "053610",
-    "name": "053610",
+    "name": "프로텍",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
@@ -140,7 +140,7 @@
    },
    {
     "code": "069960",
-    "name": "069960",
+    "name": "현대백화점",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -148,7 +148,7 @@
    },
    {
     "code": "095610",
-    "name": "095610",
+    "name": "테스",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -156,7 +156,7 @@
    },
    {
     "code": "127120",
-    "name": "127120",
+    "name": "제이에스링크",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
@@ -164,7 +164,7 @@
    },
    {
     "code": "252990",
-    "name": "252990",
+    "name": "샘씨엔에스",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
@@ -172,7 +172,7 @@
    },
    {
     "code": "281820",
-    "name": "281820",
+    "name": "케이씨텍",
     "first_seen": "2026-07-27",
     "days": 8,
     "last_score": null,
@@ -180,7 +180,7 @@
    },
    {
     "code": "319660",
-    "name": "319660",
+    "name": "피에스케이",
     "first_seen": "2026-07-24",
     "days": 11,
     "last_score": null,
