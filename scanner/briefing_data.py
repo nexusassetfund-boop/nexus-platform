@@ -2,6 +2,7 @@
 """시황 브리핑 입력 데이터 수집 — 확정 숫자는 코드가 만들고, 해설만 Claude가 쓴다.
 
 장전(am):  밤사이 글로벌 지수·금리·환율·원자재 + 전일 국내 마감 + 감지기 요약
+           + 전일 시총 상위 15 등락률·외인/기관 수급 + 전략실·섹터맵 요약
 장마감(pm): 국내 지수·등락 종목수·투자자 수급·업종 등락 + 글로벌 + 감지기 요약 + 아침 브리핑(복기용)
 
 출력: briefing_input.json (repo 루트, gitignore 대상)
@@ -153,6 +154,172 @@ def collect_kr_close(today_str):
     return out
 
 
+def _prev_trading_day(today_str):
+    """직전 거래일 (YYYYMMDD) — pykrx 영업일 캘린더 기준"""
+    from pykrx.stock import get_nearest_business_day_in_a_week
+    prev = (datetime.strptime(today_str, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y%m%d")
+    return get_nearest_business_day_in_a_week(prev)
+
+
+def _top_caps_rank_naver(n=15):
+    """시총 순위·등락률 폴백 — 네이버 시총 상위 페이지 (순위·등락률은 정확값)"""
+    import re
+    out = {}
+    for mkt, sosok in (("KOSPI", "0"), ("KOSDAQ", "1")):
+        t = requests.get(f"https://finance.naver.com/sise/sise_market_sum.naver?sosok={sosok}&page=1",
+                         headers={"user-agent": "Mozilla/5.0"}, timeout=15).content.decode("euc-kr", "ignore")
+        rows = re.findall(r'href="/item/main\.naver\?code=(\d{6})"[^>]*>([^<]+)</a>.*?'
+                          r'<td class="number">[\d,]+</td>.*?([+-][\d,]+|0).*?([+-]?[\d.]+)%',
+                          t, re.S)
+        out[mkt] = [{"code": c, "name": nm.strip(), "change_pct": _num(pct)} for c, nm, _, pct in rows[:n]]
+    return out
+
+
+def _kis_flows(codes, base_ymd):
+    """KIS inquire-investor — 종목별 외국인/기관 순매수 거래대금(백만원 → 억원 환산, 정확값).
+
+    응답에서 base_ymd(YYYYMMDD) 날짜 행을 골라 다른 세션 값이 섞이지 않게 한다.
+    """
+    import asyncio
+    sys.path.insert(0, str(Path(__file__).parent))
+    from data_provider import load_config, kis_get
+
+    async def run():
+        cfg = load_config()
+        out = {}
+        for code in codes:
+            try:
+                data = await kis_get(cfg, "/uapi/domestic-stock/v1/quotations/inquire-investor",
+                                     "FHKST01010900",
+                                     {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": code})
+                for row in (data or {}).get("output") or []:
+                    if row.get("stck_bsop_date") == base_ymd:
+                        out[code] = {
+                            "foreign_bn": round(float(row.get("frgn_ntby_tr_pbmn") or 0) / 100, 1),
+                            "inst_bn": round(float(row.get("orgn_ntby_tr_pbmn") or 0) / 100, 1),
+                        }
+                        break
+            except Exception:
+                pass
+            await asyncio.sleep(0.15)  # KIS 레이트리밋
+        return out
+    return asyncio.run(run())
+
+
+def collect_top_caps(today_str, n=15):
+    """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
+
+    순위·등락률: pykrx(KRX) 기본, 실패 시 네이버 시총 페이지.
+    수급: pykrx 투자자별 거래대금 기본, 실패 시 KIS inquire-investor 거래대금 — 둘 다 정확값.
+    둘 다 실패하면 수급 열은 비워 두고 오류를 기록한다 (근사치는 쓰지 않는다).
+    """
+    out = {}
+    prev = None
+    try:
+        prev = _prev_trading_day(today_str)
+    except Exception:
+        pass
+    # 1) 시총 순위 + 등락률
+    try:
+        from pykrx import stock
+        if not prev:
+            raise RuntimeError("직전 거래일 산출 실패")
+        for mkt in ("KOSPI", "KOSDAQ"):
+            caps = stock.get_market_cap_by_ticker(prev, market=mkt)
+            ohlcv = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
+            top = caps.sort_values("시가총액", ascending=False).head(n)
+            out[mkt] = [{
+                "code": code,
+                "name": stock.get_market_ticker_name(code),
+                "mktcap_tr": round(cap["시가총액"] / 1e12, 2),  # 조원
+                "change_pct": round(float(ohlcv.loc[code, "등락률"]), 2) if code in ohlcv.index else None,
+            } for code, cap in top.iterrows()]
+    except Exception as e:
+        out["pykrx_rank_error"] = str(e)[:100]
+        try:
+            out.update(_top_caps_rank_naver(n))
+        except Exception as e2:
+            out["rank_fallback_error"] = str(e2)[:100]
+            return out
+    if not prev:  # pykrx 캘린더 실패 시 네이버 순위는 최신 거래일 기준
+        prev = today_str.replace("-", "")
+    out["base_date"] = f"{prev[:4]}-{prev[4:6]}-{prev[6:]}"
+    # 2) 수급 — pykrx 우선, 실패 종목은 KIS로 보충
+    codes = [r["code"] for mkt in ("KOSPI", "KOSDAQ") for r in out.get(mkt) or []]
+    flows = {}
+    try:
+        from pykrx import stock
+        for code in codes:
+            tv = stock.get_market_trading_value_by_date(prev, prev, code)
+            r0 = tv.iloc[0]
+            flows[code] = {"foreign_bn": round(float(r0["외국인합계"]) / 1e8, 1),
+                           "inst_bn": round(float(r0["기관합계"]) / 1e8, 1)}
+    except Exception as e:
+        out["pykrx_flow_error"] = str(e)[:100]
+    missing = [c for c in codes if c not in flows]
+    if missing:
+        try:
+            flows.update(_kis_flows(missing, prev))
+        except Exception as e:
+            out["kis_flow_error"] = str(e)[:100]
+    for mkt in ("KOSPI", "KOSDAQ"):
+        for r in out.get(mkt) or []:
+            r.update(flows.get(r["code"], {}))
+    out["unit"] = "foreign_bn/inst_bn=억원 순매수, mktcap_tr=조원"
+    return out
+
+
+def _get_json(path, timeout=15):
+    return requests.get(f"{WORKER}{path}", timeout=timeout).json()
+
+
+def collect_platform(today_str):
+    """장전 전용 — 넥서스 전략실·섹터맵 요약 (전부 공개 KV 데이터, 탭별 핵심만 압축)"""
+    out = {}
+    try:  # 섹터 ETF RS — 장기 RS 기준 상위/하위 (단기 RS·5일 수익률 동반)
+        scan = _get_json("/data/scan.json")
+        rs = scan.get("sector_etf_rs") or {}
+        rows = sorted([{"sector": k, "etf": v.get("etf_name"), "long_rs": v.get("long_rs"),
+                        "short_rs": v.get("short_rs"), "ret_d5": v.get("ret_d5")}
+                       for k, v in rs.items() if isinstance(v, dict) and v.get("long_rs") is not None],
+                      key=lambda x: -x["long_rs"])
+        out["sector_rs"] = {"top": rows[:3], "bottom": rows[-3:]}
+    except Exception as e:
+        out["sector_rs_error"] = str(e)[:100]
+    try:  # 퀄리티 성장 상위 5
+        qg = (_get_json("/data/quality_growth.json").get("candidates") or [])[:5]
+        out["quality_growth"] = [{"name": c.get("name"), "composite": c.get("composite")} for c in qg]
+    except Exception as e:
+        out["quality_growth_error"] = str(e)[:100]
+    try:  # 눌림목 — 후보 수 + 상위 3
+        cands = _get_json("/data/pullback.json").get("candidates") or []
+        out["pullback"] = {"count": len(cands),
+                           "top": [{"name": c.get("name"), "score": c.get("pullback_score")}
+                                   for c in cands[:3]]}
+    except Exception as e:
+        out["pullback_error"] = str(e)[:100]
+    try:  # 밸류 보드 상위 3
+        vs = (_get_json("/data/value_screen.json").get("candidates") or [])[:3]
+        out["value_screen"] = [{"name": c.get("name")} for c in vs]
+    except Exception as e:
+        out["value_screen_error"] = str(e)[:100]
+    try:  # 모멘텀 원장(웨지팝) — 커버리지 유니버스 요약 (보유 현황은 detector.tracking에 있음)
+        td = _get_json("/data/trade.json")
+        stocks = td.get("stocks") or []
+        out["momentum_ledger"] = {"data_month": td.get("data_month"), "universe_count": len(stocks),
+                                  "sample_names": [s.get("name") for s in stocks[:5] if isinstance(s, dict)]}
+    except Exception as e:
+        out["momentum_ledger_error"] = str(e)[:100]
+    try:  # 실적 캘린더 — 오늘·내일 예정 최대 5건
+        ev = _get_json("/data/earnings_calendar.json").get("events") or []
+        soon = [e for e in ev if e.get("date") and today_str <= e["date"] <=
+                (datetime.strptime(today_str, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")]
+        out["earnings_upcoming"] = [{"name": e.get("name"), "date": e.get("date")} for e in soon[:5]]
+    except Exception as e:
+        out["earnings_error"] = str(e)[:100]
+    return out
+
+
 def collect_detector():
     """감지기·전략 포트폴리오 요약 (KV 데이터) — 우리 플랫폼만의 차별점"""
     out = {}
@@ -236,6 +403,9 @@ def main():
     }
     if mode == "pm":
         data["kr_close"] = collect_kr_close(today_str)
+    else:
+        data["top_caps"] = collect_top_caps(today_str)      # 전일 시총 상위 15 등락률·수급
+        data["platform"] = collect_platform(today_str)      # 전략실·섹터맵 요약
 
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=1), "utf-8")
     print(f"mode={mode} world={len(data['world'])} -> {OUT}")
