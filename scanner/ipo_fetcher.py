@@ -16,7 +16,6 @@ import pandas as pd
 import FinanceDataReader as fdr
 from datetime import datetime
 from pathlib import Path
-from bs4 import BeautifulSoup
 
 # FDR 네이버 내부 requests에 timeout이 없어 CI에서 행이 걸릴 수 있음 → 전역 소켓 타임아웃
 socket.setdefaulttimeout(15)
