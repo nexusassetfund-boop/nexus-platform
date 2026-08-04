@@ -350,7 +350,20 @@ def _normalize_history(history: list) -> list:
     return out
 
 
-def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bool) -> list:
+def _resolve_name(code: str, names: dict) -> str | None:
+    """편출 종목 이름 조회 — scan.json 이름맵 → pykrx 순 폴백.
+    편출 종목은 현재 후보(OUT_PATH candidates)에 없을 수 있어 별도 조회가 필요하다."""
+    nm = names.get(code)
+    if not nm:
+        try:
+            nm = _pykrx_stock().get_market_ticker_name(code)
+        except Exception:
+            nm = None
+    return nm if isinstance(nm, str) and nm else None
+
+
+def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bool,
+                    names: dict | None = None) -> list:
     """편입/편출 이력 누적 — 마감 확정 실행(confirm)에서만 기록한다.
     편출 기록에는 당시 score·가격·체류일을 남겨 사후 성과 추적(90일 보유 룰 운영)에 쓴다.
     같은 날 재실행은 기존 행에 병합(멱등) — 중복 행이 쌓이지 않는다."""
@@ -361,6 +374,16 @@ def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bo
     history = _normalize_history(history)
     if not confirm:                         # 장중/휴장 실행 — 표시만, 확정 없음
         return history[-30:]
+    names = names or {}
+    # 과거 버그로 name에 종목코드가 기록된 행 복구 (state/OUT 비동기 갱신 사례)
+    healed = False
+    for row in history:
+        for r in row.get("removed", []) + row.get("added", []):
+            if r.get("name") == r.get("code"):
+                nm = _resolve_name(r["code"], names)
+                if nm:
+                    r["name"] = nm
+                    healed = True
     prev_codes = set(prev_state)
     if not prev_codes:                      # 최초 실행 — diff 없음
         return history[-30:]
@@ -382,7 +405,8 @@ def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bo
                 days = (dt.date.fromisoformat(today) - dt.date.fromisoformat(first)).days
             except Exception:
                 pass
-        removed.append({"code": c, "name": p.get("name", c), "first_seen": first,
+        removed.append({"code": c, "name": p.get("name") or _resolve_name(c, names) or c,
+                        "first_seen": first,
                         "days": days, "last_score": p.get("pullback_score"),
                         "last_price": p.get("current_price")})
     if added or removed:
@@ -392,8 +416,9 @@ def _update_history(cands: list[dict], prev_state: dict, today: str, confirm: bo
             history = _normalize_history(history)
         else:
             history.append({"date": today, "added": added, "removed": removed})
-    HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
-                            encoding="utf-8")
+    if added or removed or healed:
+        HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
     return history[-30:]
 
 
@@ -562,7 +587,7 @@ def build() -> dict | None:
             r["days_in_list"] = (dt.date.fromisoformat(today) - dt.date.fromisoformat(first)).days
         except Exception:
             r["days_in_list"] = 0
-    history = _update_history(out, state, today, confirm)
+    history = _update_history(out, state, today, confirm, names)
     if confirm:
         removed_codes = set(state) - {r["ticker"] for r in out}
         perf = _update_perf(out, today, dates, all_closes, removed_codes)
