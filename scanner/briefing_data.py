@@ -2,6 +2,7 @@
 """시황 브리핑 입력 데이터 수집 — 확정 숫자는 코드가 만들고, 해설만 Claude가 쓴다.
 
 장전(am):  밤사이 글로벌 지수·금리·환율·원자재 + 전일 국내 마감 + 감지기 요약
+           + 전일 시총 상위 15 등락률·외인/기관 수급 + 전략실·섹터맵 요약
 장마감(pm): 국내 지수·등락 종목수·투자자 수급·업종 등락 + 글로벌 + 감지기 요약 + 아침 브리핑(복기용)
 
 출력: briefing_input.json (repo 루트, gitignore 대상)
@@ -153,6 +154,148 @@ def collect_kr_close(today_str):
     return out
 
 
+def _prev_trading_day(today_str):
+    """직전 거래일 (YYYYMMDD) — pykrx 영업일 캘린더 기준"""
+    from pykrx.stock import get_nearest_business_day_in_a_week
+    prev = (datetime.strptime(today_str, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y%m%d")
+    return get_nearest_business_day_in_a_week(prev)
+
+
+def _naver_stock_flows(code):
+    """종목별 외국인/기관 순매수 근사 (억원) — 네이버 frgn 페이지 최신 거래일 행.
+
+    페이지는 순매매 '수량'만 제공하므로 종가를 곱해 금액을 근사한다.
+    """
+    import pandas as pd
+    from io import StringIO
+    html = requests.get(f"https://finance.naver.com/item/frgn.naver?code={code}",
+                        headers={"user-agent": "Mozilla/5.0"}, timeout=15).content.decode("euc-kr", "ignore")
+    df = max(pd.read_html(StringIO(html)), key=lambda d: d.shape[0] * d.shape[1])
+    df.columns = ["날짜", "종가", "전일비", "등락률", "거래량", "기관", "외국인", "보유주수", "보유율"][:len(df.columns)]
+    df = df.dropna(subset=["날짜"])
+    r0 = df.iloc[0]
+    close = _num(r0["종가"])
+    return {"foreign_bn": round(_num(r0["외국인"]) * close / 1e8, 0),
+            "inst_bn": round(_num(r0["기관"]) * close / 1e8, 0)}
+
+
+def _top_caps_naver(n=15):
+    """폴백 — 네이버 시총 상위 페이지 + 종목별 frgn 수급 근사"""
+    import re
+    import time
+    out = {}
+    for mkt, sosok in (("KOSPI", "0"), ("KOSDAQ", "1")):
+        t = requests.get(f"https://finance.naver.com/sise/sise_market_sum.naver?sosok={sosok}&page=1",
+                         headers={"user-agent": "Mozilla/5.0"}, timeout=15).content.decode("euc-kr", "ignore")
+        rows = re.findall(r'href="/item/main\.naver\?code=(\d{6})"[^>]*>([^<]+)</a>.*?'
+                          r'<td class="number">[\d,]+</td>.*?([+-][\d,]+|0).*?([+-]?[\d.]+)%',
+                          t, re.S)
+        items = [{"code": c, "name": nm.strip(), "change_pct": _num(pct)} for c, nm, _, pct in rows[:n]]
+        for it in items:
+            try:
+                it.update(_naver_stock_flows(it["code"]))
+            except Exception:
+                pass
+            time.sleep(0.2)
+        out[mkt] = items
+    return out
+
+
+def collect_top_caps(today_str, n=15):
+    """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
+
+    pykrx(KRX)가 기본. KRX 인증 이슈로 실패하면 네이버 폴백(수급 없이 등락률만).
+    """
+    out = {}
+    try:
+        from pykrx import stock
+        prev = _prev_trading_day(today_str)
+        out["base_date"] = f"{prev[:4]}-{prev[4:6]}-{prev[6:]}"
+        for mkt in ("KOSPI", "KOSDAQ"):
+            caps = stock.get_market_cap_by_ticker(prev, market=mkt)
+            ohlcv = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
+            top = caps.sort_values("시가총액", ascending=False).head(n)
+            rows = []
+            for code, cap in top.iterrows():
+                row = {
+                    "code": code,
+                    "name": stock.get_market_ticker_name(code),
+                    "mktcap_tr": round(cap["시가총액"] / 1e12, 2),  # 조원
+                    "change_pct": round(float(ohlcv.loc[code, "등락률"]), 2) if code in ohlcv.index else None,
+                }
+                try:  # 종목별 투자자 순매수 거래대금 (원) → 억원
+                    tv = stock.get_market_trading_value_by_date(prev, prev, code)
+                    r0 = tv.iloc[0]
+                    row["foreign_bn"] = round(float(r0["외국인합계"]) / 1e8, 0)
+                    row["inst_bn"] = round(float(r0["기관합계"]) / 1e8, 0)
+                except Exception:
+                    pass
+                rows.append(row)
+            out[mkt] = rows
+        out["unit"] = "foreign_bn/inst_bn=억원 순매수, mktcap_tr=조원"
+    except Exception as e:
+        out["pykrx_error"] = str(e)[:100]
+        try:
+            out.update(_top_caps_naver(n))
+            out["base_date"] = today_str
+            out["note"] = "pykrx 실패 → 네이버 폴백 (수급은 순매매수량×종가 근사, 억원)"
+            out["unit"] = "foreign_bn/inst_bn=억원 순매수(근사)"
+        except Exception as e2:
+            out["fallback_error"] = str(e2)[:100]
+    return out
+
+
+def _get_json(path, timeout=15):
+    return requests.get(f"{WORKER}{path}", timeout=timeout).json()
+
+
+def collect_platform(today_str):
+    """장전 전용 — 넥서스 전략실·섹터맵 요약 (전부 공개 KV 데이터, 탭별 핵심만 압축)"""
+    out = {}
+    try:  # 섹터 ETF RS — 장기 RS 기준 상위/하위 (단기 RS·5일 수익률 동반)
+        scan = _get_json("/data/scan.json")
+        rs = scan.get("sector_etf_rs") or {}
+        rows = sorted([{"sector": k, "etf": v.get("etf_name"), "long_rs": v.get("long_rs"),
+                        "short_rs": v.get("short_rs"), "ret_d5": v.get("ret_d5")}
+                       for k, v in rs.items() if isinstance(v, dict) and v.get("long_rs") is not None],
+                      key=lambda x: -x["long_rs"])
+        out["sector_rs"] = {"top": rows[:3], "bottom": rows[-3:]}
+    except Exception as e:
+        out["sector_rs_error"] = str(e)[:100]
+    try:  # 퀄리티 성장 상위 5
+        qg = (_get_json("/data/quality_growth.json").get("candidates") or [])[:5]
+        out["quality_growth"] = [{"name": c.get("name"), "composite": c.get("composite")} for c in qg]
+    except Exception as e:
+        out["quality_growth_error"] = str(e)[:100]
+    try:  # 눌림목 — 후보 수 + 상위 3
+        cands = _get_json("/data/pullback.json").get("candidates") or []
+        out["pullback"] = {"count": len(cands),
+                           "top": [{"name": c.get("name"), "score": c.get("pullback_score")}
+                                   for c in cands[:3]]}
+    except Exception as e:
+        out["pullback_error"] = str(e)[:100]
+    try:  # 밸류 보드 상위 3
+        vs = (_get_json("/data/value_screen.json").get("candidates") or [])[:3]
+        out["value_screen"] = [{"name": c.get("name")} for c in vs]
+    except Exception as e:
+        out["value_screen_error"] = str(e)[:100]
+    try:  # 모멘텀 원장(웨지팝) — 커버리지 유니버스 요약 (보유 현황은 detector.tracking에 있음)
+        td = _get_json("/data/trade.json")
+        stocks = td.get("stocks") or []
+        out["momentum_ledger"] = {"data_month": td.get("data_month"), "universe_count": len(stocks),
+                                  "sample_names": [s.get("name") for s in stocks[:5] if isinstance(s, dict)]}
+    except Exception as e:
+        out["momentum_ledger_error"] = str(e)[:100]
+    try:  # 실적 캘린더 — 오늘·내일 예정 최대 5건
+        ev = _get_json("/data/earnings_calendar.json").get("events") or []
+        soon = [e for e in ev if e.get("date") and today_str <= e["date"] <=
+                (datetime.strptime(today_str, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")]
+        out["earnings_upcoming"] = [{"name": e.get("name"), "date": e.get("date")} for e in soon[:5]]
+    except Exception as e:
+        out["earnings_error"] = str(e)[:100]
+    return out
+
+
 def collect_detector():
     """감지기·전략 포트폴리오 요약 (KV 데이터) — 우리 플랫폼만의 차별점"""
     out = {}
@@ -236,6 +379,9 @@ def main():
     }
     if mode == "pm":
         data["kr_close"] = collect_kr_close(today_str)
+    else:
+        data["top_caps"] = collect_top_caps(today_str)      # 전일 시총 상위 15 등락률·수급
+        data["platform"] = collect_platform(today_str)      # 전략실·섹터맵 요약
 
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=1), "utf-8")
     print(f"mode={mode} world={len(data['world'])} -> {OUT}")
