@@ -4,7 +4,7 @@
 1. KIND(KRX 공시) → 2023-06-26 이후 상장 종목 목록 + 상장일
 2. finuts.co.kr    → 공모가 (상장일 기준 매핑)
 3. FinanceDataReader → 일봉 OHLCV
-결과: docs/data/ipo_backtest.json (repo 커밋 안 함 — post_ipo_backtest.py가 Worker KV로 게시)
+결과: docs/data/ipo_backtest.json (repo 커밋 안 함 — kv_push.py가 Worker KV로 게시)
 
 주의: finuts는 롤링 윈도우라 옛 종목 공모가가 사이트에서 빠진다. 아래 main()의
 '기존 데이터에서 공모가 보존' 로직이 그 공백을 메우므로, 실행 전 반드시
