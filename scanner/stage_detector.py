@@ -337,12 +337,11 @@ def _detect_bottom_base(df: pd.DataFrame, result: "StageResult", wedge: dict, pa
     이 구간이 통째로 미감지된다. Stage 0은 그 공백을 메우는 '관찰' 라벨이며,
     원장(전략 포트폴리오) 편입에는 쓰지 않는다.
 
-    두 국면으로 나눈다.
-      basing  (바닥 다지기): 깊은 낙폭 + 하락 정지(저점 대비 반등폭 확보)
-      turning (바닥 반등)  : 위 조건 + MA20 상향 전환 + MA5>MA20 + 저점 상승(Higher Low)
-    아직 흘러내리는 중(저점이 곧 현재가)인 종목은 어느 쪽도 아니다 — 그건 하락 지속이다.
+    필수: 깊은 낙폭 + 하락 정지(저점 대비 반등폭) + MA20 상향 전환 + MA5>MA20 + 저점 상승.
+    낙폭만 크고 아직 턴이 안 나온 종목(바닥 다지기)은 유니버스 대부분이라 스크리닝
+    가치가 없어 제외한다 — 감지 대상은 '실제로 돌아선' 종목뿐이다.
     """
-    empty = {"detected": False, "phase": "", "confidence": 0, "signals": [],
+    empty = {"detected": False, "confidence": 0, "signals": [],
              "drawdown_pct": 0.0, "ma20_rising": False}
     if len(df) < 60:
         return empty
@@ -367,40 +366,30 @@ def _detect_bottom_base(df: pd.DataFrame, result: "StageResult", wedge: dict, pa
     short_aligned = result.ma5 > ma20_now > 0 and cur > ma20_now
     meta = {"drawdown_pct": round(drawdown, 1), "ma20_rising": ma20_rising}
 
-    if not (deep_drop and stopped):
+    turning = ma20_rising and short_aligned and wedge.get("higher_low", False)
+    if not (deep_drop and stopped and turning):
         return {**empty, **meta}
 
-    turning = ma20_rising and short_aligned and wedge.get("higher_low", False)
-    signals = [f"고점 대비 {drawdown:.0f}% 낙폭 후 저점 대비 +{result.rise_from_low_pct}% 반등"]
-
-    if turning:
-        conf = 25
-        signals.append("MA20 상향 전환 + 단기 정배열 + 저점 상승")
-        if cur > result.ma60 > 0:
-            conf += 10
-            signals.append("MA60 회복")
-        if result.rise_from_low_pct >= params.get("stage0_rebound_min_pct", 15):
-            conf += 5
-        if wedge.get("vol_dryup", False):
-            conf += 5
-            signals.append("베이스 거래량 마름")
-        if wedge.get("reclaim", False):
-            conf += 5
-            signals.append("10·20 EMA 동시 탈환")
-    else:
-        conf = 10
-        signals.append("하락은 멈췄으나 MA20 상향 전환 미확인 — 턴 대기")
-        if cur > ma20_now > 0:
-            conf += 5
-            signals.append("MA20 위 회복")
-        if wedge.get("higher_low", False):
-            conf += 5
-            signals.append("저점 상승")
+    signals = [
+        f"고점 대비 {drawdown:.0f}% 낙폭 후 저점 대비 +{result.rise_from_low_pct}% 반등",
+        "MA20 상향 전환 + 단기 정배열 + 저점 상승",
+    ]
+    conf = 25
+    if cur > result.ma60 > 0:
+        conf += 10
+        signals.append("MA60 회복")
+    if result.rise_from_low_pct >= params.get("stage0_rebound_min_pct", 15):
+        conf += 5
+    if wedge.get("vol_dryup", False):
+        conf += 5
+        signals.append("베이스 거래량 마름")
+    if wedge.get("reclaim", False):
+        conf += 5
+        signals.append("10·20 EMA 동시 탈환")
 
     # ponytail: 관찰 전용이므로 상한 50 — 편입 컷(70/75)에 절대 닿지 않게 막는다.
     return {
         "detected": True,
-        "phase": "turning" if turning else "basing",
         "confidence": min(conf, 50),
         "signals": signals,
         **meta,
@@ -585,8 +574,7 @@ def analyze_stock(
         result.ma20_rising = bb["ma20_rising"]
         if bb["detected"]:
             result.stage = 0
-            result.stage_label = ("Stage 0 - 바닥 반등 (관찰)" if bb["phase"] == "turning"
-                                  else "Stage 0 - 바닥 다지기 (관찰)")
+            result.stage_label = "Stage 0 - 바닥 반등 (관찰)"
             confidence = bb["confidence"]
             signals = bb["signals"] + signals
         else:
@@ -780,12 +768,10 @@ def _demo():
     assert r0.confidence <= 50, f"관찰 전용 신뢰도 상한 초과: {r0.confidence}"
     assert r0.drawdown_from_high_pct <= -25, r0.drawdown_from_high_pct
 
-    # ── 케이스 1b: 급락 후 하락은 멈췄지만 아직 MA20 상향 전환 전 → '바닥 다지기' ──
+    # ── 케이스 1b: 급락 후 하락은 멈췄지만 MA20 상향 전환 전 → 감지 대상 아님 ──
     stall = list(np.linspace(138, 152, 25)) + list(np.linspace(152, 148, 35))
     r0b = analyze_stock("TEST0B", "바닥권정체주", _demo_df(surge + crash + stall), 40, params)
-    assert r0b.stage == 0, f"바닥 다지기 미감지: {r0b.stage_label}"
-    assert "다지기" in r0b.stage_label, f"국면 오분류: {r0b.stage_label}"
-    assert r0b.confidence < r0.confidence, "턴 미확인 종목이 반등 확인 종목보다 신뢰도가 높음"
+    assert r0b.stage is None, f"턴 미확인 종목이 Stage 0로 잡힘: {r0b.stage_label}"
 
     # ── 케이스 2: 꾸준한 주도주 — Stage 0로 오분류되면 안 됨 ──
     leader = list(np.linspace(100, 300, 300))
