@@ -652,6 +652,34 @@ def _investing_by_code(today: dt.date, enabled: bool = True) -> dict[str, dict]:
 
 # ── 이벤트 생성 ───────────────────────────────────────────────────
 
+def _resolve_consensus(code: str, period: str, year: int, q: int,
+                       naver: dict) -> tuple[dict | None, list[dict]]:
+    """컨센서스 확정 — 네이버 우선, 부재/폐기 시 WISEreport 추정(E) 폴백.
+
+    반환: (채택 컨센서스|None, 게이트 폐기분 목록 — 자기일관 실제치로 사후 복권 후보)
+    """
+    nq = naver.get(period) or {}
+    consensus = None
+    rejected: list[dict] = []
+    if nq and nq.get("consensus"):
+        consensus = {k: nq.get(k) for k in ("revenue", "op", "np")}
+        # 타당성 게이트 — 오염된 컨센서스는 통째로 폐기 (YoY/서프라이즈 오염 방지)
+        if not _consensus_sane(consensus, naver, year, q):
+            logger.warning("컨센서스 폐기(스케일 이상) %s %s: %s", code, period, consensus)
+            rejected.append(consensus)
+            consensus = None
+    # naver 데이터가 아예 없으면 게이트는 형상 검사(op≤1.5×rev)만 수행하게 됨
+    if consensus is None:
+        wise = _wise_quarter_consensus(code, period)
+        if wise:
+            if _consensus_sane(wise, naver, year, q):
+                logger.info("WISE 컨센서스 사용 %s %s: %s", code, period, wise)
+                consensus = wise
+            else:
+                logger.warning("WISE 컨센서스 폐기(스케일 이상) %s %s: %s", code, period, wise)
+                rejected.append(wise)
+    return consensus, rejected
+
 # 작년 공시일 기준 재추정은 +365d가 아니라 +52주 — 365d는 요일이 하루 밀려
 # 작년 금요일 발표가 올해 토요일로 찍힌다. 기업은 날짜가 아니라 요일 기준으로 잡는다.
 _YEAR_52W = dt.timedelta(weeks=52)
@@ -701,27 +729,7 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
     nq = naver.get(period) or {}
     prev = naver.get(f"{year - 1}Q{q}") or {}
 
-    consensus = None
-    cons_rejected: list[dict] = []  # 게이트 폐기분 보관 — 자기일관 실제치로 사후 복권 후보
-    if nq and nq.get("consensus"):
-        consensus = {k: nq.get(k) for k in ("revenue", "op", "np")}
-        # 타당성 게이트 — 오염된 컨센서스는 통째로 폐기 (YoY/서프라이즈 오염 방지)
-        if not _consensus_sane(consensus, naver, year, q):
-            logger.warning("컨센서스 폐기(스케일 이상) %s %s: %s", code, period, consensus)
-            cons_rejected.append(consensus)
-            consensus = None
-
-    # 네이버 컨센서스 부재/폐기 시 WISEreport 분기 추정(E) 폴백 — 동일 타당성 게이트 적용
-    # (naver 데이터가 아예 없으면 게이트는 형상 검사(op≤1.5×rev)만 수행하게 됨)
-    if consensus is None:
-        wise = _wise_quarter_consensus(code, period)
-        if wise:
-            if _consensus_sane(wise, naver, year, q):
-                logger.info("WISE 컨센서스 사용 %s %s: %s", code, period, wise)
-                consensus = wise
-            else:
-                logger.warning("WISE 컨센서스 폐기(스케일 이상) %s %s: %s", code, period, wise)
-                cons_rejected.append(wise)
+    consensus, cons_rejected = _resolve_consensus(code, period, year, q, naver)
 
     actual = None
     src = "추정"
@@ -879,6 +887,47 @@ def _market_event(row: dict, today: dt.date) -> dict:
     }
 
 
+def _fill_market_consensus(events: list[dict]) -> int:
+    """scope:"market" 이벤트에 컨센서스·YoY·서프라이즈 보강 (종목당 네이버 1회 + 필요시 WISE 1회).
+
+    시장 이벤트는 원래 '상세조회 없이 가볍게' 만들어져 컨센서스가 전부 비어 있었다.
+    추적 종목과 같은 소스·같은 타당성 게이트를 쓰되, 종목별 실패는 건너뛴다(fail-soft).
+    """
+    filled = 0
+    targets = [e for e in events if e.get("scope") == "market"]
+    for i, e in enumerate(targets, 1):
+        code, period = e.get("code"), e.get("period") or ""
+        if not code or len(period) != 6:
+            continue
+        year, q = int(period[:4]), int(period[-1])
+        try:
+            naver = _naver_quarter(code)
+            consensus, _ = _resolve_consensus(code, period, year, q, naver)
+        except Exception as ex:
+            logger.warning("시장 컨센서스 보강 실패 %s: %s", code, ex)
+            continue
+        nq = naver.get(period) or {}
+        prev = naver.get(f"{year - 1}Q{q}") or {}
+        # 네이버가 이미 실적으로 표시한 분기 — 잠정공시 원문 파싱이 없었던 건 보강
+        if e.get("actual") is None and nq and not nq.get("consensus"):
+            vals = {k: nq.get(k) for k in ("revenue", "op", "np")}
+            if any(v is not None for v in vals.values()):
+                e["actual"] = vals
+        e["consensus"] = consensus
+        actual = e.get("actual")
+        if actual and consensus:
+            e["surprise"] = {k: _pct(actual.get(k), consensus.get(k)) for k in ("revenue", "op", "np")}
+        ref = actual or consensus
+        if ref and prev:
+            e["yoy"] = {k: _pct(ref.get(k), prev.get(k)) for k in ("revenue", "op", "np")}
+        if consensus or actual:
+            filled += 1
+        if i % 20 == 0:
+            logger.info("시장 컨센서스 보강 %d/%d", i, len(targets))
+    logger.info("시장 이벤트 컨센서스 보강 — %d/%d건 확보", filled, len(targets))
+    return filled
+
+
 def _market_provisional_events(tracked: set[str], today: dt.date) -> list[dict]:
     """시장 전체 최근 잠정실적 공시 → scope:"market" 발표완료 이벤트.
 
@@ -984,6 +1033,11 @@ def build(codes: dict[str, str], use_investing: bool = True) -> dict:
             logger.warning("시장 이벤트 생성 실패 %s: %s", r.get("code"), e)
     if market:
         logger.info("시장 전체(scope:market) 이벤트 %d건 추가", len(market))
+    # 시장 이벤트 컨센서스 보강 — 추적 종목과 동일 소스/게이트 (fail-soft)
+    try:
+        _fill_market_consensus(events)
+    except Exception as e:
+        logger.warning("시장 컨센서스 보강 실패(건너뜀): %s", e)
     return {
         "updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"),
         "dart": bool(DART_KEY),
