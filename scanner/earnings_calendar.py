@@ -929,55 +929,6 @@ def _market_provisional_events(tracked: set[str], today: dt.date) -> list[dict]:
     return out
 
 
-def _us_events(today: dt.date) -> list[dict]:
-    """미국 실적 캘린더 — 나스닥 공식 API (키 불필요, fail-soft).
-
-    https://api.nasdaq.com/api/calendar/earnings?date=YYYY-MM-DD
-    최근 3일~향후 10일 창, 시총 $20B 이상만 (중요도 상/중 근사). country:"US", scope:"market".
-    금액 필드는 원화 스키마와 단위가 달라 consensus/actual은 넣지 않고 eps_est만 참고로 기록.
-    """
-    out: list[dict] = []
-    year, q = _last_quarter(today)
-    headers = {"User-Agent": _NAVER_HEADERS["User-Agent"], "Accept": "application/json"}
-    for off in range(-3, 11):
-        day = today + dt.timedelta(days=off)
-        if day.weekday() >= 5:  # 주말 제외
-            continue
-        url = f"https://api.nasdaq.com/api/calendar/earnings?date={day.isoformat()}"
-        try:
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=15) as r:
-                rows = ((json.loads(r.read().decode()).get("data") or {}).get("rows")) or []
-        except Exception as e:
-            logger.warning("나스닥 캘린더 실패 %s(건너뜀): %s", day, e)
-            continue
-        finally:
-            time.sleep(0.2)
-        for x in rows:
-            mcap = _num(re.sub(r"[^\d.]", "", x.get("marketCap") or ""))
-            if not mcap or mcap < 2e10:  # $20B 미만 제외
-                continue
-            sym = (x.get("symbol") or "").strip()
-            if not sym:
-                continue
-            out.append({
-                "code": sym, "name": (x.get("companyName") or sym).strip()[:40],
-                "period": f"{year}Q{q}",
-                "date": day.isoformat(), "date_kind": "확정" if day >= today else "확정",
-                "status": "발표완료" if day < today else "발표예정",
-                "date_src": "나스닥", "src": "확정", "rcept_no": None,
-                "scope": "market", "country": "US",
-                "concall_date": None, "concall_src": None,
-                "consensus": None, "actual": None, "surprise": None, "yoy": None,
-                "eps_est": (x.get("epsForecast") or None),
-            })
-    out.sort(key=lambda e: (e["date"], e["code"]))
-    if len(out) > 120:
-        out = out[:120]
-    logger.info("미국(나스닥) 이벤트 %d건", len(out))
-    return out
-
-
 def build(codes: dict[str, str], use_investing: bool = True) -> dict:
     today = dt.datetime.now(tz=KST).date()
     _corp_map()  # corp_code·회사명 캐시 선적재 (이름 보강은 첫 이벤트부터 필요)
@@ -1008,11 +959,6 @@ def build(codes: dict[str, str], use_investing: bool = True) -> dict:
             logger.warning("시장 이벤트 생성 실패 %s: %s", r.get("code"), e)
     if market:
         logger.info("시장 전체(scope:market) 이벤트 %d건 추가", len(market))
-    # 미국 실적 (나스닥 API, fail-soft) — country:"US"
-    try:
-        events.extend(_us_events(today))
-    except Exception as e:
-        logger.warning("미국 이벤트 생성 실패(건너뜀): %s", e)
     return {
         "updated": dt.datetime.now(tz=KST).isoformat(timespec="seconds"),
         "dart": bool(DART_KEY),
