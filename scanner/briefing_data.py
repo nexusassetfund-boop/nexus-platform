@@ -271,6 +271,24 @@ def collect_night_futures():
     return asyncio.run(run())
 
 
+def _mark_price_adj(rows, closes, prev_closes, gap_pp=2.0):
+    """권리락(무상증자·액면분할) 표시 — KRX 등락률은 조정 기준가 대비라 단순 종가 비교와 어긋난다.
+
+    2026-08-05 알테오젠: 30% 무상증자 권리락으로 KRX 등락률 +3.75%인데 종가는 347,000→277,000.
+    표시가 없으면 값이 틀린 것처럼 읽히고, 코멘트가 엉뚱한 재료를 갖다 붙인다.
+    closes/prev_closes: 종목코드 → 종가 (전일 / 전전 거래일).
+    """
+    for r in rows:
+        p0 = float(prev_closes.get(r["code"]) or 0)
+        p1 = float(closes.get(r["code"]) or 0)
+        if not p0 or not p1 or r.get("change_pct") is None:
+            continue
+        raw = (p1 / p0 - 1) * 100
+        if abs(raw - r["change_pct"]) >= gap_pp:   # 기준가가 조정된 날
+            r["price_adj"] = True
+            r["raw_change_pct"] = round(raw, 2)    # 조정 전 종가 대비 (참고용)
+
+
 def collect_top_caps(today_str, n=15):
     """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
 
@@ -289,6 +307,11 @@ def collect_top_caps(today_str, n=15):
         from pykrx import stock
         if not prev:
             raise RuntimeError("직전 거래일 산출 실패")
+        # 전전 거래일 종가 — 권리락(무상증자·액면분할) 판별용. 실패해도 표는 그대로 낸다.
+        try:
+            prev2 = _prev_trading_day(f"{prev[:4]}-{prev[4:6]}-{prev[6:]}")
+        except Exception:
+            prev2 = None
         for mkt in ("KOSPI", "KOSDAQ"):
             caps = stock.get_market_cap_by_ticker(prev, market=mkt)
             ohlcv = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
@@ -299,6 +322,12 @@ def collect_top_caps(today_str, n=15):
                 "mktcap_tr": round(cap["시가총액"] / 1e12, 2),  # 조원
                 "change_pct": round(float(ohlcv.loc[code, "등락률"]), 2) if code in ohlcv.index else None,
             } for code, cap in top.iterrows()]
+            if prev2:  # 권리락 판별 실패로 표 전체를 네이버 폴백에 넘기지 않는다
+                try:
+                    _mark_price_adj(out[mkt], ohlcv["종가"],
+                                    stock.get_market_ohlcv_by_ticker(prev2, market=mkt)["종가"])
+                except Exception as e:
+                    out["price_adj_error"] = str(e)[:100]
     except Exception as e:
         out["pykrx_rank_error"] = str(e)[:100]
         try:
