@@ -48,6 +48,25 @@ def test():
     assert not _consensus_sane({"revenue": 300.0, "op": 10.0, "np": 0.0}, only_py, 2026, 2)
     assert _consensus_sane({"revenue": 150.0, "op": 10.0, "np": 0.0}, only_py, 2026, 2)
 
+    # 저베이스 회귀 — 현대리바트(079430) 실측.
+    # 영업이익이 11억으로 작아 QoQ 비율(37/11=3.4배)은 무의미하다. 폐기하면 안 된다.
+    rivart = {
+        "2025Q2": {"revenue": 4099.0, "op": 51.0, "consensus": A},
+        "2025Q3": {"revenue": 3407.0, "op": 37.0, "consensus": A},
+        "2025Q4": {"revenue": 3579.0, "op": -26.0, "consensus": A},
+        "2026Q1": {"revenue": 3559.0, "op": 11.0, "consensus": A},
+    }
+    assert _consensus_sane({"revenue": 3582.0, "op": 37.0, "np": 30.0}, rivart, 2026, 2), \
+        "저마진 기업의 영업이익 비율로 폐기하면 안 된다"
+
+    # 계절성 — Q4 성수기 기업: QoQ는 크게 벗어나도 YoY가 정상이면 통과
+    seasonal = {
+        "2025Q2": {"revenue": 1000.0, "op": 100.0, "consensus": A},
+        "2025Q4": {"revenue": 3000.0, "op": 300.0, "consensus": A},
+        "2026Q1": {"revenue": 900.0, "op": 90.0, "consensus": A},
+    }
+    assert _consensus_sane({"revenue": 1050.0, "op": 105.0, "np": 80.0}, seasonal, 2026, 2)
+
     print("OK: gate passes real hypergrowth, still rejects contamination")
 
 
