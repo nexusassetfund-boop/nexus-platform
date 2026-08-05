@@ -37,7 +37,7 @@
     "vcp_contractions_min": 2,
     "vcp_contraction_threshold": 0.15,
     "stage1_rise_min_pct": 50,
-    "stage0_drawdown_min_pct": 25,
+    "stage0_drawdown_min_pct": 20,
     "stage0_off_low_min_pct": 5,
     "stage0_rebound_min_pct": 15,
     "wedge_vol_surge": 2.0,
