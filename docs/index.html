@@ -220,6 +220,11 @@
       color: #ef4444;
     }
 
+    .modal-inner .badge-s0 {
+      background: rgba(139, 92, 246, .15);
+      color: #8b5cf6;
+    }
+
     .modal-inner .badge-none {
       background: rgba(139, 143, 163, .15);
       color: #8b8fa3;
@@ -450,6 +455,11 @@
           class="filter-btn px-4 py-3 text-sm font-medium text-slate-400 border-b-2 border-transparent -mb-px hover:text-nexus-ink transition-all flex items-center gap-1.5 whitespace-nowrap">
           스테이지 1 상승 <span id="cnt1"
             class="bg-blue-50 text-blue-accent px-1.5 py-0.5 rounded text-[10px] font-bold">0</span>
+        </button>
+        <button data-filter="0" onclick="filterStage(0,this)"
+          class="filter-btn px-4 py-3 text-sm font-medium text-slate-400 border-b-2 border-transparent -mb-px hover:text-nexus-ink transition-all flex items-center gap-1.5 whitespace-nowrap">
+          스테이지 0 바닥 <span id="cnt0"
+            class="bg-violet-50 text-violet-600 px-1.5 py-0.5 rounded text-[10px] font-bold">0</span>
         </button>
         <button data-filter="none" onclick="filterStage('none',this)"
           class="filter-btn px-4 py-3 text-sm font-medium text-slate-400 border-b-2 border-transparent -mb-px hover:text-nexus-ink transition-all whitespace-nowrap">
@@ -758,7 +768,9 @@
       const s1 = results.filter(r => r.stage === 1).length;
       const s2 = results.filter(r => r.stage === 2).length;
       const s3 = results.filter(r => r.stage === 3).length;
-      const none = results.filter(r => !r.stage).length;
+      const s0 = results.filter(r => r.stage === 0).length;
+      const none = results.filter(r => r.stage == null).length;
+      document.getElementById('cnt0').textContent = s0;
       document.getElementById('statTotal').textContent = results.length;
       document.getElementById('statS1').textContent = s1;
       document.getElementById('statS2').textContent = s2;
@@ -792,17 +804,20 @@
           : s === 3 ? 'bg-nexus-bg text-secondary border-secondary/20'
             : s === 2 ? 'bg-amber-50 text-amber-600 border-amber-400/20'
               : s === 1 ? 'bg-blue-50 text-blue-accent border-blue-accent/20'
-                : 'bg-surface-container text-on-surface-variant border-outline-variant/20',
+                : s === 0 ? 'bg-violet-50 text-violet-600 border-violet-400/20'
+                  : 'bg-surface-container text-on-surface-variant border-outline-variant/20',
         rsBar: isClimax ? '#ba1a1a'
           : s === 3 ? '#9d8449'
             : s === 2 ? '#b45309'
               : s === 1 ? '#2d476f'
-                : '#74777f',
+                : s === 0 ? '#8b5cf6'
+                  : '#74777f',
         borderLeft: isClimax ? 'border-l-[3px] border-l-error'
           : s === 3 ? 'border-l-[3px] border-l-secondary'
             : s === 2 ? 'border-l-[3px] border-l-amber-400'
               : s === 1 ? 'border-l-[3px] border-l-blue-accent'
-                : 'border-l-[3px] border-l-transparent',
+                : s === 0 ? 'border-l-[3px] border-l-violet-400'
+                  : 'border-l-[3px] border-l-transparent',
       };
 
       const badgeText = isClimax ? 'CLIMAX' : (r.stage_label || '미분류');
@@ -852,7 +867,7 @@
     function renderTable(results) {
       const tbody = document.getElementById('stockTbody');
       let filtered = results;
-      if (currentFilter === 'none') filtered = results.filter(r => !r.stage);
+      if (currentFilter === 'none') filtered = results.filter(r => r.stage == null);
       else if (currentFilter !== 'all') filtered = results.filter(r => r.stage === currentFilter);
 
       if (filtered.length === 0) {
@@ -927,7 +942,7 @@
     }
 
     function renderDetail(d, container) {
-      const badgeClass = d.climax_warning ? 'badge-climax' : (d.stage ? `badge-s${d.stage}` : 'badge-none');
+      const badgeClass = d.climax_warning ? 'badge-climax' : (d.stage != null ? `badge-s${d.stage}` : 'badge-none');
       const badgeText = d.climax_warning ? 'CLIMAX WARNING' : (d.stage_label || 'N/A');
 
       container.innerHTML = `
@@ -999,6 +1014,7 @@
         ${row('이탈 기준', '고점 대비 ' + (d.suggested_stop_pct || -10) + '% 트레일링 · 종가 < MA60')}
         ${row('적정 비중', (d.position_size_pct || 0) + '%')}
         ${row('저점대비 상승', '+' + (d.rise_from_low_pct || 0) + '%')}
+        ${d.stage === 0 ? row('고점대비 낙폭', (d.drawdown_from_high_pct || 0) + '% · MA20 ' + (d.ma20_rising ? '상향 전환' : '하락')) : ''}
         ${row('스테이지 체류', d.days_in_stage != null ? d.days_in_stage + '일째' : '-')}
         ${d.investor_flow ? row('외국인 순매수', d.investor_flow.foreign_net?.toLocaleString() || '-') : ''}
         ${d.investor_flow ? row('기관 순매수', d.investor_flow.institution_net?.toLocaleString() || '-') : ''}

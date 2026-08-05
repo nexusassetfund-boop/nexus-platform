@@ -1,6 +1,7 @@
 """
 추세추종 스테이지 감지 엔진
 
+Stage 0: 바닥 베이스 — 급락 후 저점 축적·재상승 초입 (관찰 전용, 원장 편입 없음)
 Stage 1: 1차 상승 — MA 정배열 + 저점 대비 50%↑ + RS≥70
 Stage 2: 조정 베이스 — VCP (변동성·거래량 점진 축소)
 Stage 3: 돌파 재상승 — 전고점 돌파 + 거래량 200%↑ (매수 타점)
@@ -25,7 +26,7 @@ from typing import Optional
 class StageResult:
     ticker: str
     name: str = ""
-    stage: Optional[int] = None          # 1, 2, 3 또는 None(해당없음)
+    stage: Optional[int] = None          # 0, 1, 2, 3 또는 None(해당없음)
     stage_label: str = ""                 # "Stage 1 - 1차 상승" 등
     confidence: float = 0.0              # 신뢰도 0~100
 
@@ -54,6 +55,10 @@ class StageResult:
     ma120: float = 0.0
     ma150: float = 0.0
     ma200: float = 0.0
+
+    # Stage 0 지표 (바닥 베이스)
+    drawdown_from_high_pct: float = 0.0  # 120일 고점 대비 낙폭
+    ma20_rising: bool = False            # MA20 상향 전환
 
     # Stage 1 지표
     rise_from_low_pct: float = 0.0       # 60일 저점 대비 상승률
@@ -323,6 +328,85 @@ def _detect_wedge_drop(df: pd.DataFrame, params: dict) -> bool:
     return below_both and heavy_vol
 
 
+def _detect_bottom_base(df: pd.DataFrame, result: "StageResult", wedge: dict, params: dict) -> dict:
+    """
+    Stage 0 — 바닥 베이스 감지 (관찰 전용)
+
+    급등 후 급락한 종목이 저점을 다지고 재상승하는 구간. MTT(가격>MA150·MA200,
+    MA200 상승, RS≥70)는 급락 직후 수개월간 회복이 불가능하므로 Stage 1~3 축으로는
+    이 구간이 통째로 미감지된다. Stage 0은 그 공백을 메우는 '관찰' 라벨이며,
+    원장(전략 포트폴리오) 편입에는 쓰지 않는다.
+
+    두 국면으로 나눈다.
+      basing  (바닥 다지기): 깊은 낙폭 + 하락 정지(저점 대비 반등폭 확보)
+      turning (바닥 반등)  : 위 조건 + MA20 상향 전환 + MA5>MA20 + 저점 상승(Higher Low)
+    아직 흘러내리는 중(저점이 곧 현재가)인 종목은 어느 쪽도 아니다 — 그건 하락 지속이다.
+    """
+    empty = {"detected": False, "phase": "", "confidence": 0, "signals": [],
+             "drawdown_pct": 0.0, "ma20_rising": False}
+    if len(df) < 60:
+        return empty
+
+    closes = df["close"]
+    highs = df["high"].values
+    cur = float(closes.iloc[-1])
+
+    # ── 급락 확인: 120일 고점 대비 낙폭 ──
+    lookback = min(len(highs), 120)
+    prior_high = float(np.max(highs[-lookback:]))
+    drawdown = (cur / prior_high - 1) * 100 if prior_high > 0 else 0.0
+    deep_drop = drawdown <= -params.get("stage0_drawdown_min_pct", 25)
+
+    # ── 하락 정지: 저점에서 일정폭 떨어져 있어야 한다 (아직 신저가면 하락 지속) ──
+    stopped = result.rise_from_low_pct >= params.get("stage0_off_low_min_pct", 5)
+
+    ma20_s = _sma_series(closes, 20)
+    ma20_now = float(ma20_s.iloc[-1])
+    ma20_prev = float(ma20_s.iloc[-11]) if len(ma20_s.dropna()) >= 11 else ma20_now
+    ma20_rising = ma20_now > ma20_prev
+    short_aligned = result.ma5 > ma20_now > 0 and cur > ma20_now
+    meta = {"drawdown_pct": round(drawdown, 1), "ma20_rising": ma20_rising}
+
+    if not (deep_drop and stopped):
+        return {**empty, **meta}
+
+    turning = ma20_rising and short_aligned and wedge.get("higher_low", False)
+    signals = [f"고점 대비 {drawdown:.0f}% 낙폭 후 저점 대비 +{result.rise_from_low_pct}% 반등"]
+
+    if turning:
+        conf = 25
+        signals.append("MA20 상향 전환 + 단기 정배열 + 저점 상승")
+        if cur > result.ma60 > 0:
+            conf += 10
+            signals.append("MA60 회복")
+        if result.rise_from_low_pct >= params.get("stage0_rebound_min_pct", 15):
+            conf += 5
+        if wedge.get("vol_dryup", False):
+            conf += 5
+            signals.append("베이스 거래량 마름")
+        if wedge.get("reclaim", False):
+            conf += 5
+            signals.append("10·20 EMA 동시 탈환")
+    else:
+        conf = 10
+        signals.append("하락은 멈췄으나 MA20 상향 전환 미확인 — 턴 대기")
+        if cur > ma20_now > 0:
+            conf += 5
+            signals.append("MA20 위 회복")
+        if wedge.get("higher_low", False):
+            conf += 5
+            signals.append("저점 상승")
+
+    # ponytail: 관찰 전용이므로 상한 50 — 편입 컷(70/75)에 절대 닿지 않게 막는다.
+    return {
+        "detected": True,
+        "phase": "turning" if turning else "basing",
+        "confidence": min(conf, 50),
+        "signals": signals,
+        **meta,
+    }
+
+
 def _detect_climax(df: pd.DataFrame, params: dict) -> bool:
     """
     클라이맥스 경고 감지
@@ -490,13 +574,31 @@ def analyze_stock(
     confidence = 0
 
     if not result.mtt_pass:
-        # MTT 미충족 → 스테이지 판정 불가
-        result.stage = None
-        result.stage_label = "MTT 미충족"
+        # MTT 미충족 → Stage 1·2·3 진입 자격 없음. 바닥 베이스(Stage 0)만 판정한다.
         if rs_rank < rs_min:
             signals.append(f"RS {rs_rank:.0f} < {rs_min} (약세)")
         if not result.price_above_ma200:
             signals.append("가격 < MA200 (하락 추세)")
+
+        bb = _detect_bottom_base(df, result, wedge, params)
+        result.drawdown_from_high_pct = bb["drawdown_pct"]
+        result.ma20_rising = bb["ma20_rising"]
+        if bb["detected"]:
+            result.stage = 0
+            result.stage_label = ("Stage 0 - 바닥 반등 (관찰)" if bb["phase"] == "turning"
+                                  else "Stage 0 - 바닥 다지기 (관찰)")
+            confidence = bb["confidence"]
+            signals = bb["signals"] + signals
+        else:
+            result.stage = None
+            result.stage_label = "MTT 미충족"
+            confidence = 0
+
+        if result.climax_warning:
+            confidence = max(confidence - 20, 0)
+            signals.append("⚠ 클라이맥스 경고: 과열 징후")
+
+        result.confidence = confidence
         result.signals = signals
         return result
 
@@ -642,3 +744,64 @@ def analyze_stock(
         result.position_size_pct = round(position_value / total_capital * 100, 1)
 
     return result
+
+
+def _demo_df(closes: list, vols: list = None) -> pd.DataFrame:
+    """종가 리스트로 OHLCV 프레임 생성 (자체 점검용)"""
+    n = len(closes)
+    idx = pd.date_range("2025-01-01", periods=n, freq="D")
+    c = np.array(closes, dtype=float)
+    return pd.DataFrame({
+        "open": c * 0.995,
+        "high": c * 1.01,
+        "low": c * 0.99,
+        "close": c,
+        "volume": np.array(vols, dtype=float) if vols else np.full(n, 100_000.0),
+    }, index=idx)
+
+
+def _demo():
+    """
+    자체 점검: 급등→급락→바닥 반등이 Stage 0로 잡히고, 주도주는 종전대로 Stage 1~3.
+    실행: python scanner/stage_detector.py
+    """
+    params = {}
+
+    # ── 케이스 1: 급등(+150%) → 급락(-45%) → 바닥 다지고 재상승 ──
+    surge = list(np.linspace(100, 250, 150))
+    crash = list(np.linspace(250, 138, 60))
+    base = list(np.linspace(138, 134, 20))          # 저점 축적
+    rebound = list(np.linspace(134, 168, 40))       # 재상승
+    vols = [100_000] * 210 + [60_000] * 20 + [140_000] * 40
+    r0 = analyze_stock("TEST0", "급락반등주", _demo_df(surge + crash + base + rebound, vols), 40, params)
+    assert r0.stage == 0, f"바닥 베이스가 Stage 0로 안 잡힘: {r0.stage_label}"
+    assert "반등" in r0.stage_label, f"턴 확인 국면이 아님: {r0.stage_label}"
+    assert not r0.mtt_pass, "이 케이스는 MTT 미충족이 정상"
+    assert r0.confidence <= 50, f"관찰 전용 신뢰도 상한 초과: {r0.confidence}"
+    assert r0.drawdown_from_high_pct <= -25, r0.drawdown_from_high_pct
+
+    # ── 케이스 1b: 급락 후 하락은 멈췄지만 아직 MA20 상향 전환 전 → '바닥 다지기' ──
+    stall = list(np.linspace(138, 152, 25)) + list(np.linspace(152, 148, 35))
+    r0b = analyze_stock("TEST0B", "바닥권정체주", _demo_df(surge + crash + stall), 40, params)
+    assert r0b.stage == 0, f"바닥 다지기 미감지: {r0b.stage_label}"
+    assert "다지기" in r0b.stage_label, f"국면 오분류: {r0b.stage_label}"
+    assert r0b.confidence < r0.confidence, "턴 미확인 종목이 반등 확인 종목보다 신뢰도가 높음"
+
+    # ── 케이스 2: 꾸준한 주도주 — Stage 0로 오분류되면 안 됨 ──
+    leader = list(np.linspace(100, 300, 300))
+    r1 = analyze_stock("TEST1", "주도주", _demo_df(leader), 85, params)
+    assert r1.mtt_pass, "정배열 주도주가 MTT 탈락"
+    assert r1.stage in (1, 2, 3), f"주도주 스테이지 회귀: {r1.stage_label}"
+
+    # ── 케이스 3: 계속 흘러내리는 하락주 — 여전히 미분류 ──
+    falling = list(np.linspace(300, 150, 300))
+    r2 = analyze_stock("TEST2", "하락주", _demo_df(falling), 20, params)
+    assert r2.stage is None, f"하락 지속주가 Stage 0로 오탐: {r2.stage_label}"
+
+    print("OK  stage0:", r0.stage_label, r0.confidence, r0.signals[:2])
+    print("OK  leader:", r1.stage_label, r1.confidence)
+    print("OK  falling:", r2.stage_label)
+
+
+if __name__ == "__main__":
+    _demo()
