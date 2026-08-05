@@ -227,8 +227,8 @@ def collect_night_futures():
     """코스피200 야간선물(CME 연계 KRX 야간시장) 종가 — 장전 전략용.
 
     야간장은 18:00~익일 05:00이므로 07:20 장전 시점엔 직전 밤 세션이 이미 끝나 있다.
-    KIS 선물옵션 시세(FHMIF10000000)로 조회하고, 주간물(101W…)과 CME 야간물(A016…)을
-    함께 담아 어느 쪽이 야간 세션 값인지 브리핑이 판단할 수 있게 한다.
+    KIS 선물옵션 시세(FHMIF10000000, FID_COND_MRKT_DIV_CODE=F)에 CME 연계 야간물 코드
+    (A016… 최근월물)를 넣어 조회한다. 등락은 부호 없이 오므로 prdy_vrss_sign으로 부호를 붙인다.
     수치를 못 얻으면 키를 비워 둔다 — 근사치는 넣지 않는다.
     """
     import asyncio
@@ -243,31 +243,30 @@ def collect_night_futures():
         except Exception as e:
             out["cme_code_error"] = str(e)[:100]
             cme = None
-        for label, code, div in (("cme_night", cme, "F"), ("cme_night_JF", cme, "JF"),
-                                 ("krx_day", "101W09", "F"), ("krx_day_C9", "101C9000", "F")):
-            if not code:
-                continue
+        if cme:
             try:
                 data = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-price",
                                      "FHMIF10000000",
-                                     {"FID_COND_MRKT_DIV_CODE": div, "FID_INPUT_ISCD": code})
-                o = (data or {}).get("output1") or (data or {}).get("output") or {}
-                out[f"_raw_{label}"] = o
+                                     {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": cme})
+                o = (data or {}).get("output1") or {}
+                sign = -1 if str(o.get("prdy_vrss_sign") or "3") in ("4", "5") else 1
                 last = _num(o.get("futs_prpr"))
-                if last is None:
-                    continue
-                out[label] = {
-                    "code": code,
-                    "value": last,
-                    "change": _num(o.get("futs_prdy_vrss")),
-                    "change_pct": _num(o.get("futs_prdy_ctrt")),
-                    "prev_close": _num(o.get("futs_prdy_clpr")),
-                    "basis": _num(o.get("futs_prpr_basis") or o.get("basis")),
-                    "quote_time": o.get("bsop_date") or o.get("stck_bsop_date"),
-                }
+                if last is not None:
+                    out["cme_night"] = {
+                        "code": cme,
+                        "name": o.get("hts_kor_isnm"),
+                        "value": last,
+                        "change": sign * abs(_num(o.get("futs_prdy_vrss")) or 0),
+                        "change_pct": sign * abs(_num(o.get("futs_prdy_ctrt")) or 0),
+                        "prev_close": _num(o.get("futs_prdy_clpr")),
+                        "high": _num(o.get("futs_hgpr")),
+                        "low": _num(o.get("futs_lwpr")),
+                        "basis": _num(o.get("basis")),          # 선물 - 현물
+                        "open_interest": _num(o.get("hts_otst_stpl_qty")),
+                        "volume": _num(o.get("acml_vol")),
+                    }
             except Exception as e:
-                out[f"{label}_error"] = str(e)[:100]
-            await asyncio.sleep(0.15)
+                out["cme_night_error"] = str(e)[:100]
         return out
     return asyncio.run(run())
 
