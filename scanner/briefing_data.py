@@ -206,6 +206,71 @@ def _kis_flows(codes, base_ymd):
     return asyncio.run(run())
 
 
+def _cme_front_month():
+    """CME 연계 야간선물(코스피200) 최근월물 단축코드 — KIS 종목마스터에서 매번 읽는다.
+
+    fo_cme_code.mst: 1행=선물, 2행=스프레드. 선물 첫 행이 최근월물(예: A01609 = 2026-09물).
+    월물 롤오버를 코드에 하드코딩하지 않기 위한 것.
+    """
+    import io
+    import zipfile
+    r = requests.get("https://new.real.download.dws.co.kr/common/master/fo_cme_code.mst.zip",
+                     timeout=20, verify=False)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    for line in z.read(z.namelist()[0]).decode("cp949").splitlines():
+        if line[0:1] == "1":
+            return line[1:10].strip()
+    return None
+
+
+def collect_night_futures():
+    """코스피200 야간선물(CME 연계 KRX 야간시장) 종가 — 장전 전략용.
+
+    야간장은 18:00~익일 05:00이므로 07:20 장전 시점엔 직전 밤 세션이 이미 끝나 있다.
+    KIS 선물옵션 시세(FHMIF10000000, FID_COND_MRKT_DIV_CODE=F)에 CME 연계 야간물 코드
+    (A016… 최근월물)를 넣어 조회한다. 등락은 부호 없이 오므로 prdy_vrss_sign으로 부호를 붙인다.
+    수치를 못 얻으면 키를 비워 둔다 — 근사치는 넣지 않는다.
+    """
+    import asyncio
+    sys.path.insert(0, str(Path(__file__).parent))
+    from data_provider import load_config, kis_get
+
+    async def run():
+        cfg = load_config()
+        out = {}
+        try:
+            cme = _cme_front_month()
+        except Exception as e:
+            out["cme_code_error"] = str(e)[:100]
+            cme = None
+        if cme:
+            try:
+                data = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-price",
+                                     "FHMIF10000000",
+                                     {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": cme})
+                o = (data or {}).get("output1") or {}
+                sign = -1 if str(o.get("prdy_vrss_sign") or "3") in ("4", "5") else 1
+                last = _num(o.get("futs_prpr"))
+                if last is not None:
+                    out["cme_night"] = {
+                        "code": cme,
+                        "name": o.get("hts_kor_isnm"),
+                        "value": last,
+                        "change": sign * abs(_num(o.get("futs_prdy_vrss")) or 0),
+                        "change_pct": sign * abs(_num(o.get("futs_prdy_ctrt")) or 0),
+                        "prev_close": _num(o.get("futs_prdy_clpr")),
+                        "high": _num(o.get("futs_hgpr")),
+                        "low": _num(o.get("futs_lwpr")),
+                        "basis": _num(o.get("basis")),          # 선물 - 현물
+                        "open_interest": _num(o.get("hts_otst_stpl_qty")),
+                        "volume": _num(o.get("acml_vol")),
+                    }
+            except Exception as e:
+                out["cme_night_error"] = str(e)[:100]
+        return out
+    return asyncio.run(run())
+
+
 def collect_top_caps(today_str, n=15):
     """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
 
@@ -416,6 +481,10 @@ def main():
     else:
         data["top_caps"] = collect_top_caps(today_str)      # 전일 시총 상위 15 등락률·수급
         data["platform"] = collect_platform(today_str)      # 전략실·섹터맵 요약
+        try:
+            data["night_futures"] = collect_night_futures()  # 코스피200 야간선물 (장전 전략용)
+        except Exception as e:
+            data["night_futures_error"] = str(e)[:100]
 
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=1), "utf-8")
     print(f"mode={mode} world={len(data['world'])} -> {OUT}")
