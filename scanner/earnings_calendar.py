@@ -536,6 +536,21 @@ def _wise_quarter_consensus(code: str, period: str) -> dict | None:
         return None
 
 
+def _last_actual_quarter(naver: dict, year: int, q: int) -> dict | None:
+    """대상 분기 직전의 '실적'(consensus=False) 분기 — 없으면 None.
+
+    4개 분기까지 거슬러 올라가며 찾는다(직전이 아직 미보고일 수 있으므로).
+    """
+    for back in range(1, 5):
+        yy, qq = year, q - back
+        while qq <= 0:
+            yy, qq = yy - 1, qq + 4
+        v = naver.get(f"{yy}Q{qq}")
+        if v and not v.get("consensus"):
+            return v
+    return None
+
+
 def _consensus_sane(cons: dict, naver: dict, year: int, q: int) -> bool:
     """컨센서스 타당성 게이트 — 통과 못 하면 컨센서스 전체 폐기(재스케일 금지).
 
@@ -553,12 +568,26 @@ def _consensus_sane(cons: dict, naver: dict, year: int, q: int) -> bool:
     # 형상 검사: 영업이익 ≫ 매출액 (지주사 오염 사례 402340: op 99,084 vs rev 3,650)
     if rev is not None and op is not None and rev > 0 and op > rev * 1.5:
         return False
-    # 매출: 전년 동분기 대비 0.4~2.0배 (금융주는 rev None → 생략)
-    if rev is not None and py_rev is not None and py_rev > 0:
+    # 기준점은 '직전 실적 분기'를 우선한다.
+    #   YoY만 보면 실제 급성장을 오염으로 오판한다 — 2026-08 확인: 삼성전자 2026Q2
+    #   컨센 173.9조는 2025Q2(74.6조) 대비 2.33배라 YoY 기준에 걸렸지만,
+    #   직전 실적인 2026Q1(133.9조, DART 정기보고서와 일치) 대비로는 1.30배로 정상이었다.
+    #   오염분은 직전 실적 대비로도 2~4배로 튀므로 QoQ 기준으로 여전히 걸러진다.
+    last = _last_actual_quarter(naver, year, q)
+    if rev is not None and last and last.get("revenue"):
+        base = last["revenue"]
+        if base > 0 and not (0.4 <= rev / base <= 2.5):
+            return False
+    # 직전 실적이 없을 때만 전년 동분기 기준 — 매출 0.4~2.0배 (금융주는 rev None → 생략)
+    elif rev is not None and py_rev is not None and py_rev > 0:
         if not (0.4 <= rev / py_rev <= 2.0):
             return False
     # 영업이익: 0.2~3.0배 — 단 흑→적 전환 전망(op<0)이나 전년 적자/저베이스(마진<3%)는 비율 무의미 → 생략
-    if (op is not None and op > 0 and py_op is not None and py_op > 0
+    # 매출과 같은 이유로 직전 실적 분기를 우선 기준으로 삼는다.
+    if op is not None and op > 0 and last and last.get("op") and last["op"] > 0:
+        if not (0.2 <= op / last["op"] <= 3.0):
+            return False
+    elif (op is not None and op > 0 and py_op is not None and py_op > 0
             and py_rev is not None and py_rev > 0 and py_op / py_rev >= 0.03):
         if not (0.2 <= op / py_op <= 3.0):
             return False
