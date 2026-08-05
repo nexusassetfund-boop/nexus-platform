@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-05 16:33",
+ "updated": "2026-08-05 19:11",
  "snap_date": "2026-08-05",
  "history": [
   {
@@ -596,9 +596,9 @@
   "status": "correction",
   "label": "조정 국면",
   "color": "red",
-  "kospi_close": 6626.18,
-  "ma200": 5776.71,
-  "ma200_ratio_pct": 14.71,
+  "kospi_close": 6598.26,
+  "ma200": 5776.57,
+  "ma200_ratio_pct": 14.22,
   "dist_days": 5,
   "dist_window": 20,
   "base_date": "2026-08-05"
@@ -642,15 +642,9 @@
    "vol_dry_ratio": 0.83,
    "vol_drying": 1,
    "vol_2x_bo": 0,
-   "fwd_year1": "2026/12(E)",
-   "fwd_year2": "2027/12(E)",
-   "per_fwd1": 4.5,
-   "per_fwd2": 3.2,
-   "per_accel": 1,
-   "per_delta_pct": 28.9,
-   "pullback_score": 6,
+   "pullback_score": 5,
    "score_bits": {
-    "per_accel": 1,
+    "per_accel": 0,
     "deep_pullback": 1,
     "base_short": 1,
     "base_tight": 1,
@@ -662,49 +656,6 @@
    "first_seen": "2026-08-05",
    "is_new": 1,
    "days_in_list": 0
-  },
-  {
-   "ticker": "005930",
-   "name": "삼성전자",
-   "sector": "통신 및 방송 장비 제조업",
-   "market": "KOSPI",
-   "pct_3m": -8.4,
-   "pct_6m": 54.4,
-   "pct_12m": 270.5,
-   "rs_kkangto": 93,
-   "per_trailing": 37.24,
-   "market_cap_억": 14381845,
-   "current_price": 246000.0,
-   "w52_high": 362500.0,
-   "proximity_52w": 0.6786,
-   "retrace_pct": 32.1,
-   "pivot": 362500.0,
-   "distance_to_pivot_pct": 47.4,
-   "consolidation_days": 33,
-   "vol_contracting": 0,
-   "vol_dry_ratio": 1.13,
-   "vol_drying": 0,
-   "vol_2x_bo": 0,
-   "fwd_year1": "2026/12(E)",
-   "fwd_year2": "2027/12(E)",
-   "per_fwd1": 5.1,
-   "per_fwd2": 3.7,
-   "per_accel": 1,
-   "per_delta_pct": 27.5,
-   "pullback_score": 5,
-   "score_bits": {
-    "per_accel": 1,
-    "deep_pullback": 1,
-    "base_short": 1,
-    "base_tight": 1,
-    "vcp": 0,
-    "vol_dry": 0,
-    "rs_leader": 1
-   },
-   "rank": 2,
-   "first_seen": "2026-07-24",
-   "is_new": 0,
-   "days_in_list": 12
   },
   {
    "ticker": "041830",
@@ -738,7 +689,7 @@
     "vol_dry": 1,
     "rs_leader": 1
    },
-   "rank": 3,
+   "rank": 2,
    "first_seen": "2026-08-05",
    "is_new": 1,
    "days_in_list": 0
@@ -775,7 +726,7 @@
     "vol_dry": 1,
     "rs_leader": 1
    },
-   "rank": 4,
+   "rank": 3,
    "first_seen": "2026-07-27",
    "is_new": 0,
    "days_in_list": 9
@@ -812,7 +763,7 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 5,
+   "rank": 4,
    "first_seen": "2026-07-24",
    "is_new": 0,
    "days_in_list": 12
@@ -849,7 +800,7 @@
     "vol_dry": 1,
     "rs_leader": 1
    },
-   "rank": 6,
+   "rank": 5,
    "first_seen": "2026-08-05",
    "is_new": 1,
    "days_in_list": 0
@@ -886,7 +837,7 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 7,
+   "rank": 6,
    "first_seen": "2026-07-27",
    "is_new": 0,
    "days_in_list": 9
@@ -921,6 +872,43 @@
     "base_tight": 0,
     "vcp": 0,
     "vol_dry": 1,
+    "rs_leader": 1
+   },
+   "rank": 7,
+   "first_seen": "2026-07-24",
+   "is_new": 0,
+   "days_in_list": 12
+  },
+  {
+   "ticker": "005930",
+   "name": "삼성전자",
+   "sector": "통신 및 방송 장비 제조업",
+   "market": "KOSPI",
+   "pct_3m": -8.4,
+   "pct_6m": 54.4,
+   "pct_12m": 270.5,
+   "rs_kkangto": 93,
+   "per_trailing": 37.24,
+   "market_cap_억": 14381845,
+   "current_price": 246000.0,
+   "w52_high": 362500.0,
+   "proximity_52w": 0.6786,
+   "retrace_pct": 32.1,
+   "pivot": 362500.0,
+   "distance_to_pivot_pct": 47.4,
+   "consolidation_days": 33,
+   "vol_contracting": 0,
+   "vol_dry_ratio": 1.13,
+   "vol_drying": 0,
+   "vol_2x_bo": 0,
+   "pullback_score": 4,
+   "score_bits": {
+    "per_accel": 0,
+    "deep_pullback": 1,
+    "base_short": 1,
+    "base_tight": 1,
+    "vcp": 0,
+    "vol_dry": 0,
     "rs_leader": 1
    },
    "rank": 8,
