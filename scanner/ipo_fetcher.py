@@ -14,7 +14,7 @@
 import io, json, time, re, socket, requests
 import pandas as pd
 import FinanceDataReader as fdr
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 # FDR 네이버 내부 requests에 timeout이 없어 CI에서 행이 걸릴 수 있음 → 전역 소켓 타임아웃
@@ -317,13 +317,27 @@ def match_ipo_price(date_map: dict, ipo_date: str, name: str) -> int | None:
 # 3. 일봉 OHLCV — FinanceDataReader
 # ──────────────────────────────────────────
 
+def last_closed_date() -> str:
+    """마감이 확정된 마지막 날짜 — 16시 이전 실행이면 당일은 미마감이라 어제까지.
+
+    크론은 08:00 KST지만 GitHub 지연이 15~40분 상습이라 09:00 개장 후에 도는 일이
+    잦다. 그때 FDR이 주는 당일 봉은 장중 스냅샷이라, 그대로 저장하면 백테스터가
+    미완성 종가로 매도를 확정해버린다(2026-08-04 사례). newhigh_fetcher와 동일 규칙.
+    """
+    now = datetime.now()  # 워크플로가 TZ=Asia/Seoul 설정
+    return (now if now.hour >= 16 else now - timedelta(days=1)).strftime("%Y-%m-%d")
+
+
 def get_prices(ticker: str, start_date: str) -> list[dict] | None:
     try:
         df = fdr.DataReader(ticker, start=start_date)
         if df is None or df.empty:
             return None
+        cutoff = last_closed_date()
         rows = []
         for dt, r in df.iterrows():
+            if dt.strftime("%Y-%m-%d") > cutoff:  # 미마감 당일 봉 제외
+                continue
             o = int(r.get("Open", 0) or 0)
             h = int(r.get("High", 0) or 0)
             l = int(r.get("Low", 0) or 0)

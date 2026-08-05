@@ -153,14 +153,28 @@ def fetch_details(corp_codes: set[str]):
 # 3. 일봉 — pykrx (KRX) 우선, FDR 폴백
 # ──────────────────────────────────────────
 
+def last_closed_date() -> str:
+    """마감이 확정된 마지막 날짜 — 16시 이전 실행이면 당일은 미마감이라 어제까지.
+
+    크론은 08:20 KST지만 GitHub 지연이 15~40분 상습이라 09:00 개장 후에 도는 일이
+    잦다. 그때 받는 당일 봉은 장중 스냅샷이라, 그대로 저장하면 백테스터가 미완성
+    종가로 권리락 전일 매도를 확정해버린다(2026-08-04 사례). newhigh_fetcher와 동일 규칙.
+    """
+    now = datetime.now()  # 워크플로가 TZ=Asia/Seoul 설정
+    return (now if now.hour >= 16 else now - timedelta(days=1)).strftime("%Y-%m-%d")
+
+
 def get_prices_krx(ticker: str, frm: str, to: str) -> list[dict] | None:
     try:
         from pykrx import stock as krx
         df = krx.get_market_ohlcv(frm.replace("-", ""), to.replace("-", ""), ticker)
         if df is None or df.empty:
             return None
+        cutoff = last_closed_date()
         rows = []
         for dt, r in df.iterrows():
+            if dt.strftime("%Y-%m-%d") > cutoff:  # 미마감 당일 봉 제외
+                continue
             o, h = int(r.get("시가", 0) or 0), int(r.get("고가", 0) or 0)
             l, c = int(r.get("저가", 0) or 0), int(r.get("종가", 0) or 0)
             if o <= 0 or h <= 0 or l <= 0 or c <= 0:  # 거래정지·결측일 제외
@@ -267,8 +281,11 @@ def get_prices_fdr(ticker: str, frm: str, to: str) -> list[dict] | None:
         df = fdr.DataReader(ticker, start=frm, end=to)
         if df is None or df.empty:
             return None
+        cutoff = last_closed_date()
         rows = []
         for dt, r in df.iterrows():
+            if dt.strftime("%Y-%m-%d") > cutoff:  # 미마감 당일 봉 제외
+                continue
             o, h = int(r.get("Open", 0) or 0), int(r.get("High", 0) or 0)
             l, c = int(r.get("Low", 0) or 0), int(r.get("Close", 0) or 0)
             if o <= 0 or h <= 0 or l <= 0 or c <= 0:
