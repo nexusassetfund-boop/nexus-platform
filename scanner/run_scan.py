@@ -1186,7 +1186,11 @@ async def main():
     except Exception:
         pass
     sector_rrg_out = prev_rrg  # 기본: 직전 장마감 좌표·인사이트 유지
-    if sector_closes and (is_close_run or not prev_rrg.get("sectors")):
+    # 대표 ETF 교체·섹터 추가 직후엔 장중이라도 재계산 — 안 그러면 마감 전까지 옛 유니버스가 그대로 보인다.
+    # (compute_rrg는 확정 금요일 종가만 쓰므로 장중 실행에도 좌표는 결정론적)
+    universe_changed = ({k: (v or {}).get("etf") for k, v in (prev_rrg.get("sectors") or {}).items()}
+                        != {k: code for k, (code, _n, _c) in sector_closes.items()})
+    if sector_closes and (is_close_run or not prev_rrg.get("sectors") or universe_changed):
         # 장마감 확정 실행 또는 부트스트랩(직전 rrg 없음 — 이때도 확정 종가 기준이라 결정론적)
         try:
             sector_rrg_out = _compute_sector_rrg(sector_closes)
