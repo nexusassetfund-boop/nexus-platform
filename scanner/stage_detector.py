@@ -388,6 +388,9 @@ def _detect_bottom_base(df: pd.DataFrame, result: "StageResult", wedge: dict, pa
         signals.append("10·20 EMA 동시 탈환")
 
     # ponytail: 관찰 전용이므로 상한 50 — 편입 컷(70/75)에 절대 닿지 않게 막는다.
+    # 백테스트(신호 3,328건, 341종목, 2018-06~2026-05) 결론: 같은 날 급락군 대비
+    # 백분위 순위 0.498(H=60)·0.503(H=20) = 동전던지기. 매수 근거로 쓰지 말 것.
+    signals.append("백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)")
     return {
         "detected": True,
         "confidence": min(conf, 50),
@@ -574,7 +577,7 @@ def analyze_stock(
         result.ma20_rising = bb["ma20_rising"]
         if bb["detected"]:
             result.stage = 0
-            result.stage_label = "Stage 0 - 바닥 반등 (관찰)"
+            result.stage_label = "Stage 0 - 바닥 반등 (관찰·알파 미검증)"
             confidence = bb["confidence"]
             signals = bb["signals"] + signals
         else:
