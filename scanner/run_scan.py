@@ -55,7 +55,7 @@ RS_PERIODS = [("q1", 63, 0.4), ("q2", 126, 0.2), ("q3", 189, 0.2), ("q4", 252, 0
 SECTOR_ETFS = {
     "semiconductor": ("091160", "KODEX 반도체"),
     "robotics": ("0148J0", "TIGER 코리아휴머노이드로봇산업"),
-    "it-service-sw": ("157490", "TIGER 소프트웨어"),
+    "it-service-sw": ("0105D0", "SOL 한국AI소프트웨어"),
     "auto-mobility": ("091180", "KODEX 자동차"),
     "energy": ("377990", "TIGER Fn신재생에너지"),
     "finance": ("139270", "TIGER 200 금융"),
@@ -64,23 +64,34 @@ SECTOR_ETFS = {
     "battery-renewable": ("305720", "KODEX 2차전지산업"),
     "bio-healthcare": ("143860", "TIGER 헬스케어"),
     "shipbuilding-shipping": ("466920", "SOL 조선TOP3플러스"),
-    "telecom": ("098560", "TIGER 방송통신"),
+    "telecom": ("315270", "TIGER 200커뮤니케이션서비스"),
     "construction-realestate": ("117700", "KODEX 건설"),
-    "media-ent-game": ("364990", "TIGER 미디어컨텐츠"),
-    "retail-fashion-beauty": ("228790", "TIGER 화장품"),
+    "media-ent-game": ("475050", "ACE KPOP포커스"),
+    "game": ("364990", "TIGER 게임TOP10"),
+    "retail-fashion-beauty": ("479850", "HANARO K-뷰티"),
     "chem-materials": ("117460", "KODEX 에너지화학"),
-    "food-agri-fishery": ("266410", "KODEX 필수소비재"),
+    "food-agri-fishery": ("438900", "HANARO Fn K-푸드"),
     "machinery-industrial": ("102960", "KODEX 기계장비"),
     "transport-logistics": ("140710", "KODEX 운송"),
     "travel-leisure": ("228800", "TIGER 여행레저"),
     "holdings-company": ("307520", "TIGER 지주회사"),
-    "nuclear": ("433500", "ACE 원자력TOP10"),
+    "nuclear": ("0091P0", "TIGER 코리아원자력"),
     "banks": ("091170", "KODEX 은행"),
     "securities": ("102970", "KODEX 증권"),
+    "semicon-front": ("475300", "SOL 반도체전공정"),
+    "semicon-back": ("475310", "SOL 반도체후공정"),
+    "power-equipment": ("487240", "KODEX AI전력핵심설비"),
+    "insurance": ("140700", "KODEX 보험"),
 }
 
 # sector_map.json에 없는 RRG 전용 섹터의 표시 이름 (금융 하위는 세분 표시용)
-RRG_EXTRA_NAMES = {"nuclear": "원전·원자력", "banks": "은행", "securities": "증권"}
+RRG_EXTRA_NAMES = {
+    "nuclear": "원전·원자력", "banks": "은행", "securities": "증권",
+    "game": "게임", "semicon-front": "반도체 전공정", "semicon-back": "반도체 후공정",
+    "power-equipment": "전력기기", "insurance": "보험",
+    # 게임 분리 후 개칭 — sector_map.json의 "미디어·엔터·게임"을 덮어씀
+    "media-ent-game": "미디어·엔터",
+}
 
 # 신규 상장 ETF의 최소 이력 예외 (기본 150거래일)
 # robotics: 0148J0 상장 2026-01-06 — RS 산출에 필요한 m3(63일)만 넘으면 편입
