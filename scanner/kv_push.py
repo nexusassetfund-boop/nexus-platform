@@ -65,7 +65,9 @@ def main():
     body = json.dumps({"files": {name: data}}, ensure_ascii=False).encode("utf-8")
     req = urllib.request.Request(
         f"{WORKER}/api/push", data=body, method="POST",
-        headers={"authorization": f"Bearer {token}", "content-type": "application/json"})
+        # user-agent 필수 — Python-urllib 기본 UA는 Cloudflare가 403으로 차단한다
+        headers={"authorization": f"Bearer {token}", "content-type": "application/json",
+                 "user-agent": "nexus-scanner"})
     try:
         with urllib.request.urlopen(req, timeout=a.timeout) as resp:
             print(f"POST /api/push -> {resp.status} {resp.read()[:200].decode('utf-8', 'replace')}")

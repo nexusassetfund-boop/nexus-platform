@@ -141,7 +141,9 @@ def publish() -> int:
     req = urllib.request.Request(
         f"{WORKER}/api/push",
         data=json.dumps({"files": {"trade_report.json": doc}}, ensure_ascii=False).encode(),
-        headers={"authorization": f"Bearer {token}", "content-type": "application/json"},
+        # user-agent 필수 — Python-urllib 기본 UA는 Cloudflare가 403으로 차단한다
+        headers={"authorization": f"Bearer {token}", "content-type": "application/json",
+                 "user-agent": "nexus-scanner"},
         method="POST")
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
