@@ -1,6 +1,6 @@
 {
  "schema_version": 2,
- "scan_time": "2026-08-05T23:16:21+09:00",
+ "scan_time": "2026-08-06T01:32:47+09:00",
  "universe_size": 350,
  "scanned": 350,
  "kospi": {
@@ -12,7 +12,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-05T23:16:21+09:00"
+  "updated": "2026-08-06T01:32:47+09:00"
  },
  "sector_etf_rs": {
   "semiconductor": {
@@ -2774,7 +2774,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 52.0,
    "ema10": 89496.0247355242,
-   "ema20": 85926.40988662711,
+   "ema20": 85926.40988662718,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -2811,7 +2811,7 @@
    "off_high": -6.8,
    "ret_1w": 13.0,
    "ret_1m": 18.6,
-   "days_in_stage": 9
+   "days_in_stage": 10
   },
   {
    "ticker": "483650",
@@ -2841,7 +2841,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.1,
    "ema10": 234192.6803848064,
-   "ema20": 230021.25248172312,
+   "ema20": 230021.25248170827,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -2878,13 +2878,13 @@
    "off_high": -15.8,
    "ret_1w": -12.5,
    "ret_1m": 0.9,
-   "days_in_stage": 13
+   "days_in_stage": 14
   },
   {
    "ticker": "035420",
    "name": "NAVER",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": true,
@@ -2892,7 +2892,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 70.6,
-   "rs_momentum": -1.4,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "자료처리, 호스팅, 포털 및 기타 인터넷 정보매개 서비스업",
    "sector_rs": 0.0,
@@ -2908,7 +2908,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 25.0,
    "ema10": 212075.09506641692,
-   "ema20": 207835.67222561355,
+   "ema20": 207835.67222559112,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -2938,6 +2938,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "가격 < MA200 (하락 추세)"
    ],
    "change_pct": 1.1,
@@ -2946,13 +2947,13 @@
    "off_high": -24.7,
    "ret_1w": 13.6,
    "ret_1m": 16.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "008930",
    "name": "한미사이언스",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": true,
@@ -2976,7 +2977,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 54.6,
    "ema10": 36291.964505574906,
-   "ema20": 34723.22192922221,
+   "ema20": 34723.2219292166,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3005,7 +3006,8 @@
     "고점 대비 -27% 낙폭 후 저점 대비 +54.6% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
-    "10·20 EMA 동시 탈환"
+    "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)"
    ],
    "change_pct": 2.93,
    "high52": 55500,
@@ -3013,13 +3015,13 @@
    "off_high": -27.3,
    "ret_1w": 20.3,
    "ret_1m": 27.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "002790",
    "name": "아모레퍼시픽홀딩스",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3043,7 +3045,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 27.6,
    "ema10": 25187.08894462709,
-   "ema20": 24685.936225833197,
+   "ema20": 24685.936225832073,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3073,6 +3075,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 66 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3082,13 +3085,13 @@
    "off_high": -27.4,
    "ret_1w": 7.6,
    "ret_1m": 4.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "006040",
    "name": "동원산업",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3096,7 +3099,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 52.8,
-   "rs_momentum": 1.8,
+   "rs_momentum": -1.2,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -3112,7 +3115,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 20.5,
    "ema10": 35323.16615592144,
-   "ema20": 34724.60700668385,
+   "ema20": 34724.60700668788,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3142,6 +3145,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 53 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3151,13 +3155,13 @@
    "off_high": -29.7,
    "ret_1w": 5.1,
    "ret_1m": 2.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "009240",
    "name": "한샘",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3165,8 +3169,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 58.2,
-   "rs_momentum": -1.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "생활용품 도매업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -3181,7 +3185,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 35.4,
    "ema10": 38050.45866697963,
-   "ema20": 37014.140830816825,
+   "ema20": 37014.140830816585,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3211,6 +3215,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 58 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3220,13 +3225,13 @@
    "off_high": -29.5,
    "ret_1w": 2.7,
    "ret_1m": 10.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "014820",
    "name": "동원시스템즈",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3234,7 +3239,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 33.2,
-   "rs_momentum": 1.2,
+   "rs_momentum": 0.2,
    "rs_new_high": true,
    "sector": "플라스틱제품 제조업",
    "sector_rs": 0.0,
@@ -3250,7 +3255,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 19.7,
    "ema10": 20423.95002564969,
-   "ema20": 20113.796005221135,
+   "ema20": 20113.796005221582,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3280,6 +3285,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 33 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3289,13 +3295,13 @@
    "off_high": -31.6,
    "ret_1w": 11.4,
    "ret_1m": 9.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "251970",
    "name": "펌텍코리아",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": true,
@@ -3303,7 +3309,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 61.3,
-   "rs_momentum": 0.3,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "플라스틱제품 제조업",
    "sector_rs": 0.0,
@@ -3319,7 +3325,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 43.6,
    "ema10": 45978.52484163907,
-   "ema20": 44289.00880186064,
+   "ema20": 44289.00880185997,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3349,6 +3355,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 61 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3358,13 +3365,13 @@
    "off_high": -39.3,
    "ret_1w": -6.4,
    "ret_1m": 0.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "194480",
    "name": "데브시스터즈",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 45,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3388,7 +3395,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 53.2,
    "ema10": 18191.229437865484,
-   "ema20": 17427.335746395474,
+   "ema20": 17427.33574640333,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3418,6 +3425,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 25 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3427,13 +3435,13 @@
    "off_high": -65.4,
    "ret_1w": 26.5,
    "ret_1m": 19.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000240",
    "name": "한국앤컴퍼니",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 40,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3457,7 +3465,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.6,
    "ema10": 25026.76814828187,
-   "ema20": 24975.041253407344,
+   "ema20": 24975.04125340941,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3487,6 +3495,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "가격 < MA200 (하락 추세)"
    ],
    "change_pct": 1.6,
@@ -3495,13 +3504,13 @@
    "off_high": -30.2,
    "ret_1w": 4.5,
    "ret_1m": -2.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "268280",
    "name": "미원에스씨",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 40,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3525,7 +3534,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 20.7,
    "ema10": 117250.97558717849,
-   "ema20": 114691.9845103611,
+   "ema20": 114691.98451035997,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -3554,6 +3563,7 @@
     "고점 대비 -21% 낙폭 후 저점 대비 +20.7% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 58 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3563,13 +3573,13 @@
    "off_high": -23.6,
    "ret_1w": -3.9,
    "ret_1m": 7.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "095660",
    "name": "네오위즈",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 40,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3577,7 +3587,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 35.2,
-   "rs_momentum": 1.2,
+   "rs_momentum": 0.2,
    "rs_new_high": true,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -3593,7 +3603,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 14.9,
    "ema10": 18370.908965573588,
-   "ema20": 18208.946928694393,
+   "ema20": 18208.946928693826,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3623,6 +3633,7 @@
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 35 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3632,13 +3643,13 @@
    "off_high": -40.5,
    "ret_1w": 6.4,
    "ret_1m": 1.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "069080",
    "name": "웹젠",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 40,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3646,7 +3657,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 54.7,
-   "rs_momentum": -1.3,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -3662,7 +3673,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 21.0,
    "ema10": 11884.953954355016,
-   "ema20": 11800.692329321419,
+   "ema20": 11800.692329321171,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -3691,6 +3702,7 @@
     "고점 대비 -23% 낙폭 후 저점 대비 +21.0% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "MA60 회복",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 55 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3700,13 +3712,13 @@
    "off_high": -34.3,
    "ret_1w": 0.7,
    "ret_1m": 0.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "035720",
    "name": "카카오",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 35,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3714,8 +3726,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 25.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "자료처리, 호스팅, 포털 및 기타 인터넷 정보매개 서비스업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -3730,7 +3742,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 15.1,
    "ema10": 36881.600728401834,
-   "ema20": 36484.67622787047,
+   "ema20": 36484.67622786733,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3759,6 +3771,7 @@
     "고점 대비 -41% 낙폭 후 저점 대비 +15.1% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 25 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3768,13 +3781,13 @@
    "off_high": -45.3,
    "ret_1w": 8.1,
    "ret_1m": 7.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "047050",
    "name": "포스코인터내셔널",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 35,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3782,7 +3795,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 38.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "상품 중개업",
    "sector_rs": 0.0,
@@ -3798,7 +3811,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 19.2,
    "ema10": 52481.80956687029,
-   "ema20": 52366.793563729516,
+   "ema20": 52366.7935637293,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3827,6 +3840,7 @@
     "고점 대비 -40% 낙폭 후 저점 대비 +19.2% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 39 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3836,13 +3850,13 @@
    "off_high": -40.4,
    "ret_1w": 12.0,
    "ret_1m": 9.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "298020",
    "name": "효성티앤씨",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 35,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3850,7 +3864,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 57.0,
-   "rs_momentum": 0.0,
+   "rs_momentum": -1.0,
    "rs_new_high": false,
    "sector": "화학섬유 제조업",
    "sector_rs": 0.0,
@@ -3866,7 +3880,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 25.2,
    "ema10": 311959.15017083054,
-   "ema20": 306566.65588409273,
+   "ema20": 306566.655884132,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3895,6 +3909,7 @@
     "고점 대비 -41% 낙폭 후 저점 대비 +25.2% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 57 < 70 (약세)"
    ],
    "change_pct": 2.96,
@@ -3903,13 +3918,13 @@
    "off_high": -40.8,
    "ret_1w": 15.2,
    "ret_1m": 18.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "437730",
    "name": "삼현",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 35,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3917,7 +3932,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 59.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": -2.1,
    "rs_new_high": false,
    "sector": "자동차 신품 부품 제조업",
    "sector_rs": 0.0,
@@ -3933,7 +3948,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 45.3,
    "ema10": 35983.94214994677,
-   "ema20": 35429.416472083714,
+   "ema20": 35429.41647208306,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -3962,6 +3977,7 @@
     "고점 대비 -42% 낙폭 후 저점 대비 +45.3% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 60 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -3971,13 +3987,13 @@
    "off_high": -49.7,
    "ret_1w": 12.8,
    "ret_1m": 16.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "036620",
    "name": "감성코퍼레이션",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 35,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -3985,7 +4001,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 20.1,
-   "rs_momentum": 0.1,
+   "rs_momentum": -0.9,
    "rs_new_high": false,
    "sector": "기타 전문 도매업",
    "sector_rs": 0.0,
@@ -4030,6 +4046,7 @@
     "고점 대비 -46% 낙폭 후 저점 대비 +16.6% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 20 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4039,13 +4056,13 @@
    "off_high": -45.6,
    "ret_1w": 5.5,
    "ret_1m": -2.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "086280",
    "name": "현대글로비스",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4053,7 +4070,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 77.4,
-   "rs_momentum": 0.4,
+   "rs_momentum": -0.6,
    "rs_new_high": false,
    "sector": "기타 운송관련 서비스업",
    "sector_rs": 0.0,
@@ -4069,7 +4086,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.9,
    "ema10": 198318.7523151735,
-   "ema20": 197009.9572181493,
+   "ema20": 197009.957218154,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4098,6 +4115,7 @@
     "고점 대비 -30% 낙폭 후 저점 대비 +13.9% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "가격 < MA200 (하락 추세)"
    ],
    "change_pct": 2.75,
@@ -4106,13 +4124,13 @@
    "off_high": -30.6,
    "ret_1w": 9.1,
    "ret_1m": 4.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "032640",
    "name": "LG유플러스",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4136,7 +4154,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 6.6,
    "ema10": 14811.482568140957,
-   "ema20": 14752.047229126509,
+   "ema20": 14752.047229126665,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4165,6 +4183,7 @@
     "고점 대비 -21% 낙폭 후 저점 대비 +6.6% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "가격 < MA200 (하락 추세)"
    ],
    "change_pct": -0.07,
@@ -4173,13 +4192,13 @@
    "off_high": -20.6,
    "ret_1w": 3.5,
    "ret_1m": -0.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000100",
    "name": "유한양행",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4203,7 +4222,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.1,
    "ema10": 73061.47044649994,
-   "ema20": 72341.76673482824,
+   "ema20": 72341.76673483205,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4232,6 +4251,7 @@
     "고점 대비 -34% 낙폭 후 저점 대비 +13.1% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 31 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4241,13 +4261,13 @@
    "off_high": -41.9,
    "ret_1w": 6.8,
    "ret_1m": 6.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "251270",
    "name": "넷마블",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4255,7 +4275,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 27.5,
-   "rs_momentum": -2.5,
+   "rs_momentum": 0.5,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -4271,7 +4291,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 8.7,
    "ema10": 37755.56962694386,
-   "ema20": 37635.1048957698,
+   "ema20": 37635.10489576822,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4300,6 +4320,7 @@
     "고점 대비 -36% 낙폭 후 저점 대비 +8.7% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 28 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4309,13 +4330,13 @@
    "off_high": -45.0,
    "ret_1w": 5.6,
    "ret_1m": -3.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "097950",
    "name": "CJ제일제당",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4323,7 +4344,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 51.6,
-   "rs_momentum": -1.4,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
@@ -4339,7 +4360,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 11.3,
    "ema10": 192272.7662188071,
-   "ema20": 191583.34017001142,
+   "ema20": 191583.34017003834,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4368,6 +4389,7 @@
     "고점 대비 -22% 낙폭 후 저점 대비 +11.3% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 52 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4377,13 +4399,13 @@
    "off_high": -22.2,
    "ret_1w": 3.6,
    "ret_1m": -1.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "007310",
    "name": "오뚜기",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4391,8 +4413,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 53.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -4407,7 +4429,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.7,
    "ema10": 320254.4981039528,
-   "ema20": 318270.5516353225,
+   "ema20": 318270.5516353427,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4436,6 +4458,7 @@
     "고점 대비 -22% 낙폭 후 저점 대비 +9.7% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 53 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4445,13 +4468,13 @@
    "off_high": -31.2,
    "ret_1w": 1.4,
    "ret_1m": 0.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "003240",
    "name": "태광산업",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4475,7 +4498,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.7,
    "ema10": 868113.4726362012,
-   "ema20": 864058.1889870116,
+   "ema20": 864058.18898696,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4504,6 +4527,7 @@
     "고점 대비 -45% 낙폭 후 저점 대비 +13.7% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 62 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4513,13 +4537,13 @@
    "off_high": -44.7,
    "ret_1w": 11.3,
    "ret_1m": 4.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "004000",
    "name": "롯데정밀화학",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4527,7 +4551,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 55.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -4543,7 +4567,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.7,
    "ema10": 45369.23866010882,
-   "ema20": 45427.9180832628,
+   "ema20": 45427.91808326448,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4572,6 +4596,7 @@
     "고점 대비 -35% 낙폭 후 저점 대비 +10.7% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 56 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4581,13 +4606,13 @@
    "off_high": -34.5,
    "ret_1w": 9.6,
    "ret_1m": 4.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "001680",
    "name": "대상",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4595,7 +4620,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 46.8,
-   "rs_momentum": 0.8,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
@@ -4611,7 +4636,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.8,
    "ema10": 17672.2983708776,
-   "ema20": 17618.3611039339,
+   "ema20": 17618.361103934014,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4640,6 +4665,7 @@
     "고점 대비 -27% 낙폭 후 저점 대비 +10.8% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 47 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4649,13 +4675,13 @@
    "off_high": -28.3,
    "ret_1w": -1.0,
    "ret_1m": -1.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "225570",
    "name": "넥슨게임즈",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 30,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4663,7 +4689,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 25.8,
-   "rs_momentum": 0.8,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -4679,7 +4705,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.8,
    "ema10": 8901.656732454167,
-   "ema20": 8833.020142911797,
+   "ema20": 8833.020142913705,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -4708,6 +4734,7 @@
     "고점 대비 -30% 낙폭 후 저점 대비 +13.8% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
     "10·20 EMA 동시 탈환",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 26 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4717,13 +4744,13 @@
    "off_high": -41.6,
    "ret_1w": 3.2,
    "ret_1m": 0.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "377300",
    "name": "카카오페이",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 25,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4731,8 +4758,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 19.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "금융 지원 서비스업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -4747,7 +4774,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.9,
    "ema10": 41924.83966717166,
-   "ema20": 41630.5213498181,
+   "ema20": 41630.52134981967,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -4775,6 +4802,7 @@
    "signals": [
     "고점 대비 -43% 낙폭 후 저점 대비 +10.9% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 19 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4784,13 +4812,13 @@
    "off_high": -47.5,
    "ret_1w": 5.6,
    "ret_1m": 5.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "036460",
    "name": "한국가스공사",
    "stage": 0,
-   "stage_label": "Stage 0 - 바닥 반등 (관찰)",
+   "stage_label": "Stage 0 - 바닥 반등 (관찰·알파 미검증)",
    "confidence": 25,
    "mtt_pass": false,
    "price_above_ma150": false,
@@ -4814,7 +4842,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 7.1,
    "ema10": 33973.08283452927,
-   "ema20": 33743.130308495696,
+   "ema20": 33743.13030849558,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -4842,6 +4870,7 @@
    "signals": [
     "고점 대비 -26% 낙폭 후 저점 대비 +7.1% 반등",
     "MA20 상향 전환 + 단기 정배열 + 저점 상승",
+    "백테스트 3,328건: 같은날 급락군 내 순위 0.50 — 무작위 급락주와 구별 불가(알파 미검증)",
     "RS 48 < 70 (약세)",
     "가격 < MA200 (하락 추세)"
    ],
@@ -4851,7 +4880,7 @@
    "off_high": -26.1,
    "ret_1w": 1.6,
    "ret_1m": 2.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005930",
@@ -4865,8 +4894,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 93.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "통신 및 방송 장비 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -4881,7 +4910,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 18.8,
    "ema10": 243135.50081972746,
-   "ema20": 255559.53721218664,
+   "ema20": 255559.53721218795,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -4909,6 +4938,7 @@
    "signals": [
     "MTT 통과",
     "RS 93 — 최상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 2.5,
@@ -4917,7 +4947,7 @@
    "off_high": -34.3,
    "ret_1w": 18.0,
    "ret_1m": -16.9,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "000660",
@@ -4947,7 +4977,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.2,
    "ema10": 1652433.6094459603,
-   "ema20": 1792913.0908138962,
+   "ema20": 1792913.0908138813,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -4984,7 +5014,7 @@
    "off_high": -44.2,
    "ret_1w": 19.1,
    "ret_1m": -24.2,
-   "days_in_stage": 30
+   "days_in_stage": 31
   },
   {
    "ticker": "402340",
@@ -5014,7 +5044,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 40.1,
    "ema10": 1060864.0142092318,
-   "ema20": 1146932.7272195162,
+   "ema20": 1146932.7272194964,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -5050,7 +5080,7 @@
    "off_high": -48.9,
    "ret_1w": 31.6,
    "ret_1m": -17.5,
-   "days_in_stage": 29
+   "days_in_stage": 30
   },
   {
    "ticker": "009150",
@@ -5080,7 +5110,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 54.3,
    "ema10": 1223055.9594328527,
-   "ema20": 1326325.8016302788,
+   "ema20": 1326325.8016302774,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -5117,7 +5147,7 @@
    "off_high": -43.9,
    "ret_1w": 31.8,
    "ret_1m": -17.7,
-   "days_in_stage": 29
+   "days_in_stage": 30
   },
   {
    "ticker": "105560",
@@ -5147,7 +5177,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.3,
    "ema10": 169623.7416517128,
-   "ema20": 169721.64749283396,
+   "ema20": 169721.64749284004,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -5183,7 +5213,7 @@
    "off_high": -12.2,
    "ret_1w": 6.6,
    "ret_1m": -1.4,
-   "days_in_stage": 8
+   "days_in_stage": 9
   },
   {
    "ticker": "032830",
@@ -5197,7 +5227,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 93.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": -0.1,
    "rs_new_high": false,
    "sector": "보험업",
    "sector_rs": 0.0,
@@ -5213,7 +5243,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.4,
    "ema10": 295582.795094808,
-   "ema20": 313986.95784098253,
+   "ema20": 313986.95784097665,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -5249,7 +5279,7 @@
    "off_high": -43.1,
    "ret_1w": 10.7,
    "ret_1m": -21.6,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "028260",
@@ -5279,7 +5309,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.7,
    "ema10": 333307.3005995402,
-   "ema20": 351015.12647665816,
+   "ema20": 351015.126476651,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -5316,7 +5346,7 @@
    "off_high": -38.5,
    "ret_1w": 21.7,
    "ret_1m": -18.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "055550",
@@ -5346,7 +5376,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 13.1,
    "ema10": 102585.12281031658,
-   "ema20": 102823.42660923016,
+   "ema20": 102823.426609229,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -5383,7 +5413,7 @@
    "off_high": -8.6,
    "ret_1w": 5.4,
    "ret_1m": -4.6,
-   "days_in_stage": 12
+   "days_in_stage": 13
   },
   {
    "ticker": "012330",
@@ -5413,7 +5443,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.3,
    "ema10": 480266.17831401277,
-   "ema20": 486883.2551929193,
+   "ema20": 486883.2551929394,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -5450,7 +5480,7 @@
    "off_high": -38.8,
    "ret_1w": 13.0,
    "ret_1m": 1.6,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "068270",
@@ -5464,8 +5494,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 79.1,
-   "rs_momentum": -0.9,
-   "rs_new_high": false,
+   "rs_momentum": 0.1,
+   "rs_new_high": true,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -5480,7 +5510,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.4,
    "ema10": 183078.09578701004,
-   "ema20": 179966.59435382526,
+   "ema20": 179966.59435384345,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -5507,6 +5537,7 @@
    "scan_date": "2026-08-05",
    "signals": [
     "MTT 통과",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 2.42,
@@ -5515,7 +5546,7 @@
    "off_high": -20.5,
    "ret_1w": 5.7,
    "ret_1m": 6.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "034730",
@@ -5545,7 +5576,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.0,
    "ema10": 551488.2781806996,
-   "ema20": 579716.9884935912,
+   "ema20": 579716.9884935674,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -5582,7 +5613,7 @@
    "off_high": -36.4,
    "ret_1w": 14.9,
    "ret_1m": -10.2,
-   "days_in_stage": 29
+   "days_in_stage": 30
   },
   {
    "ticker": "086790",
@@ -5612,7 +5643,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.2,
    "ema10": 127351.62452730877,
-   "ema20": 127112.28054278839,
+   "ema20": 127112.2805427814,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -5648,7 +5679,7 @@
    "off_high": -9.8,
    "ret_1w": 6.8,
    "ret_1m": 1.3,
-   "days_in_stage": 7
+   "days_in_stage": 8
   },
   {
    "ticker": "010120",
@@ -5678,7 +5709,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 41.1,
    "ema10": 191052.3542985067,
-   "ema20": 195405.80690446723,
+   "ema20": 195405.8069044621,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -5714,7 +5745,7 @@
    "off_high": -36.7,
    "ret_1w": 29.4,
    "ret_1m": 2.9,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "000810",
@@ -5780,7 +5811,7 @@
    "off_high": -15.9,
    "ret_1w": 8.5,
    "ret_1m": -6.6,
-   "days_in_stage": 13
+   "days_in_stage": 14
   },
   {
    "ticker": "066570",
@@ -5810,7 +5841,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.3,
    "ema10": 167409.8871392623,
-   "ema20": 174500.81586811904,
+   "ema20": 174500.8158681208,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -5847,7 +5878,7 @@
    "off_high": -59.0,
    "ret_1w": 19.3,
    "ret_1m": -5.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "298040",
@@ -5861,8 +5892,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 74.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "전동기, 발전기 및 전기 변환 · 공급 · 제어 장치 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -5877,7 +5908,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 57.6,
    "ema10": 2569992.467960228,
-   "ema20": 2676036.6317565953,
+   "ema20": 2676036.63175667,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -5904,6 +5935,7 @@
    "scan_date": "2026-08-05",
    "signals": [
     "MTT 통과",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 12.43,
@@ -5912,7 +5944,7 @@
    "off_high": -37.1,
    "ret_1w": 48.8,
    "ret_1m": 2.9,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "316140",
@@ -5942,7 +5974,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.6,
    "ema10": 32602.363240068302,
-   "ema20": 31955.848025228304,
+   "ema20": 31955.848025228643,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -5978,7 +6010,7 @@
    "off_high": -19.6,
    "ret_1w": 4.1,
    "ret_1m": 5.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "000150",
@@ -5992,7 +6024,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 76.6,
-   "rs_momentum": -1.4,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -6008,7 +6040,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 40.0,
    "ema10": 1184207.8695268324,
-   "ema20": 1224275.8434348889,
+   "ema20": 1224275.8434348176,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6043,7 +6075,7 @@
    "off_high": -49.4,
    "ret_1w": 26.1,
    "ret_1m": -4.5,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "017670",
@@ -6073,7 +6105,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 18.9,
    "ema10": 87479.04823222646,
-   "ema20": 88187.30656038335,
+   "ema20": 88187.30656038424,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6109,7 +6141,7 @@
    "off_high": -33.3,
    "ret_1w": 18.3,
    "ret_1m": 9.2,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "033780",
@@ -6123,8 +6155,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 86.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "담배 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -6139,7 +6171,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.3,
    "ema10": 178463.5179797323,
-   "ema20": 178329.10175245145,
+   "ema20": 178329.10175245817,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -6167,6 +6199,7 @@
    "signals": [
     "MTT 통과",
     "RS 86 — 상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 0.23,
@@ -6175,7 +6208,7 @@
    "off_high": -8.5,
    "ret_1w": -3.6,
    "ret_1m": -4.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "079550",
@@ -6189,7 +6222,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 82.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": 0.8,
    "rs_new_high": false,
    "sector": "무기 및 총포탄 제조업",
    "sector_rs": 0.0,
@@ -6205,7 +6238,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.7,
    "ema10": 727132.2355329673,
-   "ema20": 727800.4050588866,
+   "ema20": 727800.405058853,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6241,7 +6274,7 @@
    "off_high": -28.6,
    "ret_1w": 28.7,
    "ret_1m": -0.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "018260",
@@ -6271,7 +6304,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 39.9,
    "ema10": 210088.3060184796,
-   "ema20": 206432.35732092423,
+   "ema20": 206432.3573209166,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6307,7 +6340,7 @@
    "off_high": -40.7,
    "ret_1w": 16.8,
    "ret_1m": 12.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "003550",
@@ -6337,7 +6370,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 15.8,
    "ema10": 100152.02362188997,
-   "ema20": 100088.45135708511,
+   "ema20": 100088.45135708332,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6374,7 +6407,7 @@
    "off_high": -42.5,
    "ret_1w": 15.8,
    "ret_1m": 4.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "010950",
@@ -6404,7 +6437,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.4,
    "ema10": 129021.09838656249,
-   "ema20": 129344.99164418723,
+   "ema20": 129344.99164418812,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -6441,7 +6474,7 @@
    "off_high": -30.8,
    "ret_1w": -3.1,
    "ret_1m": -3.8,
-   "days_in_stage": 5
+   "days_in_stage": 6
   },
   {
    "ticker": "278470",
@@ -6471,7 +6504,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 13.5,
    "ema10": 347140.5548114552,
-   "ema20": 356052.1521625171,
+   "ema20": 356052.1521624999,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6507,7 +6540,7 @@
    "off_high": -24.4,
    "ret_1w": 10.0,
    "ret_1m": -12.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "011070",
@@ -6521,7 +6554,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 94.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -6537,7 +6570,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 41.7,
    "ema10": 557617.0735058923,
-   "ema20": 626722.3904468127,
+   "ema20": 626722.3904468184,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -6573,7 +6606,7 @@
    "off_high": -66.4,
    "ret_1w": 31.2,
    "ret_1m": -26.2,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "003490",
@@ -6603,7 +6636,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 13.0,
    "ema10": 25980.55296128261,
-   "ema20": 26157.889987817307,
+   "ema20": 26157.88998781844,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6640,7 +6673,7 @@
    "off_high": -13.8,
    "ret_1w": 8.5,
    "ret_1m": -7.7,
-   "days_in_stage": 27
+   "days_in_stage": 28
   },
   {
    "ticker": "028050",
@@ -6707,7 +6740,7 @@
    "off_high": -27.0,
    "ret_1w": 23.5,
    "ret_1m": 3.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "006260",
@@ -6721,7 +6754,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 72.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -6737,7 +6770,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 47.2,
    "ema10": 288048.67596043285,
-   "ema20": 299367.0845535344,
+   "ema20": 299367.08455347933,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6773,7 +6806,7 @@
    "off_high": -45.5,
    "ret_1w": 35.1,
    "ret_1m": -3.5,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "161390",
@@ -6803,7 +6836,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.6,
    "ema10": 68072.45187067242,
-   "ema20": 68524.94856611427,
+   "ema20": 68524.94856611674,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -6839,7 +6872,7 @@
    "off_high": -13.6,
    "ret_1w": 2.7,
    "ret_1m": -8.6,
-   "days_in_stage": 7
+   "days_in_stage": 8
   },
   {
    "ticker": "180640",
@@ -6869,7 +6902,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.7,
    "ema10": 115142.24739213107,
-   "ema20": 115172.64413511725,
+   "ema20": 115172.6441351148,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6905,7 +6938,7 @@
    "off_high": -30.4,
    "ret_1w": 10.1,
    "ret_1m": -8.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "090430",
@@ -6935,7 +6968,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.5,
    "ema10": 127151.59615052608,
-   "ema20": 123573.1370237143,
+   "ema20": 123573.13702371226,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -6971,7 +7004,7 @@
    "off_high": -22.3,
    "ret_1w": 7.7,
    "ret_1m": 3.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "241560",
@@ -7001,7 +7034,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.6,
    "ema10": 61810.655961971686,
-   "ema20": 62166.49840929248,
+   "ema20": 62166.49840929024,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7036,7 +7069,7 @@
    "off_high": -19.3,
    "ret_1w": 10.1,
    "ret_1m": -0.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "267270",
@@ -7050,8 +7083,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 76.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -7066,7 +7099,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.8,
    "ema10": 128327.36271344399,
-   "ema20": 127981.97285425846,
+   "ema20": 127981.9728542843,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7093,6 +7126,7 @@
    "scan_date": "2026-08-05",
    "signals": [
     "MTT 통과",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 11.64,
@@ -7101,7 +7135,7 @@
    "off_high": -34.8,
    "ret_1w": 19.9,
    "ret_1m": 12.5,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "271560",
@@ -7115,8 +7149,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 81.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -7131,7 +7165,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 4.4,
    "ema10": 131861.1669177967,
-   "ema20": 131918.2283461783,
+   "ema20": 131918.22834619356,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -7159,6 +7193,7 @@
    "signals": [
     "MTT 통과",
     "RS 81 — 상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": -1.81,
@@ -7167,7 +7202,7 @@
    "off_high": -13.2,
    "ret_1w": -3.5,
    "ret_1m": -6.6,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "175330",
@@ -7181,7 +7216,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 84.8,
-   "rs_momentum": 0.8,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -7197,7 +7232,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.7,
    "ema10": 27041.02581768363,
-   "ema20": 26774.275138107987,
+   "ema20": 26774.275138109784,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7233,7 +7268,7 @@
    "off_high": -27.8,
    "ret_1w": 5.9,
    "ret_1m": -0.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "010060",
@@ -7263,7 +7298,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 44.6,
    "ema10": 209039.74198299253,
-   "ema20": 209449.6053598938,
+   "ema20": 209449.6053598974,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7300,7 +7335,7 @@
    "off_high": -40.6,
    "ret_1w": 44.6,
    "ret_1m": 24.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "111770",
@@ -7330,7 +7365,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 25.3,
    "ema10": 87810.97382189188,
-   "ema20": 86246.08929884937,
+   "ema20": 86246.0892988469,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7367,7 +7402,7 @@
    "off_high": -14.5,
    "ret_1w": 0.7,
    "ret_1m": 5.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "028670",
@@ -7397,7 +7432,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.9,
    "ema10": 5326.66129471822,
-   "ema20": 5224.152920404535,
+   "ema20": 5224.152920404524,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7433,7 +7468,7 @@
    "off_high": -11.2,
    "ret_1w": 18.1,
    "ret_1m": 15.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "001450",
@@ -7463,7 +7498,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.9,
    "ema10": 37629.34118217733,
-   "ema20": 37593.55915109658,
+   "ema20": 37593.55915109558,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -7500,7 +7535,7 @@
    "off_high": -17.1,
    "ret_1w": -0.5,
    "ret_1m": -2.3,
-   "days_in_stage": 1
+   "days_in_stage": 2
   },
   {
    "ticker": "009420",
@@ -7530,7 +7565,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.2,
    "ema10": 48051.62194285849,
-   "ema20": 49454.14338875345,
+   "ema20": 49454.14338875435,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7567,7 +7602,7 @@
    "off_high": -27.3,
    "ret_1w": 27.3,
    "ret_1m": -11.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "375500",
@@ -7581,8 +7616,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 80.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "토목 건설업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -7597,7 +7632,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.3,
    "ema10": 62346.81586747187,
-   "ema20": 62380.08964668843,
+   "ema20": 62380.08964668596,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7625,6 +7660,7 @@
    "signals": [
     "MTT 통과",
     "RS 80 — 상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 7.42,
@@ -7633,7 +7669,7 @@
    "off_high": -33.5,
    "ret_1w": 35.3,
    "ret_1m": 9.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "081660",
@@ -7647,8 +7683,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 84.5,
-   "rs_momentum": -0.5,
-   "rs_new_high": false,
+   "rs_momentum": 0.5,
+   "rs_new_high": true,
    "sector": "생활용품 도매업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -7663,7 +7699,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.0,
    "ema10": 44660.47536219805,
-   "ema20": 44659.27453529718,
+   "ema20": 44659.27453530257,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -7691,6 +7727,7 @@
    "signals": [
     "MTT 통과",
     "RS 84 — 상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": -0.79,
@@ -7699,7 +7736,7 @@
    "off_high": -21.1,
    "ret_1w": -0.6,
    "ret_1m": -4.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "161890",
@@ -7729,7 +7766,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 32.2,
    "ema10": 99693.31914714277,
-   "ema20": 100288.88418464105,
+   "ema20": 100288.88418463971,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7765,7 +7802,7 @@
    "off_high": -17.9,
    "ret_1w": 5.0,
    "ret_1m": -11.1,
-   "days_in_stage": 14
+   "days_in_stage": 15
   },
   {
    "ticker": "007340",
@@ -7795,7 +7832,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.1,
    "ema10": 40772.37512273571,
-   "ema20": 39722.94950884258,
+   "ema20": 39722.94950884347,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7832,7 +7869,7 @@
    "off_high": -14.4,
    "ret_1w": 31.6,
    "ret_1m": 26.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "007070",
@@ -7862,7 +7899,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 15.6,
    "ema10": 24898.091173348883,
-   "ema20": 24936.095496861646,
+   "ema20": 24936.095496862163,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -7898,7 +7935,7 @@
    "off_high": -17.2,
    "ret_1w": 1.0,
    "ret_1m": -3.9,
-   "days_in_stage": 8
+   "days_in_stage": 9
   },
   {
    "ticker": "073240",
@@ -7912,8 +7949,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 94.5,
-   "rs_momentum": -0.5,
-   "rs_new_high": false,
+   "rs_momentum": 0.5,
+   "rs_new_high": true,
    "sector": "고무제품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -7928,7 +7965,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 71.4,
    "ema10": 6630.656524486264,
-   "ema20": 6334.121860960158,
+   "ema20": 6334.121860960517,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -7956,6 +7993,7 @@
    "signals": [
     "MTT 통과",
     "RS 94 — 최상위 강세",
+    "RS 신고점",
     "MA 정배열 아님"
    ],
    "change_pct": 5.73,
@@ -7964,7 +8002,7 @@
    "off_high": -5.9,
    "ret_1w": 31.8,
    "ret_1m": 16.6,
-   "days_in_stage": 22
+   "days_in_stage": 23
   },
   {
    "ticker": "001800",
@@ -7978,7 +8016,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 87.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -7994,7 +8032,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 12.1,
    "ema10": 25541.56933648087,
-   "ema20": 25524.455624516733,
+   "ema20": 25524.45562451662,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -8030,7 +8068,7 @@
    "off_high": -13.7,
    "ret_1w": 3.0,
    "ret_1m": -1.9,
-   "days_in_stage": 7
+   "days_in_stage": 8
   },
   {
    "ticker": "192080",
@@ -8044,7 +8082,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 83.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -8060,7 +8098,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 10.7,
    "ema10": 60600.8014315731,
-   "ema20": 61162.18582709709,
+   "ema20": 61162.185827098,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8096,7 +8134,7 @@
    "off_high": -20.4,
    "ret_1w": 4.1,
    "ret_1m": -8.6,
-   "days_in_stage": 26
+   "days_in_stage": 27
   },
   {
    "ticker": "000210",
@@ -8110,7 +8148,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 71.2,
-   "rs_momentum": -1.8,
+   "rs_momentum": -0.8,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -8126,7 +8164,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.4,
    "ema10": 47127.44056973608,
-   "ema20": 46740.50659526924,
+   "ema20": 46740.50659526566,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -8161,7 +8199,7 @@
    "off_high": -34.1,
    "ret_1w": 24.4,
    "ret_1m": 13.1,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "036930",
@@ -8191,7 +8229,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 45.4,
    "ema10": 137819.34899635488,
-   "ema20": 151317.32035554427,
+   "ema20": 151317.32035554457,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8228,7 +8266,7 @@
    "off_high": -49.5,
    "ret_1w": 23.1,
    "ret_1m": -18.6,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "319660",
@@ -8258,7 +8296,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 40.9,
    "ema10": 133103.4856067958,
-   "ema20": 144639.54865747158,
+   "ema20": 144639.5486574715,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8295,7 +8333,7 @@
    "off_high": -41.8,
    "ret_1w": 11.1,
    "ret_1m": -21.1,
-   "days_in_stage": 14
+   "days_in_stage": 15
   },
   {
    "ticker": "222800",
@@ -8325,7 +8363,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 61.4,
    "ema10": 90816.53622009236,
-   "ema20": 96530.41942185813,
+   "ema20": 96530.41942185568,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -8361,7 +8399,7 @@
    "off_high": -37.3,
    "ret_1w": 50.1,
    "ret_1m": -5.0,
-   "days_in_stage": 28
+   "days_in_stage": 29
   },
   {
    "ticker": "095610",
@@ -8391,7 +8429,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.0,
    "ema10": 134815.41935268856,
-   "ema20": 145089.20416291239,
+   "ema20": 145089.20416291215,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8427,7 +8465,7 @@
    "off_high": -42.5,
    "ret_1w": 19.0,
    "ret_1m": -6.2,
-   "days_in_stage": 13
+   "days_in_stage": 14
   },
   {
    "ticker": "080220",
@@ -8457,7 +8495,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 50.7,
    "ema10": 68913.95435327232,
-   "ema20": 73933.34995469762,
+   "ema20": 73933.34995469905,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -8494,7 +8532,7 @@
    "off_high": -45.3,
    "ret_1w": 37.0,
    "ret_1m": -8.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "058610",
@@ -8524,7 +8562,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 74.0,
    "ema10": 92110.4209176,
-   "ema20": 85626.09443705934,
+   "ema20": 85626.09443705864,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -8561,7 +8599,7 @@
    "off_high": -34.3,
    "ret_1w": 33.1,
    "ret_1m": 52.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "031980",
@@ -8591,7 +8629,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.5,
    "ema10": 103266.4765114109,
-   "ema20": 111472.14196685431,
+   "ema20": 111472.14196685275,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8627,7 +8665,7 @@
    "off_high": -39.5,
    "ret_1w": 27.4,
    "ret_1m": -18.0,
-   "days_in_stage": 13
+   "days_in_stage": 14
   },
   {
    "ticker": "131290",
@@ -8657,7 +8695,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 39.6,
    "ema10": 197472.57385110506,
-   "ema20": 211389.4511195049,
+   "ema20": 211389.45111950435,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8693,7 +8731,7 @@
    "off_high": -31.8,
    "ret_1w": 27.3,
    "ret_1m": -14.1,
-   "days_in_stage": 12
+   "days_in_stage": 13
   },
   {
    "ticker": "098460",
@@ -8723,7 +8761,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 37.5,
    "ema10": 27420.70229494617,
-   "ema20": 27460.232700501583,
+   "ema20": 27460.23270050138,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -8759,7 +8797,7 @@
    "off_high": -31.1,
    "ret_1w": 36.3,
    "ret_1m": 14.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "089970",
@@ -8789,7 +8827,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.8,
    "ema10": 69417.70395655511,
-   "ema20": 76723.3860268346,
+   "ema20": 76723.38602683469,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8825,7 +8863,7 @@
    "off_high": -44.1,
    "ret_1w": 19.4,
    "ret_1m": -21.8,
-   "days_in_stage": 14
+   "days_in_stage": 15
   },
   {
    "ticker": "420770",
@@ -8855,7 +8893,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 38.2,
    "ema10": 114542.4743537518,
-   "ema20": 124700.12380476971,
+   "ema20": 124700.12380476984,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -8892,7 +8930,7 @@
    "off_high": -43.5,
    "ret_1w": 26.5,
    "ret_1m": -16.9,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "096530",
@@ -8922,7 +8960,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.5,
    "ema10": 27183.747400716205,
-   "ema20": 27431.341636554098,
+   "ema20": 27431.34163655455,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -8959,7 +8997,7 @@
    "off_high": -13.7,
    "ret_1w": 10.2,
    "ret_1m": -4.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "241710",
@@ -8973,7 +9011,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 86.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": 0.8,
    "rs_new_high": false,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
@@ -8989,7 +9027,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.5,
    "ema10": 82713.70058171457,
-   "ema20": 81413.58433413498,
+   "ema20": 81413.58433413724,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9025,7 +9063,7 @@
    "off_high": -18.6,
    "ret_1w": 5.1,
    "ret_1m": 2.6,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "005380",
@@ -9039,7 +9077,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 70.3,
-   "rs_momentum": 0.3,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "자동차용 엔진 및 자동차 제조업",
    "sector_rs": 0.0,
@@ -9055,7 +9093,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 15.2,
    "ema10": 394099.8551183304,
-   "ema20": 416818.0860202641,
+   "ema20": 416818.086020272,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -9089,7 +9127,7 @@
    "off_high": -48.3,
    "ret_1w": 14.4,
    "ret_1m": -15.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "373220",
@@ -9103,7 +9141,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 29.8,
-   "rs_momentum": 1.8,
+   "rs_momentum": 0.8,
    "rs_new_high": false,
    "sector": "일차전지 및 이차전지 제조업",
    "sector_rs": 0.0,
@@ -9119,7 +9157,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.6,
    "ema10": 325567.028868331,
-   "ema20": 331034.57619394263,
+   "ema20": 331034.57619395375,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -9154,7 +9192,7 @@
    "off_high": -36.3,
    "ret_1w": 11.6,
    "ret_1m": 1.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "207940",
@@ -9184,7 +9222,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 20.0,
    "ema10": 1470191.402770623,
-   "ema20": 1446594.3764015827,
+   "ema20": 1446594.3764016025,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9219,7 +9257,7 @@
    "off_high": -25.0,
    "ret_1w": 0.8,
    "ret_1m": 4.9,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "012450",
@@ -9233,7 +9271,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 44.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": 0.8,
    "rs_new_high": false,
    "sector": "항공기,우주선 및 부품 제조업",
    "sector_rs": 0.0,
@@ -9249,7 +9287,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.3,
    "ema10": 938546.3065415833,
-   "ema20": 952230.8781742958,
+   "ema20": 952230.8781742508,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9284,7 +9322,7 @@
    "off_high": -39.2,
    "ret_1w": 24.3,
    "ret_1m": -10.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "329180",
@@ -9298,7 +9336,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 56.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 2.7,
    "rs_new_high": false,
    "sector": "선박 및 보트 건조업",
    "sector_rs": 0.0,
@@ -9314,7 +9352,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.3,
    "ema10": 479265.05435665435,
-   "ema20": 493734.01694017486,
+   "ema20": 493734.01694014575,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -9349,7 +9387,7 @@
    "off_high": -33.5,
    "ret_1w": 17.3,
    "ret_1m": -7.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000270",
@@ -9379,7 +9417,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 10.5,
    "ema10": 131533.49250552262,
-   "ema20": 136035.99462680123,
+   "ema20": 136035.99462680414,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -9413,7 +9451,7 @@
    "off_high": -37.4,
    "ret_1w": 10.5,
    "ret_1m": -13.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "034020",
@@ -9427,7 +9465,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 31.5,
-   "rs_momentum": -0.5,
+   "rs_momentum": 0.5,
    "rs_new_high": false,
    "sector": "일반 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -9443,7 +9481,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.9,
    "ema10": 69939.02498676411,
-   "ema20": 72286.10206278448,
+   "ema20": 72286.10206278248,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9478,7 +9516,7 @@
    "off_high": -44.7,
    "ret_1w": 26.6,
    "ret_1m": -5.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "006400",
@@ -9492,7 +9530,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 65.5,
-   "rs_momentum": 1.5,
+   "rs_momentum": 0.5,
    "rs_new_high": false,
    "sector": "일차전지 및 이차전지 제조업",
    "sector_rs": 0.0,
@@ -9508,7 +9546,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.7,
    "ema10": 408280.10061445204,
-   "ema20": 422246.40156592824,
+   "ema20": 422246.40156593005,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -9542,7 +9580,7 @@
    "off_high": -40.7,
    "ret_1w": 17.9,
    "ret_1m": -3.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "042660",
@@ -9572,7 +9610,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.2,
    "ema10": 85499.83083653534,
-   "ema20": 87586.71728235023,
+   "ema20": 87586.71728234527,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9607,7 +9645,7 @@
    "off_high": -40.6,
    "ret_1w": 23.2,
    "ret_1m": 2.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "009540",
@@ -9621,8 +9659,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 65.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -9637,7 +9675,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 21.1,
    "ema10": 370728.36239433795,
-   "ema20": 365831.7719451146,
+   "ema20": 365831.77194506733,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9672,7 +9710,7 @@
    "off_high": -19.9,
    "ret_1w": 18.2,
    "ret_1m": 9.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "267260",
@@ -9686,7 +9724,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 38.0,
-   "rs_momentum": 1.0,
+   "rs_momentum": 0.0,
    "rs_new_high": true,
    "sector": "전동기, 발전기 및 전기 변환 · 공급 · 제어 장치 제조업",
    "sector_rs": 0.0,
@@ -9702,7 +9740,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 32.4,
    "ema10": 722549.3390336545,
-   "ema20": 768465.090383437,
+   "ema20": 768465.0903833911,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -9737,7 +9775,7 @@
    "off_high": -46.0,
    "ret_1w": 31.7,
    "ret_1m": -14.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005490",
@@ -9767,7 +9805,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.9,
    "ema10": 308914.4383883147,
-   "ema20": 312553.58784300217,
+   "ema20": 312553.5878430292,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9802,7 +9840,7 @@
    "off_high": -41.5,
    "ret_1w": 9.9,
    "ret_1m": 0.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "015760",
@@ -9832,7 +9870,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 8.2,
    "ema10": 34742.4111435016,
-   "ema20": 35083.80667020004,
+   "ema20": 35083.806670195554,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9867,7 +9905,7 @@
    "off_high": -48.6,
    "ret_1w": 7.9,
    "ret_1m": -6.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "010130",
@@ -9881,7 +9919,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 31.8,
-   "rs_momentum": -2.2,
+   "rs_momentum": -1.2,
    "rs_new_high": false,
    "sector": "1차 비철금속 제조업",
    "sector_rs": 0.0,
@@ -9897,7 +9935,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 18.6,
    "ema10": 1019091.5353280811,
-   "ema20": 1030295.2716833977,
+   "ema20": 1030295.2716834223,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9932,7 +9970,7 @@
    "off_high": -50.0,
    "ret_1w": 18.6,
    "ret_1m": 0.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "011200",
@@ -9946,7 +9984,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 75.5,
-   "rs_momentum": 0.5,
+   "rs_momentum": -0.5,
    "rs_new_high": false,
    "sector": "해상 운송업",
    "sector_rs": 0.0,
@@ -9962,7 +10000,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 15.2,
    "ema10": 20742.80136191562,
-   "ema20": 20440.91636850593,
+   "ema20": 20440.916368506045,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -9994,7 +10032,7 @@
    "off_high": -15.4,
    "ret_1w": 4.2,
    "ret_1m": 7.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "138040",
@@ -10024,7 +10062,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 19.7,
    "ema10": 119960.40129818514,
-   "ema20": 117803.16390572027,
+   "ema20": 117803.16390572187,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -10056,7 +10094,7 @@
    "off_high": -19.6,
    "ret_1w": 2.4,
    "ret_1m": 5.2,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "042700",
@@ -10070,7 +10108,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 59.0,
-   "rs_momentum": 1.0,
+   "rs_momentum": 0.0,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -10086,7 +10124,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.7,
    "ema10": 202221.4906492799,
-   "ema20": 212308.61000685467,
+   "ema20": 212308.61000684838,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10121,7 +10159,7 @@
    "off_high": -50.9,
    "ret_1w": 24.7,
    "ret_1m": -0.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "096770",
@@ -10135,7 +10173,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": true,
    "rs_rank": 46.0,
-   "rs_momentum": 2.0,
+   "rs_momentum": 1.0,
    "rs_new_high": true,
    "sector": "석유 정제품 제조업",
    "sector_rs": 0.0,
@@ -10151,7 +10189,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 22.0,
    "ema10": 112480.8964364722,
-   "ema20": 111916.78206542236,
+   "ema20": 111916.78206540261,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10186,7 +10224,7 @@
    "off_high": -29.7,
    "ret_1w": -0.3,
    "ret_1m": 5.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "010140",
@@ -10216,7 +10254,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.4,
    "ema10": 21514.839155627553,
-   "ema20": 21975.424336124976,
+   "ema20": 21975.424336124437,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -10251,7 +10289,7 @@
    "off_high": -37.2,
    "ret_1w": 14.4,
    "ret_1m": -1.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "006800",
@@ -10281,7 +10319,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.6,
    "ema10": 34740.73814979289,
-   "ema20": 37007.70192675618,
+   "ema20": 37007.7019267554,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10316,7 +10354,7 @@
    "off_high": -59.9,
    "ret_1w": 14.7,
    "ret_1m": -17.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "051910",
@@ -10330,7 +10368,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 17.0,
-   "rs_momentum": 0.0,
+   "rs_momentum": -1.0,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -10346,7 +10384,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.9,
    "ema10": 253057.8535022688,
-   "ema20": 259944.0270816906,
+   "ema20": 259944.02708171526,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10381,7 +10419,7 @@
    "off_high": -41.6,
    "ret_1w": 9.9,
    "ret_1m": -3.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "267250",
@@ -10411,7 +10449,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 16.7,
    "ema10": 205426.89677743224,
-   "ema20": 206680.64525177772,
+   "ema20": 206680.6452517662,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -10446,7 +10484,7 @@
    "off_high": -34.2,
    "ret_1w": 16.7,
    "ret_1m": 4.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "024110",
@@ -10476,7 +10514,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 2.7,
    "ema10": 20526.25264630775,
-   "ema20": 20686.547527132974,
+   "ema20": 20686.54752713311,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10510,7 +10548,7 @@
    "off_high": -31.6,
    "ret_1w": 0.0,
    "ret_1m": -5.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "064350",
@@ -10540,7 +10578,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.0,
    "ema10": 139925.3681107777,
-   "ema20": 149857.13266853752,
+   "ema20": 149857.13266854204,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10575,7 +10613,7 @@
    "off_high": -47.6,
    "ret_1w": 23.0,
    "ret_1m": -20.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "047810",
@@ -10589,7 +10627,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 77.7,
-   "rs_momentum": 1.7,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "항공기,우주선 및 부품 제조업",
    "sector_rs": 0.0,
@@ -10605,7 +10643,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.7,
    "ema10": 137219.86008643225,
-   "ema20": 140740.4334553622,
+   "ema20": 140740.4334553613,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -10639,7 +10677,7 @@
    "off_high": -32.0,
    "ret_1w": 24.7,
    "ret_1m": -8.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "272210",
@@ -10669,7 +10707,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 33.6,
    "ema10": 64958.8847276976,
-   "ema20": 66803.17661418526,
+   "ema20": 66803.17661417964,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -10704,7 +10742,7 @@
    "off_high": -60.7,
    "ret_1w": 33.6,
    "ret_1m": 2.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "030200",
@@ -10734,7 +10772,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 1.7,
    "ema10": 52787.77531352218,
-   "ema20": 53119.5673432128,
+   "ema20": 53119.56734321168,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10769,7 +10807,7 @@
    "off_high": -24.4,
    "ret_1w": -2.4,
    "ret_1m": -5.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "003670",
@@ -10799,7 +10837,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.7,
    "ema10": 140092.53360594704,
-   "ema20": 145813.68300091912,
+   "ema20": 145813.68300092363,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -10834,7 +10872,7 @@
    "off_high": -51.2,
    "ret_1w": 19.7,
    "ret_1m": -7.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "071050",
@@ -10864,7 +10902,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 15.3,
    "ema10": 204378.52743619255,
-   "ema20": 210837.09097249707,
+   "ema20": 210837.0909724937,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -10899,7 +10937,7 @@
    "off_high": -30.3,
    "ret_1w": 14.2,
    "ret_1m": -14.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000720",
@@ -10913,7 +10951,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 71.5,
-   "rs_momentum": 0.5,
+   "rs_momentum": 2.5,
    "rs_new_high": false,
    "sector": "토목 건설업",
    "sector_rs": 0.0,
@@ -10929,7 +10967,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.8,
    "ema10": 98829.3437417668,
-   "ema20": 101367.61944819236,
+   "ema20": 101367.61944818676,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -10963,7 +11001,7 @@
    "off_high": -44.5,
    "ret_1w": 30.1,
    "ret_1m": 0.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "259960",
@@ -10977,8 +11015,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 42.0,
-   "rs_momentum": -1.0,
-   "rs_new_high": false,
+   "rs_momentum": 0.0,
+   "rs_new_high": true,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -10993,7 +11031,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 12.3,
    "ema10": 238891.45628977587,
-   "ema20": 238729.05525669947,
+   "ema20": 238729.05525669162,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11028,7 +11066,7 @@
    "off_high": -33.4,
    "ret_1w": -6.1,
    "ret_1m": -6.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "307950",
@@ -11058,7 +11096,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.4,
    "ema10": 384330.55280425935,
-   "ema20": 410258.7942177198,
+   "ema20": 410258.79421772296,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -11090,7 +11128,7 @@
    "off_high": -61.1,
    "ret_1w": 22.6,
    "ret_1m": -13.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "323410",
@@ -11104,7 +11142,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 53.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "은행 및 저축기관",
    "sector_rs": 0.0,
@@ -11120,7 +11158,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.1,
    "ema10": 21830.38670425245,
-   "ema20": 21955.400554061896,
+   "ema20": 21955.400554061336,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11155,7 +11193,7 @@
    "off_high": -27.1,
    "ret_1w": 1.9,
    "ret_1m": -5.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005940",
@@ -11217,7 +11255,7 @@
    "off_high": -33.7,
    "ret_1w": 8.9,
    "ret_1m": -11.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005830",
@@ -11247,7 +11285,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 18.3,
    "ema10": 157934.10639033644,
-   "ema20": 156929.63042483327,
+   "ema20": 156929.63042482856,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11279,7 +11317,7 @@
    "off_high": -27.3,
    "ret_1w": 0.6,
    "ret_1m": 3.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "0126Z0",
@@ -11344,7 +11382,7 @@
    "off_high": -49.7,
    "ret_1w": 10.4,
    "ret_1m": -4.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "003230",
@@ -11408,7 +11446,7 @@
    "off_high": -27.3,
    "ret_1w": -0.8,
    "ret_1m": -1.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "016360",
@@ -11422,7 +11460,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 61.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "금융 지원 서비스업",
    "sector_rs": 0.0,
@@ -11438,7 +11476,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.0,
    "ema10": 98056.50959362918,
-   "ema20": 101354.50455587347,
+   "ema20": 101354.50455587143,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11472,7 +11510,7 @@
    "off_high": -40.1,
    "ret_1w": 11.0,
    "ret_1m": -15.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "443060",
@@ -11486,7 +11524,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 49.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": 1.9,
    "rs_new_high": false,
    "sector": "건축기술, 엔지니어링 및 관련 기술 서비스업",
    "sector_rs": 0.0,
@@ -11502,7 +11540,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 6.9,
    "ema10": 190432.70996988213,
-   "ema20": 196012.66430956143,
+   "ema20": 196012.66430954685,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11537,7 +11575,7 @@
    "off_high": -32.7,
    "ret_1w": 6.6,
    "ret_1m": -3.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "352820",
@@ -11567,7 +11605,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.0,
    "ema10": 184622.9591751537,
-   "ema20": 193122.25970090236,
+   "ema20": 193122.25970088333,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11602,7 +11640,7 @@
    "off_high": -55.4,
    "ret_1w": 6.3,
    "ret_1m": -22.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "039490",
@@ -11632,7 +11670,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.0,
    "ema10": 287392.4784692075,
-   "ema20": 299469.95211968856,
+   "ema20": 299469.9521196627,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11667,7 +11705,7 @@
    "off_high": -43.4,
    "ret_1w": 14.0,
    "ret_1m": -15.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "021240",
@@ -11697,7 +11735,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.2,
    "ema10": 92353.53799739698,
-   "ema20": 92160.26943262917,
+   "ema20": 92160.2694326384,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -11729,7 +11767,7 @@
    "off_high": -18.9,
    "ret_1w": 2.4,
    "ret_1m": -4.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "064400",
@@ -11759,7 +11797,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 25.9,
    "ema10": 65796.9458153481,
-   "ema20": 67595.70790862535,
+   "ema20": 67595.7079086249,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -11791,7 +11829,7 @@
    "off_high": -52.2,
    "ret_1w": 23.6,
    "ret_1m": -0.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "326030",
@@ -11821,7 +11859,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.9,
    "ema10": 79495.20704205209,
-   "ema20": 80244.6103779047,
+   "ema20": 80244.6103779038,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -11856,7 +11894,7 @@
    "off_high": -43.1,
    "ret_1w": 8.5,
    "ret_1m": -3.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "047040",
@@ -11886,7 +11924,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 44.9,
    "ema10": 14408.576677773948,
-   "ema20": 15273.854506747726,
+   "ema20": 15273.854506747575,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -11920,7 +11958,7 @@
    "off_high": -59.8,
    "ret_1w": 35.0,
    "ret_1m": -3.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "007660",
@@ -11934,7 +11972,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": true,
    "rs_rank": 25.5,
-   "rs_momentum": -0.5,
+   "rs_momentum": -1.5,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -11950,7 +11988,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 43.1,
    "ema10": 79281.9594330061,
-   "ema20": 85770.60119842614,
+   "ema20": 85770.60119842266,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -11985,7 +12023,7 @@
    "off_high": -48.5,
    "ret_1w": 32.3,
    "ret_1m": -13.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000880",
@@ -11999,7 +12037,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 22.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
@@ -12015,7 +12053,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 0.0,
    "ema10": 86305.7777696198,
-   "ema20": 90512.67690266384,
+   "ema20": 90512.67690263464,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12050,7 +12088,7 @@
    "off_high": -49.6,
    "ret_1w": 0.0,
    "ret_1m": -17.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "036570",
@@ -12064,7 +12102,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 75.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": -1.3,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -12080,7 +12118,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.6,
    "ema10": 231966.78361136914,
-   "ema20": 234175.3973852667,
+   "ema20": 234175.39738526,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -12112,7 +12150,7 @@
    "off_high": -31.6,
    "ret_1w": 5.6,
    "ret_1m": -7.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "029780",
@@ -12126,8 +12164,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 58.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -12142,7 +12180,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 3.0,
    "ema10": 47283.94021210603,
-   "ema20": 47642.27105831612,
+   "ema20": 47642.271058316794,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12177,7 +12215,7 @@
    "off_high": -32.7,
    "ret_1w": -1.8,
    "ret_1m": -5.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "034220",
@@ -12207,7 +12245,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.8,
    "ema10": 9491.981163663922,
-   "ema20": 9961.970805903764,
+   "ema20": 9961.970805903697,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12242,7 +12280,7 @@
    "off_high": -45.4,
    "ret_1w": 14.4,
    "ret_1m": -9.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "062040",
@@ -12272,7 +12310,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 38.4,
    "ema10": 154315.47778609305,
-   "ema20": 166154.3698434153,
+   "ema20": 166154.36984341397,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -12307,7 +12345,7 @@
    "off_high": -51.0,
    "ret_1w": 30.8,
    "ret_1m": -13.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "001440",
@@ -12337,7 +12375,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.8,
    "ema10": 25778.79311712337,
-   "ema20": 27436.792083934106,
+   "ema20": 27436.792083932643,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -12372,7 +12410,7 @@
    "off_high": -62.5,
    "ret_1w": 28.2,
    "ret_1m": -6.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "138930",
@@ -12402,7 +12440,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 0.9,
    "ema10": 15866.079150687316,
-   "ema20": 16542.709141697815,
+   "ema20": 16542.709141697946,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12437,7 +12475,7 @@
    "off_high": -35.2,
    "ret_1w": -0.1,
    "ret_1m": -19.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "128940",
@@ -12451,7 +12489,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 63.8,
-   "rs_momentum": -1.2,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
@@ -12467,7 +12505,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.0,
    "ema10": 362744.6206076974,
-   "ema20": 373152.2836299129,
+   "ema20": 373152.28362991737,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -12502,7 +12540,7 @@
    "off_high": -41.3,
    "ret_1w": 18.0,
    "ret_1m": -11.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "454910",
@@ -12532,7 +12570,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.8,
    "ema10": 65868.25376897912,
-   "ema20": 69351.93138897972,
+   "ema20": 69351.93138897631,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -12567,7 +12605,7 @@
    "off_high": -57.1,
    "ret_1w": 27.0,
    "ret_1m": -7.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "009830",
@@ -12581,7 +12619,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 47.1,
-   "rs_momentum": -4.9,
+   "rs_momentum": -2.9,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -12597,7 +12635,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.9,
    "ema10": 26842.83414572006,
-   "ema20": 28091.818442742275,
+   "ema20": 28091.81844274662,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -12632,7 +12670,7 @@
    "off_high": -46.1,
    "ret_1w": 31.9,
    "ret_1m": -4.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "051900",
@@ -12662,7 +12700,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 36.0,
    "ema10": 275599.74053710734,
-   "ema20": 264126.58393759414,
+   "ema20": 264126.583937602,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -12694,7 +12732,7 @@
    "off_high": -11.4,
    "ret_1w": 11.2,
    "ret_1m": 13.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "052690",
@@ -12708,7 +12746,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 29.2,
-   "rs_momentum": 0.2,
+   "rs_momentum": -0.8,
    "rs_new_high": false,
    "sector": "건축기술, 엔지니어링 및 관련 기술 서비스업",
    "sector_rs": 0.0,
@@ -12724,7 +12762,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.3,
    "ema10": 93589.87530121315,
-   "ema20": 95885.84671092215,
+   "ema20": 95885.84671091275,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -12759,7 +12797,7 @@
    "off_high": -48.2,
    "ret_1w": 24.4,
    "ret_1m": 0.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "088350",
@@ -12789,7 +12827,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 7.0,
    "ema10": 4340.049853995511,
-   "ema20": 4406.452118844121,
+   "ema20": 4406.452118843908,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12821,7 +12859,7 @@
    "off_high": -42.4,
    "ret_1w": 7.0,
    "ret_1m": -2.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "011790",
@@ -12851,7 +12889,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.8,
    "ema10": 76832.64840174766,
-   "ema20": 82675.51115105927,
+   "ema20": 82675.51115106308,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -12886,7 +12924,7 @@
    "off_high": -55.9,
    "ret_1w": 25.0,
    "ret_1m": -16.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "001040",
@@ -12916,7 +12954,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.0,
    "ema10": 132015.52142813013,
-   "ema20": 136201.58769596624,
+   "ema20": 136201.5876959512,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -12951,7 +12989,7 @@
    "off_high": -41.4,
    "ret_1w": 10.8,
    "ret_1m": -10.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "004170",
@@ -12981,7 +13019,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 8.6,
    "ema10": 457324.13776779175,
-   "ema20": 509496.3065397321,
+   "ema20": 509496.30653973424,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13013,7 +13051,7 @@
    "off_high": -45.7,
    "ret_1w": -3.3,
    "ret_1m": -36.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000990",
@@ -13027,7 +13065,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 55.3,
-   "rs_momentum": -0.7,
+   "rs_momentum": -1.7,
    "rs_new_high": false,
    "sector": "반도체 제조업",
    "sector_rs": 0.0,
@@ -13043,7 +13081,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.4,
    "ema10": 88982.4239541905,
-   "ema20": 99562.47930080685,
+   "ema20": 99562.4793008045,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13078,7 +13116,7 @@
    "off_high": -61.0,
    "ret_1w": 20.2,
    "ret_1m": -19.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "082740",
@@ -13092,7 +13130,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 33.8,
-   "rs_momentum": 0.8,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "일반 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -13108,7 +13146,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.2,
    "ema10": 42693.274883092716,
-   "ema20": 44762.885886430384,
+   "ema20": 44762.8858864296,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -13143,7 +13181,7 @@
    "off_high": -51.2,
    "ret_1w": 19.0,
    "ret_1m": -5.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "023530",
@@ -13157,7 +13195,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 86.5,
-   "rs_momentum": 0.5,
+   "rs_momentum": -0.5,
    "rs_new_high": false,
    "sector": "종합 소매업",
    "sector_rs": 0.0,
@@ -13173,7 +13211,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 1.5,
    "ema10": 120953.96240116877,
-   "ema20": 131564.73328854403,
+   "ema20": 131564.7332885438,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13205,7 +13243,7 @@
    "off_high": -45.8,
    "ret_1w": -2.5,
    "ret_1m": -34.5,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "004020",
@@ -13219,7 +13257,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 27.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": -1.2,
    "rs_new_high": false,
    "sector": "1차 철강 제조업",
    "sector_rs": 0.0,
@@ -13235,7 +13273,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 12.9,
    "ema10": 26332.344054327383,
-   "ema20": 26879.708006161192,
+   "ema20": 26879.70800616254,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -13270,7 +13308,7 @@
    "off_high": -45.1,
    "ret_1w": 12.9,
    "ret_1m": -0.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "018880",
@@ -13284,7 +13322,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 47.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "일반 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -13300,7 +13338,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.7,
    "ema10": 3404.9317032512163,
-   "ema20": 3512.472050491888,
+   "ema20": 3512.472050492085,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -13335,7 +13373,7 @@
    "off_high": -40.6,
    "ret_1w": 11.7,
    "ret_1m": -4.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "002380",
@@ -13365,7 +13403,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.6,
    "ema10": 399258.8396801861,
-   "ema20": 415232.11131100706,
+   "ema20": 415232.1113110082,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -13400,7 +13438,7 @@
    "off_high": -37.6,
    "ret_1w": 22.6,
    "ret_1m": -8.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "302440",
@@ -13414,7 +13452,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 26.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
@@ -13430,7 +13468,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 6.5,
    "ema10": 34188.16072283967,
-   "ema20": 34738.33055811612,
+   "ema20": 34738.330558116235,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13465,7 +13503,7 @@
    "off_high": -43.6,
    "ret_1w": 6.5,
    "ret_1m": -9.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "035250",
@@ -13479,8 +13517,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 43.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "유원지 및 기타 오락관련 서비스업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -13495,7 +13533,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 0.5,
    "ema10": 14440.89402248765,
-   "ema20": 14500.241496242463,
+   "ema20": 14500.241496243543,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13530,7 +13568,7 @@
    "off_high": -27.8,
    "ret_1w": -1.9,
    "ret_1m": -6.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "066970",
@@ -13544,8 +13582,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 8.5,
-   "rs_momentum": -0.5,
-   "rs_new_high": false,
+   "rs_momentum": 0.5,
+   "rs_new_high": true,
    "sector": "일차전지 및 이차전지 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -13560,7 +13598,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.6,
    "ema10": 77470.5710039195,
-   "ema20": 84620.4248525594,
+   "ema20": 84620.42485256054,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13595,7 +13633,7 @@
    "off_high": -64.5,
    "ret_1w": 21.6,
    "ret_1m": -19.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "139130",
@@ -13625,7 +13663,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.0,
    "ema10": 17183.660123449197,
-   "ema20": 17338.442405089976,
+   "ema20": 17338.442405090278,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13657,7 +13695,7 @@
    "off_high": -21.4,
    "ret_1w": 10.0,
    "ret_1m": -7.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "011780",
@@ -13671,7 +13709,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 59.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": 1.6,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -13687,7 +13725,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 8.9,
    "ema10": 116692.56217406792,
-   "ema20": 117466.40477640662,
+   "ema20": 117466.40477641649,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -13722,7 +13760,7 @@
    "off_high": -26.2,
    "ret_1w": 8.9,
    "ret_1m": 2.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "012750",
@@ -13736,7 +13774,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 74.3,
-   "rs_momentum": -1.7,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "경비, 경호 및 탐정업",
    "sector_rs": 0.0,
@@ -13752,7 +13790,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 7.9,
    "ema10": 72297.04757362415,
-   "ema20": 72337.95655207221,
+   "ema20": 72337.95655207604,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -13786,7 +13824,7 @@
    "off_high": -28.5,
    "ret_1w": 3.2,
    "ret_1m": 0.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "017800",
@@ -13816,7 +13854,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.5,
    "ema10": 68725.92700385481,
-   "ema20": 69317.75746102237,
+   "ema20": 69317.75746101428,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -13851,7 +13889,7 @@
    "off_high": -37.2,
    "ret_1w": 9.5,
    "ret_1m": -0.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "022100",
@@ -13881,7 +13919,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.9,
    "ema10": 19354.069381120476,
-   "ema20": 19756.595167218024,
+   "ema20": 19756.595167217125,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -13916,7 +13954,7 @@
    "off_high": -54.3,
    "ret_1w": 20.0,
    "ret_1m": 3.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "026960",
@@ -13946,7 +13984,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.8,
    "ema10": 25539.582689263123,
-   "ema20": 25468.827216655616,
+   "ema20": 25468.82721665674,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -13981,7 +14019,7 @@
    "off_high": -18.6,
    "ret_1w": -1.0,
    "ret_1m": -2.5,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "450080",
@@ -14011,7 +14049,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 18.5,
    "ema10": 33026.54716914635,
-   "ema20": 35272.91668291111,
+   "ema20": 35272.916682911804,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14046,7 +14084,7 @@
    "off_high": -61.8,
    "ret_1w": 18.5,
    "ret_1m": -13.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "069960",
@@ -14060,7 +14098,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 88.5,
-   "rs_momentum": 3.5,
+   "rs_momentum": 0.5,
    "rs_new_high": true,
    "sector": "종합 소매업",
    "sector_rs": 0.0,
@@ -14076,7 +14114,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 6.1,
    "ema10": 123366.56939396341,
-   "ema20": 135797.33539701105,
+   "ema20": 135797.33539701084,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14108,7 +14146,7 @@
    "off_high": -50.4,
    "ret_1w": -7.4,
    "ret_1m": -37.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "139480",
@@ -14138,7 +14176,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.6,
    "ema10": 79674.21768762388,
-   "ema20": 80540.1566521478,
+   "ema20": 80540.15665214554,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14173,7 +14211,7 @@
    "off_high": -41.6,
    "ret_1w": 3.4,
    "ret_1m": -5.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "192820",
@@ -14203,7 +14241,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 34.6,
    "ema10": 186751.86212807917,
-   "ema20": 181909.57482750554,
+   "ema20": 181909.57482747856,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -14237,7 +14275,7 @@
    "off_high": -27.8,
    "ret_1w": 5.6,
    "ret_1m": 6.6,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "204320",
@@ -14267,7 +14305,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.4,
    "ema10": 45906.12186371997,
-   "ema20": 46417.63143817745,
+   "ema20": 46417.6314381779,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -14301,7 +14339,7 @@
    "off_high": -36.0,
    "ret_1w": 29.4,
    "ret_1m": 4.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "004370",
@@ -14315,8 +14353,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 68.4,
-   "rs_momentum": -2.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -14331,7 +14369,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 14.3,
    "ema10": 373704.9704468306,
-   "ema20": 367897.3937245715,
+   "ema20": 367897.3937245861,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -14366,7 +14404,7 @@
    "off_high": -35.0,
    "ret_1w": -0.3,
    "ret_1m": 3.4,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "004990",
@@ -14380,7 +14418,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 32.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -14396,7 +14434,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.5,
    "ema10": 22646.153956031852,
-   "ema20": 22948.757656025813,
+   "ema20": 22948.75765602447,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14431,7 +14469,7 @@
    "off_high": -42.3,
    "ret_1w": 5.5,
    "ret_1m": -7.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005850",
@@ -14461,7 +14499,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 12.8,
    "ema10": 53785.65920762979,
-   "ema20": 54735.6961877891,
+   "ema20": 54735.69618779067,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -14493,7 +14531,7 @@
    "off_high": -29.4,
    "ret_1w": 12.8,
    "ret_1m": -3.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "009970",
@@ -14523,7 +14561,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 18.0,
    "ema10": 193798.37260663864,
-   "ema20": 192106.79222804948,
+   "ema20": 192106.79222804654,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14557,7 +14595,7 @@
    "off_high": -27.5,
    "ret_1w": -5.0,
    "ret_1m": -0.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "011170",
@@ -14571,7 +14609,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 17.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -14587,7 +14625,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.7,
    "ema10": 57553.03150264507,
-   "ema20": 59565.4576390561,
+   "ema20": 59565.457639064385,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14622,7 +14660,7 @@
    "off_high": -51.7,
    "ret_1w": 5.7,
    "ret_1m": -8.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "014680",
@@ -14636,7 +14674,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 57.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -14652,7 +14690,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.7,
    "ema10": 215533.03890881813,
-   "ema20": 226227.22113244951,
+   "ema20": 226227.22113244384,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14687,7 +14725,7 @@
    "off_high": -34.9,
    "ret_1w": 20.7,
    "ret_1m": -10.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "383220",
@@ -14701,8 +14739,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 60.1,
-   "rs_momentum": -1.9,
-   "rs_new_high": false,
+   "rs_momentum": 0.1,
+   "rs_new_high": true,
    "sector": "봉제의복 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -14717,7 +14755,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.2,
    "ema10": 71417.4531326046,
-   "ema20": 73987.04418135798,
+   "ema20": 73987.04418136024,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14752,7 +14790,7 @@
    "off_high": -27.0,
    "ret_1w": -16.2,
    "ret_1m": -21.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "282330",
@@ -14782,7 +14820,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.2,
    "ema10": 123625.70277602045,
-   "ema20": 123297.77664390439,
+   "ema20": 123297.77664391247,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14814,7 +14852,7 @@
    "off_high": -17.3,
    "ret_1w": -2.0,
    "ret_1m": -3.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "457190",
@@ -14844,7 +14882,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.0,
    "ema10": 55598.82584068374,
-   "ema20": 58197.46807428806,
+   "ema20": 58197.46807428919,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -14879,7 +14917,7 @@
    "off_high": -54.3,
    "ret_1w": 25.5,
    "ret_1m": -7.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "030000",
@@ -14909,7 +14947,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 4.0,
    "ema10": 18843.7078391478,
-   "ema20": 18842.67917140893,
+   "ema20": 18842.679171409713,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -14944,7 +14982,7 @@
    "off_high": -19.7,
    "ret_1w": -0.5,
    "ret_1m": -2.1,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "051600",
@@ -14974,7 +15012,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.3,
    "ema10": 45034.533595925874,
-   "ema20": 45118.55248974849,
+   "ema20": 45118.55248974669,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15009,7 +15047,7 @@
    "off_high": -32.5,
    "ret_1w": 10.3,
    "ret_1m": 2.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "103140",
@@ -15039,7 +15077,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 39.9,
    "ema10": 68172.77737205721,
-   "ema20": 66572.65392858698,
+   "ema20": 66572.65392857532,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15074,7 +15112,7 @@
    "off_high": -53.1,
    "ret_1w": 39.9,
    "ret_1m": 22.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000120",
@@ -15104,7 +15142,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 8.8,
    "ema10": 74614.06966608914,
-   "ema20": 74675.17274899852,
+   "ema20": 74675.17274900255,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15139,7 +15177,7 @@
    "off_high": -50.1,
    "ret_1w": 8.8,
    "ret_1m": 0.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "071970",
@@ -15153,8 +15191,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 17.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "일반 목적용 기계 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -15169,7 +15207,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.6,
    "ema10": 55048.62335543598,
-   "ema20": 57129.11096197871,
+   "ema20": 57129.11096197589,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -15204,7 +15242,7 @@
    "off_high": -49.9,
    "ret_1w": 23.5,
    "ret_1m": -2.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "001430",
@@ -15218,7 +15256,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 34.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "1차 철강 제조업",
    "sector_rs": 0.0,
@@ -15234,7 +15272,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 35.3,
    "ema10": 35450.96418153827,
-   "ema20": 35031.28822711811,
+   "ema20": 35031.28822711889,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15269,7 +15307,7 @@
    "off_high": -55.9,
    "ret_1w": 31.4,
    "ret_1m": 27.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "006280",
@@ -15299,7 +15337,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 8.0,
    "ema10": 118775.1344829997,
-   "ema20": 119916.47300054626,
+   "ema20": 119916.47300055074,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15334,7 +15372,7 @@
    "off_high": -33.5,
    "ret_1w": 8.0,
    "ret_1m": -2.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "008770",
@@ -15364,7 +15402,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 2.1,
    "ema10": 43791.06076667299,
-   "ema20": 45725.793823359505,
+   "ema20": 45725.79382335928,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -15399,7 +15437,7 @@
    "off_high": -40.1,
    "ret_1w": -3.4,
    "ret_1m": -22.3,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "011210",
@@ -15429,7 +15467,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.3,
    "ema10": 58359.2258800501,
-   "ema20": 59313.10415475547,
+   "ema20": 59313.104154756475,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15464,7 +15502,7 @@
    "off_high": -44.7,
    "ret_1w": 19.3,
    "ret_1m": -1.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "069620",
@@ -15494,7 +15532,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 16.0,
    "ema10": 122071.2179904145,
-   "ema20": 122833.07793979002,
+   "ema20": 122833.07793979067,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15529,7 +15567,7 @@
    "off_high": -37.6,
    "ret_1w": 2.0,
    "ret_1m": -7.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "112610",
@@ -15559,7 +15597,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.0,
    "ema10": 39116.70190013391,
-   "ema20": 39807.98665198314,
+   "ema20": 39807.986651984145,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15594,7 +15632,7 @@
    "off_high": -48.4,
    "ret_1w": 17.0,
    "ret_1m": -0.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "120110",
@@ -15624,7 +15662,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.1,
    "ema10": 51017.536927704496,
-   "ema20": 52888.860569343524,
+   "ema20": 52888.86056934565,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -15659,7 +15697,7 @@
    "off_high": -48.7,
    "ret_1w": 17.1,
    "ret_1m": -9.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000080",
@@ -15689,7 +15727,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 5.5,
    "ema10": 15183.564032078692,
-   "ema20": 15155.598495799662,
+   "ema20": 15155.598495800112,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -15724,7 +15762,7 @@
    "off_high": -26.8,
    "ret_1w": -1.9,
    "ret_1m": -2.0,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "361610",
@@ -15754,7 +15792,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.0,
    "ema10": 13732.207369412972,
-   "ema20": 14218.878247153638,
+   "ema20": 14218.878247154313,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -15789,7 +15827,7 @@
    "off_high": -60.3,
    "ret_1w": 11.0,
    "ret_1m": -9.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "300720",
@@ -15803,7 +15841,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 41.4,
-   "rs_momentum": 0.4,
+   "rs_momentum": -0.6,
    "rs_new_high": false,
    "sector": "시멘트, 석회, 플라스터 및 그 제품 제조업",
    "sector_rs": 0.0,
@@ -15819,7 +15857,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.0,
    "ema10": 13960.564749877834,
-   "ema20": 13999.388417021895,
+   "ema20": 13999.388417022526,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15854,7 +15892,7 @@
    "off_high": -34.1,
    "ret_1w": 4.7,
    "ret_1m": -3.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "298050",
@@ -15868,7 +15906,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 30.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "화학섬유 제조업",
    "sector_rs": 0.0,
@@ -15884,7 +15922,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.3,
    "ema10": 159182.55201693065,
-   "ema20": 158316.9513948939,
+   "ema20": 158316.9513949085,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15919,7 +15957,7 @@
    "off_high": -37.8,
    "ret_1w": 23.3,
    "ret_1m": 12.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "285130",
@@ -15949,7 +15987,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.3,
    "ema10": 40099.25954144476,
-   "ema20": 40052.24446128092,
+   "ema20": 40052.244461282055,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -15984,7 +16022,7 @@
    "off_high": -48.8,
    "ret_1w": 14.3,
    "ret_1m": -2.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "280360",
@@ -15998,7 +16036,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 55.0,
-   "rs_momentum": -3.0,
+   "rs_momentum": -1.0,
    "rs_new_high": false,
    "sector": "기타 식품 제조업",
    "sector_rs": 0.0,
@@ -16014,7 +16052,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 10.8,
    "ema10": 102393.89107259113,
-   "ema20": 102320.93076818305,
+   "ema20": 102320.93076819315,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16049,7 +16087,7 @@
    "off_high": -25.4,
    "ret_1w": -0.7,
    "ret_1m": -4.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "185750",
@@ -16063,7 +16101,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 40.3,
-   "rs_momentum": -1.7,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
@@ -16079,7 +16117,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.3,
    "ema10": 67245.4554854798,
-   "ema20": 67735.20459291802,
+   "ema20": 67735.20459292452,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16114,7 +16152,7 @@
    "off_high": -36.8,
    "ret_1w": 2.9,
    "ret_1m": -3.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "137310",
@@ -16128,7 +16166,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 28.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "의료용 기기 제조업",
    "sector_rs": 0.0,
@@ -16144,7 +16182,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 10.0,
    "ema10": 6311.87959692794,
-   "ema20": 6317.835800078164,
+   "ema20": 6317.8358000780745,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -16179,7 +16217,7 @@
    "off_high": -41.4,
    "ret_1w": 6.0,
    "ret_1m": -3.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "093370",
@@ -16209,7 +16247,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 47.6,
    "ema10": 9604.80159450168,
-   "ema20": 10637.104844877727,
+   "ema20": 10637.104844877862,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16241,7 +16279,7 @@
    "off_high": -56.6,
    "ret_1w": 42.7,
    "ret_1m": -11.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "071320",
@@ -16271,7 +16309,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 4.0,
    "ema10": 64653.55273070501,
-   "ema20": 65213.560295879906,
+   "ema20": 65213.56029587766,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16306,7 +16344,7 @@
    "off_high": -44.9,
    "ret_1w": 3.0,
    "ret_1m": -6.1,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "034230",
@@ -16320,7 +16358,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 9.9,
-   "rs_momentum": 1.9,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "유원지 및 기타 오락관련 서비스업",
    "sector_rs": 0.0,
@@ -16336,7 +16374,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 3.5,
    "ema10": 9951.94960422953,
-   "ema20": 10614.670010405625,
+   "ema20": 10614.67001040659,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16371,7 +16409,7 @@
    "off_high": -59.2,
    "ret_1w": 1.6,
    "ret_1m": -27.1,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "017960",
@@ -16385,7 +16423,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 10.2,
-   "rs_momentum": 2.2,
+   "rs_momentum": 1.2,
    "rs_new_high": true,
    "sector": "구조용 금속제품, 탱크 및 증기발생기 제조업",
    "sector_rs": 0.0,
@@ -16401,7 +16439,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.5,
    "ema10": 21976.013564399775,
-   "ema20": 22978.24159573398,
+   "ema20": 22978.241595733303,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -16436,7 +16474,7 @@
    "off_high": -57.0,
    "ret_1w": 20.5,
    "ret_1m": -5.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "003090",
@@ -16466,7 +16504,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 7.7,
    "ema10": 16661.17965976311,
-   "ema20": 16770.114506773632,
+   "ema20": 16770.114506772396,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -16501,7 +16539,7 @@
    "off_high": -44.2,
    "ret_1w": 7.0,
    "ret_1m": -6.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005300",
@@ -16531,7 +16569,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 4.6,
    "ema10": 100969.5680732882,
-   "ema20": 100676.6642398669,
+   "ema20": 100676.66423987948,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16566,7 +16604,7 @@
    "off_high": -35.2,
    "ret_1w": -0.4,
    "ret_1m": -1.3,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "006650",
@@ -16596,7 +16634,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.1,
    "ema10": 91524.1663123202,
-   "ema20": 96836.66275276012,
+   "ema20": 96836.66275276753,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16631,7 +16669,7 @@
    "off_high": -55.6,
    "ret_1w": 4.3,
    "ret_1m": -17.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005420",
@@ -16645,7 +16683,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 4.0,
-   "rs_momentum": 1.0,
+   "rs_momentum": 0.0,
    "rs_new_high": true,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
@@ -16661,7 +16699,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 25.9,
    "ema10": 9085.179589185398,
-   "ema20": 9357.991057792638,
+   "ema20": 9357.991057792931,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -16696,7 +16734,7 @@
    "off_high": -54.9,
    "ret_1w": 25.9,
    "ret_1m": -2.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "069260",
@@ -16761,7 +16799,7 @@
    "off_high": -29.1,
    "ret_1w": 5.7,
    "ret_1m": -2.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "456040",
@@ -16791,7 +16829,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.5,
    "ema10": 73424.02885979129,
-   "ema20": 78506.89108826907,
+   "ema20": 78506.89108826997,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16826,7 +16864,7 @@
    "off_high": -53.1,
    "ret_1w": 23.5,
    "ret_1m": -15.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "003030",
@@ -16856,7 +16894,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.4,
    "ema10": 105309.01486628901,
-   "ema20": 107144.4529132974,
+   "ema20": 107144.45291329629,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -16891,7 +16929,7 @@
    "off_high": -58.7,
    "ret_1w": 8.1,
    "ret_1m": -3.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "002840",
@@ -16905,8 +16943,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 41.1,
-   "rs_momentum": -0.9,
-   "rs_new_high": false,
+   "rs_momentum": 0.1,
+   "rs_new_high": true,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -16921,7 +16959,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 7.1,
    "ema10": 121759.14393400474,
-   "ema20": 122191.50559435847,
+   "ema20": 122191.50559436296,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -16956,7 +16994,7 @@
    "off_high": -28.7,
    "ret_1w": -2.9,
    "ret_1m": -3.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "002030",
@@ -16970,8 +17008,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 14.5,
-   "rs_momentum": -0.5,
-   "rs_new_high": false,
+   "rs_momentum": 0.5,
+   "rs_new_high": true,
    "sector": "회사 본부 및 경영 컨설팅 서비스업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -16986,7 +17024,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.9,
    "ema10": 187947.3864625093,
-   "ema20": 186992.371716031,
+   "ema20": 186992.3717160299,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -17021,7 +17059,7 @@
    "off_high": -55.1,
    "ret_1w": -8.4,
    "ret_1m": -3.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "000670",
@@ -17035,7 +17073,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 14.8,
-   "rs_momentum": 0.8,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "1차 비철금속 제조업",
    "sector_rs": 0.0,
@@ -17051,7 +17089,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.0,
    "ema10": 34786.0202684895,
-   "ema20": 35784.59304657443,
+   "ema20": 35784.593046572365,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -17086,7 +17124,7 @@
    "off_high": -48.1,
    "ret_1w": 16.0,
    "ret_1m": -4.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "008730",
@@ -17116,7 +17154,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.0,
    "ema10": 13486.351870933988,
-   "ema20": 13812.831884575851,
+   "ema20": 13812.831884575628,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17151,7 +17189,7 @@
    "off_high": -63.7,
    "ret_1w": 19.0,
    "ret_1m": -5.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "196170",
@@ -17165,8 +17203,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 53.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 1.3,
+   "rs_new_high": true,
    "sector": "자연과학 및 공학 연구개발업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -17181,7 +17219,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.3,
    "ema10": 244172.0858486161,
-   "ema20": 241333.63281761654,
+   "ema20": 241333.63281765106,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17216,7 +17254,7 @@
    "off_high": -36.7,
    "ret_1w": 27.4,
    "ret_1m": 6.7,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "086520",
@@ -17246,7 +17284,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.1,
    "ema10": 78504.78250590725,
-   "ema20": 81600.64954967522,
+   "ema20": 81600.64954967554,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17281,7 +17319,7 @@
    "off_high": -56.7,
    "ret_1w": 22.1,
    "ret_1m": -2.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "247540",
@@ -17311,7 +17349,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.8,
    "ema10": 103166.6651064169,
-   "ema20": 110828.87952009319,
+   "ema20": 110828.87952009588,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -17346,7 +17384,7 @@
    "off_high": -60.9,
    "ret_1w": 9.8,
    "ret_1m": -15.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "277810",
@@ -17376,7 +17414,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.8,
    "ema10": 444742.951217957,
-   "ema20": 451536.7034510296,
+   "ema20": 451536.7034510195,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17411,7 +17449,7 @@
    "off_high": -50.6,
    "ret_1w": 17.9,
    "ret_1m": 5.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "058470",
@@ -17441,7 +17479,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.2,
    "ema10": 64970.499806672,
-   "ema20": 68719.78703699281,
+   "ema20": 68719.78703698855,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -17476,7 +17514,7 @@
    "off_high": -48.1,
    "ret_1w": 14.9,
    "ret_1m": -7.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "240810",
@@ -17490,7 +17528,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 76.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -17506,7 +17544,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.0,
    "ema10": 98311.38212156681,
-   "ema20": 107375.35674286104,
+   "ema20": 107375.35674286078,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -17540,7 +17578,7 @@
    "off_high": -48.0,
    "ret_1w": 17.4,
    "ret_1m": -13.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "028300",
@@ -17570,7 +17608,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.1,
    "ema10": 32540.268662242524,
-   "ema20": 34645.05920727125,
+   "ema20": 34645.0592072708,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -17605,7 +17643,7 @@
    "off_high": -49.6,
    "ret_1w": 11.7,
    "ret_1m": -32.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "298380",
@@ -17635,7 +17673,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.9,
    "ema10": 73173.66732147719,
-   "ema20": 76090.49103520327,
+   "ema20": 76090.49103520642,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17670,7 +17708,7 @@
    "off_high": -68.9,
    "ret_1w": 26.7,
    "ret_1m": -14.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "141080",
@@ -17700,7 +17738,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 40.6,
    "ema10": 98747.98715833848,
-   "ema20": 104337.58043995331,
+   "ema20": 104337.58043996946,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17735,7 +17773,7 @@
    "off_high": -51.3,
    "ret_1w": 32.1,
    "ret_1m": -19.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "087010",
@@ -17749,7 +17787,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 11.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
@@ -17765,7 +17803,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 65.5,
    "ema10": 146517.02415433183,
-   "ema20": 146231.83870685368,
+   "ema20": 146231.83870684623,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17800,7 +17838,7 @@
    "off_high": -56.3,
    "ret_1w": 26.8,
    "ret_1m": -5.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "214450",
@@ -17814,7 +17852,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 51.9,
-   "rs_momentum": 1.9,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "의료용품 및 기타 의약 관련제품 제조업",
    "sector_rs": 0.0,
@@ -17830,7 +17868,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 45.9,
    "ema10": 364320.12390151294,
-   "ema20": 352805.6955316975,
+   "ema20": 352805.69553168165,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -17864,7 +17902,7 @@
    "off_high": -47.0,
    "ret_1w": -3.3,
    "ret_1m": 11.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "000250",
@@ -17894,7 +17932,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.7,
    "ema10": 158426.54280420518,
-   "ema20": 171914.9325054046,
+   "ema20": 171914.9325054275,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -17929,7 +17967,7 @@
    "off_high": -86.5,
    "ret_1w": 31.7,
    "ret_1m": -17.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "039030",
@@ -17943,7 +17981,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 65.2,
-   "rs_momentum": 0.2,
+   "rs_momentum": -0.8,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -17959,7 +17997,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.2,
    "ema10": 302567.83127092355,
-   "ema20": 325234.121476792,
+   "ema20": 325234.12147679285,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -17994,7 +18032,7 @@
    "off_high": -47.5,
    "ret_1w": 31.3,
    "ret_1m": -11.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "214370",
@@ -18008,7 +18046,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 26.1,
-   "rs_momentum": 0.1,
+   "rs_momentum": 1.1,
    "rs_new_high": true,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
@@ -18024,7 +18062,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.0,
    "ema10": 58807.905776593805,
-   "ema20": 60251.93829629315,
+   "ema20": 60251.93829629484,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18059,7 +18097,7 @@
    "off_high": -58.6,
    "ret_1w": 26.9,
    "ret_1m": -6.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "108490",
@@ -18073,7 +18111,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 68.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": -1.4,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -18089,7 +18127,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 52.8,
    "ema10": 207999.67940447247,
-   "ema20": 211206.40869903492,
+   "ema20": 211206.40869903276,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18124,7 +18162,7 @@
    "off_high": -47.8,
    "ret_1w": 39.6,
    "ret_1m": 14.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "145020",
@@ -18154,7 +18192,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.4,
    "ema10": 242590.25663884357,
-   "ema20": 241442.4996575548,
+   "ema20": 241442.4996575582,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18188,7 +18226,7 @@
    "off_high": -29.5,
    "ret_1w": 13.3,
    "ret_1m": 4.8,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "214150",
@@ -18202,7 +18240,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 36.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "의료용 기기 제조업",
    "sector_rs": 0.0,
@@ -18218,7 +18256,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.6,
    "ema10": 43320.73412788041,
-   "ema20": 43985.58560562353,
+   "ema20": 43985.585605624656,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18253,7 +18291,7 @@
    "off_high": -42.1,
    "ret_1w": 12.1,
    "ret_1m": -6.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "347850",
@@ -18267,7 +18305,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 47.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "자연과학 및 공학 연구개발업",
    "sector_rs": 0.0,
@@ -18283,7 +18321,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.2,
    "ema10": 57423.145248068555,
-   "ema20": 63332.69495579512,
+   "ema20": 63332.69495579855,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -18319,7 +18357,7 @@
    "off_high": -54.5,
    "ret_1w": 9.1,
    "ret_1m": -37.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "403870",
@@ -18333,7 +18371,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 49.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -18349,7 +18387,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.2,
    "ema10": 35377.94019383235,
-   "ema20": 38216.4403906466,
+   "ema20": 38216.44039064492,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -18384,7 +18422,7 @@
    "off_high": -60.2,
    "ret_1w": 23.4,
    "ret_1m": -11.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "095340",
@@ -18414,7 +18452,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.6,
    "ema10": 130941.03300735117,
-   "ema20": 139028.9188285159,
+   "ema20": 139028.91882851382,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -18449,7 +18487,7 @@
    "off_high": -52.1,
    "ret_1w": 26.4,
    "ret_1m": -6.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "084370",
@@ -18463,7 +18501,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 86.0,
-   "rs_momentum": 0.0,
+   "rs_momentum": 1.0,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -18479,7 +18517,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 39.2,
    "ema10": 115844.62328570416,
-   "ema20": 124980.84917513731,
+   "ema20": 124980.84917513528,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -18511,7 +18549,7 @@
    "off_high": -46.7,
    "ret_1w": 27.4,
    "ret_1m": -15.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "319400",
@@ -18541,7 +18579,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 31.8,
    "ema10": 22297.352614109128,
-   "ema20": 22570.913371604343,
+   "ema20": 22570.913371604547,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18575,7 +18613,7 @@
    "off_high": -51.5,
    "ret_1w": 4.3,
    "ret_1m": 7.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "226950",
@@ -18589,8 +18627,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 67.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "자연과학 및 공학 연구개발업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -18605,7 +18643,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.8,
    "ema10": 110377.73614023176,
-   "ema20": 115325.00732504379,
+   "ema20": 115325.00732504578,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18640,7 +18678,7 @@
    "off_high": -44.0,
    "ret_1w": 29.1,
    "ret_1m": -9.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "310210",
@@ -18654,8 +18692,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 16.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "자연과학 및 공학 연구개발업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -18670,7 +18708,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 46.3,
    "ema10": 127943.72424490658,
-   "ema20": 137630.4343472092,
+   "ema20": 137630.43434722425,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18705,7 +18743,7 @@
    "off_high": -60.7,
    "ret_1w": 38.0,
    "ret_1m": -16.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "257720",
@@ -18719,7 +18757,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 39.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "상품 종합 도매업",
    "sector_rs": 0.0,
@@ -18735,7 +18773,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 22.0,
    "ema10": 35766.731975580486,
-   "ema20": 35698.45605909051,
+   "ema20": 35698.456059078606,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18770,7 +18808,7 @@
    "off_high": -33.9,
    "ret_1w": 7.2,
    "ret_1m": -3.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "178320",
@@ -18800,7 +18838,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.4,
    "ema10": 35562.34615392779,
-   "ema20": 38959.241711571914,
+   "ema20": 38959.241711571674,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -18835,7 +18873,7 @@
    "off_high": -55.0,
    "ret_1w": 26.9,
    "ret_1m": -18.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "263750",
@@ -18849,7 +18887,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 28.9,
-   "rs_momentum": -1.1,
+   "rs_momentum": -0.1,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -18865,7 +18903,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 7.9,
    "ema10": 34076.697455119254,
-   "ema20": 34602.264321469775,
+   "ema20": 34602.26432146764,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -18900,7 +18938,7 @@
    "off_high": -55.2,
    "ret_1w": 5.5,
    "ret_1m": -7.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "237690",
@@ -18914,7 +18952,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 37.4,
-   "rs_momentum": 1.4,
+   "rs_momentum": 0.4,
    "rs_new_high": true,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
@@ -18930,7 +18968,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.0,
    "ema10": 100263.41918176843,
-   "ema20": 106891.70381479082,
+   "ema20": 106891.70381479485,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -18965,7 +19003,7 @@
    "off_high": -41.4,
    "ret_1w": 11.3,
    "ret_1m": -21.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "357780",
@@ -18979,8 +19017,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 34.3,
-   "rs_momentum": -1.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -18995,7 +19033,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.2,
    "ema10": 266263.7080526786,
-   "ema20": 279949.13289329916,
+   "ema20": 279949.1328933018,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -19030,7 +19068,7 @@
    "off_high": -46.1,
    "ret_1w": 22.3,
    "ret_1m": -6.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "067310",
@@ -19044,7 +19082,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 68.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": -1.1,
    "rs_new_high": false,
    "sector": "반도체 제조업",
    "sector_rs": 0.0,
@@ -19060,7 +19098,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.9,
    "ema10": 31417.029856341294,
-   "ema20": 34081.707118867314,
+   "ema20": 34081.70711886692,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -19095,7 +19133,7 @@
    "off_high": -45.5,
    "ret_1w": 19.7,
    "ret_1m": -14.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "005290",
@@ -19125,7 +19163,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.1,
    "ema10": 39988.17400661045,
-   "ema20": 42338.72919829361,
+   "ema20": 42338.72919829248,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -19160,7 +19198,7 @@
    "off_high": -42.1,
    "ret_1w": 21.9,
    "ret_1m": -9.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "064760",
@@ -19190,7 +19228,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 32.8,
    "ema10": 178241.0217138225,
-   "ema20": 194411.53813766243,
+   "ema20": 194411.53813765722,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -19225,7 +19263,7 @@
    "off_high": -47.3,
    "ret_1w": 22.5,
    "ret_1m": -20.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "032820",
@@ -19239,7 +19277,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 69.5,
-   "rs_momentum": -0.5,
+   "rs_momentum": 0.5,
    "rs_new_high": false,
    "sector": "전동기, 발전기 및 전기 변환 · 공급 · 제어 장치 제조업",
    "sector_rs": 0.0,
@@ -19255,7 +19293,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 51.6,
    "ema10": 9998.410366617867,
-   "ema20": 10293.533602551826,
+   "ema20": 10293.5336025524,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19290,7 +19328,7 @@
    "off_high": -61.2,
    "ret_1w": 45.2,
    "ret_1m": 7.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "068760",
@@ -19304,7 +19342,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 23.8,
-   "rs_momentum": -1.2,
+   "rs_momentum": -0.2,
    "rs_new_high": false,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
@@ -19320,7 +19358,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 10.5,
    "ema10": 40409.94152303661,
-   "ema20": 40411.27981895578,
+   "ema20": 40411.27981896482,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19355,7 +19393,7 @@
    "off_high": -46.4,
    "ret_1w": 9.1,
    "ret_1m": 0.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "140860",
@@ -19369,7 +19407,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 55.6,
-   "rs_momentum": 1.6,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "측정, 시험, 항해, 제어 및 기타 정밀기기 제조업; 광학기기 제외",
    "sector_rs": 0.0,
@@ -19385,7 +19423,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.5,
    "ema10": 248392.77013954858,
-   "ema20": 251526.55263591776,
+   "ema20": 251526.55263594133,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19420,7 +19458,7 @@
    "off_high": -27.8,
    "ret_1w": 7.4,
    "ret_1m": -6.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "089030",
@@ -19450,7 +19488,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 50.2,
    "ema10": 44140.79391082483,
-   "ema20": 45128.97069490518,
+   "ema20": 45128.97069490326,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19485,7 +19523,7 @@
    "off_high": -35.3,
    "ret_1w": 39.2,
    "ret_1m": 16.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "041510",
@@ -19515,7 +19553,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 10.8,
    "ema10": 71538.38636093307,
-   "ema20": 71888.80186236033,
+   "ema20": 71888.8018623617,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19550,7 +19588,7 @@
    "off_high": -52.5,
    "ret_1w": 10.5,
    "ret_1m": -10.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "035900",
@@ -19564,7 +19602,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 21.0,
-   "rs_momentum": 0.0,
+   "rs_momentum": 1.0,
    "rs_new_high": true,
    "sector": "오디오물 출판 및 원판 녹음업",
    "sector_rs": 0.0,
@@ -19580,7 +19618,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 9.8,
    "ema10": 45155.82380322511,
-   "ema20": 46490.77761059505,
+   "ema20": 46490.77761059437,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -19615,7 +19653,7 @@
    "off_high": -47.9,
    "ret_1w": 7.3,
    "ret_1m": -15.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "290650",
@@ -19629,7 +19667,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 74.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
@@ -19645,7 +19683,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 19.1,
    "ema10": 56760.74822801835,
-   "ema20": 61876.95737314172,
+   "ema20": 61876.95737314272,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -19679,7 +19717,7 @@
    "off_high": -53.8,
    "ret_1w": 10.5,
    "ret_1m": -27.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "030530",
@@ -19693,7 +19731,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 28.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
@@ -19744,7 +19782,7 @@
    "off_high": -58.7,
    "ret_1w": 47.6,
    "ret_1m": 16.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "0009K0",
@@ -19809,7 +19847,7 @@
    "off_high": -69.7,
    "ret_1w": 34.0,
    "ret_1m": -6.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "083650",
@@ -19839,7 +19877,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 46.0,
    "ema10": 44221.715667571516,
-   "ema20": 45587.78726323811,
+   "ema20": 45587.787263236314,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19874,7 +19912,7 @@
    "off_high": -55.8,
    "ret_1w": 40.5,
    "ret_1m": 1.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "060370",
@@ -19904,7 +19942,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 36.2,
    "ema10": 28110.680129798908,
-   "ema20": 27903.486788525002,
+   "ema20": 27903.486788525795,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -19938,7 +19976,7 @@
    "off_high": -39.1,
    "ret_1w": 28.2,
    "ret_1m": 19.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "007390",
@@ -19952,7 +19990,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": true,
    "rs_rank": 68.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
@@ -19968,7 +20006,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.0,
    "ema10": 22620.16294636735,
-   "ema20": 23358.772597634183,
+   "ema20": 23358.77259763497,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -20003,7 +20041,7 @@
    "off_high": -43.7,
    "ret_1w": -2.4,
    "ret_1m": -3.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "082920",
@@ -20017,7 +20055,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 69.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": -1.2,
    "rs_new_high": false,
    "sector": "일차전지 및 이차전지 제조업",
    "sector_rs": 0.0,
@@ -20033,7 +20071,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 30.8,
    "ema10": 29507.2938573334,
-   "ema20": 30855.23108613809,
+   "ema20": 30855.231086138556,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20067,7 +20105,7 @@
    "off_high": -52.7,
    "ret_1w": 22.8,
    "ret_1m": -7.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "078600",
@@ -20097,7 +20135,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 36.9,
    "ema10": 76105.11162149259,
-   "ema20": 78744.73037761956,
+   "ema20": 78744.73037761754,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20132,7 +20170,7 @@
    "off_high": -53.4,
    "ret_1w": 34.3,
    "ret_1m": 4.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "039200",
@@ -20146,8 +20184,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 27.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "의약품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -20162,7 +20200,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.0,
    "ema10": 31519.2581446286,
-   "ema20": 31828.79183490518,
+   "ema20": 31828.79183490574,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20197,7 +20235,7 @@
    "off_high": -49.1,
    "ret_1w": 15.3,
    "ret_1m": 1.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "131970",
@@ -20211,7 +20249,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 52.2,
-   "rs_momentum": 0.2,
+   "rs_momentum": -0.8,
    "rs_new_high": false,
    "sector": "그외 기타 전문, 과학 및 기술 서비스업",
    "sector_rs": 0.0,
@@ -20227,7 +20265,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 33.4,
    "ema10": 69421.44701125419,
-   "ema20": 79277.72116739869,
+   "ema20": 79277.72116739792,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -20262,7 +20300,7 @@
    "off_high": -64.9,
    "ret_1w": 23.6,
    "ret_1m": -33.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "218410",
@@ -20292,7 +20330,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 48.2,
    "ema10": 45380.401344995655,
-   "ema20": 47923.88678402645,
+   "ema20": 47923.88678402331,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20327,7 +20365,7 @@
    "off_high": -58.8,
    "ret_1w": 41.2,
    "ret_1m": -4.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "475830",
@@ -20341,7 +20379,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 51.3,
-   "rs_momentum": -1.7,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "기초 의약물질 제조업",
    "sector_rs": 0.0,
@@ -20357,7 +20395,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 56.1,
    "ema10": 49120.967152901234,
-   "ema20": 48826.32763566377,
+   "ema20": 48826.32763566185,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20392,7 +20430,7 @@
    "off_high": -59.8,
    "ret_1w": 49.2,
    "ret_1m": 16.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "043260",
@@ -20422,7 +20460,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 60.3,
    "ema10": 16618.684224365476,
-   "ema20": 18636.676964448143,
+   "ema20": 18636.67696444811,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -20457,7 +20495,7 @@
    "off_high": -68.1,
    "ret_1w": 45.0,
    "ret_1m": -2.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "323280",
@@ -20471,7 +20509,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 45.1,
-   "rs_momentum": 5.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -20487,7 +20525,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 86.3,
    "ema10": 35487.278860744824,
-   "ema20": 35870.87200548318,
+   "ema20": 35870.87200548474,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20522,7 +20560,7 @@
    "off_high": -52.3,
    "ret_1w": 73.0,
    "ret_1m": 16.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "003380",
@@ -20536,7 +20574,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 70.9,
-   "rs_momentum": 1.9,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -20552,7 +20590,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.2,
    "ema10": 9964.569885079969,
-   "ema20": 9890.454964312636,
+   "ema20": 9890.454964311984,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20586,7 +20624,7 @@
    "off_high": -44.6,
    "ret_1w": 23.2,
    "ret_1m": 8.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "183300",
@@ -20616,7 +20654,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 0.0,
    "ema10": 57990.922933341484,
-   "ema20": 64708.54565753469,
+   "ema20": 64708.54565753378,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -20651,7 +20689,7 @@
    "off_high": -60.9,
    "ret_1w": 0.0,
    "ret_1m": -25.0,
-   "days_in_stage": 34
+   "days_in_stage": 35
   },
   {
    "ticker": "195940",
@@ -20681,7 +20719,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.0,
    "ema10": 38001.514603688396,
-   "ema20": 38434.105347061624,
+   "ema20": 38434.10534706209,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20716,7 +20754,7 @@
    "off_high": -30.9,
    "ret_1w": 12.5,
    "ret_1m": -2.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "166090",
@@ -20730,7 +20768,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 65.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": -1.2,
    "rs_new_high": false,
    "sector": "반도체 제조업",
    "sector_rs": 0.0,
@@ -20746,7 +20784,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.5,
    "ema10": 52781.450136860134,
-   "ema20": 53822.99215597636,
+   "ema20": 53822.99215597524,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20781,7 +20819,7 @@
    "off_high": -36.4,
    "ret_1w": 23.0,
    "ret_1m": 8.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "101490",
@@ -20795,7 +20833,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 9.4,
-   "rs_momentum": 0.4,
+   "rs_momentum": -0.6,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -20811,7 +20849,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.7,
    "ema10": 40887.557221134426,
-   "ema20": 42959.989028129276,
+   "ema20": 42959.989028132084,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -20846,7 +20884,7 @@
    "off_high": -59.3,
    "ret_1w": 29.7,
    "ret_1m": -5.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "085660",
@@ -20876,7 +20914,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 13.4,
    "ema10": 8895.650502528104,
-   "ema20": 9228.72816749486,
+   "ema20": 9228.728167495512,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -20911,7 +20949,7 @@
    "off_high": -62.0,
    "ret_1w": 12.5,
    "ret_1m": -12.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "065350",
@@ -20941,7 +20979,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 32.4,
    "ema10": 29127.220690632625,
-   "ema20": 29311.082969253115,
+   "ema20": 29311.08296925109,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -20976,7 +21014,7 @@
    "off_high": -61.6,
    "ret_1w": 32.4,
    "ret_1m": 9.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "293490",
@@ -20990,8 +21028,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 7.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -21006,7 +21044,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 12.1,
    "ema10": 7838.174828570961,
-   "ema20": 7891.010253744398,
+   "ema20": 7891.010253743522,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -21041,7 +21079,7 @@
    "off_high": -57.9,
    "ret_1w": 5.7,
    "ret_1m": -0.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "204270",
@@ -21071,7 +21109,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.5,
    "ema10": 14121.831049853035,
-   "ema20": 14673.343658489854,
+   "ema20": 14673.343658488437,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21106,7 +21144,7 @@
    "off_high": -49.5,
    "ret_1w": 28.7,
    "ret_1m": -2.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "388720",
@@ -21120,7 +21158,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 32.1,
-   "rs_momentum": 3.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -21136,7 +21174,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 30.9,
    "ema10": 65413.09369801107,
-   "ema20": 65704.49344901695,
+   "ema20": 65704.49344901089,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21171,7 +21209,7 @@
    "off_high": -52.7,
    "ret_1w": 21.8,
    "ret_1m": 3.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "036540",
@@ -21185,8 +21223,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 46.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "반도체 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -21201,7 +21239,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.9,
    "ema10": 4933.889704574123,
-   "ema20": 5160.668759901608,
+   "ema20": 5160.668759901541,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -21236,7 +21274,7 @@
    "off_high": -55.0,
    "ret_1w": 30.0,
    "ret_1m": 2.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "090710",
@@ -21266,7 +21304,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 37.7,
    "ema10": 6717.784771444271,
-   "ema20": 6911.586552779,
+   "ema20": 6911.586552778539,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21301,7 +21339,7 @@
    "off_high": -71.3,
    "ret_1w": 28.2,
    "ret_1m": 7.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "099320",
@@ -21331,7 +21369,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.1,
    "ema10": 70766.41304324477,
-   "ema20": 75479.75583570766,
+   "ema20": 75479.75583570621,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -21366,7 +21404,7 @@
    "off_high": -67.1,
    "ret_1w": 20.4,
    "ret_1m": -9.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "328130",
@@ -21396,7 +21434,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.3,
    "ema10": 9879.706675320378,
-   "ema20": 10114.5381433073,
+   "ema20": 10114.538143302354,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21431,7 +21469,7 @@
    "off_high": -56.2,
    "ret_1w": 19.6,
    "ret_1m": -2.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "038500",
@@ -21461,7 +21499,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.7,
    "ema10": 7279.223807581007,
-   "ema20": 7589.9275663769995,
+   "ema20": 7589.927566376897,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -21496,7 +21534,7 @@
    "off_high": -66.5,
    "ret_1w": 23.4,
    "ret_1m": -5.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "281740",
@@ -21526,7 +21564,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 26.9,
    "ema10": 11392.139428470446,
-   "ema20": 11876.99709582728,
+   "ema20": 11876.99709582694,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21561,7 +21599,7 @@
    "off_high": -57.3,
    "ret_1w": 25.4,
    "ret_1m": -5.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "213420",
@@ -21575,7 +21613,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 19.3,
-   "rs_momentum": 0.3,
+   "rs_momentum": -0.7,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -21591,7 +21629,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.4,
    "ema10": 29856.503068504637,
-   "ema20": 30186.885571561226,
+   "ema20": 30186.88557155775,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21626,7 +21664,7 @@
    "off_high": -44.7,
    "ret_1w": 22.4,
    "ret_1m": 7.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "417200",
@@ -21640,7 +21678,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 19.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": -0.1,
    "rs_new_high": false,
    "sector": "전자부품 제조업",
    "sector_rs": 0.0,
@@ -21656,7 +21694,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 33.0,
    "ema10": 11071.647005583292,
-   "ema20": 11722.827483940964,
+   "ema20": 11722.827483940717,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -21691,7 +21729,7 @@
    "off_high": -63.3,
    "ret_1w": 27.9,
    "ret_1m": -8.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "056190",
@@ -21705,7 +21743,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 26.4,
-   "rs_momentum": 2.4,
+   "rs_momentum": 0.4,
    "rs_new_high": true,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -21721,7 +21759,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 21.3,
    "ema10": 20382.175688333948,
-   "ema20": 20852.9035878811,
+   "ema20": 20852.90358788043,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21756,7 +21794,7 @@
    "off_high": -40.4,
    "ret_1w": 19.2,
    "ret_1m": -0.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "100790",
@@ -21770,7 +21808,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 40.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "기타 금융업",
    "sector_rs": 0.0,
@@ -21786,7 +21824,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 39.1,
    "ema10": 13450.703415250515,
-   "ema20": 14958.400722681126,
+   "ema20": 14958.400722680204,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -21821,7 +21859,7 @@
    "off_high": -79.3,
    "ret_1w": 33.5,
    "ret_1m": -12.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "122870",
@@ -21835,7 +21873,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 18.4,
-   "rs_momentum": 1.4,
+   "rs_momentum": 0.4,
    "rs_new_high": true,
    "sector": "오디오물 출판 및 원판 녹음업",
    "sector_rs": 0.0,
@@ -21851,7 +21889,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 8.2,
    "ema10": 39377.42162232587,
-   "ema20": 40004.83043445972,
+   "ema20": 40004.830434452095,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21886,7 +21924,7 @@
    "off_high": -63.5,
    "ret_1w": 8.2,
    "ret_1m": -9.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "189300",
@@ -21916,7 +21954,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 42.5,
    "ema10": 62684.10890217232,
-   "ema20": 65183.56546045475,
+   "ema20": 65183.56546045196,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -21951,7 +21989,7 @@
    "off_high": -61.0,
    "ret_1w": 36.3,
    "ret_1m": 2.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "232140",
@@ -21965,7 +22003,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 5.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -21981,7 +22019,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 34.3,
    "ema10": 8963.700073440608,
-   "ema20": 9649.234178385366,
+   "ema20": 9649.234178385279,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -22016,7 +22054,7 @@
    "off_high": -60.3,
    "ret_1w": 30.5,
    "ret_1m": -12.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "137400",
@@ -22030,7 +22068,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 12.8,
-   "rs_momentum": -0.2,
+   "rs_momentum": 0.8,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -22081,7 +22119,7 @@
    "off_high": -49.9,
    "ret_1w": 23.2,
    "ret_1m": -7.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "032190",
@@ -22111,7 +22149,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 15.0,
    "ema10": 18420.210009319853,
-   "ema20": 18324.23691023988,
+   "ema20": 18324.2369102411,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22146,7 +22184,7 @@
    "off_high": -38.8,
    "ret_1w": 14.4,
    "ret_1m": 4.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "035760",
@@ -22160,8 +22198,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 5.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "텔레비전 방송업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -22176,7 +22214,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.4,
    "ema10": 31408.973134387386,
-   "ema20": 31493.423158409045,
+   "ema20": 31493.423158399837,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22211,7 +22249,7 @@
    "off_high": -60.9,
    "ret_1w": 8.2,
    "ret_1m": -2.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "445680",
@@ -22276,7 +22314,7 @@
    "off_high": -71.8,
    "ret_1w": 22.6,
    "ret_1m": -2.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "033100",
@@ -22290,7 +22328,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 45.4,
-   "rs_momentum": 0.4,
+   "rs_momentum": -0.6,
    "rs_new_high": false,
    "sector": "전동기, 발전기 및 전기 변환 · 공급 · 제어 장치 제조업",
    "sector_rs": 0.0,
@@ -22306,7 +22344,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.9,
    "ema10": 43207.92768947787,
-   "ema20": 44129.44343199942,
+   "ema20": 44129.44343199594,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22340,7 +22378,7 @@
    "off_high": -49.5,
    "ret_1w": 25.6,
    "ret_1m": 1.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "014620",
@@ -22354,7 +22392,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 26.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "1차 철강 제조업",
    "sector_rs": 0.0,
@@ -22370,7 +22408,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.1,
    "ema10": 26485.066101494238,
-   "ema20": 26680.10204010399,
+   "ema20": 26680.10204010298,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22405,7 +22443,7 @@
    "off_high": -48.5,
    "ret_1w": 9.8,
    "ret_1m": 6.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "074600",
@@ -22419,7 +22457,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 66.7,
-   "rs_momentum": -0.3,
+   "rs_momentum": 0.7,
    "rs_new_high": false,
    "sector": "유리 및 유리제품 제조업",
    "sector_rs": 0.0,
@@ -22435,7 +22473,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.1,
    "ema10": 25872.260061540026,
-   "ema20": 27234.646804028765,
+   "ema20": 27234.64680402849,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -22470,7 +22508,7 @@
    "off_high": -38.5,
    "ret_1w": 29.5,
    "ret_1m": -9.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "090360",
@@ -22484,7 +22522,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 83.1,
-   "rs_momentum": 4.1,
+   "rs_momentum": -0.9,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -22500,7 +22538,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 49.4,
    "ema10": 65318.492585243905,
-   "ema20": 67360.70081170103,
+   "ema20": 67360.70081170026,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22532,7 +22570,7 @@
    "off_high": -55.2,
    "ret_1w": 39.6,
    "ret_1m": 6.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "253450",
@@ -22562,7 +22600,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 12.7,
    "ema10": 21513.191570423598,
-   "ema20": 21464.600370125707,
+   "ema20": 21464.6003701238,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22597,7 +22635,7 @@
    "off_high": -57.0,
    "ret_1w": 8.3,
    "ret_1m": -3.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "036830",
@@ -22611,7 +22649,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 7.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "회사 본부 및 경영 컨설팅 서비스업",
    "sector_rs": 0.0,
@@ -22627,7 +22665,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.4,
    "ema10": 31592.36678747505,
-   "ema20": 32532.823514574626,
+   "ema20": 32532.823514575302,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22662,7 +22700,7 @@
    "off_high": -57.4,
    "ret_1w": 26.0,
    "ret_1m": -1.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "466100",
@@ -22676,7 +22714,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 21.6,
-   "rs_momentum": 0.6,
+   "rs_momentum": -0.4,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -22692,7 +22730,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 39.2,
    "ema10": 25094.111132064227,
-   "ema20": 25494.351473865612,
+   "ema20": 25494.351473863826,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22727,7 +22765,7 @@
    "off_high": -63.6,
    "ret_1w": 28.2,
    "ret_1m": 7.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "032500",
@@ -22741,8 +22779,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 37.2,
-   "rs_momentum": -0.8,
-   "rs_new_high": false,
+   "rs_momentum": 0.2,
+   "rs_new_high": true,
    "sector": "통신 및 방송 장비 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -22757,7 +22795,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 38.3,
    "ema10": 15308.303467057129,
-   "ema20": 15987.879831982607,
+   "ema20": 15987.87983198191,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22792,7 +22830,7 @@
    "off_high": -57.3,
    "ret_1w": 28.5,
    "ret_1m": 6.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "006730",
@@ -22806,8 +22844,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 44.3,
-   "rs_momentum": -1.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "일반 및 생활 숙박시설 운영업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -22822,7 +22860,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.0,
    "ema10": 9961.974074526084,
-   "ema20": 10027.118160428205,
+   "ema20": 10027.118160427935,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22857,7 +22895,7 @@
    "off_high": -49.3,
    "ret_1w": 10.8,
    "ret_1m": -6.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "171090",
@@ -22871,7 +22909,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 72.9,
-   "rs_momentum": 0.9,
+   "rs_momentum": -0.1,
    "rs_new_high": false,
    "sector": "특수 목적용 기계 제조업",
    "sector_rs": 0.0,
@@ -22887,7 +22925,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 33.5,
    "ema10": 59173.487874457394,
-   "ema20": 58304.63941708587,
+   "ema20": 58304.63941708429,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -22921,7 +22959,7 @@
    "off_high": -54.1,
    "ret_1w": 32.5,
    "ret_1m": 22.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "048410",
@@ -22951,7 +22989,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 29.2,
    "ema10": 6236.843704703926,
-   "ema20": 6543.942885631692,
+   "ema20": 6543.942885631825,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -22986,7 +23024,7 @@
    "off_high": -68.3,
    "ret_1w": 26.3,
    "ret_1m": -8.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "053800",
@@ -23000,7 +23038,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 58.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -23016,7 +23054,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 9.7,
    "ema10": 54428.3012699733,
-   "ema20": 54235.77537920756,
+   "ema20": 54235.7753792098,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23051,7 +23089,7 @@
    "off_high": -24.7,
    "ret_1w": 8.7,
    "ret_1m": 4.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "052400",
@@ -23081,7 +23119,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.8,
    "ema10": 39968.20704181235,
-   "ema20": 40819.337552037934,
+   "ema20": 40819.337552033656,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23116,7 +23154,7 @@
    "off_high": -42.4,
    "ret_1w": 17.8,
    "ret_1m": -7.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "161580",
@@ -23146,7 +23184,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 32.8,
    "ema10": 25279.45035288182,
-   "ema20": 27115.09499650143,
+   "ema20": 27115.09499650031,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -23181,7 +23219,7 @@
    "off_high": -58.8,
    "ret_1w": 30.5,
    "ret_1m": -16.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "050890",
@@ -23211,7 +23249,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 35.9,
    "ema10": 9088.307369799199,
-   "ema20": 9409.47392593096,
+   "ema20": 9409.47392593062,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23246,7 +23284,7 @@
    "off_high": -51.8,
    "ret_1w": 30.3,
    "ret_1m": 1.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "399720",
@@ -23260,8 +23298,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 30.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "반도체 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -23276,7 +23314,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 31.4,
    "ema10": 46654.963712651705,
-   "ema20": 46702.28067910597,
+   "ema20": 46702.28067910541,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23311,7 +23349,7 @@
    "off_high": -42.2,
    "ret_1w": 11.6,
    "ret_1m": -1.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "358570",
@@ -23341,7 +23379,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.1,
    "ema10": 7738.840917897024,
-   "ema20": 8024.2001576711755,
+   "ema20": 8024.200157671736,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23376,7 +23414,7 @@
    "off_high": -61.0,
    "ret_1w": 17.5,
    "ret_1m": -7.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "222080",
@@ -23441,7 +23479,7 @@
    "off_high": -62.4,
    "ret_1w": 25.7,
    "ret_1m": -4.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "112040",
@@ -23455,7 +23493,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 11.1,
-   "rs_momentum": 1.1,
+   "rs_momentum": 0.1,
    "rs_new_high": true,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
@@ -23471,7 +23509,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 11.7,
    "ema10": 15718.153453279629,
-   "ema20": 16192.838125446815,
+   "ema20": 16192.838125445243,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -23506,7 +23544,7 @@
    "off_high": -54.6,
    "ret_1w": 11.7,
    "ret_1m": -15.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "295310",
@@ -23520,7 +23558,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 30.9,
-   "rs_momentum": -0.1,
+   "rs_momentum": 0.9,
    "rs_new_high": false,
    "sector": "1차 비철금속 제조업",
    "sector_rs": 0.0,
@@ -23536,7 +23574,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 41.3,
    "ema10": 39795.47000357179,
-   "ema20": 43248.68687477524,
+   "ema20": 43248.68687477356,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23571,7 +23609,7 @@
    "off_high": -69.9,
    "ret_1w": 36.2,
    "ret_1m": -15.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "060250",
@@ -23585,7 +23623,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 16.7,
-   "rs_momentum": 0.7,
+   "rs_momentum": -0.3,
    "rs_new_high": false,
    "sector": "금융 지원 서비스업",
    "sector_rs": 0.0,
@@ -23601,7 +23639,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 18.1,
    "ema10": 12473.767825513245,
-   "ema20": 12554.714681402816,
+   "ema20": 12554.714681401088,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23636,7 +23674,7 @@
    "off_high": -48.0,
    "ret_1w": 18.1,
    "ret_1m": 3.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "082270",
@@ -23666,7 +23704,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 25.5,
    "ema10": 10745.419360538039,
-   "ema20": 10824.91246343224,
+   "ema20": 10824.912463434039,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23701,7 +23739,7 @@
    "off_high": -81.1,
    "ret_1w": 20.6,
    "ret_1m": 1.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "376300",
@@ -23731,7 +23769,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 5.8,
    "ema10": 20193.174450066203,
-   "ema20": 20487.057398009216,
+   "ema20": 20487.05739800338,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -23766,7 +23804,7 @@
    "off_high": -66.0,
    "ret_1w": 5.8,
    "ret_1m": -13.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "124500",
@@ -23780,7 +23818,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 19.6,
-   "rs_momentum": -0.4,
+   "rs_momentum": 0.6,
    "rs_new_high": false,
    "sector": "컴퓨터 프로그래밍, 시스템 통합 및 관리업",
    "sector_rs": 0.0,
@@ -23796,7 +23834,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 27.0,
    "ema10": 21666.651397244732,
-   "ema20": 22202.56995622992,
+   "ema20": 22202.56995622913,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23831,7 +23869,7 @@
    "off_high": -68.9,
    "ret_1w": 25.5,
    "ret_1m": 10.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "121600",
@@ -23845,7 +23883,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 7.9,
-   "rs_momentum": -1.1,
+   "rs_momentum": -0.1,
    "rs_new_high": false,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
@@ -23861,7 +23899,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.8,
    "ema10": 41360.96588043266,
-   "ema20": 42873.64652775472,
+   "ema20": 42873.64652775517,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23896,7 +23934,7 @@
    "off_high": -53.7,
    "ret_1w": 24.8,
    "ret_1m": -6.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "033500",
@@ -23910,8 +23948,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 10.5,
-   "rs_momentum": -0.5,
-   "rs_new_high": false,
+   "rs_momentum": 0.5,
+   "rs_new_high": true,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -23926,7 +23964,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.1,
    "ema10": 16184.371518581007,
-   "ema20": 16384.129658006583,
+   "ema20": 16384.129658005124,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -23961,7 +23999,7 @@
    "off_high": -50.2,
    "ret_1w": 16.1,
    "ret_1m": -0.5,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "067160",
@@ -23975,8 +24013,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 21.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "소프트웨어 개발 및 공급업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -24026,7 +24064,7 @@
    "off_high": -54.9,
    "ret_1w": -9.1,
    "ret_1m": -13.4,
-   "days_in_stage": 30
+   "days_in_stage": 31
   },
   {
    "ticker": "211050",
@@ -24040,7 +24078,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 54.2,
-   "rs_momentum": 2.2,
+   "rs_momentum": 1.2,
    "rs_new_high": true,
    "sector": "보험 및 연금관련 서비스업",
    "sector_rs": 0.0,
@@ -24056,7 +24094,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.1,
    "ema10": 9952.032446522839,
-   "ema20": 9918.865909058806,
+   "ema20": 9918.865909058131,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24091,7 +24129,7 @@
    "off_high": -40.2,
    "ret_1w": 9.9,
    "ret_1m": -1.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "214430",
@@ -24121,7 +24159,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 25.5,
    "ema10": 61460.49153790275,
-   "ema20": 61211.33828430794,
+   "ema20": 61211.33828430118,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24156,7 +24194,7 @@
    "off_high": -51.8,
    "ret_1w": 20.9,
    "ret_1m": 7.3,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "056080",
@@ -24186,7 +24224,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 52.2,
    "ema10": 11945.548788569817,
-   "ema20": 12389.675860078245,
+   "ema20": 12389.675860077683,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24221,7 +24259,7 @@
    "off_high": -71.2,
    "ret_1w": 44.6,
    "ret_1m": 8.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "015750",
@@ -24251,7 +24289,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 16.5,
    "ema10": 5697.668316130394,
-   "ema20": 5779.110273960619,
+   "ema20": 5779.110273960642,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24286,7 +24324,7 @@
    "off_high": -50.0,
    "ret_1w": 16.5,
    "ret_1m": 0.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "009520",
@@ -24300,8 +24338,8 @@
    "ma150_above_ma200": true,
    "ma200_rising": false,
    "rs_rank": 9.1,
-   "rs_momentum": -0.9,
-   "rs_new_high": false,
+   "rs_momentum": 0.1,
+   "rs_new_high": true,
    "sector": "1차 철강 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -24316,7 +24354,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.4,
    "ema10": 10492.602079906965,
-   "ema20": 10819.655959451627,
+   "ema20": 10819.655959451671,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24351,7 +24389,7 @@
    "off_high": -51.0,
    "ret_1w": 23.4,
    "ret_1m": -0.8,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "042000",
@@ -24381,7 +24419,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.0,
    "ema10": 17200.692336260276,
-   "ema20": 17143.437866703633,
+   "ema20": 17143.437866701617,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24416,7 +24454,7 @@
    "off_high": -61.5,
    "ret_1w": 11.1,
    "ret_1m": 3.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "018290",
@@ -24430,7 +24468,7 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 22.1,
-   "rs_momentum": 0.1,
+   "rs_momentum": -0.9,
    "rs_new_high": false,
    "sector": "기타 화학제품 제조업",
    "sector_rs": 0.0,
@@ -24446,7 +24484,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 22.6,
    "ema10": 12011.175563536231,
-   "ema20": 11884.083173022123,
+   "ema20": 11884.083173023922,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24481,7 +24519,7 @@
    "off_high": -66.6,
    "ret_1w": 21.9,
    "ret_1m": 7.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "030520",
@@ -24511,7 +24549,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 22.7,
    "ema10": 17238.406953641606,
-   "ema20": 17184.58083544854,
+   "ema20": 17184.580835447534,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24546,7 +24584,7 @@
    "off_high": -33.4,
    "ret_1w": 22.7,
    "ret_1m": 2.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "348370",
@@ -24576,7 +24614,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 43.0,
    "ema10": 18908.28124060056,
-   "ema20": 20228.209190165522,
+   "ema20": 20228.209190165977,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24611,7 +24649,7 @@
    "off_high": -79.9,
    "ret_1w": 43.0,
    "ret_1m": -10.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "215200",
@@ -24641,7 +24679,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 13.6,
    "ema10": 40659.21007630574,
-   "ema20": 40149.21932443054,
+   "ema20": 40149.21932442897,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24676,7 +24714,7 @@
    "off_high": -18.7,
    "ret_1w": 2.3,
    "ret_1m": 0.4,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "036810",
@@ -24706,7 +24744,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 37.1,
    "ema10": 19413.081822943714,
-   "ema20": 20557.193614349195,
+   "ema20": 20557.193614348882,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -24741,7 +24779,7 @@
    "off_high": -58.6,
    "ret_1w": 31.5,
    "ret_1m": -5.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "278280",
@@ -24755,8 +24793,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 4.3,
-   "rs_momentum": -0.7,
-   "rs_new_high": false,
+   "rs_momentum": 0.3,
+   "rs_new_high": true,
    "sector": "기초 화학물질 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -24771,7 +24809,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.4,
    "ema10": 32477.969802567153,
-   "ema20": 33656.236836617856,
+   "ema20": 33656.23683661796,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": true,
@@ -24806,7 +24844,7 @@
    "off_high": -57.8,
    "ret_1w": 16.8,
    "ret_1m": -4.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "272290",
@@ -24836,7 +24874,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 20.4,
    "ema10": 19988.94232365298,
-   "ema20": 20797.106409576758,
+   "ema20": 20797.10640957653,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24871,7 +24909,7 @@
    "off_high": -53.2,
    "ret_1w": 18.9,
    "ret_1m": -7.1,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "025980",
@@ -24901,7 +24939,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 15.4,
    "ema10": 3671.699015598684,
-   "ema20": 3764.665739388973,
+   "ema20": 3764.6657393884793,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -24936,7 +24974,7 @@
    "off_high": -64.7,
    "ret_1w": 14.9,
    "ret_1m": -3.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "253590",
@@ -25001,7 +25039,7 @@
    "off_high": -56.6,
    "ret_1w": 28.8,
    "ret_1m": -5.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "060280",
@@ -25031,7 +25069,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.8,
    "ema10": 8370.192768590923,
-   "ema20": 8431.6579611066,
+   "ema20": 8431.657961106219,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25066,7 +25104,7 @@
    "off_high": -59.8,
    "ret_1w": 21.9,
    "ret_1m": 6.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "041190",
@@ -25096,7 +25134,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 17.9,
    "ema10": 4406.469214103454,
-   "ema20": 4481.828296512371,
+   "ema20": 4481.828296512572,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25131,7 +25169,7 @@
    "off_high": -64.7,
    "ret_1w": 16.2,
    "ret_1m": 0.0,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "078340",
@@ -25161,7 +25199,7 @@
    "ma20_rising": true,
    "rise_from_low_pct": 36.3,
    "ema10": 28695.889794662282,
-   "ema20": 27523.64020795317,
+   "ema20": 27523.64020795205,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25196,7 +25234,7 @@
    "off_high": -26.7,
    "ret_1w": 19.0,
    "ret_1m": 17.9,
-   "days_in_stage": 16
+   "days_in_stage": 17
   },
   {
    "ticker": "025320",
@@ -25226,7 +25264,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 25.1,
    "ema10": 3639.223955672558,
-   "ema20": 3787.241444307843,
+   "ema20": 3787.2414443073303,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25261,7 +25299,7 @@
    "off_high": -53.1,
    "ret_1w": 25.1,
    "ret_1m": -11.9,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "348210",
@@ -25291,7 +25329,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 28.1,
    "ema10": 31569.132257549132,
-   "ema20": 34800.12952071013,
+   "ema20": 34800.12952070743,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -25326,7 +25364,7 @@
    "off_high": -67.7,
    "ret_1w": 22.7,
    "ret_1m": -20.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "125490",
@@ -25340,7 +25378,7 @@
    "ma150_above_ma200": true,
    "ma200_rising": true,
    "rs_rank": 4.5,
-   "rs_momentum": 0.5,
+   "rs_momentum": -0.5,
    "rs_new_high": false,
    "sector": "자동차 신품 부품 제조업",
    "sector_rs": 0.0,
@@ -25391,7 +25429,7 @@
    "off_high": -65.2,
    "ret_1w": 37.3,
    "ret_1m": 7.7,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "025900",
@@ -25405,8 +25443,8 @@
    "ma150_above_ma200": false,
    "ma200_rising": false,
    "rs_rank": 3.4,
-   "rs_momentum": -0.6,
-   "rs_new_high": false,
+   "rs_momentum": 0.4,
+   "rs_new_high": true,
    "sector": "나무제품 제조업",
    "sector_rs": 0.0,
    "ma_aligned": false,
@@ -25421,7 +25459,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 23.0,
    "ema10": 5766.887211502058,
-   "ema20": 5878.6642033804,
+   "ema20": 5878.664203380871,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25456,7 +25494,7 @@
    "off_high": -52.6,
    "ret_1w": 23.0,
    "ret_1m": 4.4,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "101730",
@@ -25486,7 +25524,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 24.4,
    "ema10": 3462.027196155027,
-   "ema20": 3673.5825471423777,
+   "ema20": 3673.582547141681,
    "wedge_pop": false,
    "wedge_reclaim": false,
    "wedge_fresh": false,
@@ -25521,7 +25559,7 @@
    "off_high": -59.4,
    "ret_1w": 6.9,
    "ret_1m": -33.6,
-   "days_in_stage": 0
+   "days_in_stage": 1
   },
   {
    "ticker": "352480",
@@ -25551,7 +25589,7 @@
    "ma20_rising": false,
    "rise_from_low_pct": 14.7,
    "ema10": 18548.67845386564,
-   "ema20": 18816.65497257625,
+   "ema20": 18816.654972576805,
    "wedge_pop": false,
    "wedge_reclaim": true,
    "wedge_fresh": false,
@@ -25586,7 +25624,7 @@
    "off_high": -57.7,
    "ret_1w": 11.3,
    "ret_1m": -3.2,
-   "days_in_stage": 0
+   "days_in_stage": 1
   }
  ]
 }
