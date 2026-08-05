@@ -243,14 +243,16 @@ def collect_night_futures():
         except Exception as e:
             out["cme_code_error"] = str(e)[:100]
             cme = None
-        for label, code in (("cme_night", cme), ("krx_day", "101W09")):
+        for label, code, div in (("cme_night", cme, "F"), ("cme_night_JF", cme, "JF"),
+                                 ("krx_day", "101W09", "F"), ("krx_day_C9", "101C9000", "F")):
             if not code:
                 continue
             try:
                 data = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-price",
                                      "FHMIF10000000",
-                                     {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code})
+                                     {"FID_COND_MRKT_DIV_CODE": div, "FID_INPUT_ISCD": code})
                 o = (data or {}).get("output1") or (data or {}).get("output") or {}
+                out[f"_raw_{label}"] = o
                 last = _num(o.get("futs_prpr"))
                 if last is None:
                     continue
