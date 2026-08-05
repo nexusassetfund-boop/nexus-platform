@@ -89,8 +89,8 @@ RRG_EXTRA_NAMES = {
     "nuclear": "원전·원자력", "banks": "은행", "securities": "증권",
     "game": "게임", "semicon-front": "반도체 전공정", "semicon-back": "반도체 후공정",
     "power-equipment": "전력기기", "insurance": "보험",
-    # 게임 분리 후 개칭 — sector_map.json의 "미디어·엔터·게임"을 덮어씀
-    "media-ent-game": "미디어·엔터",
+    # 표시명 개칭 — sector_map.json 이름을 덮어씀 (게임 분리, 화장품 대표성)
+    "media-ent-game": "엔터", "retail-fashion-beauty": "화장품",
 }
 
 # 신규 상장 ETF의 최소 이력 예외 (기본 150거래일)
