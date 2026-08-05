@@ -578,16 +578,24 @@ _MARKET_EVENT_CAP = 60  # 시장 전체(scope:"market") 이벤트 상한
 
 # HTML 파싱 — 날짜 구분행(theDay)과 회사행(earnCalCompanyName + 6자리 코드)
 _INV_DAY_RE = re.compile(r'class="theDay"[^>]*>\s*(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일')
+# 종목코드는 <a> 링크 안에 들어있다 — 예전 마크업의 평문 "(A005930)" 형태가 아니다.
+#   <span class="earnCalCompanyName middle">SK텔레콤</span>&nbsp;(<a href="...">017670</a>)
 _INV_ROW_RE = re.compile(
-    r'earnCalCompanyName[^>]*>(?:<[^>]+>)*([^<]+)</.*?\(A?(\d{6})\)', re.S)
+    r'earnCalCompanyName[^>]*>([^<]+)</span>.*?>A?(\d{6})<', re.S)
 
 
-def _investing_fetch(bgn: dt.date, end: dt.date) -> list[dict]:
-    """인베스팅 한국 실적 캘린더 [{code, name, date}] — 실패 시 [] (fail-soft).
+def _investing_html(bgn: dt.date, end: dt.date) -> str:
+    """캘린더 HTML 조각 — 사전수집 파일 우선, 없으면 직접 HTTP (실패 시 "").
 
-    응답은 {"data": "<tr>...</tr>"} 형태의 HTML 테이블 조각.
-    Cloudflare 안티봇(403 challenge)에 차단될 수 있으며 그 경우 경고만 남긴다.
+    인베스팅은 Cloudflare 안티봇이 순수 HTTP를 403으로 막는다(페이지 GET도 차단돼
+    쿠키 우회도 불가). 워크플로는 scanner/investing_fetch.js(Playwright)로 미리 받아
+    INVESTING_HTML 경로에 넣어 두고, 여기서는 그 파일을 읽는다.
     """
+    path = os.environ.get("INVESTING_HTML", "").strip()
+    if path and Path(path).exists():
+        html = Path(path).read_text("utf-8", "replace")
+        logger.info("인베스팅 사전수집 HTML 사용: %s (%d자)", path, len(html))
+        return html
     form = [
         ("country[]", "11"),
         ("importance[]", "2"), ("importance[]", "3"),
@@ -600,10 +608,16 @@ def _investing_fetch(bgn: dt.date, end: dt.date) -> list[dict]:
     try:
         with urllib.request.urlopen(req, timeout=25) as r:
             body = r.read().decode("utf-8", "replace")
-        d = json.loads(body)
-        html = d.get("data") or ""
+        return json.loads(body).get("data") or ""
     except Exception as e:
         logger.warning("인베스팅 캘린더 조회 실패(건너뜀): %s", e)
+        return ""
+
+
+def _investing_fetch(bgn: dt.date, end: dt.date) -> list[dict]:
+    """인베스팅 한국 실적 캘린더 [{code, name, date}] — 실패 시 [] (fail-soft)."""
+    html = _investing_html(bgn, end)
+    if not html:
         return []
     rows: list[dict] = []
     cur_date: dt.date | None = None
@@ -637,6 +651,17 @@ def _investing_by_code(today: dt.date, enabled: bool = True) -> dict[str, dict]:
 
 
 # ── 이벤트 생성 ───────────────────────────────────────────────────
+
+# 작년 공시일 기준 재추정은 +365d가 아니라 +52주 — 365d는 요일이 하루 밀려
+# 작년 금요일 발표가 올해 토요일로 찍힌다. 기업은 날짜가 아니라 요일 기준으로 잡는다.
+_YEAR_52W = dt.timedelta(weeks=52)
+
+
+def _bizday(d: dt.date) -> dt.date:
+    """주말이면 다음 월요일 — 한국 기업은 주말에 실적을 공시하지 않는다."""
+    while d.weekday() >= 5:
+        d += dt.timedelta(days=1)
+    return d
 
 def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) -> dict:
     year, q = _last_quarter(today)
@@ -796,18 +821,18 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         date_kind = "예상"
         status = "발표완료" if actual else "발표예정"
         if prelim:
-            # 잠정 관행 Y — 작년 잠정공시일 +365d
-            est = dt.date(int(prelim[:4]), int(prelim[4:6]), int(prelim[6:])) + dt.timedelta(days=365)
+            # 잠정 관행 Y — 작년 잠정공시일 +52주
+            est = _bizday(dt.date(int(prelim[:4]), int(prelim[4:6]), int(prelim[6:])) + _YEAR_52W)
             date, date_src = est.isoformat(), "추정"
         elif concall_date and concall_date >= today.isoformat():
             # 잠정 관행 N — IR 컨콜이 첫 공개일
             date, date_src = concall_date, "IR공시"
         elif periodic_base:
-            est = dt.date(int(periodic_base[:4]), int(periodic_base[4:6]),
-                          int(periodic_base[6:])) + dt.timedelta(days=365)
+            est = _bizday(dt.date(int(periodic_base[:4]), int(periodic_base[4:6]),
+                                  int(periodic_base[6:])) + _YEAR_52W)
             date, date_src = est.isoformat(), "추정"
         else:
-            date, date_src = (qend + dt.timedelta(days=45)).isoformat(), "추정"
+            date, date_src = _bizday(qend + dt.timedelta(days=45)).isoformat(), "추정"
 
     # stale 처리 — 발표예정인데 예상일이 이미 지난 경우(올해 잠정 미공시 등):
     # 미래 컨콜일이 있으면 그 날로 승격, 없으면 분기말+45d로 재추정하고 date_kind="지연"
@@ -815,7 +840,7 @@ def _build_event(code: str, name: str, today: dt.date, inv: dict | None = None) 
         if concall_date and concall_date >= today.isoformat():
             date, date_src, date_kind = concall_date, "IR공시", "예상"
         else:
-            date = max(qend + dt.timedelta(days=45), today).isoformat()
+            date = _bizday(max(qend + dt.timedelta(days=45), today)).isoformat()
             date_kind = "지연"
 
     # IR 승격 — 추정일보다 IR공시 컨콜일이 빠르면 그 날이 첫 숫자 공개일
