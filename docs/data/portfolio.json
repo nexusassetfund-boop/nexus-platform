@@ -1,27 +1,28 @@
 {
- "updated": "2026-08-06T11:21:47+09:00",
+ "updated": "2026-08-06T12:10:00+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": null,
+  "portfolio_value": 139585377.0,
   "cash": 95124494.0,
-  "eval_pnl": -1011500.04,
-  "eval_pnl_pct": -2.25,
-  "cum_pnl": null,
-  "cum_pnl_pct": null,
+  "eval_pnl": -366500.04,
+  "eval_pnl_pct": -0.81,
+  "cum_pnl": -10414623.0,
+  "cum_pnl_pct": -6.94,
   "day_change": null,
   "day_change_pct": null,
-  "nav_index": null,
+  "realized_pnl": 9866506.0,
+  "nav_index": 930.57,
   "n_stocks": 3.0,
   "n_win": 3.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6285.2,
-    "change": -313.0
+    "value": 6334.0,
+    "change": -264.2
    },
    "kosdaq": {
-    "value": 785.2,
-    "change": 14.4
+    "value": 804.8,
+    "change": 5.2
    },
    "dow": {
     "value": 54349.1,
@@ -36,8 +37,8 @@
     "change": -13.0
    },
    "usdkrw": {
-    "value": 1416.7,
-    "change": 7.0
+    "value": 1418.4,
+    "change": 5.7
    }
   }
  },
@@ -47,13 +48,13 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 86.0,
-   "price": 238500.0,
-   "change_pct": 2.8,
+   "price": 241000.0,
+   "change_pct": 3.88,
    "avg_price": 232453.0,
-   "eval_pnl": 520000.0,
-   "return_pct": 2.6,
-   "contrib_pct": 0.52,
-   "eval_amount": 20511000.0,
+   "eval_pnl": 735000.0,
+   "return_pct": 3.68,
+   "contrib_pct": 0.73,
+   "eval_amount": 20726000.0,
    "buy_amount": 19991000.0,
    "target_price": null,
    "buy_date": "2026-07-01",
@@ -66,13 +67,13 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 5.0,
-   "price": 1528000.0,
-   "change_pct": -8.39,
+   "price": 1532000.0,
+   "change_pct": -8.15,
    "avg_price": 2025000.0,
-   "eval_pnl": -2485000.0,
-   "return_pct": -24.54,
-   "contrib_pct": -2.49,
-   "eval_amount": 7640000.0,
+   "eval_pnl": -2465000.0,
+   "return_pct": -24.35,
+   "contrib_pct": -2.47,
+   "eval_amount": 7660000.0,
    "buy_amount": 10125000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
@@ -85,13 +86,13 @@
    "code": "214450",
    "name": "파마리서치",
    "qty": 41.0,
-   "price": 386500.0,
-   "change_pct": 2.25,
+   "price": 396500.0,
+   "change_pct": 4.89,
    "avg_price": 363244.0,
-   "eval_pnl": 953500.0,
-   "return_pct": 6.4,
-   "contrib_pct": 0.95,
-   "eval_amount": 15846500.0,
+   "eval_pnl": 1363500.0,
+   "return_pct": 9.16,
+   "contrib_pct": 1.36,
+   "eval_amount": 16256500.0,
    "buy_amount": 14893000.0,
    "target_price": null,
    "buy_date": "2026-07-28",
@@ -130,7 +131,7 @@
    "target_price": null,
    "upside_pct": -100.0,
    "mktcap": "11,161,918억",
-   "per": "14.5x",
+   "per": "14.4x",
    "eps": "105,627원",
    "high52": 2987000.0,
    "low52": 245000.0,
@@ -148,7 +149,7 @@
    "target_price": 300000.0,
    "upside_pct": 25.79,
    "mktcap": "29,798억",
-   "per": "33.7x",
+   "per": "33.5x",
    "eps": "7,116원",
    "high52": 275500.0,
    "low52": 116200.0,
@@ -166,7 +167,7 @@
    "target_price": null,
    "upside_pct": -100.0,
    "mktcap": "1,312,985억",
-   "per": "8.5x",
+   "per": "8.4x",
    "eps": "117,817원",
    "high52": 2189000.0,
    "low52": 130900.0,
@@ -184,7 +185,7 @@
    "target_price": 680000.0,
    "upside_pct": 62.49,
    "mktcap": "39,623억",
-   "per": "48.3x",
+   "per": "48.1x",
    "eps": "8,737원",
    "high52": 792000.0,
    "low52": 160800.0,
@@ -298,7 +299,7 @@
    "qty": 140.0,
    "unit_price": 85600.0,
    "amount": 11984000.0,
-   "realized_pnl": null,
+   "realized_pnl": -392000.0,
    "fee": 1798.0,
    "tax": 23968.0,
    "memo": "포트폴리오 리셋으로 전량 매도"
@@ -368,7 +369,7 @@
    "qty": 6.0,
    "unit_price": 1303000.0,
    "amount": 7818000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1329000.0,
    "fee": 1173.0,
    "tax": 15636.0,
    "memo": ""
@@ -382,7 +383,7 @@
    "qty": 13.0,
    "unit_price": 656000.0,
    "amount": 8528000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1287000.0,
    "fee": 1279.0,
    "tax": 17056.0,
    "memo": "고점대비 -17%(-13% 절반 손절)"
@@ -396,7 +397,7 @@
    "qty": 6.0,
    "unit_price": 1340000.0,
    "amount": 8040000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1107000.0,
    "fee": 1206.0,
    "tax": 16080.0,
    "memo": ""
@@ -410,7 +411,7 @@
    "qty": 13.0,
    "unit_price": 621692.0,
    "amount": 8081996.0,
-   "realized_pnl": null,
+   "realized_pnl": -1733004.0,
    "fee": 1212.0,
    "tax": 16164.0,
    "memo": ""
@@ -424,7 +425,7 @@
    "qty": 84.0,
    "unit_price": 109050.0,
    "amount": 9160200.0,
-   "realized_pnl": null,
+   "realized_pnl": -869400.0,
    "fee": 1374.0,
    "tax": 18320.0,
    "memo": ""
@@ -494,7 +495,7 @@
    "qty": 112.0,
    "unit_price": 33050.0,
    "amount": 3701600.0,
-   "realized_pnl": null,
+   "realized_pnl": -1239100.0,
    "fee": 555.0,
    "tax": 7403.0,
    "memo": ""
@@ -508,7 +509,7 @@
    "qty": 112.0,
    "unit_price": 31000.0,
    "amount": 3472000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1468700.0,
    "fee": 521.0,
    "tax": 6944.0,
    "memo": ""
@@ -648,7 +649,7 @@
    "qty": 3.0,
    "unit_price": 1549000.0,
    "amount": 4647000.0,
-   "realized_pnl": null,
+   "realized_pnl": -1428000.0,
    "fee": 697.0,
    "tax": 9294.0,
    "memo": ""
@@ -676,7 +677,7 @@
    "qty": 2.0,
    "unit_price": 1617000.0,
    "amount": 3234000.0,
-   "realized_pnl": null,
+   "realized_pnl": -816000.0,
    "fee": 485.0,
    "tax": 6468.0,
    "memo": ""
@@ -704,7 +705,7 @@
    "qty": 460.0,
    "unit_price": 8340.0,
    "amount": 3836400.0,
-   "realized_pnl": null,
+   "realized_pnl": 1343200.0,
    "fee": 575.0,
    "tax": 7673.0,
    "memo": "전략실_눌림목"
@@ -718,7 +719,7 @@
    "qty": 44.0,
    "unit_price": 65500.0,
    "amount": 2881998.0,
-   "realized_pnl": null,
+   "realized_pnl": 459498.0,
    "fee": 432.0,
    "tax": 5764.0,
    "memo": "무상증자_마지막 날짜 매도"
@@ -890,6 +891,12 @@
    }
   ],
   "value": [
+   {
+    "date": "2026-8-6",
+    "portfolio_value": 139585377.0,
+    "total_value": 44642500.0,
+    "eval_pnl": -366500.04
+   },
    {
     "date": "2026-8-3",
     "portfolio_value": 136163123.0,
