@@ -550,8 +550,9 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
         else:
             new_holdings.append(h2)
 
-    # 신규 편입 — 시장 청산 신호는 전량 매도 대신 신규 편입 차단으로만 사용
-    if kospi.get("entry_allowed", True) and not kospi.get("exit_signal"):
+    # 신규 편입 — 시장 게이트는 MA200(entry_allowed)만 사용.
+    # KOSPI 전체청산 신호(exit_signal)는 참고 표시 전용 — 편입 차단에 쓰지 않는다.
+    if kospi.get("entry_allowed", True):
         # 재편입 쿨다운: 트랙별 가장 최근 이탈일 — 손절 이탈은 더 긴 쿨다운 적용
         last_exit = {}   # (ticker, tid) -> (exit_date, is_stop)
         for e in exited:
