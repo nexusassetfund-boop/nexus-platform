@@ -1,0 +1,73 @@
+name: CANSLIM 백테스트 (연구용·수동)
+# 임계치 완화가 유효한지 검증하는 일회성 리서치 잡. 정기 실행 안 함.
+# DART_API_KEY가 시크릿에만 있어 로컬에서 못 돌리므로 여기서 돈다.
+# tmp/ 캐시(가격 pkl ~100MB + DART json)를 actions/cache로 물려 단계별 재실행을 싸게 만든다.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "probe(시세만) | warm(DART 수집) | controls(대조군) | grid(OFAT+강건성)"
+        type: choice
+        default: warm
+        options: [probe, warm, controls, grid]
+      start:
+        description: "백테스트 시작(YYYY-MM-DD) — 기간분할 검증 시 변경"
+        default: "2021-07-01"
+      end:
+        description: "백테스트 종료(YYYY-MM-DD)"
+        default: "2026-06-30"
+      tag:
+        description: "출력 파일 접미사 (기간분할 결과를 덮어쓰지 않게)"
+        default: ""
+permissions:
+  contents: read
+concurrency: { group: canslim-backtest, cancel-in-progress: false }
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350   # 시세 다운로드 ~75분 + DART 수집 ~3시간 (캐시 미스 최악)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      # 가격 pkl과 DART 재무는 재수집이 비싸다(각각 ~75분·~3시간).
+      # 키를 고정해 매 실행 복원하고, 갱신분은 실행 끝에 새 키로 저장한다.
+      - name: 캐시 복원
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: tmp
+          key: cbt-cache-${{ github.run_id }}
+          restore-keys: cbt-cache-
+
+      - name: 백테스트 실행
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: |
+          set -o pipefail
+          mkdir -p tmp            # tee 대상 — 캐시 미스면 디렉터리가 없다
+          python scanner/canslim_backtest.py \
+            --${{ inputs.mode }} \
+            --start "${{ inputs.start }}" --end "${{ inputs.end }}" \
+            --tag "${{ inputs.tag }}" 2>&1 | tee tmp/run_${{ inputs.mode }}.log
+
+      - name: 캐시 저장
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: tmp
+          key: cbt-cache-${{ github.run_id }}
+
+      # 결과 JSON만 받는다 — 가격 pkl(100MB)은 캐시에 두고 아티팩트로 빼지 않는다.
+      - name: 결과 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canslim-backtest-${{ inputs.mode }}${{ inputs.tag }}
+          retention-days: 30
+          path: |
+            tmp/cbt_*.json
+            tmp/run_*.log

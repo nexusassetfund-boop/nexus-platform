@@ -58,6 +58,7 @@ ROOT = Path(__file__).parent.parent
 
 FSCORE_CACHE_PATH = CACHE_DIR / "vbt_fscore.json"
 KRX_DUMP_GLOB = str(Path.home() / "krx_pit_*.json")
+KRX_PIT_GZ = Path(__file__).parent / "data" / "krx_pit_60m.json.gz"
 
 DART_SLEEP = 0.15   # DART 호출 간격 (분당 한도 보호)
 
@@ -125,7 +126,17 @@ def load_krx_dumps(pattern: str | None = None) -> dict:
     if _krx_dumps is not None:
         return _krx_dumps
     import glob as _glob
+    import gzip as _gzip
     dumps = {}
+    # 저장소 동봉본(60개 신호일 병합·gzip 5MB) — 홈 디렉터리 덤프가 없는 CI에서도 재현되게.
+    # 홈 덤프가 있으면 아래에서 덮어써 최신본이 이긴다.
+    if KRX_PIT_GZ.exists():
+        try:
+            with _gzip.open(KRX_PIT_GZ, "rt", encoding="utf-8") as f:
+                dumps.update({k: v for k, v in json.load(f).items()
+                              if not k.startswith("_") and isinstance(v, dict)})
+        except Exception as e:
+            logger.warning("동봉 KRX 덤프 로드 실패 %s: %s", KRX_PIT_GZ, e)
     for fp in sorted(_glob.glob(pattern or KRX_DUMP_GLOB)):
         if "test" in Path(fp).stem:
             continue
