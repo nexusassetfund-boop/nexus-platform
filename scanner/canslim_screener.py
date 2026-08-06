@@ -59,7 +59,17 @@ PRE_PROX_MIN = 0.75
 MAX_DETAIL = 120                 # 개별 일봉/DART 조회 상한 (API 보호)
 
 _Q_REPRT = {"11013": "1Q", "11012": "2Q", "11014": "3Q"}   # 사업보고서(11011)는 연간이라 C에서 제외
-_NI_NAMES = ("분기순이익", "반기순이익", "당기순이익")
+# 순이익 계정명은 같은 회사도 연도마다 다르게 쓴다 (실측: 지엔씨에너지 2026 1Q '당기순이익',
+# 2025 1Q '당기순이익(손실)'). 정확히 일치로 잡으면 전년 값을 놓쳐 종목 전체가 결측된다.
+# 다만 '비지배지분에 귀속되는 당기순이익(손실)'·'당기순이익조정을 위한 가감'은 순이익이 아니므로
+# 접두 + 허용 접미만 통과시킨다 (부분일치는 이것들까지 삼킨다).
+_NI_PREFIX = ("당기순이익", "분기순이익", "반기순이익")
+_NI_SUFFIX = ("", "(손실)", "(순손실)", "(당기순손실)")
+
+
+def _is_ni_account(nm: str) -> bool:
+    nm = (nm or "").replace(" ", "")
+    return any(nm.startswith(p) and nm[len(p):] in _NI_SUFFIX for p in _NI_PREFIX)
 
 
 def _shares_map(date: str, market: str) -> dict[str, float]:
@@ -116,10 +126,11 @@ def _acnt_all_ni(corp: str, year: int, reprt: str) -> float | None:
             continue
         for sj in ("IS", "CIS"):         # 손익계산서 우선, 없으면 포괄손익계산서
             for x in d["list"]:
-                if x.get("sj_div") == sj and x.get("account_nm", "").strip() in _NI_NAMES:
+                if x.get("sj_div") == sj and _is_ni_account(x.get("account_nm")):
                     v = fv._num(x.get("thstrm_amount"))
                     if v is not None:
                         return v
+        logger.debug("%s/%s/%s/%s 순이익 계정 없음", corp, year, reprt, fs)
     return None
 
 
@@ -274,6 +285,14 @@ def build() -> dict | None:
     if pool and fails > len(pool) / 2:
         logger.error("일봉 확보 실패 %d/%d — 일시 장애 의심, 기존 파일 보존", fails, len(pool))
         return None
+
+    # C 요건 확보율 — 조용히 결측되면 전 종목 C가 0점이 되어 점수가 통째로 눌린다.
+    # 첫 실행(2026-08-06)이 계정명 정확일치 탓에 8/42까지 떨어진 걸 놓쳤던 지점.
+    q_ok = sum(1 for r in out if r.get("q_period"))
+    logger.info("분기 실적(C) 확보 %d/%d", q_ok, len(out))
+    if out and q_ok < len(out) * 0.5:
+        logger.warning("분기 실적 확보율 %d%% — DART 계정명/제출 시점 확인 필요",
+                       round(q_ok / len(out) * 100))
 
     out.sort(key=lambda r: (-r["canslim_score"], -r["rs_kkangto"], -r["pct_12m"]))
     for i, r in enumerate(out, 1):
