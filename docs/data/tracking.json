@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-06T15:13:54+09:00",
+ "updated": "2026-08-06T15:37:03+09:00",
  "kospi": {
   "price": 6306.81,
   "ma200": 5790.3,
@@ -9,9 +9,126 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-06T15:13:54+09:00"
+  "updated": "2026-08-06T15:37:03+09:00"
  },
- "holdings": [],
+ "holdings": [
+  {
+   "ticker": "073240",
+   "name": "금호타이어",
+   "sector": "고무제품 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-08-06",
+   "entry_price": 7940.0,
+   "entry_confidence": 95,
+   "init_stop_pct": -10.0,
+   "last_price": 7940.0,
+   "peak_price": 7940.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 95,
+   "last_updated": "2026-08-06",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 96 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 2.3x"
+   ]
+  },
+  {
+   "ticker": "051900",
+   "name": "LG생활건강",
+   "sector": "기타 화학제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-06",
+   "entry_price": 324000.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -9.0,
+   "last_price": 324000.0,
+   "peak_price": 324000.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 93,
+   "last_updated": "2026-08-06",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.36x",
+    "불 스노트 — 거래량 폭증 3.36x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
+  },
+  {
+   "ticker": "073240",
+   "name": "금호타이어",
+   "sector": "고무제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-06",
+   "entry_price": 7940.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -10.3,
+   "last_price": 7940.0,
+   "peak_price": 7940.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 93,
+   "last_updated": "2026-08-06",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.25x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 96 — 최상위 강세"
+   ]
+  },
+  {
+   "ticker": "008930",
+   "name": "한미사이언스",
+   "sector": "기타 금융업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-06",
+   "entry_price": 43800.0,
+   "entry_confidence": 88,
+   "init_stop_pct": -8.8,
+   "last_price": 43800.0,
+   "peak_price": 43800.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 0,
+   "confidence_now": 88,
+   "last_updated": "2026-08-06",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 80 — 상위 강세"
+   ]
+  }
+ ],
  "exited": [],
  "track_history": {
   "3": [
@@ -155,9 +272,9 @@
  },
  "nav_base": "2026-07-28",
  "stats": {
-  "holding_count": 0,
+  "holding_count": 4,
   "exited_count": 0,
-  "avg_return": 0,
+  "avg_return": 0.0,
   "exited_avg_return": 0,
   "win_rate": 0
  }
