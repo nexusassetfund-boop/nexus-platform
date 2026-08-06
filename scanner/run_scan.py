@@ -668,14 +668,19 @@ def _refresh_ledger_view(ledger: dict, results: list[dict]) -> dict:
 #   - 이후 매 장마감: (전일까지 실현 누적 + 오늘 실현 + 보유 평가손익) 스냅샷을 1점 추가
 #   실현 누적 베이스(cum_base)는 메타에 확정 저장 — 이탈 기록이 180일 보존정책으로
 #   잘려나가도 과거 누적치가 함께 꺼지지 않는다. 같은 날 재실행은 오늘 점만 갱신(멱등).
-def _is_trading_day_today() -> bool:
-    """오늘이 한국 증시 거래일인지 — KOSPI 최신 캔들 날짜로 판별 (공휴일 캘린더 불필요)"""
+def _is_trading_day_today(ohlcv_map: dict) -> bool:
+    """오늘이 한국 증시 거래일인지 — 이미 조회한 종목 OHLCV의 최신 캔들 날짜로 판별.
+
+    KOSPI 지수(KS11) 캔들은 장중에 하루 늦게 붙는 경우가 있어(2026-08-06 관측)
+    정상 거래일을 휴장으로 오판 → 원장이 통째로 갱신되지 않았다.
+    개별 종목 캔들은 장중에도 당일치가 붙으므로 이쪽을 기준으로 삼는다.
+    """
+    today = dt.date.today()
     try:
-        import FinanceDataReader as fdr
-        df = fdr.DataReader("KS11", dt.date.today() - dt.timedelta(days=10))
-        if df is None or df.empty:
+        dates = [df.index[-1].date() for df in ohlcv_map.values() if df is not None and not df.empty]
+        if not dates:
             return True  # 판별 실패 시 기존 동작 유지
-        return df.index[-1].date() == dt.date.today()
+        return max(dates) == today
     except Exception:
         return True
 
@@ -1153,7 +1158,7 @@ async def main():
     # 스트래들 가드: 장중에 시작해 가상 캔들(실시간 중간가)을 붙인 실행이
     # 지연되어 15:30을 넘겨 끝나면, 비종가 데이터로 이탈·부분익절이 확정되는 것을 막는다.
     now = dt.datetime.now(tz=KST)
-    trading_day = bool(AS_OF) or _is_trading_day_today()
+    trading_day = bool(AS_OF) or _is_trading_day_today(ohlcv_map)
     is_close_run = bool(AS_OF) or ((now.hour, now.minute) >= (15, 30) and trading_day and not realtime)
     if AS_OF:
         logger.warning("SCAN_AS_OF=%s — 휴장/장중 가드 우회, 직전 마감 데이터로 원장 확정", AS_OF)
