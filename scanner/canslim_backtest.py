@@ -83,9 +83,13 @@ def _base_params() -> dict:
         "th": dict(cs.THRESHOLDS),    # 원전 임계치 (라이브와 동일)
         "report_month": 5,            # 연간 재무 확정 여유 (fiscal_year_for)
         "quarter_lag_days": 45,       # 분기보고서 법정 제출기한
-        # DART 호출 전 사전컷 — 가장 느슨한 변형(L=70, N=0.80)보다 느슨해야 편향이 없다.
-        "pre_rs": 50,
-        "pre_prox": 0.70,
+        # 사전컷은 라이브 canslim_screener 와 같은 값이어야 한다 — 라이브는 RS 상위
+        # MAX_DETAIL 개만 상세 평가하므로, 이걸 안 맞추면 다른 파이프라인을 검증하게 된다.
+        # (첫 CI 실행이 신호일당 727종목을 평가하다 타임아웃 난 원인이기도 하다.)
+        # 테스트하는 가장 느슨한 변형(L=70, N=0.80)이 이 값들보다 빡빡하므로 편향은 없다.
+        "pre_rs": 60,        # 라이브 PRE_RS_MIN
+        "pre_prox": 0.75,    # 라이브 PRE_PROX_MIN
+        "max_detail": 120,   # 라이브 MAX_DETAIL — RS 상위 N개만 상세 평가
     }
 
 
@@ -297,6 +301,7 @@ def screen_at(sig: pd.Timestamp, p: dict, store: NIStore | None,
     pre = [u for u in uni
            if rs.get(u["code"], 0) >= p["pre_rs"] and prox.get(u["code"], 0) >= p["pre_prox"]]
     pre.sort(key=lambda u: -rs.get(u["code"], 0))
+    pre = pre[:p["max_detail"]]          # 라이브와 동일하게 RS 상위 N개만 상세 평가
 
     # min_score<=0 은 rs_only 대조군 — 요건을 아예 안 보므로 DART를 부르지 않는다.
     use_dart = store is not None and p["min_score"] > 0
@@ -335,10 +340,10 @@ def run_screens(rebals, p, store, closes, volumes, log_bits=False):
             rate = {k: round(np.mean([r["bits"][k] for r in rows]) * 100, 1)
                     for k in rows[0]["bits"]}
             bit_log.append({"sig": str(sig.date()), "n": len(rows), "pass_rate_pct": rate})
-            logger.info("%s 사전컷 %d → 선정 %d | 요건 통과율 %s",
-                        sig.date(), n_pre, len(sel), rate)
+            logger.info("%s 상세평가 %d → 선정 %d | DART 누적 %d | 요건 통과율 %s",
+                        sig.date(), n_pre, len(sel), store.calls if store else 0, rate)
         else:
-            logger.info("%s 사전컷 %d → 선정 %d", sig.date(), n_pre, len(sel))
+            logger.info("%s 상세평가 %d → 선정 %d", sig.date(), n_pre, len(sel))
     return out, bit_log
 
 

@@ -125,6 +125,23 @@ def test_pit_universe_filters_match_live():
     assert cs.score({"shares": uni[0]["shares"]})[1]["S1"] == 0     # 59.7억 주 → S1 미충족
 
 
+def test_pre_cut_matches_live_screener():
+    """사전컷은 라이브 canslim_screener 와 같은 값이어야 한다.
+
+    다르면 다른 파이프라인을 검증하게 된다 — 첫 CI 실행이 신호일당 727종목을
+    평가하다 타임아웃 난 원인이 바로 이 불일치였다.
+    """
+    p = cbt._base_params()
+    assert p["pre_rs"] == cs.PRE_RS_MIN, (p["pre_rs"], cs.PRE_RS_MIN)
+    assert p["pre_prox"] == cs.PRE_PROX_MIN, (p["pre_prox"], cs.PRE_PROX_MIN)
+    assert p["max_detail"] == cs.MAX_DETAIL, (p["max_detail"], cs.MAX_DETAIL)
+    assert p["min_cap"] == cs.MIN_MARKET_CAP
+    assert p["min_price"] == cs.MIN_PRICE
+    # 테스트하는 가장 느슨한 변형이 사전컷보다 빡빡해야 편향이 없다
+    assert cbt.LOOSE_TH["L"] >= p["pre_rs"], "완화 RS가 사전컷보다 느슨하면 편향된다"
+    assert cbt.LOOSE_TH["N"] >= p["pre_prox"], "완화 근접도가 사전컷보다 느슨하면 편향된다"
+
+
 def test_screen_uses_injected_thresholds():
     """완화 임계치 주입이 실제로 선정 결과를 바꾸는가 (백테스트의 존재 이유)."""
     rec = {"roe": 12.0, "q_ni_yoy": 12.0, "ni_growth": 12.0,
