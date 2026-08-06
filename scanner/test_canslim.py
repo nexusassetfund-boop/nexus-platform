@@ -100,6 +100,27 @@ def test_quarter_yoy_matches_real_dart_samsung_3q():
     assert cs.score(_rec(q_ni_yoy=r["q_ni_yoy"]))[1]["C"] == 1     # C 임계 20% 통과
 
 
+def test_ni_account_matches_real_name_variants():
+    """실측 회귀 — 같은 회사(지엔씨에너지)도 연도마다 계정명이 다르다.
+
+    2026 1Q '당기순이익' / 2025 1Q '당기순이익(손실)'.
+    첫 배포에서 정확일치로 잡는 바람에 전년 값을 놓쳐 42종목 중 34종목이 결측됐다.
+    """
+    for nm in ("당기순이익", "당기순이익(손실)", "분기순이익", "분기순이익(손실)",
+               "반기순이익", "반기순이익(손실)", "당기순이익 (손실)"):
+        assert cs._is_ni_account(nm), nm
+
+
+def test_ni_account_rejects_lookalikes():
+    """지분 귀속분·현금흐름표 조정 항목은 순이익이 아니다 — 부분일치로 삼키면 안 된다."""
+    for nm in ("비지배지분에 귀속되는 당기순이익(손실)",
+               "지배기업의 소유주에게 귀속되는 당기순이익(손실)",
+               "당기순이익조정을 위한 가감",
+               "계속영업당기순이익",
+               "총포괄손익", "영업이익(손실)"):
+        assert not cs._is_ni_account(nm), nm
+
+
 def test_quarter_yoy_no_data_returns_empty():
     with _Stub({}):
         assert cs.quarter_ni_yoy("X", today=dt.date(2026, 5, 20)) == {}
