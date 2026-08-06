@@ -227,5 +227,77 @@
     "last_price": 359500.0
    }
   ]
+ },
+ {
+  "date": "2026-08-06",
+  "added": [
+   {
+    "code": "375500",
+    "name": "DL이앤씨",
+    "score": 6
+   },
+   {
+    "code": "278470",
+    "name": "에이피알",
+    "score": 5
+   },
+   {
+    "code": "181710",
+    "name": "NHN",
+    "score": 5
+   },
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "score": 5
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "score": 4
+   }
+  ],
+  "removed": [
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "first_seen": "2026-07-24",
+    "days": 13,
+    "last_score": 4,
+    "last_price": 246000.0
+   },
+   {
+    "code": "007340",
+    "name": "DN오토모티브",
+    "first_seen": "2026-08-04",
+    "days": 2,
+    "last_score": 3,
+    "last_price": 46400.0
+   },
+   {
+    "code": "034730",
+    "name": "SK",
+    "first_seen": "2026-08-05",
+    "days": 1,
+    "last_score": 5,
+    "last_price": 562000.0
+   },
+   {
+    "code": "041830",
+    "name": "인바디",
+    "first_seen": "2026-08-05",
+    "days": 1,
+    "last_score": 5,
+    "last_price": 56700.0
+   },
+   {
+    "code": "053610",
+    "name": "프로텍",
+    "first_seen": "2026-08-05",
+    "days": 1,
+    "last_score": 5,
+    "last_price": 64800.0
+   }
+  ]
  }
 ]
