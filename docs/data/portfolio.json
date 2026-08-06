@@ -1,44 +1,44 @@
 {
- "updated": "2026-08-06T01:33:17+09:00",
+ "updated": "2026-08-06T10:09:52+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
-  "portfolio_value": 138732877.0,
+  "portfolio_value": 139601877.0,
   "cash": 95124494.0,
-  "eval_pnl": -1219000.04,
-  "eval_pnl_pct": -2.71,
-  "cum_pnl": -11267123.0,
-  "cum_pnl_pct": -7.51,
+  "eval_pnl": -350000.04,
+  "eval_pnl_pct": -0.78,
+  "cum_pnl": -10398123.0,
+  "cum_pnl_pct": -6.93,
   "day_change": null,
   "day_change_pct": null,
   "realized_pnl": 9866506.0,
-  "nav_index": 924.89,
+  "nav_index": 930.68,
   "n_stocks": 3.0,
   "n_win": 3.0,
   "n_loss": 0.0,
   "indices": {
    "kospi": {
-    "value": 6598.3,
-    "change": 239.3
+    "value": 6394.5,
+    "change": -203.8
    },
    "kosdaq": {
-    "value": 799.6,
-    "change": 18.9
+    "value": 789.9,
+    "change": 9.7
    },
    "dow": {
-    "value": 54533.6,
-    "change": 447.7
+    "value": 54349.1,
+    "change": 263.2
    },
    "nasdaq": {
-    "value": 26500.5,
-    "change": -84.5
+    "value": 26363.4,
+    "change": -221.6
    },
    "sp500": {
-    "value": 7741.6,
-    "change": 5.1
+    "value": 7723.6,
+    "change": -13.0
    },
    "usdkrw": {
-    "value": 1423.5,
-    "change": 6.5
+    "value": 1417.5,
+    "change": 6.6
    }
   }
  },
@@ -48,13 +48,13 @@
    "code": "483650",
    "name": "달바글로벌",
    "qty": 86.0,
-   "price": 232000.0,
-   "change_pct": -3.13,
+   "price": 243500.0,
+   "change_pct": 4.96,
    "avg_price": 232453.0,
-   "eval_pnl": -39000.0,
-   "return_pct": -0.2,
-   "contrib_pct": -0.04,
-   "eval_amount": 19952000.0,
+   "eval_pnl": 950000.0,
+   "return_pct": 4.75,
+   "contrib_pct": 0.95,
+   "eval_amount": 20941000.0,
    "buy_amount": 19991000.0,
    "target_price": null,
    "buy_date": "2026-07-01",
@@ -67,13 +67,13 @@
    "code": "000660",
    "name": "SK하이닉스",
    "qty": 5.0,
-   "price": 1668000.0,
-   "change_pct": 5.77,
+   "price": 1541500.0,
+   "change_pct": -7.58,
    "avg_price": 2025000.0,
-   "eval_pnl": -1785000.0,
-   "return_pct": -17.63,
-   "contrib_pct": -1.79,
-   "eval_amount": 8340000.0,
+   "eval_pnl": -2417500.0,
+   "return_pct": -23.88,
+   "contrib_pct": -2.42,
+   "eval_amount": 7707500.0,
    "buy_amount": 10125000.0,
    "target_price": null,
    "buy_date": "2026-07-08",
@@ -86,13 +86,13 @@
    "code": "214450",
    "name": "파마리서치",
    "qty": 41.0,
-   "price": 378000.0,
-   "change_pct": -1.69,
+   "price": 390500.0,
+   "change_pct": 3.31,
    "avg_price": 363244.0,
-   "eval_pnl": 605000.0,
-   "return_pct": 4.06,
-   "contrib_pct": 0.61,
-   "eval_amount": 15498000.0,
+   "eval_pnl": 1117500.0,
+   "return_pct": 7.5,
+   "contrib_pct": 1.12,
+   "eval_amount": 16010500.0,
    "buy_amount": 14893000.0,
    "target_price": null,
    "buy_date": "2026-07-28",
@@ -130,7 +130,7 @@
    "change_pct": 5.77,
    "target_price": null,
    "upside_pct": -100.0,
-   "mktcap": "8,051억",
+   "mktcap": "7,887억",
    "per": "15.8x",
    "eps": "105,627원",
    "high52": 2987000.0,
@@ -893,9 +893,9 @@
   "value": [
    {
     "date": "2026-8-6",
-    "portfolio_value": 138732877.0,
-    "total_value": 43790000.0,
-    "eval_pnl": -1219000.04
+    "portfolio_value": 139601877.0,
+    "total_value": 44659000.0,
+    "eval_pnl": -350000.04
    },
    {
     "date": "2026-8-3",
