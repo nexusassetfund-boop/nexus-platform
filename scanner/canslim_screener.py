@@ -6,14 +6,14 @@
   · 거래일 캘린더·전종목 스냅샷·깡토 RS·시장방향(M) → pullback_screener
   · 52주 고가/근접도·vol_2x_bo(S2) → pullback_screener._detail
   · 연간 재무(A: 순이익 YoY·ROE) → fetch_value._financials (DART, corp_code 캐시 공용)
-새로 짠 것: 분기 순이익 YoY(C) — DART 분기보고서 누적치 차분.
+새로 짠 것: 분기 순이익 YoY(C) — DART 전체재무제표의 분기 단독 순이익을 전년 동기와 직접 비교.
 
 파이프라인:
   1) 전종목 스냅샷 → 깡토 RS + 시총 + 상장주식수
   2) 1차 필터(시총·RS·주가·우선주/스팩) → RS 상위 MAX_DETAIL 종목만 개별 일봉
   3) 일봉 → 52주 근접도(N)·거래량 2배 돌파(S2)
   4) 기관+외인 60거래일 순매수(I)
-  5) DART → 분기 순이익 YoY(C), 연간 순이익 YoY·ROE(A)
+  5) DART → 분기 순이익 YoY(C, 2023 3분기부터 제공), 연간 순이익 YoY·ROE(A)
   6) 7점 채점 + M(시장방향)
 출력: docs/data/canslim.json (프론트 '스테이지 감지기 > CANSLIM' 하위탭이 읽음)
 
@@ -58,7 +58,8 @@ PRE_RS_MIN = 60
 PRE_PROX_MIN = 0.75
 MAX_DETAIL = 120                 # 개별 일봉/DART 조회 상한 (API 보호)
 
-_REPRT_SEQ = ["11013", "11012", "11014", "11011"]   # 1Q · 반기 · 3Q · 사업보고서(누적)
+_Q_REPRT = {"11013": "1Q", "11012": "2Q", "11014": "3Q"}   # 사업보고서(11011)는 연간이라 C에서 제외
+_NI_NAMES = ("분기순이익", "반기순이익", "당기순이익")
 
 
 def _shares_map(date: str, market: str) -> dict[str, float]:
@@ -90,64 +91,61 @@ def _flow_map(start: str, end: str, market: str) -> dict[str, float]:
     return out
 
 
-def _acnt_q(corp: str, year: int, reprt: str) -> tuple[float | None, float | None]:
-    """DART 분기/사업보고서 → (당기 누적 순이익, 전년 동기 누적 순이익).
+def _acnt_all_ni(corp: str, year: int, reprt: str) -> float | None:
+    """DART 전체재무제표(fnlttSinglAcntAll) → 해당 '분기 단독' 순이익.
 
-    fnlttSinglAcnt의 분기 응답은 thstrm=당기 누적, frmtrm=전년 동기 누적이다
-    (frmtrm_nm 예: '제 54 기 3분기'). 조회 실패/미제출은 (None, None).
+    이 엔드포인트의 분기보고서 손익계산서 당기금액은 누적이 아니라 분기 단독이다
+    (실측: 삼성전자 2025 3분기보고서 매출액 86.1조 = 3Q 단독, 3Q 누적 ~240조 아님).
+    그래서 차분이 필요 없고, 전년 동기는 같은 reprt_code를 연도만 바꿔 부르면 된다.
+    CFS 우선, 없으면 OFS. 미제출·조회 실패는 None.
     """
     import urllib.request
     import fetch_value as fv
     if not fv.DART_KEY:
-        return None, None
-    url = (f"{fv._DART}/fnlttSinglAcnt.json?crtfc_key={fv.DART_KEY}&corp_code={corp}"
-           f"&bsns_year={year}&reprt_code={reprt}")
-    try:
-        with urllib.request.urlopen(url, timeout=25) as r:
-            d = json.loads(r.read().decode())
-    except Exception as e:
-        logger.warning("분기 재무 %s/%s/%s 실패: %s", corp, year, reprt, e)
-        return None, None
-    if d.get("status") != "000" or not d.get("list"):
-        return None, None
-    rows = [x for x in d["list"] if x.get("fs_div") == "CFS"] or d["list"]
-    for x in rows:
-        if x.get("account_nm", "").startswith("당기순이익"):
-            return fv._num(x.get("thstrm_amount")), fv._num(x.get("frmtrm_amount"))
-    return None, None
+        return None
+    for fs in ("CFS", "OFS"):
+        url = (f"{fv._DART}/fnlttSinglAcntAll.json?crtfc_key={fv.DART_KEY}&corp_code={corp}"
+               f"&bsns_year={year}&reprt_code={reprt}&fs_div={fs}")
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                d = json.loads(r.read().decode())
+        except Exception as e:
+            logger.warning("분기 재무 %s/%s/%s/%s 실패: %s", corp, year, reprt, fs, e)
+            continue
+        if d.get("status") != "000" or not d.get("list"):
+            continue
+        for sj in ("IS", "CIS"):         # 손익계산서 우선, 없으면 포괄손익계산서
+            for x in d["list"]:
+                if x.get("sj_div") == sj and x.get("account_nm", "").strip() in _NI_NAMES:
+                    v = fv._num(x.get("thstrm_amount"))
+                    if v is not None:
+                        return v
+    return None
 
 
 def quarter_ni_yoy(corp: str, today: dt.date | None = None) -> dict:
     """C 요건 — 최근 제출 분기의 '해당 분기' 순이익 YoY(%).
 
-    누적치만 주는 DART 응답에서 분기 값을 차분으로 뽑는다:
-      Q_n = 누적_n - 누적_{n-1}  (1분기는 누적이 곧 분기)
-    당기·전년 동기 모두 같은 차분을 적용하므로 추가 호출은 직전 분기 1건뿐이다.
+    최신 제출 분기를 찾은 뒤, 같은 분기(reprt_code)의 전년도 값과 직접 비교한다.
+    누적/분기 필드 해석에 기대지 않으므로 계정 표기가 바뀌어도 흔들리지 않는다.
+    전년 동기가 적자/0이면 YoY는 무의미 → None + q_turnaround 플래그로만 표기.
     """
     today = today or dt.datetime.now(tz=KST).date()
-    # 최신 제출본 탐색 (당해 3Q → 반기 → 1Q → 전년 사업보고서 → …)
-    seq = [(today.year, r) for r in reversed(_REPRT_SEQ[:3])] + \
-          [(today.year - 1, r) for r in reversed(_REPRT_SEQ)]
+    seq = [(today.year, r) for r in ("11014", "11012", "11013")] + \
+          [(today.year - 1, r) for r in ("11014", "11012", "11013")]
     for year, reprt in seq:
-        cur, prev = _acnt_q(corp, year, reprt)
-        if cur is None or prev is None:
+        cur = _acnt_all_ni(corp, year, reprt)
+        if cur is None:
             continue
-        i = _REPRT_SEQ.index(reprt)
-        if i == 0:                       # 1분기 — 누적 = 분기
-            q_cur, q_prev = cur, prev
-        else:
-            p_year, p_reprt = (year, _REPRT_SEQ[i - 1])
-            b_cur, b_prev = _acnt_q(corp, p_year, p_reprt)
-            if b_cur is None or b_prev is None:
-                continue
-            q_cur, q_prev = cur - b_cur, prev - b_prev
-        if not q_prev or q_prev <= 0:    # 전년 적자/0 → YoY 무의미 (흑전은 별도 표기)
-            return {"q_period": f"{year}-{reprt}", "q_ni": q_cur,
-                    "q_ni_prev": q_prev, "q_ni_yoy": None,
-                    "q_turnaround": int(q_prev is not None and q_prev <= 0 and (q_cur or 0) > 0)}
-        return {"q_period": f"{year}-{reprt}", "q_ni": q_cur, "q_ni_prev": q_prev,
-                "q_ni_yoy": round((q_cur - q_prev) / abs(q_prev) * 100, 1),
-                "q_turnaround": 0}
+        prev = _acnt_all_ni(corp, year - 1, reprt)
+        if prev is None:
+            continue
+        period = f"{year} {_Q_REPRT[reprt]}"
+        if prev <= 0:
+            return {"q_period": period, "q_ni": cur, "q_ni_prev": prev,
+                    "q_ni_yoy": None, "q_turnaround": int(cur > 0)}
+        return {"q_period": period, "q_ni": cur, "q_ni_prev": prev,
+                "q_ni_yoy": round((cur - prev) / prev * 100, 1), "q_turnaround": 0}
     return {}
 
 
