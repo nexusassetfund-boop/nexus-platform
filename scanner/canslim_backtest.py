@@ -107,6 +107,23 @@ def quarter_fiscal_for(sig_date: pd.Timestamp, lag_days: int = 45):
     return (y, reprt)
 
 
+def market_pool(sig_date: pd.Timestamp) -> list[dict]:
+    """RS 백분위의 모수 — 시총 필터 이전의 전 시장(코스피·코스닥).
+
+    라이브 build()는 pykrx 전종목 스냅샷으로 _pct_rank_map을 돌린다. 여기서 시총 1천억
+    유니버스만 넣으면 같은 종목도 백분위가 달라져 L(RS≥80)이 다른 척도가 된다.
+    """
+    v = load_krx_dumps()[_dump_key_for(sig_date)]
+    out = []
+    for r in v["cap"]:
+        code = str(r[0]).zfill(6)
+        mkt = str(r[2] or "")
+        if not _knum(r[3]) or mkt.startswith("KONEX"):
+            continue
+        out.append({"code": code, "market": "KOSDAQ" if "KOSDAQ" in mkt else "KOSPI"})
+    return out
+
+
 def pit_universe(sig_date: pd.Timestamp, p: dict) -> list[dict]:
     """신호일 시점 KRX 덤프 → 라이브와 같은 시총 1천억 유니버스. shares = 시총/종가."""
     v = load_krx_dumps()[_dump_key_for(sig_date)]
@@ -273,7 +290,7 @@ def screen_at(sig: pd.Timestamp, p: dict, store: NIStore | None,
               closes: pd.DataFrame, volumes: pd.DataFrame):
     """신호일 크로스섹션 스크린 → (selected, 사전컷 통과수, 전체 rows)."""
     uni = pit_universe(sig, p)
-    rs = make_rs(closes, sig, uni)
+    rs = make_rs(closes, sig, market_pool(sig))   # 백분위 모수는 전 시장 (라이브와 동일)
     prox = make_prox(closes, sig)
     v2x = make_vol2x(volumes, closes, sig)
 
@@ -371,11 +388,12 @@ def main():
     if args.probe:
         sig = rebals[-1][0]
         uni = pit_universe(sig, p)
-        rs = make_rs(closes, sig, uni)
+        pool = market_pool(sig)
+        rs = make_rs(closes, sig, pool)
         prox = make_prox(closes, sig)
         v2x = make_vol2x(volumes, closes, sig)
         top = sorted(uni, key=lambda u: -rs.get(u["code"], 0))[:20]
-        out = {"sig": str(sig.date()), "universe": len(uni),
+        out = {"sig": str(sig.date()), "universe": len(uni), "rs_pool": len(pool),
                "rs_covered": len(rs), "prox_covered": len(prox),
                "vol2x_true": sum(v2x.values()), "missing_prices": len(missing),
                "top20_rs": [{"code": u["code"], "name": u["name"],
