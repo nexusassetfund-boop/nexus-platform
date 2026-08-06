@@ -100,6 +100,26 @@ def test_quarter_yoy_matches_real_dart_samsung_3q():
     assert cs.score(_rec(q_ni_yoy=r["q_ni_yoy"]))[1]["C"] == 1     # C 임계 20% 통과
 
 
+def test_score_threshold_override_is_backtest_only():
+    """임계치 주입은 백테스트 전용 — 기본 호출(라이브)은 동작이 변하지 않아야 한다."""
+    assert cs.score(_rec(roe=15.0))[1]["A_roe"] == 0              # 라이브: 17% 미달
+    assert cs.score(_rec(roe=15.0), {"A_roe": 12.0})[1]["A_roe"] == 1   # 완화 주입
+    assert cs.score(_rec(), None) == cs.score(_rec())             # None = 기본
+    assert cs.score(_rec(), {}) == cs.score(_rec())               # 빈 dict = 기본
+    # 일부 키만 줘도 나머지는 기본 임계치를 유지한다
+    s, b = cs.score(_rec(roe=15.0, q_ni_yoy=5.0), {"A_roe": 12.0})
+    assert b["A_roe"] == 1 and b["C"] == 0, b
+    # THRESHOLDS는 모듈 상수와 일치 (한쪽만 고치는 실수 방지)
+    assert cs.THRESHOLDS["A_roe"] == cs.A_ROE and cs.THRESHOLDS["L"] == cs.L_RS_SCORE
+
+
+def test_score_override_does_not_mutate_defaults():
+    """주입이 전역 THRESHOLDS를 오염시키면 이후 라이브 스캔이 조용히 틀어진다."""
+    before = dict(cs.THRESHOLDS)
+    cs.score(_rec(), {"A_roe": 1.0, "L": 1})
+    assert cs.THRESHOLDS == before, cs.THRESHOLDS
+
+
 def test_ni_account_matches_real_name_variants():
     """실측 회귀 — 같은 회사(지엔씨에너지)도 연도마다 계정명이 다르다.
 
