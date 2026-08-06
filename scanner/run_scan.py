@@ -49,6 +49,10 @@ TRACKING_PATH = DATA_DIR / "tracking.json"  # 보유/이탈 원장 (프론트가
 
 RS_PERIODS = [("q1", 63, 0.4), ("q2", 126, 0.2), ("q3", 189, 0.2), ("q4", 252, 0.2)]
 
+# 원장 확정 강제 실행 (SCAN_AS_OF=YYYY-MM-DD) — 휴장일에 직전 거래일 종가로 마감 처리.
+# 편입/이탈 날짜도 이 날짜로 기록된다. 미설정이면 평소대로 오늘 기준.
+AS_OF = dt.date.fromisoformat(os.environ["SCAN_AS_OF"]) if os.environ.get("SCAN_AS_OF") else None
+
 # ── 섹터 대표 ETF (섹터 맵 사분면용 — 시장 전체를 대표하면서 조회는 섹터당 1종목) ──
 # 키는 sector_map.json의 섹터 슬러그와 일치해야 한다. 대표 ETF가 없거나 조회 실패한
 # 섹터는 사분면에서 제외된다(프론트가 있는 것만 그림).
@@ -391,7 +395,7 @@ def _update_stage_history(stage_history: dict, results: list[dict]):
 #                    ② 웨지 드롭: 대량 거래 동반 10·20 EMA 종가 하향 이탈 (Oliver Kell)
 #                    ③ 추세 이탈: 종가 < exit_ma_period 이동평균 (기본 60일선)
 def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict) -> dict:
-    today = dt.date.today()
+    today = AS_OF or dt.date.today()
     today_str = today.isoformat()
     trail_stop = float(params.get("trail_stop_pct", -10.0))  # 고점 대비 허용 하락폭 (%)
     exit_ma_key = f"ma{params.get('exit_ma_period', 60)}"   # 추세 이탈 기준 이동평균
@@ -1060,7 +1064,7 @@ async def main():
 
     # 4) 장중 실시간 가격 (성공한 종목만)
     realtime: dict = {}
-    if is_market_hours() and ohlcv_map:
+    if is_market_hours() and ohlcv_map and not AS_OF:   # AS_OF 실행은 종가만 사용
         try:
             realtime = await fetch_realtime_prices_batch(cfg, list(ohlcv_map.keys()))
         except Exception as e:
@@ -1149,8 +1153,10 @@ async def main():
     # 스트래들 가드: 장중에 시작해 가상 캔들(실시간 중간가)을 붙인 실행이
     # 지연되어 15:30을 넘겨 끝나면, 비종가 데이터로 이탈·부분익절이 확정되는 것을 막는다.
     now = dt.datetime.now(tz=KST)
-    trading_day = _is_trading_day_today()
-    is_close_run = (now.hour, now.minute) >= (15, 30) and trading_day and not realtime
+    trading_day = bool(AS_OF) or _is_trading_day_today()
+    is_close_run = bool(AS_OF) or ((now.hour, now.minute) >= (15, 30) and trading_day and not realtime)
+    if AS_OF:
+        logger.warning("SCAN_AS_OF=%s — 휴장/장중 가드 우회, 직전 마감 데이터로 원장 확정", AS_OF)
     ledger = state.get("ledger", {"holdings": [], "exited": []})
     if is_close_run:
         ledger = _update_ledger(ledger, results, kospi, params)

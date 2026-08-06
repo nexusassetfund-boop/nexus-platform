@@ -9,7 +9,12 @@ on:
     - cron: "33 6 * * 1-5"        # KST 15:33
     - cron: "17 7 * * 1-5"        # KST 16:17  (백업)
     - cron: "27 8 * * 1-5"        # KST 17:27  (백업)
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      as_of:
+        description: "원장 강제 확정일 (YYYY-MM-DD, 휴장일에 직전 거래일 종가로 마감 처리). 비우면 평소 동작."
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -42,6 +47,7 @@ jobs:
           # KIS 토큰 24h 공유(Worker KV) 인증 — 없으면 러너마다 재발급(분당 1회 제한 위험).
           # value-screen.yml과 동일 패턴. data_provider._kis_token_remote_get/put이 사용.
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+          SCAN_AS_OF: ${{ inputs.as_of }}
         run: python scanner/run_scan.py
 
       - name: 결과 커밋
