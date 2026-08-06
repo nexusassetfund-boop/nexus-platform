@@ -160,16 +160,26 @@ def quarter_ni_yoy(corp: str, today: dt.date | None = None) -> dict:
     return {}
 
 
-def score(rec: dict) -> tuple[int, dict]:
-    """7대 요건 비트 — C/A1(성장)/A2(ROE)/N/S1/S2/L. 결측은 미충족(0)으로 본다."""
+# 임계치 묶음 — 백테스트가 완화본을 주입하는 진입점. 값은 위 상수 그대로(라이브 불변).
+# value_backtest._base_params()의 "roe_min"(실서비스 미사용, 검증축) 선례와 같은 패턴.
+THRESHOLDS = {"C": C_NI_YOY, "A_growth": A_NI_YOY, "A_roe": A_ROE,
+              "N": N_PROXIMITY, "S1": S1_SHARES, "L": L_RS_SCORE}
+
+
+def score(rec: dict, th: dict | None = None) -> tuple[int, dict]:
+    """7대 요건 비트 — C/A1(성장)/A2(ROE)/N/S1/S2/L. 결측은 미충족(0)으로 본다.
+
+    th: 임계치 오버라이드 — 백테스트가 완화본을 주입할 때만 쓴다(실서비스는 None).
+    """
+    t = THRESHOLDS if not th else {**THRESHOLDS, **th}
     b = {
-        "C": int((rec.get("q_ni_yoy") or -1e9) >= C_NI_YOY),
-        "A_growth": int((rec.get("ni_growth") or -1e9) >= A_NI_YOY),
-        "A_roe": int((rec.get("roe") or -1e9) >= A_ROE),
-        "N": int((rec.get("proximity_52w") or 0) >= N_PROXIMITY),
-        "S1": int(0 < (rec.get("shares") or 0) <= S1_SHARES),
+        "C": int((rec.get("q_ni_yoy") or -1e9) >= t["C"]),
+        "A_growth": int((rec.get("ni_growth") or -1e9) >= t["A_growth"]),
+        "A_roe": int((rec.get("roe") or -1e9) >= t["A_roe"]),
+        "N": int((rec.get("proximity_52w") or 0) >= t["N"]),
+        "S1": int(0 < (rec.get("shares") or 0) <= t["S1"]),
         "S2": int(rec.get("vol_2x_bo") == 1),
-        "L": int((rec.get("rs_kkangto") or 0) >= L_RS_SCORE),
+        "L": int((rec.get("rs_kkangto") or 0) >= t["L"]),
     }
     return sum(b.values()), b
 
