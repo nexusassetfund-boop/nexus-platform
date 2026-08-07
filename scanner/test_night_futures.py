@@ -4,7 +4,20 @@
 07:20 장전에 KIS가 주는 "전일 종가 + 등락 0.00 + 거래량 0"을 야간 종가로 착각해 싣는 바람에
 브리핑에 매일 "야간선물 981.15(보합, 0.00%)"가 찍혔다(2026-08-06·08-07 am). 그 판별 로직.
 """
-from briefing_data import night_quote_is_preopen_reset
+from datetime import datetime
+
+from briefing_data import KST, is_night_session, night_quote_is_preopen_reset
+
+
+def test_night_session_window():
+    at = lambda h: datetime(2026, 8, 7, h, 30, tzinfo=KST)
+    assert is_night_session(at(4))    # 스냅샷 크론이 도는 04:50
+    assert is_night_session(at(19))
+    assert is_night_session(at(23))
+    # 정규장·장전 시간에 찍으면 주간 시세가 야간선물로 저장된다 — 거래량이 있어 리셋 판별로는 못 막는다
+    assert not is_night_session(at(7))    # 장전 브리핑
+    assert not is_night_session(at(9))    # 정규장 개장
+    assert not is_night_session(at(14))
 
 
 def test_preopen_reset_detected():
