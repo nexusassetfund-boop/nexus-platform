@@ -21,7 +21,8 @@ on:
         default: ""
 permissions:
   contents: read
-concurrency: { group: canslim-backtest, cancel-in-progress: false }
+# 모드별로 그룹을 나눈다 — warm(DART 수집, 최대 6시간)이 돌고 있어도 다른 모드를 돌려야 한다.
+concurrency: { group: canslim-backtest-${{ inputs.mode }}, cancel-in-progress: false }
 jobs:
   backtest:
     runs-on: ubuntu-latest
