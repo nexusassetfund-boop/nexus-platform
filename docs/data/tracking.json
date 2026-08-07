@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-07T15:20:46+09:00",
+ "updated": "2026-08-07T15:36:59+09:00",
  "kospi": {
   "price": 6250.24,
   "ma200": 5803.21,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-07T15:20:46+09:00"
+  "updated": "2026-08-07T15:36:59+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7790.0,
+   "last_price": 7810.0,
    "peak_price": 7940.0,
-   "return_pct": -1.89,
-   "total_return_pct": -1.89,
+   "return_pct": -1.64,
+   "total_return_pct": -1.64,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -33,7 +33,7 @@
    "days_held": 1,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-06",
+   "last_updated": "2026-08-07",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -41,6 +41,35 @@
     "전고점 돌파! 거래량 2.3x"
    ],
    "stop_warning": false
+  },
+  {
+   "ticker": "282330",
+   "name": "BGF리테일",
+   "sector": "종합 소매업",
+   "entry_stage": 3,
+   "entry_date": "2026-08-07",
+   "entry_price": 153100.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 153100.0,
+   "peak_price": 153100.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-08-07",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 90 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 3.25x"
+   ]
   },
   {
    "ticker": "051900",
@@ -52,7 +81,7 @@
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
    "last_price": 333500.0,
-   "peak_price": 324000.0,
+   "peak_price": 333500.0,
    "return_pct": 2.93,
    "total_return_pct": 2.93,
    "qty_frac": 1.0,
@@ -63,7 +92,7 @@
    "days_held": 1,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-06",
+   "last_updated": "2026-08-07",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.36x",
     "불 스노트 — 거래량 폭증 3.36x",
@@ -81,10 +110,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7790.0,
+   "last_price": 7810.0,
    "peak_price": 7940.0,
-   "return_pct": -1.89,
-   "total_return_pct": -1.89,
+   "return_pct": -1.64,
+   "total_return_pct": -1.64,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -93,7 +122,7 @@
    "days_held": 1,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-06",
+   "last_updated": "2026-08-07",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.25x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -111,19 +140,19 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 44450.0,
-   "peak_price": 43800.0,
-   "return_pct": 1.48,
-   "total_return_pct": 1.48,
+   "last_price": 44650.0,
+   "peak_price": 44650.0,
+   "return_pct": 1.94,
+   "total_return_pct": 1.94,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
    "days_held": 1,
-   "stage_now": 0,
-   "confidence_now": 45,
-   "last_updated": "2026-08-06",
+   "stage_now": null,
+   "confidence_now": 0,
+   "last_updated": "2026-08-07",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -131,6 +160,64 @@
     "RS 80 — 상위 강세"
    ],
    "stop_warning": false
+  },
+  {
+   "ticker": "282330",
+   "name": "BGF리테일",
+   "sector": "종합 소매업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-07",
+   "entry_price": 153100.0,
+   "entry_confidence": 98,
+   "init_stop_pct": -7.8,
+   "last_price": 153100.0,
+   "peak_price": 153100.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 98,
+   "last_updated": "2026-08-07",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.22x",
+    "불 스노트 — 거래량 폭증 3.22x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
+  },
+  {
+   "ticker": "007070",
+   "name": "GS리테일",
+   "sector": "종합 소매업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-07",
+   "entry_price": 28350.0,
+   "entry_confidence": 98,
+   "init_stop_pct": -7.4,
+   "last_price": 28350.0,
+   "peak_price": 28350.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 1,
+   "confidence_now": 98,
+   "last_updated": "2026-08-07",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.08x",
+    "불 스노트 — 거래량 폭증 3.08x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
   }
  ],
  "exited": [],
@@ -170,7 +257,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": -1.89
+    "cum": -0.82
    }
   ],
   "1": [
@@ -208,7 +295,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": 0.84
+    "cum": 0.65
    }
   ]
  },
@@ -248,7 +335,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": -1.89
+    "cum": -0.82
    }
   ],
   "1": [
@@ -286,15 +373,15 @@
    },
    {
     "date": "2026-08-07",
-    "cum": 0.84
+    "cum": 0.65
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
-  "holding_count": 4,
+  "holding_count": 7,
   "exited_count": 0,
-  "avg_return": 0.16,
+  "avg_return": 0.23,
   "exited_avg_return": 0,
   "win_rate": 0
  }
