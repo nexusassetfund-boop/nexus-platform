@@ -299,5 +299,51 @@
     "last_price": 64800.0
    }
   ]
+ },
+ {
+  "date": "2026-08-07",
+  "added": [
+   {
+    "code": "010060",
+    "name": "OCI홀딩스",
+    "score": 4
+   },
+   {
+    "code": "010950",
+    "name": "S-Oil",
+    "score": 3
+   },
+   {
+    "code": "079940",
+    "name": "가비아",
+    "score": 2
+   }
+  ],
+  "removed": [
+   {
+    "code": "017670",
+    "name": "SK텔레콤",
+    "first_seen": "2026-08-06",
+    "days": 1,
+    "last_score": 5,
+    "last_price": 91100.0
+   },
+   {
+    "code": "181710",
+    "name": "NHN",
+    "first_seen": "2026-08-06",
+    "days": 1,
+    "last_score": 6,
+    "last_price": 43100.0
+   },
+   {
+    "code": "475150",
+    "name": "SK이터닉스",
+    "first_seen": "2026-07-27",
+    "days": 11,
+    "last_score": 4,
+    "last_price": 55000.0
+   }
+  ]
  }
 ]
