@@ -1,0 +1,37 @@
+name: 야간선물 스냅샷
+
+# 코스피200 야간선물(18:00~05:00)은 장전 07:20엔 이미 전일 종가로 리셋돼 0.00% 보합으로 보인다.
+# 세션이 아직 열려 있는 04:50에 찍어 Worker KV에 넣어 두고, 장전 브리핑이 그걸 읽는다.
+on:
+  schedule:
+    - cron: "50 19 * * 0-4"   # KST 04:50 (UTC 전날 19:50, 일~목 = KST 월~금 새벽)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: night-futures
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt requests
+
+      - name: 야간선물 스냅샷 기록
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python scanner/briefing_data.py --mode night

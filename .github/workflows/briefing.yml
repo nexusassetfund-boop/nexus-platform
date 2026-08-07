@@ -54,6 +54,7 @@ jobs:
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
           KRX_ID: ${{ secrets.KRX_ID }}
           KRX_PW: ${{ secrets.KRX_PW }}
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}   # KIS 토큰 공유 (재발급 시 기존 토큰 무효화 방지)
         run: python scanner/briefing_data.py --mode ${{ steps.mode.outputs.mode }}
 
       - uses: actions/setup-node@v4
