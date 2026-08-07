@@ -291,6 +291,55 @@ def mini_port(obs, top: int = 20) -> dict:
     return out
 
 
+def run_variants(days, rebals, p, closes, opens, volumes, bench, store: FlowStore) -> dict:
+    """3단계 — 라이브 파이프라인(7요건+DART)에 I를 넣는 세 가지 방식을 포트폴리오로 비교.
+
+      base      : 현행 (7비트 score≥5, RS 내림차순 top20)
+      i_gate    : 현행 + I>0 관문
+      i_bit8_5  : I를 8번째 비트로 넣고 score≥5 (I가 다른 요건을 대체할 수 있게 됨)
+      i_bit8_6  : 8비트 score≥6 (통과율을 현행과 비슷하게 맞춘 비교)
+      i_rank    : 요건은 현행, 선정 순서만 RS → I(시총 정규화)
+      i_neg_gate: I≤0 관문 (반증 대조군 — 여기가 나쁘지 않으면 신호가 아니다)
+    """
+    ni = cbt.NIStore()
+    variants = ("base", "i_gate", "i_bit8_5", "i_bit8_6", "i_rank", "i_neg_gate")
+    screens = {v: [] for v in variants}
+    for sig, ex in rebals:
+        _, n_pre, rows = cbt.screen_at(sig, p, ni, closes, volumes)
+        ni.save()
+        flows = store.get(days, sig)
+        for r in rows:
+            f = flows.get(r["code"])
+            r["flow"] = f
+            r["flow_cap"] = (f / r["cap"]) if (f is not None and r.get("cap")) else None
+        by_rs = sorted(rows, key=lambda r: -(r.get("rs_kkangto") or 0))
+        pick = {
+            "base": [r for r in by_rs if r["score"] >= 5],
+            "i_gate": [r for r in by_rs if r["score"] >= 5 and (r["flow"] or 0) > 0],
+            "i_bit8_5": [r for r in by_rs if r["score"] + int((r["flow"] or 0) > 0) >= 5],
+            "i_bit8_6": [r for r in by_rs if r["score"] + int((r["flow"] or 0) > 0) >= 6],
+            "i_rank": sorted([r for r in rows if r["score"] >= 5],
+                             key=lambda r: -(r["flow_cap"] if r["flow_cap"] is not None else -1e9)),
+            "i_neg_gate": [r for r in by_rs if r["score"] >= 5 and (r["flow"] or 0) <= 0],
+        }
+        for v in variants:
+            screens[v].append({"sig": sig, "ex": ex, "selected": pick[v][:p["top"]],
+                               "n_prelim": n_pre, "uni_src": "pit", "top": p["top"]})
+        logger.info("%s 선정수 %s", sig.date(),
+                    {v: len(pick[v][:p['top']]) for v in variants})
+    store.save()
+    out = {}
+    for v in variants:
+        nav, trades, aux = cbt.vb.simulate(days, screens[v], opens, closes, p, 1.0, False)
+        m = cbt.vb.metrics(nav, trades, bench, screens[v], aux, [])
+        m["label"] = v
+        out[v] = cbt.vb._grid_row(m)
+        logger.info("[%s] CAGR %.2f%% (초과 %.2f%%p) MDD %.1f%% 승률 %s%%",
+                    v, m["cagr_pct"], m["excess_cagr_pct"], m["mdd_pct"], m["win_rate"])
+    out["_dart_calls"] = ni.calls
+    return out
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     ap = argparse.ArgumentParser()
@@ -298,6 +347,8 @@ def main():
     ap.add_argument("--end", default="2026-06-30")
     ap.add_argument("--tag", default="")
     ap.add_argument("--spread", action="store_true", help="I 스프레드 검증 (기본 동작)")
+    ap.add_argument("--variants", action="store_true",
+                    help="3단계 — 7요건 파이프라인에 I를 관문/8번째비트/정렬키로 넣어 포트폴리오 비교 (DART 필요)")
     ap.add_argument("--limit-months", type=int, default=0)
     args = ap.parse_args()
 
@@ -308,6 +359,14 @@ def main():
 
     store = FlowStore()
     out = {}
+    if args.variants:
+        bench = cbt.vb.load_bench(cbt.PX_START, cbt.PX_END)
+        out["variants"] = run_variants(days, rebals, p, closes, opens, volumes, bench, store)
+        out["meta"] = {"start": args.start, "end": args.end, "flow_calls": store.calls}
+        (cbt.CBT_CACHE / f"cbt_ivar{args.tag}.json").write_text(
+            json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(json.dumps(out, ensure_ascii=False, indent=1))
+        return
     for core, key in ((True, "core_NL"), (False, "prefilter")):
         obs = collect(days, rebals, opens, closes, p, store, core=core)
         out[key] = analyze(obs)

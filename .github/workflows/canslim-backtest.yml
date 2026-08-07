@@ -9,7 +9,7 @@ on:
         description: "probe(시세만) | warm(DART 수집) | controls(대조군) | grid(OFAT+강건성) | iflow(I 스프레드 검증)"
         type: choice
         default: warm
-        options: [probe, warm, controls, grid, iflow]
+        options: [probe, warm, controls, grid, iflow, ivar]
       start:
         description: "백테스트 시작(YYYY-MM-DD) — 기간분할 검증 시 변경"
         default: "2021-07-01"
@@ -55,6 +55,8 @@ jobs:
           mkdir -p tmp            # tee 대상 — 캐시 미스면 디렉터리가 없다
           if [ "${{ inputs.mode }}" = "iflow" ]; then
             SCRIPT=scanner/canslim_i_backtest.py; FLAG=--spread
+          elif [ "${{ inputs.mode }}" = "ivar" ]; then
+            SCRIPT=scanner/canslim_i_backtest.py; FLAG=--variants
           else
             SCRIPT=scanner/canslim_backtest.py; FLAG=--${{ inputs.mode }}
           fi
