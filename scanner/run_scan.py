@@ -214,13 +214,85 @@ def _save_json(path: Path, data):
     path.write_text(json.dumps(_sanitize(data), ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+# 섹터 캐시 — 유니버스 캐시(data_provider._UNIVERSE_CACHE)와 같은 취지다.
+# 섹터의 유일한 출처인 FDR KRX-DESC가 러너 IP에서만 404를 내기 시작하면(2026-08-07 발생)
+# 전 종목 섹터가 조용히 빈 문자열이 된다 — 경고 한 줄만 남고 스캔은 성공으로 끝나서
+# 프론트에 섹터가 '-'로 뜨기 전까지 아무도 모른다. 섹터는 거의 바뀌지 않으므로
+# 마지막 정상값을 캐시해 두고 실패 시 그대로 쓴다.
+_SECTOR_CACHE = Path(__file__).resolve().parents[1] / "docs" / "data" / "sector_cache.json"
+
+
+def _load_sector_cache() -> dict:
+    try:
+        d = json.loads(_SECTOR_CACHE.read_text("utf-8"))
+        return {str(k): str(v) for k, v in (d.get("sectors") or {}).items() if v}
+    except Exception:
+        return {}
+
+
+def _save_sector_cache(sector_map: dict) -> None:
+    try:
+        _SECTOR_CACHE.write_text(json.dumps(
+            {"updated": dt.datetime.now().isoformat(timespec="seconds"),
+             "sectors": dict(sorted(sector_map.items()))},
+            ensure_ascii=False, indent=0), "utf-8")
+    except Exception as e:
+        logger.warning("섹터 캐시 저장 실패: %s", e)
+
+
+def _fdr_desc_rows() -> list[tuple[str, str, str]]:
+    """FDR KRX-DESC → [(code, name, industry)]. 실패는 호출부가 처리하도록 그대로 올린다."""
+    import FinanceDataReader as fdr
+    df = fdr.StockListing("KRX-DESC")
+    if df is None or df.empty:
+        return []
+    rows = []
+    for _, row in df.iterrows():
+        code = str(row.get("Code", "")).strip()
+        if len(code) != 6 or not code.isdigit():
+            continue
+        name = str(row.get("Name", "")).strip()
+        industry = str(row.get("Industry", "")).strip()
+        rows.append((code, name, "" if industry == "nan" else industry))
+    return rows
+
+
+def _sector_and_names() -> tuple[dict, dict, bool]:
+    """종목명·섹터 맵. 섹터는 조회 실패 시 캐시로 폴백한다.
+
+    returns (ticker_map, sector_map, from_cache)
+    """
+    ticker_map: dict = {}
+    sector_map: dict = {}
+    try:
+        for code, name, industry in _fdr_desc_rows():
+            if name:
+                ticker_map.setdefault(code, name)
+            if industry:
+                sector_map[code] = industry
+    except Exception as e:
+        logger.warning("FDR KRX-DESC 로드 실패: %s", e)
+
+    cached = _load_sector_cache()
+    from_cache = False
+    if sector_map:
+        # 새로 온 값이 우선, 빠진 종목만 캐시로 보충
+        for code, industry in cached.items():
+            sector_map.setdefault(code, industry)
+        _save_sector_cache(sector_map)
+    elif cached:
+        sector_map = dict(cached)
+        from_cache = True
+        logger.warning("FDR 섹터 조회 실패 — 섹터 캐시 %d종목 사용", len(sector_map))
+    else:
+        logger.error("섹터 조회 실패 + 캐시 없음 — 이번 스캔의 섹터는 전부 빈 값이 된다")
+    return ticker_map, sector_map, from_cache
+
+
 # ── RS 유니버스 계산 (main.py에서 이식, 섹터 RS 집계 제외) ──
 def _compute_rs_sync() -> tuple[dict, dict, dict]:
     """returns (ticker_map, sector_map, period_returns)"""
     from pykrx import stock as krx
-
-    ticker_map: dict = {}
-    sector_map: dict = {}
 
     # 거래일 탐색 — 전용 함수 1회 호출 (기존: 전종목 스냅샷 최대 7회, KRX 차단 유발 요인)
     end_str = None
@@ -231,22 +303,8 @@ def _compute_rs_sync() -> tuple[dict, dict, dict]:
     except Exception:
         pass
 
-    # 종목명 + 섹터 (FDR KRX-DESC)
-    try:
-        import FinanceDataReader as fdr
-        df_desc = fdr.StockListing("KRX-DESC")
-        if df_desc is not None and not df_desc.empty:
-            for _, row in df_desc.iterrows():
-                code = str(row.get("Code", "")).strip()
-                name = str(row.get("Name", "")).strip()
-                industry = str(row.get("Industry", "")).strip()
-                if len(code) == 6 and code.isdigit():
-                    if name:
-                        ticker_map.setdefault(code, name)
-                    if industry and industry != "nan":
-                        sector_map[code] = industry
-    except Exception as e:
-        logger.warning("FDR KRX-DESC 로드 실패: %s", e)
+    # 종목명 + 섹터 (FDR KRX-DESC, 섹터는 실패 시 캐시 폴백)
+    ticker_map, sector_map, _sector_from_cache = _sector_and_names()
 
     if not end_str:
         logger.warning("pykrx 거래일 감지 실패 — RS는 fallback 경로 사용")
