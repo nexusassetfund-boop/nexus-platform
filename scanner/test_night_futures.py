@@ -13,9 +13,11 @@ def test_preopen_reset_detected():
 
 
 def test_real_night_session_kept():
-    # 2026-08-07 야간세션 실제값: 전일 종가 981.15 → 990.30 (+9.15, +0.93%)
+    # 2026-08-07 야간세션 실제 결과: 전일 종가 981.15 대비 +1.45% (≈995.4).
+    # 사후 조회로는 이 값을 못 얻는다 — 07:20엔 리셋, 08:2x엔 장전에 흘러가는 다른 값이 온다.
+    # 그래서 04:50 스냅샷이 필요하고, 이 판별기는 그 스냅샷이 진짜 세션 값일 때 통과시켜야 한다.
     assert not night_quote_is_preopen_reset(
-        {"value": 990.30, "prev_close": 981.15, "change": 9.15, "change_pct": 0.93, "volume": 991})
+        {"value": 995.38, "prev_close": 981.15, "change": 14.23, "change_pct": 1.45, "volume": 38000})
 
 
 def test_genuine_flat_with_volume_kept():
