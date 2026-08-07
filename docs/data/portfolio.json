@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-07T16:56:02+09:00",
+ "updated": "2026-08-07T17:22:29+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": null,
@@ -36,8 +36,8 @@
     "change": -13.6
    },
    "usdkrw": {
-    "value": 1418.5,
-    "change": 6.1
+    "value": 1417.9,
+    "change": 7.1
    }
   }
  },
