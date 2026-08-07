@@ -125,6 +125,31 @@ def test_pit_universe_filters_match_live():
     assert cs.score({"shares": uni[0]["shares"]})[1]["S1"] == 0     # 59.7억 주 → S1 미충족
 
 
+def test_price_signals_memo_is_computed_once_per_date():
+    """RS·근접도·거래량은 파라미터와 무관 — 변형마다 재계산하면 grid가 몇 시간이 된다."""
+    dates = pd.bdate_range("2022-01-03", periods=300)
+    n = len(dates)
+    closes = _closes({"000010": [100.0 + i for i in range(n)]}, dates)
+    vols = _closes({"000010": [1000.0] * n}, dates)
+    calls = {"n": 0}
+    orig = cbt.make_rs
+
+    def counting(*a, **k):
+        calls["n"] += 1
+        return orig(*a, **k)
+
+    cbt.make_rs = counting
+    cbt._px_memo.clear()
+    try:
+        a = cbt.price_signals(dates[-1], closes, vols)
+        b = cbt.price_signals(dates[-1], closes, vols)
+    finally:
+        cbt.make_rs = orig
+        cbt._px_memo.clear()
+    assert calls["n"] == 1, calls          # 두 번 불러도 계산은 한 번
+    assert a is b, "메모가 같은 객체를 돌려주지 않는다"
+
+
 def test_pre_cut_matches_live_screener():
     """사전컷은 라이브 canslim_screener 와 같은 값이어야 한다.
 

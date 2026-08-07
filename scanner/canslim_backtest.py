@@ -290,13 +290,26 @@ class NIStore:
         return out
 
 
+# 신호일별 가격 파생 지표 메모 — RS·근접도·거래량은 파라미터와 무관하므로
+# 변형마다 다시 계산할 이유가 없다. grid는 변형 20여 개 × 신호일 60개라
+# 메모가 없으면 DART와 무관한 순수 연산에만 몇 시간이 든다.
+_px_memo: dict = {}
+
+
+def price_signals(sig: pd.Timestamp, closes: pd.DataFrame, volumes: pd.DataFrame):
+    key = sig.value
+    if key not in _px_memo:
+        _px_memo[key] = (make_rs(closes, sig, market_pool(sig)),   # 모수는 전 시장(라이브 동일)
+                         make_prox(closes, sig),
+                         make_vol2x(volumes, closes, sig))
+    return _px_memo[key]
+
+
 def screen_at(sig: pd.Timestamp, p: dict, store: NIStore | None,
               closes: pd.DataFrame, volumes: pd.DataFrame):
     """신호일 크로스섹션 스크린 → (selected, 사전컷 통과수, 전체 rows)."""
     uni = pit_universe(sig, p)
-    rs = make_rs(closes, sig, market_pool(sig))   # 백분위 모수는 전 시장 (라이브와 동일)
-    prox = make_prox(closes, sig)
-    v2x = make_vol2x(volumes, closes, sig)
+    rs, prox, v2x = price_signals(sig, closes, volumes)
 
     pre = [u for u in uni
            if rs.get(u["code"], 0) >= p["pre_rs"] and prox.get(u["code"], 0) >= p["pre_prox"]]
