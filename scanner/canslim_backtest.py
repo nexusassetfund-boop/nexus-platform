@@ -454,6 +454,11 @@ def main():
                 days, rebals, {**p, **over}, store, closes, opens, volumes, bench,
                 label=name, log_bits=(name == "orig5"))
             results[name] = _grid_row(m)
+            if name == "loose5":
+                # 판정 대상 — _grid_row에는 평균 손익이 없어 backtest-expert 입력이
+                # 불완전해진다(기대값 0·PF 무한대). 전체 지표를 따로 남긴다.
+                (CBT_CACHE / f"cbt_loose5{args.tag}.json").write_text(
+                    json.dumps(m, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
             if name == "orig5":
                 (CBT_CACHE / f"cbt_result{args.tag}.json").write_text(json.dumps(
                     {"params": {k: v for k, v in p.items()}, "metrics": m,

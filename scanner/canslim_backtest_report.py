@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
+import backtest_report
 from backtest_report import run_eval   # evaluate_backtest.py(backtest-expert) 호출부 재사용
 
 ROOT = Path(__file__).parent.parent
@@ -137,8 +138,11 @@ def main():
     bits = base.get("bit_log") or _load(f"cbt_bits{args.tag}.json") or []
 
     v, reasons = verdict(controls, grid)
-    ev = run_eval({**_eval_compat(controls.get("loose5", {})),
-                   "num_parameters": NUM_PARAMS_CANSLIM})
+    # 판정 입력은 loose5 '전체 지표'여야 한다 — controls에 담긴 _grid_row에는 평균 손익이
+    # 없어 기대값·PF가 0/무한대로 계산된다.
+    loose5_full = _load(f"cbt_loose5{args.tag}.json") or controls.get("loose5", {})
+    backtest_report.NUM_PARAMS = NUM_PARAMS_CANSLIM   # 모듈 상수(8, 스테이지용)를 덮어쓴다
+    ev = run_eval(_eval_compat(loose5_full))
 
     md = [f"# CANSLIM 임계치 완화 검증{' — ' + args.tag if args.tag else ''}", "",
           f"**판정: {v}**", "",
@@ -161,7 +165,9 @@ def main():
 
     if ev:
         md += ["### backtest-expert 판정 (loose5)", "",
-               f"- 총점 **{ev.get('total_score', '-')}/100** → **{ev.get('recommendation', '-')}**",
+               f"- 총점 **{ev.get('total_score', '-')}/100** → **{ev.get('verdict', '-')}**"
+               + (f" · PF {ev.get('profit_factor')} · 기대값 {ev.get('expectancy')}"
+                  if ev.get("profit_factor") is not None else ""),
                f"- 파라미터 {NUM_PARAMS_CANSLIM}개 × 60개월은 과최적화 경보 구간이라 "
                "Robustness 감점은 정상이다.", ""]
 
