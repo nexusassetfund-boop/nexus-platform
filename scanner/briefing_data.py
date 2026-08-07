@@ -300,11 +300,22 @@ def _admin_headers():
     return {"authorization": f"Bearer {token}"} if token else None
 
 
+def is_night_session(now=None):
+    """KRX 야간 파생 세션(18:00~06:00 KST) 시간대인가."""
+    hour = (now or datetime.now(KST)).hour
+    return hour >= 18 or hour < 6
+
+
 def put_night_snapshot(today_str):
     """`--mode night` (04:50 KST, 야간세션 진행 중) — 야간선물 시세를 Worker에 기록한다."""
     h = _admin_headers()
     if not h:
         print("NEXUS_ADMIN_TOKEN 없음 — 야간선물 스냅샷 건너뜀")
+        return
+    # 세션 밖(특히 정규장 중)에 부르면 주간 시세가 야간선물로 둔갑해 저장된다.
+    # 리셋 판별은 거래량 0을 보므로 이건 못 걸러낸다 — 시각으로 막는다.
+    if not is_night_session():
+        print(f"야간세션 시간이 아님({datetime.now(KST):%H:%M} KST) — 스냅샷 건너뜀")
         return
     q = (collect_night_futures() or {}).get("cme_night")
     if not q or night_quote_is_preopen_reset(q):
