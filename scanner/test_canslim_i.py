@@ -43,6 +43,39 @@ def test_no_alpha_is_flat():
     assert abs(r["ic_mean"]) < 0.05, r
 
 
+def test_resid_ic_kills_collinear_signal():
+    """flow_cap이 RS의 복제본이면 RS 통제 후 IC는 0이어야 한다 — 중복 판정의 근거."""
+    rng = np.random.default_rng(3)
+    rows = []
+    for i in range(60):
+        rs = float(rng.integers(80, 100))
+        rows.append({"code": f"{i:06d}", "rs": rs, "prox": 0.9, "cap": 1e12,
+                     "flow": rs, "flow_cap": rs, "fwd": 0.001 * rs + rng.normal() * 0.02})
+    raw = ib._resid_ic(rows, "flow_cap", [])
+    ctrl = ib._resid_ic(rows, "flow_cap", ["rs"])
+    assert raw > 0.2, raw
+    assert abs(ctrl) < 1e-6, ctrl
+
+
+def test_resid_ic_keeps_independent_signal():
+    rng = np.random.default_rng(4)
+    rows = []
+    for i in range(60):
+        rs = float(rng.integers(80, 100))
+        f = rng.normal()
+        rows.append({"code": f"{i:06d}", "rs": rs, "prox": 0.9, "cap": 1e12,
+                     "flow": f, "flow_cap": f, "fwd": 0.03 * f + rng.normal() * 0.02})
+    assert ib._resid_ic(rows, "flow_cap", ["rs"]) > 0.3
+
+
+def test_mini_port_separates_groups():
+    obs = _obs(24, alpha=0.05, seed=5)
+    r = ib.mini_port(obs, top=10)
+    # flow_cap 상위로 뽑은 쪽이 무작위(RS 고정) 상위보다 나아야 한다 — 심은 알파 방향
+    assert r["core_top_I_rank"]["mean_monthly_pct"] > r["core_top"]["mean_monthly_pct"]
+    assert r["core_top_I_pos"]["mean_monthly_pct"] > r["core_top_I_neg"]["mean_monthly_pct"]
+
+
 def test_fwd_returns_basic():
     idx = pd.to_datetime(["2024-02-01", "2024-03-01"])
     opens = pd.DataFrame({"A": [100.0, 110.0], "B": [50.0, np.nan]}, index=idx)
@@ -61,6 +94,9 @@ def test_t_stat_edges():
 if __name__ == "__main__":
     test_alpha_detected()
     test_no_alpha_is_flat()
+    test_resid_ic_kills_collinear_signal()
+    test_resid_ic_keeps_independent_signal()
+    test_mini_port_separates_groups()
     test_fwd_returns_basic()
     test_t_stat_edges()
     print("ok")

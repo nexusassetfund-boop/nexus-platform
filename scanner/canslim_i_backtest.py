@@ -185,6 +185,112 @@ def analyze(obs) -> dict:
     }
 
 
+def _rank(vals) -> np.ndarray:
+    return pd.Series(vals).rank().to_numpy(dtype=float)
+
+
+def _resid_ic(rows, key: str, ctrl: list[str]) -> float | None:
+    """ctrl 순위로 설명되는 부분을 제거한 뒤의 key–fwd 순위상관.
+
+    I가 RS·N의 재포장인지 보는 핵심 지표다. 회귀는 순위 공간에서 최소제곱 1~2변수.
+    """
+    if len(rows) < 15:
+        return None
+    y = _rank([r["fwd"] for r in rows])
+    x = _rank([r[key] for r in rows])
+    X = np.column_stack([np.ones(len(rows))] + [_rank([r[c] for r in rows]) for c in ctrl])
+    beta, *_ = np.linalg.lstsq(X, x, rcond=None)
+    res = x - X @ beta
+    # 통제변수와 완전 공선이면 잔차가 부동소수 잡음(~1e-14)만 남는다 — 그 잡음과의 상관은
+    # 무의미한 난수라서 반드시 0으로 눌러야 한다(합성 테스트에서 0.23이 나왔던 지점).
+    if res.std() <= 1e-8 * max(x.std(), 1.0):
+        return 0.0
+    c = np.corrcoef(res, y)[0, 1]
+    return float(c) if np.isfinite(c) else None
+
+
+def analyze_neutral(obs) -> dict:
+    """I가 RS와 별개인지 — RS 구간별 스프레드 + 통제 후 IC + 기간 분할."""
+    buckets = {"rs_low": (0, 85), "rs_mid": (86, 92), "rs_high": (93, 99)}
+    bspread = {k: [] for k in buckets}
+    ic_raw, ic_ctrl_rs, ic_ctrl_both, ic_rs, ic_prox = [], [], [], [], []
+    for o in obs:
+        rows = o["rows"]
+        for k, (lo, hi) in buckets.items():
+            sub = [r for r in rows if lo <= r["rs"] <= hi]
+            pos = [r["fwd"] for r in sub if r["flow"] > 0]
+            neg = [r["fwd"] for r in sub if r["flow"] <= 0]
+            if len(pos) >= 3 and len(neg) >= 3:
+                bspread[k].append(np.mean(pos) - np.mean(neg))
+        if len(rows) >= 15:
+            for lst, key, ctrl in ((ic_raw, "flow_cap", []),
+                                   (ic_ctrl_rs, "flow_cap", ["rs"]),
+                                   (ic_ctrl_both, "flow_cap", ["rs", "prox"]),
+                                   (ic_rs, "rs", []), (ic_prox, "prox", [])):
+                v = _resid_ic(rows, key, ctrl)
+                if v is not None:
+                    lst.append(v)
+    half = len(obs) // 2
+    sub = {}
+    for name, part in (("first_half", obs[:half]), ("second_half", obs[half:])):
+        sp = []
+        for o in part:
+            pos = [r["fwd"] for r in o["rows"] if r["flow"] > 0]
+            neg = [r["fwd"] for r in o["rows"] if r["flow"] <= 0]
+            if len(pos) >= 3 and len(neg) >= 3:
+                sp.append(np.mean(pos) - np.mean(neg))
+        sub[name] = {"months": len(sp),
+                     "spread_pct": round(float(np.mean(sp)) * 100, 3) if sp else None,
+                     "spread_t": round(_t_stat(sp), 2) if sp else None,
+                     "range": [str(part[0]["sig"].date()), str(part[-1]["sig"].date())] if part else None}
+    def _s(x):
+        return {"mean": round(float(np.mean(x)), 4), "t": round(_t_stat(x), 2), "n": len(x)} if x else None
+    return {
+        "rs_bucket_spread_pct": {k: (round(float(np.mean(v)) * 100, 3) if v else None)
+                                 for k, v in bspread.items()},
+        "rs_bucket_spread_t": {k: (round(_t_stat(v), 2) if v else None) for k, v in bspread.items()},
+        "rs_bucket_months": {k: len(v) for k, v in bspread.items()},
+        "ic_flow_raw": _s(ic_raw), "ic_flow_ctrl_rs": _s(ic_ctrl_rs),
+        "ic_flow_ctrl_rs_prox": _s(ic_ctrl_both),
+        "ic_rs_alone": _s(ic_rs), "ic_prox_alone": _s(ic_prox),
+        "subperiod": sub,
+    }
+
+
+def mini_port(obs, top: int = 20) -> dict:
+    """DART 없는 미니 포트폴리오 — 'I를 필터로 쓰면 코어 상위군이 나아지나'.
+
+    라이브 선정 규칙(요건 통과 후 RS 내림차순 top N)의 DART 없는 축소판이다.
+    점수화(가점)와 필터(관문)를 가르려면 이 비교가 필요하다.
+    """
+    out = {}
+    for name, pick in (
+        ("core_top", lambda rs: rs),
+        ("core_top_I_pos", lambda rs: [r for r in rs if r["flow"] > 0]),
+        ("core_top_I_neg", lambda rs: [r for r in rs if r["flow"] <= 0]),   # 반증 대조군
+        ("core_top_I_rank", None),      # RS 대신 flow_cap 상위 (I만으로 뽑기)
+    ):
+        rets, months = [], 0
+        for o in obs:
+            rows = sorted(o["rows"], key=lambda r: -r["rs"])
+            sel = (sorted(o["rows"], key=lambda r: -r["flow_cap"])[:top] if pick is None
+                   else pick(rows)[:top])
+            if len(sel) < 5:
+                continue
+            rets.append(float(np.mean([r["fwd"] for r in sel])))
+            months += 1
+        if not rets:
+            out[name] = None
+            continue
+        a = np.asarray(rets)
+        cagr = (float(np.prod(1 + a)) ** (12 / len(a)) - 1) * 100
+        out[name] = {"months": months, "mean_monthly_pct": round(float(a.mean()) * 100, 3),
+                     "cagr_pct": round(cagr, 2), "vol_pct": round(float(a.std(ddof=1)) * 100, 2),
+                     "worst_month_pct": round(float(a.min()) * 100, 2),
+                     "win_rate_pct": round(float((a > 0).mean()) * 100, 1)}
+    return out
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     ap = argparse.ArgumentParser()
@@ -205,6 +311,10 @@ def main():
     for core, key in ((True, "core_NL"), (False, "prefilter")):
         obs = collect(days, rebals, opens, closes, p, store, core=core)
         out[key] = analyze(obs)
+        if core:
+            # 직교성·기간분할·미니포트는 코어(라이브 후보군에 가까운 집합)에서만 본다
+            out["core_neutral"] = analyze_neutral(obs)
+            out["core_mini_port"] = mini_port(obs)
         logger.info("[%s] %s", key, json.dumps(out[key], ensure_ascii=False))
     out["meta"] = {"flow_calls": store.calls, "missing_prices": len(missing),
                    "flow_td": FLOW_TD, "start": args.start, "end": args.end,
