@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-07T15:01:31+09:00",
+ "updated": "2026-08-07T15:09:48+09:00",
  "kospi": {
   "price": 6250.24,
   "ma200": 5803.21,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-07T15:01:31+09:00"
+  "updated": "2026-08-07T15:09:48+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7790.0,
+   "last_price": 7750.0,
    "peak_price": 7940.0,
-   "return_pct": -1.89,
-   "total_return_pct": -1.89,
+   "return_pct": -2.39,
+   "total_return_pct": -2.39,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -51,10 +51,10 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 335000.0,
+   "last_price": 333500.0,
    "peak_price": 324000.0,
-   "return_pct": 3.4,
-   "total_return_pct": 3.4,
+   "return_pct": 2.93,
+   "total_return_pct": 2.93,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -81,10 +81,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7790.0,
+   "last_price": 7750.0,
    "peak_price": 7940.0,
-   "return_pct": -1.89,
-   "total_return_pct": -1.89,
+   "return_pct": -2.39,
+   "total_return_pct": -2.39,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -170,7 +170,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": -1.89
+    "cum": -2.39
    }
   ],
   "1": [
@@ -208,7 +208,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": 0.96
+    "cum": 0.64
    }
   ]
  },
@@ -248,7 +248,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": -1.89
+    "cum": -2.39
    }
   ],
   "1": [
@@ -286,7 +286,7 @@
    },
    {
     "date": "2026-08-07",
-    "cum": 0.96
+    "cum": 0.64
    }
   ]
  },
@@ -294,7 +294,7 @@
  "stats": {
   "holding_count": 4,
   "exited_count": 0,
-  "avg_return": 0.25,
+  "avg_return": -0.12,
   "exited_avg_return": 0,
   "win_rate": 0
  }
