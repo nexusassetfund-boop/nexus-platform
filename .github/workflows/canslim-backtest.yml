@@ -21,8 +21,8 @@ on:
         default: ""
 permissions:
   contents: read
-# 모드별로 그룹을 나눈다 — warm(DART 수집, 최대 6시간)이 돌고 있어도 다른 모드를 돌려야 한다.
-concurrency: { group: canslim-backtest-${{ inputs.mode }}, cancel-in-progress: false }
+# concurrency 없음 — 수동 리서치 잡이고, warm(DART 수집, 수 시간)이 점유하면 다른 모드가
+# 큐에 갇힌다. inputs 컨텍스트는 concurrency에서 못 쓴다(워크플로 파싱 실패).
 jobs:
   backtest:
     runs-on: ubuntu-latest
