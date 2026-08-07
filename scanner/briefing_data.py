@@ -4,12 +4,14 @@
 장전(am):  밤사이 글로벌 지수·금리·환율·원자재 + 전일 국내 마감 + 감지기 요약
            + 전일 시총 상위 15 등락률·외인/기관 수급 + 전략실·섹터맵 요약
 장마감(pm): 국내 지수·등락 종목수·투자자 수급·업종 등락 + 글로벌 + 감지기 요약 + 아침 브리핑(복기용)
+야간(night): 코스피200 야간선물 스냅샷만 Worker에 기록 (04:50 KST — 세션이 아직 열려 있을 때)
 
-출력: briefing_input.json (repo 루트, gitignore 대상)
-사용: python scanner/briefing_data.py --mode am|pm   (미지정 시 KST 시각으로 자동)
+출력: briefing_input.json (repo 루트, gitignore 대상). night 모드는 파일을 쓰지 않는다.
+사용: python scanner/briefing_data.py --mode am|pm|night   (미지정 시 KST 시각으로 자동)
 """
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -223,10 +225,32 @@ def _cme_front_month():
     return None
 
 
+def night_quote_is_preopen_reset(q):
+    """야간세션이 끝나고 장전 리셋된 시세인가.
+
+    07:20 장전 시점에 KIS를 부르면 야간 체결이 지워지고 전일 종가·등락 0.00·거래량 0이 온다.
+    이걸 그대로 실으면 브리핑에 "야간선물 981.15(보합, 0.00%)"처럼 매일 가짜 보합이 찍힌다
+    (실제 사고 2026-08-06·08-07 am — 8/7 야간선물은 실제로 +1.45%였다).
+
+    사후 조회로는 야간 종가를 복원할 수 없다(08시대에 부르면 장전에 흘러가는 또 다른 값이 온다).
+    그래서 04:50 스냅샷이 정답이고, 이 판별기는 리셋된 값이 새어 나가는 것만 막는다.
+    """
+    if not q:
+        return True
+    if (q.get("volume") or 0) > 0:
+        return False
+    prev = q.get("prev_close")
+    return q.get("change") == 0 and (prev is None or q.get("value") == prev)
+
+
 def collect_night_futures():
     """코스피200 야간선물(CME 연계 KRX 야간시장) 종가 — 장전 전략용.
 
-    야간장은 18:00~익일 05:00이므로 07:20 장전 시점엔 직전 밤 세션이 이미 끝나 있다.
+    야간장은 18:00~익일 05:00이므로 07:20 장전 시점엔 직전 밤 세션이 이미 끝나 있고,
+    KIS 시세는 그때 이미 전일 종가로 리셋돼 있다. 그래서 세션이 열려 있는 04:50에
+    `--mode night`으로 미리 찍어 Worker에 넣어 두고(put_night_snapshot), 장전엔 그걸 읽는다.
+    라이브 조회는 스냅샷이 없을 때의 보루이며, 리셋으로 판정되면 버린다.
+
     KIS 선물옵션 시세(FHMIF10000000, FID_COND_MRKT_DIV_CODE=F)에 CME 연계 야간물 코드
     (A016… 최근월물)를 넣어 조회한다. 등락은 부호 없이 오므로 prdy_vrss_sign으로 부호를 붙인다.
     수치를 못 얻으면 키를 비워 둔다 — 근사치는 넣지 않는다.
@@ -269,6 +293,57 @@ def collect_night_futures():
                 out["cme_night_error"] = str(e)[:100]
         return out
     return asyncio.run(run())
+
+
+def _admin_headers():
+    token = os.environ.get("NEXUS_ADMIN_TOKEN")
+    return {"authorization": f"Bearer {token}"} if token else None
+
+
+def put_night_snapshot(today_str):
+    """`--mode night` (04:50 KST, 야간세션 진행 중) — 야간선물 시세를 Worker에 기록한다."""
+    h = _admin_headers()
+    if not h:
+        print("NEXUS_ADMIN_TOKEN 없음 — 야간선물 스냅샷 건너뜀")
+        return
+    q = (collect_night_futures() or {}).get("cme_night")
+    if not q or night_quote_is_preopen_reset(q):
+        print(f"야간선물 시세 없음/리셋 상태 — 기록 안 함: {q}")
+        return
+    body = {**q, "date": today_str, "captured_at": datetime.now(KST).isoformat()}
+    r = requests.put(f"{WORKER}/api/night-futures", headers=h, json=body, timeout=20)
+    print(f"PUT /api/night-futures -> {r.status_code} {r.text[:120]}")
+    r.raise_for_status()
+
+
+def get_night_snapshot(today_str):
+    """장전 — 오늘 새벽에 찍어 둔 야간선물 스냅샷. 날짜가 다르면 낡은 값이므로 쓰지 않는다."""
+    h = _admin_headers()
+    if not h:
+        return {"error": "NEXUS_ADMIN_TOKEN 없음"}
+    try:
+        r = requests.get(f"{WORKER}/api/night-futures", headers=h, timeout=15)
+        if r.status_code != 200:
+            return {"error": f"스냅샷 없음 ({r.status_code})"}
+        snap = r.json()
+    except Exception as e:
+        return {"error": str(e)[:100]}
+    if snap.get("date") != today_str:
+        return {"error": f"스냅샷이 오늘({today_str}) 것이 아님: {snap.get('date')}"}
+    return {"cme_night": snap}
+
+
+def collect_night_futures_for_am(today_str):
+    """장전용 야간선물 — 스냅샷 우선, 없으면 라이브(리셋이면 폐기)."""
+    snap = get_night_snapshot(today_str)
+    if snap.get("cme_night"):
+        return snap
+    live = collect_night_futures() or {}
+    q = live.get("cme_night")
+    if q and not night_quote_is_preopen_reset(q):
+        return {**live, "source": "live"}
+    # 가짜 보합을 싣느니 비워 둔다 — 프롬프트가 야간선물 행 자체를 생략한다
+    return {"error": snap.get("error") or "야간선물 시세 없음(장전 리셋)", "dropped_live": q}
 
 
 def collect_top_caps(today_str, n=15):
@@ -452,12 +527,17 @@ def is_trading_day(today_str, mode="pm"):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=["am", "pm"], default=None)
+    ap.add_argument("--mode", choices=["am", "pm", "night"], default=None)
     ap.add_argument("--date", default=None, help="YYYY-MM-DD (테스트용 — 기본 오늘)")
     args = ap.parse_args()
     now = datetime.now(KST)
     mode = args.mode or ("am" if now.hour < 12 else "pm")
     today_str = args.date or now.strftime("%Y-%m-%d")
+
+    if mode == "night":
+        # 야간세션 중 스냅샷만 찍고 끝 — briefing_input.json은 건드리지 않는다
+        put_night_snapshot(today_str)
+        return
 
     if not is_trading_day(today_str, mode):
         print(f"휴장일({today_str}) — 브리핑 생성 건너뜀")
@@ -482,7 +562,7 @@ def main():
         data["top_caps"] = collect_top_caps(today_str)      # 전일 시총 상위 15 등락률·수급
         data["platform"] = collect_platform(today_str)      # 전략실·섹터맵 요약
         try:
-            data["night_futures"] = collect_night_futures()  # 코스피200 야간선물 (장전 전략용)
+            data["night_futures"] = collect_night_futures_for_am(today_str)  # 코스피200 야간선물
         except Exception as e:
             data["night_futures_error"] = str(e)[:100]
 
