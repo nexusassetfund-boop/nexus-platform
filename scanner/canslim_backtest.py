@@ -393,7 +393,9 @@ def main():
     ap.add_argument("--tag", default="")
     ap.add_argument("--probe", action="store_true", help="DART 없이 유니버스·RS·N·S2 점검")
     ap.add_argument("--warm", action="store_true", help="DART 캐시 워밍업만")
-    ap.add_argument("--limit-months", type=int, default=0, help="앞에서부터 N개 신호일만")
+    ap.add_argument("--limit-months", type=int, default=0,
+                    help="앞에서부터 N개 신호일만 — DART 워밍업 분할 전용. "
+                         "기간분할 성과 비교에는 쓰지 말고 --start/--end 를 써라")
     ap.add_argument("--controls", action="store_true", help="대조군 표")
     ap.add_argument("--grid", action="store_true", help="OFAT + 강건성")
     args = ap.parse_args()
@@ -401,6 +403,10 @@ def main():
     p = _base_params()
     days, rebals, opens, closes, volumes, missing = _load_market_data(args.start, args.end, p)
     if args.limit_months:
+        # 리밸런싱만 자르면 나머지 기간은 '방치된 포트폴리오'가 되어 성과가 무의미해진다.
+        # 워밍업(DART 수집)에만 쓰고, 성과 비교는 --start/--end 로 기간 자체를 잘라야 한다.
+        if not (args.warm or args.probe):
+            sys.exit("--limit-months 는 워밍업 전용이다. 기간분할은 --start/--end 를 써라.")
         rebals = rebals[:args.limit_months]
 
     if args.probe:
