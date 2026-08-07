@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-07T15:36:59+09:00",
+ "updated": "2026-08-07T16:55:33+09:00",
  "kospi": {
-  "price": 6250.24,
-  "ma200": 5803.21,
-  "ma50": 7605.59,
+  "price": 6258.77,
+  "ma200": 5803.25,
+  "ma50": 7605.76,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-07T15:36:59+09:00"
+  "updated": "2026-08-07T16:55:33+09:00"
  },
  "holdings": [
   {
@@ -69,7 +69,8 @@
     "RS 90 — 최상위 강세",
     "RS 신고점",
     "전고점 돌파! 거래량 3.25x"
-   ]
+   ],
+   "stop_warning": false
   },
   {
    "ticker": "051900",
@@ -181,14 +182,15 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": 3,
-   "confidence_now": 98,
+   "confidence_now": 100,
    "last_updated": "2026-08-07",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.22x",
     "불 스노트 — 거래량 폭증 3.22x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
+   ],
+   "stop_warning": false
   },
   {
    "ticker": "007070",
@@ -210,14 +212,15 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": 1,
-   "confidence_now": 98,
+   "confidence_now": 65,
    "last_updated": "2026-08-07",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.08x",
     "불 스노트 — 거래량 폭증 3.08x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
+   ],
+   "stop_warning": false
   }
  ],
  "exited": [],
