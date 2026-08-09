@@ -184,6 +184,15 @@ def score(rec: dict, th: dict | None = None) -> tuple[int, dict]:
     return sum(b.values()), b
 
 
+def i_gate(net_억: float | None) -> int | None:
+    """I 관문 — 기관+외인 순매수가 (+)인가. 0(중립)은 미통과, 결측은 판정 보류(None).
+
+    점수와 분리해 둔 이유는 canslim_i_backtest 결과다: 8번째 비트로 넣으면 I≤0 종목이
+    다른 요건으로 통과해 효과가 반감됐다.
+    """
+    return None if net_억 is None else int(net_억 > 0)
+
+
 def build() -> dict | None:
     pykrx = pb._pykrx_stock()
     dates = pb._trading_dates()
@@ -290,6 +299,10 @@ def build() -> dict | None:
             rec.update(quarter_ni_yoy(corp))
         rec["canslim_score"], rec["bits"] = score(rec)
         rec["strict"] = int(rec["canslim_score"] == 7)
+        # I 관문 — 점수(7점)에는 넣지 않는다. 백테스트(2026-08, canslim_i_backtest)에서
+        # 8번째 비트로 넣으면 효과가 반감(+8.8% vs 관문 +14.7%)했고, 관문은 약세·강세 두
+        # 구간 모두 base를 이겼다. 결측(수급 조회 실패)은 None — 게이트 판정 보류.
+        rec["i_gate"] = i_gate(rec["inst_frgn_net_억"])
         out.append(rec)
 
     if pool and fails > len(pool) / 2:
@@ -319,11 +332,16 @@ def build() -> dict | None:
             "min_market_cap_억": MIN_MARKET_CAP // 100_000_000,
             "i_flow_td": I_FLOW_TD, "score_max": 7,
             "note": "C/A는 EPS가 아닌 순이익(NI) 기준 근사 — 주식수 변동 종목은 실제 EPS와 다를 수 있음. "
-                    "M(시장방향)이 correction이면 신규 진입 보류가 오닐 원전.",
+                    "M(시장방향)이 correction이면 신규 진입 보류가 오닐 원전. "
+                    "I(기관+외인 순매수)는 점수 미반영 관문 — 백테스트에서 8번째 비트보다 관문이 유효했음.",
         },
         "scanned": len(pool),
         "count": len(out),
         "strict_count": sum(r["strict"] for r in out),
+        # 수급 조회가 통째로 실패한 날은 프론트가 게이트를 끄고 score 필터로 돌아가야 한다
+        # (게이트를 그대로 적용하면 표가 빈다 — KRX 간헐 차단이 실제로 있었다).
+        "i_flow_ok": int(sum(1 for r in out if r["i_gate"] is not None) >= max(1, len(out) // 2)),
+        "gate_count": sum(1 for r in out if r["i_gate"] == 1 and r["canslim_score"] >= 5),
         "candidates": out,
     }
 
