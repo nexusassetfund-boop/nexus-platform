@@ -141,6 +141,23 @@ def test_ni_account_rejects_lookalikes():
         assert not cs._is_ni_account(nm), nm
 
 
+def test_i_gate_sign_and_missing():
+    """I 관문: (+)만 통과, 0은 미통과, 결측은 판정 보류(None) — 결측을 0으로 보면 표가 빈다."""
+    assert cs.i_gate(3033) == 1
+    assert cs.i_gate(-12) == 0
+    assert cs.i_gate(0) == 0
+    assert cs.i_gate(None) is None
+
+
+def test_i_gate_not_in_score():
+    """관문은 7점 채점에 영향을 주지 않아야 한다 — 백테스트 비교 가능성 보존."""
+    rec = {"q_ni_yoy": 50, "ni_growth": 50, "roe": 20, "proximity_52w": 0.95,
+           "shares": 10_000_000, "vol_2x_bo": 1, "rs_kkangto": 95,
+           "inst_frgn_net_억": -500}
+    sc, bits = cs.score(rec)
+    assert sc == 7 and "I" not in bits, (sc, bits)
+
+
 def test_quarter_yoy_no_data_returns_empty():
     with _Stub({}):
         assert cs.quarter_ni_yoy("X", today=dt.date(2026, 5, 20)) == {}
