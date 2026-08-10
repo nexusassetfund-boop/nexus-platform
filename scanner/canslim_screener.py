@@ -15,7 +15,8 @@
   4) 기관+외인 60거래일 순매수(I)
   5) DART → 분기 순이익 YoY(C, 2023 3분기부터 제공), 연간 순이익 YoY·ROE(A)
   6) 7점 채점 + M(시장방향)
-출력: docs/data/canslim.json (프론트 '스테이지 감지기 > CANSLIM' 하위탭이 읽음)
+출력: docs/data/canslim.json (프론트 '전략실 > CANSLIM' 탭이 읽음)
+      + canslim_state.json(멤버십 스냅샷·리포 전용) / canslim_history.json(편입·편출, canslim.json에 동봉)
 
 주의: EPS 대신 순이익(NI) 증가율을 쓴다 — 분기 주식수 시계열을 DART에서 별도로
       받아야 해서, 주식수 변동이 없는 대부분의 종목에서 동일한 근사다. 유상증자·
@@ -40,6 +41,10 @@ KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).parent.parent
 OUT_PATH = ROOT / "docs" / "data" / "canslim.json"
 SCAN_PATH = ROOT / "docs" / "data" / "scan.json"
+STATE_PATH = ROOT / "docs" / "data" / "canslim_state.json"      # {code: {first,rank,score,name}}
+HISTORY_PATH = ROOT / "docs" / "data" / "canslim_history.json"  # append-only 편입/편출
+MEMBER_SCORE = 5                 # 편입/편출 판정선 — 프론트 기본 필터(score≥5)와 동일.
+                                 # 전체 후보엔 2~3점도 섞여 있어 그대로 세면 이력이 무의미하다.
 
 # ── 7대 요건 임계치 (한국시장 조정 — 완화하려면 여기만 수정) ──
 C_NI_YOY = 20.0                  # C: 최근 분기 순이익 YoY ≥ 20%
@@ -193,6 +198,79 @@ def i_gate(net_억: float | None) -> int | None:
     return None if net_억 is None else int(net_억 > 0)
 
 
+def _days(a: str, b: str) -> int | None:
+    try:
+        return (dt.date.fromisoformat(a) - dt.date.fromisoformat(b)).days
+    except Exception:
+        return None
+
+
+def _track(out: list[dict], today: str, now: dt.datetime | None = None) -> tuple[list, dict, bool]:
+    """편입/편출 이력 + 순위·score 변화 (눌림목 _update_history와 같은 원칙, 성과추적 없음).
+
+    순위 Δ는 참고용이다 — 정렬 키가 (score, RS, 12M)이라 score가 그대로면 순위 변동은
+    같은 점수대 안의 RS 자리바꿈일 뿐이다. 상태 변화(편입/편출·score Δ)가 본 신호.
+    확정(confirm)은 마감 이후 + 스냅샷이 당일일 때만 — 장중/휴장 실행이 당일 왕복
+    편입·편출을 남기지 않게 한다.
+    """
+    try:
+        state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        state = {}
+    try:
+        history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        history = []
+
+    members = {r["ticker"]: r for r in out if r["canslim_score"] >= MEMBER_SCORE}
+    for r in out:
+        p = state.get(r["ticker"]) or {}
+        r["rank_prev"] = p.get("rank")
+        r["rank_delta"] = (p["rank"] - r["rank"]) if p.get("rank") else None   # +면 순위 상승
+        r["score_prev"] = p.get("score")
+        r["score_delta"] = (r["canslim_score"] - p["score"]) if p.get("score") is not None else None
+        if r["ticker"] in members:
+            first = p.get("first") or today
+            r["first_seen"] = first
+            r["is_new"] = int(bool(state) and first == today)
+            r["days_in_list"] = _days(today, first) or 0
+
+    now = now or dt.datetime.now(tz=KST)
+    confirm = (now.hour, now.minute) >= (15, 30) and now.strftime("%Y-%m-%d") == today
+    # 후보 급감 가드 — 데이터 부분 장애로 쪼그라든 실행이 대량 편출을 확정하는 것 방지
+    # (눌림목 7/28 사례). 진짜 시장 변화라면 다음 마감 실행이 하루 늦게 확정한다.
+    if confirm and len(state) >= 8 and len(members) < len(state) * 0.4:
+        logger.warning("멤버 급감 (%d→%d) — 일시 장애 의심, 이번 실행은 확정 보류",
+                       len(state), len(members))
+        confirm = False
+    if not confirm:
+        logger.info("비확정 실행 (now=%s, snap=%s) — 이력/상태 동결", now.strftime("%H:%M"), today)
+        return history[-30:], state, False
+
+    new_state = {c: {"first": r["first_seen"], "rank": r["rank"],
+                     "score": r["canslim_score"], "name": r["name"]}
+                 for c, r in members.items()}
+    if not state:                                  # 최초 실행 — diff 없이 시드만
+        return history[-30:], new_state, True
+
+    added = [{"code": c, "name": r["name"], "score": r["canslim_score"]}
+             for c, r in members.items() if c not in state]
+    removed = [{"code": c, "name": (state[c].get("name") or c),
+                "days": _days(today, state[c].get("first") or today),
+                "last_score": state[c].get("score"), "last_rank": state[c].get("rank")}
+               for c in sorted(set(state) - set(members))]
+    if added or removed:
+        if history and history[-1].get("date") == today:   # 같은 날 재확정 → 병합 (멱등)
+            last = history[-1]
+            last["added"] = list({a["code"]: a for a in last.get("added", []) + added}.values())
+            last["removed"] = list({r["code"]: r for r in last.get("removed", []) + removed}.values())
+        else:
+            history.append({"date": today, "added": added, "removed": removed})
+        HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+    return history[-30:], new_state, True
+
+
 def build() -> dict | None:
     pykrx = pb._pykrx_stock()
     dates = pb._trading_dates()
@@ -321,9 +399,16 @@ def build() -> dict | None:
     for i, r in enumerate(out, 1):
         r["rank"] = i
 
+    today = f"{d0[:4]}-{d0[4:6]}-{d0[6:]}"
+    history, new_state, confirm = _track(out, today)
+
     return {
         "updated": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
-        "snap_date": f"{d0[:4]}-{d0[4:6]}-{d0[6:]}",
+        "snap_date": today,
+        "history": history,
+        "member_score": MEMBER_SCORE,
+        "_state": new_state,
+        "_confirm": confirm,
         "market": pb.market_direction(),
         "thresholds": {
             "c_ni_yoy": C_NI_YOY, "a_ni_yoy": A_NI_YOY, "a_roe": A_ROE,
@@ -352,8 +437,12 @@ def main():
     if data is None:
         logger.error("CANSLIM 스캔 실패 — 기존 파일 보존, exit 1")
         sys.exit(1)
+    new_state = data.pop("_state", {})
+    confirm = data.pop("_confirm", True)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    if confirm:   # 멤버십 기준은 마감 확정 실행에서만 갱신
+        STATE_PATH.write_text(json.dumps(new_state, ensure_ascii=False, indent=1), encoding="utf-8")
     logger.info("저장: %s (후보 %d, 7요건 충족 %d, 시장 %s)",
                 OUT_PATH, data["count"], data["strict_count"], data["market"]["status"])
 
