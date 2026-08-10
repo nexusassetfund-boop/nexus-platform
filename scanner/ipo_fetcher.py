@@ -258,10 +258,13 @@ def get_finuts_ipo_prices() -> tuple[dict[str, list], dict[str, list]]:
 # 락업해제 테이블 '구분' 라벨 → 백테스터 앵커 키
 LOCKUP_KEYS = {"15일": "d15", "1개월": "m1", "3개월": "m3", "6개월": "m6"}
 
-# finuts는 상세 페이지를 ~100건 연속 조회하면 403으로 차단한다(2026-08-10 CI 실측).
-# 403이 재시도 후에도 계속되면 이번 실행의 상세 조회를 전부 중단 — 수집값은 KV에
+# finuts는 상세 페이지를 ~100건 연속 조회하면 403으로 차단한다(2026-08-10 CI 실측,
+# 차단이 목록 API·후속 실행까지 번짐). 403이 재시도 후에도 계속되면 이번 실행의
+# 상세 조회를 전부 중단하고, 정상 실행도 실행당 80건까지만 조회 — 수집값은 KV에
 # 보존되므로 다음 날 실행이 빠진 종목만 이어서 채운다(점진 백필).
 _lockup_blocked = False
+_lockup_fetched = 0
+LOCKUP_MAX_PER_RUN = 80
 
 
 def get_finuts_lockup(ipo_sn: str) -> dict | None:
@@ -272,9 +275,10 @@ def get_finuts_lockup(ipo_sn: str) -> dict | None:
     를 파싱해 {"total_shares": int|None, "lockup": {d15,m1,m3,m6}} 반환. 실패 시 None.
     확약이 없는 구간은 키 자체가 없다(0으로 간주). 페이지는 서버렌더 HTML — 쿠키 불필요.
     """
-    global _lockup_blocked
-    if _lockup_blocked:
+    global _lockup_blocked, _lockup_fetched
+    if _lockup_blocked or _lockup_fetched >= LOCKUP_MAX_PER_RUN:
         return None
+    _lockup_fetched += 1
     try:
         resp = None
         for attempt in range(2):
