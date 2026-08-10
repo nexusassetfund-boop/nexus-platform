@@ -163,6 +163,49 @@ def test_quarter_yoy_no_data_returns_empty():
         assert cs.quarter_ni_yoy("X", today=dt.date(2026, 5, 20)) == {}
 
 
+def _member(code, rank, score=6, name=None):
+    return {"ticker": code, "name": name or f"종목{code}", "rank": rank,
+            "canslim_score": score}
+
+
+def test_track_diff_and_deltas(tmp=None):
+    """편입/편출 diff · 순위/score Δ · 최초 실행 시드 · 비확정 동결 (파일 I/O는 tmp로 격리)"""
+    import json
+    import tempfile
+    from pathlib import Path
+    d = Path(tempfile.mkdtemp())
+    orig = (cs.STATE_PATH, cs.HISTORY_PATH)
+    cs.STATE_PATH, cs.HISTORY_PATH = d / "s.json", d / "h.json"
+    try:
+        n1 = dt.datetime(2026, 8, 7, 16, 40, tzinfo=cs.KST)
+        n2 = dt.datetime(2026, 8, 8, 16, 40, tzinfo=cs.KST)
+        day1 = [_member("A", 1), _member("B", 2), _member("C", 3, score=3)]  # C는 멤버 아님
+        hist, st, ok = cs._track(day1, "2026-08-07", n1)
+        assert ok, "마감 후 + 스냅샷 당일이면 확정"
+        assert set(st) == {"A", "B"} and hist == [], (st, hist)
+        cs.STATE_PATH.write_text(json.dumps(st), encoding="utf-8")
+
+        # 다음 날: A 순위 하락 + score 상승, B 편출(score 붕괴), D 신규 편입
+        day2 = [_member("A", 4, score=7), _member("B", 9, score=2), _member("D", 1)]
+        hist, st, ok = cs._track(day2, "2026-08-08", n2)
+        a = day2[0]
+        assert a["rank_delta"] == -3 and a["score_delta"] == 1, a
+        assert a["days_in_list"] == 1 and a["is_new"] == 0, a
+        assert day2[2]["is_new"] == 1, day2[2]
+        assert set(st) == {"A", "D"}, st
+        assert [x["code"] for x in hist[-1]["added"]] == ["D"], hist
+        assert hist[-1]["removed"][0]["code"] == "B" and hist[-1]["removed"][0]["days"] == 1, hist
+
+        # 같은 날 재실행 → 행 병합 (멱등)
+        cs.STATE_PATH.write_text(json.dumps(st), encoding="utf-8")
+        hist, st, ok = cs._track(day2, "2026-08-08", n2)
+        assert len(hist) == 1, hist
+        # 장중 실행(마감 전)은 이력·상태 동결
+        assert cs._track(day2, "2026-08-08", n2.replace(hour=11))[2] is False
+    finally:
+        cs.STATE_PATH, cs.HISTORY_PATH = orig
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):
