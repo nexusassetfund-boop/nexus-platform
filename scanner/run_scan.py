@@ -18,6 +18,7 @@ import json
 import logging
 import math
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -248,8 +249,9 @@ def _fdr_desc_rows() -> list[tuple[str, str, str]]:
         return []
     rows = []
     for _, row in df.iterrows():
-        code = str(row.get("Code", "")).strip()
-        if len(code) != 6 or not code.isdigit():
+        code = str(row.get("Code", "")).strip().upper()
+        # 신규 상장분은 영숫자 혼합 코드(예: 0156T0) — 숫자만 받으면 인덱스에서 통째로 빠진다
+        if not re.fullmatch(r"\d[0-9A-Z]{5}", code):
             continue
         name = str(row.get("Name", "")).strip()
         industry = str(row.get("Industry", "")).strip()

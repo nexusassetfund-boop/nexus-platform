@@ -6,6 +6,7 @@ import asyncio
 import datetime as dt
 import json
 import logging
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
@@ -638,9 +639,9 @@ def _fetch_constituents_fdr_fallback() -> tuple[list[tuple[str, str]], set]:
                 if capcol:
                     df = df.sort_values(capcol, ascending=False)
                 for _, row in df.iterrows():
-                    code = str(row.get("Code", "")).strip()
+                    code = str(row.get("Code", "")).strip().upper()
                     name = str(row.get("Name", code)).strip()
-                    if len(code) == 6 and code.isdigit() and code not in seen:
+                    if re.fullmatch(r"\d[0-9A-Z]{5}", code) and code not in seen:
                         all_stocks.append((code, name, market))
                         seen.add(code)
                 logger.info("FDR %s: %d 종목 로드 (%s)", market, len(df),
