@@ -258,6 +258,11 @@ def get_finuts_ipo_prices() -> tuple[dict[str, list], dict[str, list]]:
 # 락업해제 테이블 '구분' 라벨 → 백테스터 앵커 키
 LOCKUP_KEYS = {"15일": "d15", "1개월": "m1", "3개월": "m3", "6개월": "m6"}
 
+# finuts는 상세 페이지를 ~100건 연속 조회하면 403으로 차단한다(2026-08-10 CI 실측).
+# 403이 재시도 후에도 계속되면 이번 실행의 상세 조회를 전부 중단 — 수집값은 KV에
+# 보존되므로 다음 날 실행이 빠진 종목만 이어서 채운다(점진 백필).
+_lockup_blocked = False
+
 
 def get_finuts_lockup(ipo_sn: str) -> dict | None:
     """
@@ -267,10 +272,23 @@ def get_finuts_lockup(ipo_sn: str) -> dict | None:
     를 파싱해 {"total_shares": int|None, "lockup": {d15,m1,m3,m6}} 반환. 실패 시 None.
     확약이 없는 구간은 키 자체가 없다(0으로 간주). 페이지는 서버렌더 HTML — 쿠키 불필요.
     """
+    global _lockup_blocked
+    if _lockup_blocked:
+        return None
     try:
-        resp = requests.get("https://www.finuts.co.kr/html/ipo/ipoView.php",
-                            params={"ipo_sn": ipo_sn, "rt_se": "lst"},
-                            headers=HEADERS, timeout=30)
+        resp = None
+        for attempt in range(2):
+            resp = requests.get("https://www.finuts.co.kr/html/ipo/ipoView.php",
+                                params={"ipo_sn": ipo_sn, "rt_se": "lst"},
+                                headers=HEADERS, timeout=30)
+            if resp.status_code == 403 and attempt == 0:
+                time.sleep(30)  # 레이트리밋 추정 — 한 번 쉬고 재시도
+                continue
+            break
+        if resp.status_code == 403:
+            _lockup_blocked = True
+            print("    락업 조회 403 지속 — 이번 실행 상세 조회 중단(내일 이어서 백필)")
+            return None
         resp.raise_for_status()
         txt = resp.text
         lockup: dict[str, int] = {}
@@ -530,7 +548,7 @@ def main():
                     total_shares = got["total_shares"]
                 if lockup is None:
                     lockup = got["lockup"]
-                time.sleep(0.2)
+                time.sleep(1.2)  # 상세 페이지 연타 시 403 차단 — 간격을 넉넉히
 
         stocks.append({
             "ticker":        ticker,
