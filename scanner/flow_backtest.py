@@ -88,7 +88,7 @@ def tstat(xs: list[float]) -> float:
 
 
 # ── 신호 정의 ───────────────────────────────────────────
-def signals(m: dict, mom20: float | None) -> dict[str, float]:
+def signals(m: dict, mom20: float | None, trend: bool = True) -> dict[str, float]:
     """지표 → 검증할 신호 값들. 이산 신호는 0/1, 연속 신호는 값 그대로."""
     f, i = m["frgn"], m["inst"]
     both_streak_tol = min(f["streak"], i["streak"])
@@ -115,6 +115,11 @@ def signals(m: dict, mom20: float | None) -> dict[str, float]:
         # Q5 집중도 필터 적용판
         "intensity_both_conc": m["both_intensity"] if conc_ok else 0.0,
         "tol_both_ge4_conc": 1.0 if (both_streak_tol >= 4 and conc_ok) else 0.0,
+        # 1차 결과 후속 검증 — 기관 강도가 유의한 (−)로 나와서 추가한 조합들
+        "frgn_minus_inst": f["intensity"] - i["intensity"],
+        "frgn_pos_inst_neg": 1.0 if (f["streak"] >= 4 and i["intensity"] < 0) else 0.0,
+        "intensity_frgn_trend": f["intensity"] if trend else 0.0,
+        "tol_frgn_ge4_trend": 1.0 if (f["streak"] >= 4 and trend) else 0.0,
         # 대조군
         "mom20": mom20 if mom20 is not None else 0.0,
     }
@@ -167,7 +172,7 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
             if m is None:
                 continue
             ma20 = _ma20(rows)
-            s = signals(m, _mom20(rows))
+            s = signals(m, _mom20(rows), trend=bool(ma20 and p0 >= ma20))
             for k, v in s.items():
                 sig_vals.setdefault(k, []).append(v)
             rets.append(ret)
@@ -253,9 +258,10 @@ def main() -> None:
         return
     res = evaluate(cache, have, a.window)
     text = report(res, a.window)
-    print(text)
-    OUT_PATH.write_text(text, encoding="utf-8")
+    OUT_PATH.write_text(text, encoding="utf-8")   # 출력보다 먼저 — cp949 콘솔에서 print가 죽는다
     logger.info("리포트 저장 %s", OUT_PATH)
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    print(text)
 
 
 if __name__ == "__main__":
