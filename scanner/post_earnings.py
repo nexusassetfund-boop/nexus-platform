@@ -20,7 +20,7 @@ def main():
     b = json.loads(out.read_text("utf-8"))
 
     # Worker 검증 규칙과 동일하게 fail-closed 사전 검증
-    assert re.fullmatch(r"\d{6}", str(b.get("code", ""))), f"code 오류: {b.get('code')}"
+    assert re.fullmatch(r"\d[0-9A-Z]{5}", str(b.get("code", ""))), f"code 오류: {b.get('code')}"
     assert re.fullmatch(r"\d{4}Q[1-4]", str(b.get("period", ""))), f"period 오류: {b.get('period')}"
     assert b.get("verdict") in ("상회", "부합", "하회"), f"verdict 오류: {b.get('verdict')}"
     assert str(b.get("summary", "")).strip(), "summary 비어있음"

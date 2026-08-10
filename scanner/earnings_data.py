@@ -69,8 +69,9 @@ def main():
 
     code = args.code.strip()
     period = args.period.strip()
-    if not re.fullmatch(r"\d{6}", code):
-        print(f"code 형식 오류: {code!r} (6자리 숫자여야 함)")
+    code = code.upper()
+    if not re.fullmatch(r"\d[0-9A-Z]{5}", code):
+        print(f"code 형식 오류: {code!r} (6자리여야 함 — 예: 005930, 0156T0)")
         sys.exit(1)
     if not re.fullmatch(r"\d{4}Q[1-4]", period):
         print(f"period 형식 오류: {period!r} (YYYYQn 이어야 함)")

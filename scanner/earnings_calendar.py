@@ -120,8 +120,8 @@ def _collect_codes() -> dict[str, str]:
     codes: dict[str, str] = {}
 
     def add(rec):
-        c = str(rec.get("code", "")).strip()
-        if len(c) == 6 and c.isdigit():
+        c = str(rec.get("code", "")).strip().upper()
+        if re.fullmatch(r"\d[0-9A-Z]{5}", c):
             codes.setdefault(c, (rec.get("name") or "").strip())
 
     try:
@@ -619,7 +619,7 @@ _INV_DAY_RE = re.compile(r'class="theDay"[^>]*>\s*(\d{4})년\s*(\d{1,2})월\s*(\
 # 종목코드는 <a> 링크 안에 들어있다 — 예전 마크업의 평문 "(A005930)" 형태가 아니다.
 #   <span class="earnCalCompanyName middle">SK텔레콤</span>&nbsp;(<a href="...">017670</a>)
 _INV_ROW_RE = re.compile(
-    r'earnCalCompanyName[^>]*>([^<]+)</span>.*?>A?(\d{6})<', re.S)
+    r'earnCalCompanyName[^>]*>([^<]+)</span>.*?>A?(\d[0-9A-Z]{5})<', re.S)
 
 
 def _investing_html(bgn: dt.date, end: dt.date) -> str:
