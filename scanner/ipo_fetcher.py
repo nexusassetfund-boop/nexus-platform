@@ -208,11 +208,12 @@ def is_public_offering(ticker: str, name: str, ipo_date: str,
 # 2. 공모가 — finuts.co.kr API
 # ──────────────────────────────────────────
 
-def get_finuts_ipo_prices() -> dict[str, int]:
+def get_finuts_ipo_prices() -> tuple[dict[str, list], dict[str, list]]:
     """
     finuts.co.kr의 ipoListQuery.php API에서
-    {상장일: 공모가} 딕셔너리를 반환.
+    date_map {상장일: [(회사명, 공모가)]} 과 sn_map {상장일: [(회사명, IPO_SN)]} 반환.
     KIND 데이터와 상장일로 매핑하여 종목코드별 공모가를 확인.
+    IPO_SN은 상세 페이지(ipoView.php) 조회 키 — 락업해제 물량 수집에 쓴다.
     """
     url = "https://www.finuts.co.kr/html/task/ipo/ipoListQuery.php"
     headers = {
@@ -223,6 +224,7 @@ def get_finuts_ipo_prices() -> dict[str, int]:
     }
     # {상장일: [(회사명, 공모가), ...]}
     date_map: dict[str, list[tuple[str, int]]] = {}
+    sn_map: dict[str, list[tuple[str, str]]] = {}
     try:
         resp = requests.post(url, data={"active": "ipo-011", "search_text": ""},
                              headers=headers, timeout=30)
@@ -232,8 +234,11 @@ def get_finuts_ipo_prices() -> dict[str, int]:
             ipo_date = item.get("IPO_DATE", "")
             pss_prc  = item.get("PSS_PRC", "")
             ent_nm   = item.get("ENT_NM", "")
+            ipo_sn   = str(item.get("IPO_SN", "") or "")
             if ipo_date in ("9999-99-99", "", None):
                 continue
+            if ipo_sn:
+                sn_map.setdefault(ipo_date, []).append((ent_nm, ipo_sn))
             if not pss_prc:
                 continue
             try:
@@ -247,7 +252,46 @@ def get_finuts_ipo_prices() -> dict[str, int]:
               f"({len(date_map)}개 날짜)")
     except Exception as e:
         print(f"  finuts API 실패: {e}")
-    return date_map
+    return date_map, sn_map
+
+
+# 락업해제 테이블 '구분' 라벨 → 백테스터 앵커 키
+LOCKUP_KEYS = {"15일": "d15", "1개월": "m1", "3개월": "m3", "6개월": "m6"}
+
+
+def get_finuts_lockup(ipo_sn: str) -> dict | None:
+    """
+    finuts 상세 페이지(ipoView.php)에서
+    - 보호예수 탭 '기간별 락업해제 물량' (15일/1개월/3개월/6개월 주식수)
+    - 유통가능물량 탭 '합계' (상장후 총주식수)
+    를 파싱해 {"total_shares": int|None, "lockup": {d15,m1,m3,m6}} 반환. 실패 시 None.
+    확약이 없는 구간은 키 자체가 없다(0으로 간주). 페이지는 서버렌더 HTML — 쿠키 불필요.
+    """
+    try:
+        resp = requests.get("https://www.finuts.co.kr/html/ipo/ipoView.php",
+                            params={"ipo_sn": ipo_sn, "rt_se": "lst"},
+                            headers=HEADERS, timeout=30)
+        resp.raise_for_status()
+        txt = resp.text
+        lockup: dict[str, int] = {}
+        i = txt.find("기간별 락업해제 물량")
+        if i >= 0:
+            seg = txt[i:txt.find("</table>", i)]
+            for label, qty in re.findall(
+                    r"<th>\s*(15일|1개월|3개월|6개월)\s*</th>\s*<td>\s*([\d,]+)\s*</td>", seg):
+                lockup[LOCKUP_KEYS[label]] = int(qty.replace(",", ""))
+        total = None
+        j = txt.find("유통 가능 물량")
+        if j >= 0:
+            m = re.search(r"합계</td>.*?<td class=\"bold\">\s*([\d,]+)", txt[j:j + 30000], re.S)
+            if m:
+                total = int(m.group(1).replace(",", ""))
+        if total is None and not lockup:
+            return None  # 두 테이블 다 없음 — 페이지 구조 변경이거나 잘못된 sn
+        return {"total_shares": total, "lockup": lockup}
+    except Exception as e:
+        print(f"    락업 조회 실패 sn={ipo_sn}: {e}")
+        return None
 
 
 def get_38_ipo_data() -> dict[str, list[tuple[str, int, int]]]:
@@ -396,7 +440,7 @@ def main():
 
     # ── 공모가 ── (finuts + 38커뮤니케이션 이중 소스)
     print("\n[2/3] 공모가 수집 (finuts.co.kr + 38.co.kr)...")
-    date_map = get_finuts_ipo_prices()
+    date_map, sn_map = get_finuts_ipo_prices()
     date_map_38 = get_38_ipo_data()
 
     # 기존 데이터에서 공모가 보존
@@ -471,6 +515,23 @@ def main():
             if ratio < 0.95:
                 ipo_price_adj = round(ipo_price * ratio)
 
+        # ── 락업해제 물량·상장후 총주식수 (finuts 상세 페이지) ──
+        # 상장 시점에 확정되는 불변 데이터 → 기존 KV 값이 있으면 재조회하지 않는다.
+        # finuts는 롤링 윈도우라 옛 종목은 상세 페이지 접근 키(IPO_SN)가 사라짐 —
+        # 기존 값 보존이 유일한 방어(공모가와 동일 원칙).
+        prev = existing.get(ticker, {})
+        total_shares = prev.get("total_shares")
+        lockup = prev.get("lockup")
+        if lockup is None or total_shares is None:
+            sn = match_ipo_price(sn_map, ipo_date, name)  # 튜플 (회사명, IPO_SN) → sn 반환
+            got = get_finuts_lockup(sn) if sn else None
+            if got:
+                if total_shares is None:
+                    total_shares = got["total_shares"]
+                if lockup is None:
+                    lockup = got["lockup"]
+                time.sleep(0.2)
+
         stocks.append({
             "ticker":        ticker,
             "name":          name,
@@ -479,10 +540,13 @@ def main():
             "ipo_price":     ipo_price,
             "ipo_price_adj": ipo_price_adj,
             "listing_open":  listing_open,
+            "total_shares":  total_shares,  # 상장후 총주식수 (finuts 유통가능물량 합계)
+            "lockup":        lockup,        # 확약해제 물량 {d15,m1,m3,m6} — None=미수집
             "prices":        prices,
         })
         flag = f"공모가 {ipo_price:,}" if ipo_price else "공모가 ?"
-        print(f" → {len(prices)}일 / {flag} / 시초가 {listing_open:,}")
+        lk = f"락업 {len(lockup)}구간" if lockup is not None else "락업 ?"
+        print(f" → {len(prices)}일 / {flag} / 시초가 {listing_open:,} / {lk}")
         time.sleep(0.2)
 
     output = {
