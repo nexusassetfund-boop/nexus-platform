@@ -35,6 +35,23 @@ EXCLUDE_TICKERS = {
     "199550", "066970", "452190", "022100", "109670", "452160", "290560",
     "188260", "221800", "403490", "465770", "146060", "355390", "030190",
     "462520",
+    # 2026-08-10 KIND 상장방법 전수 대조로 확인된 비공모 상장 (스팩합병 14 + 분할재상장 1).
+    # 같은 날 다른 종목 공모가가 오매칭되어 '공모가 있음 → 공모주' 판정을 통과했던 케이스들.
+    "384470",  # 코어라인소프트 (신한제7호스팩 소멸합병)
+    "362990",  # 드림인사이트 (스팩합병)
+    "451250",  # 삐아 (신영해피투모로우제7호스팩 합병)
+    "140430",  # 카티스 (스팩합병)
+    "469750",  # 아이비젼웍스 (스팩합병)
+    "471820",  # 셀로맥스사이언스 (스팩합병)
+    "432980",  # 엠에프씨 (스팩합병)
+    "435570",  # 에르코스 (스팩합병)
+    "364950",  # 에이아이코리아 (스팩합병)
+    "188040",  # 바이오포트 (스팩합병)
+    "014950",  # 삼익제약 (하나28호스팩 합병)
+    "459550",  # 알트 (IBKS제21호스팩 소멸합병)
+    "012210",  # 삼미금속 (스팩합병)
+    "288180",  # 케이피항공산업 (엔에이치기업인수목적30호 소멸합병)
+    "0218L0",  # 네오뷰 (토비스 인적분할 재상장)
 }
 
 # 소스 자동 매칭이 틀린 것으로 확인된 공모가 수동 보정(최우선 적용).
@@ -158,25 +175,33 @@ def _norm_name(s: str) -> str:
 def is_public_offering(ticker: str, name: str, ipo_date: str,
                        ipo_price, methods: dict) -> bool:
     """
-    공모청약 신규상장주인지 판정.
-    - 공모가가 있으면 공모청약을 거친 것(코넥스 공모 이전상장 포함) → True
-    - KIND 상장방법이 '신규상장'이면 → True
-    - 상장방법 데이터가 없으면(조회 실패) 보수적으로 True (데이터 보존)
-    - 그 외(이전상장·재상장·스팩합병 등)는 → False
+    공모청약 신규상장주인지 판정. KIND 상장방법이 공모가 매칭보다 우선한다 —
+    공모가는 같은 날 다른 종목 값이 오매칭될 수 있어서(케이피항공산업 스팩합병 등
+    15종목이 이 경로로 유니버스에 섞였던 사고, 2026-08-10 확인) 단독 근거로 쓰지 않는다.
+    - KIND '신규상장' → True
+    - KIND '이전상장' → 공모가가 확인될 때만 True (코넥스→코스닥 공모 이전상장)
+    - KIND 그 외('' = 스팩합병·분할, '재상장' 등) → 공모가가 매칭돼 있어도 False
+    - KIND에서 방법을 못 찾은 종목 → 공모가 있으면 True
+    - 상장방법 조회 자체가 실패(빈 dict) → 보수적으로 True (데이터 보존)
     """
+    if methods:
+        m = methods.get((ipo_date, _norm_name(name)))
+        if m is None:
+            # 이름 표기 차이 → 상장일 기준 부분일치로 재시도
+            nn = _norm_name(name)
+            for (dt, wn), mt in methods.items():
+                if dt == ipo_date and nn and (nn in wn or wn in nn):
+                    m = mt
+                    break
+        if m == "신규상장":
+            return True
+        if m == "이전상장":
+            return bool(ipo_price)
+        if m is not None:
+            return False
     if ipo_price:
         return True
-    if not methods:
-        return True
-    m = methods.get((ipo_date, _norm_name(name)))
-    if m is None:
-        # 이름 표기 차이 → 상장일 기준 부분일치로 재시도
-        nn = _norm_name(name)
-        for (dt, wn), mt in methods.items():
-            if dt == ipo_date and nn and (nn in wn or wn in nn):
-                m = mt
-                break
-    return m == "신규상장"
+    return not methods
 
 
 # ──────────────────────────────────────────
@@ -419,6 +444,19 @@ def main():
             or match_ipo_price(date_map_38, ipo_date, name)
             or existing.get(ticker, {}).get("ipo_price")
         )
+        rec38 = find_38(date_map_38, ipo_date, name)
+
+        # 공모가-시초가 정합성: 2023-06-26 이후 상장일 시초가는 공모가의 60~400%로
+        # 제한된다. 밴드 밖이면 오매칭(스팩합병 등 공모가가 없어야 할 종목에 같은 날
+        # 다른 종목 값이 붙은 것) → 폐기하고 KIND 상장방법만으로 판정. 수정주가 배율은
+        # 38의 명목 시초가로 제거(없으면 listing_open으로 근사 — 수동보정 종목은 신뢰).
+        if ipo_price and ticker not in MANUAL_IPO_PRICES:
+            nominal_open = rec38[2] if rec38 and rec38[2] > 0 else listing_open
+            band = nominal_open / ipo_price
+            if band > 4.05 or band < 0.55:
+                print(f" [공모가 {ipo_price:,} 폐기 — 시초가 {nominal_open:,} 대비 "
+                      f"{band:.1f}배, 60~400% 밴드 밖]", end="")
+                ipo_price = None
 
         # 공모청약 신규상장주가 아니면(이전상장·재상장·스팩합병 등) 제외
         if not is_public_offering(ticker, name, ipo_date, ipo_price, methods):
@@ -428,7 +466,6 @@ def main():
         # 수정주가 보정: 일봉이 수정주가(무상증자·분할)이므로, 명목 공모가를
         # 동일 배율(수정시초/명목시초)로 조정한 값을 공모가 기준 백테스트용으로 저장.
         ipo_price_adj = ipo_price
-        rec38 = find_38(date_map_38, ipo_date, name)
         if ipo_price and rec38 and rec38[2] > 0:
             ratio = listing_open / rec38[2]
             if ratio < 0.95:
