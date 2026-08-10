@@ -14,7 +14,12 @@
 
 **아키텍처 한 장 요약**: GitHub Actions(nexus-platform repo)가 스캔/브리핑/복기 데이터를 생산해 `docs/data/`에 커밋 → Cloudflare Worker가 GitHub raw에서 동기화(`syncFromGitHub`, KV 저장) + 5분 시세 갱신 + 원장(Durable Object BookStore) 관리 → `public/index.html`이 `./data/*.json`을 읽어 렌더. 트리거는 **cron-job.org(주) + Worker 크론(보조) + GitHub schedule(백업)** 3중화.
 
-주요 탭: 시황(브리핑|섹터 맵) · 스테이지 감지기(감지기|전략 포트폴리오[보유|이탈|주간 복기]) · 모델 포트폴리오 · 가치투자 · Post IPO · 설정
+주요 탭: 시황(브리핑|섹터 맵) · 스테이지 감지기(감지기|수급 감지기|전략 포트폴리오[보유|이탈|주간 복기]|CANSLIM) · 모델 포트폴리오 · 가치투자 · Post IPO · 설정
+
+**수급 감지기**(`scanner/flow_screener.py` → `docs/data/flow.json`)는 데이터 출처가 다르다 —
+KRX 투자자별 엔드포인트가 IP에 따라 상습 차단되므로 **네이버 종목별 수급 표**를 쓴다
+(`scanner/flow_history.py`). 그래서 '기관'은 기관합계이고 금융투자 분리가 안 된다.
+설계 근거·검증은 `scanner/flow_backtest.py` 참조.
 
 ## 2. 세팅 절차
 

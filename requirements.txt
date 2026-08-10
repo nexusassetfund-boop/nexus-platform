@@ -3,6 +3,7 @@ numpy>=1.26
 pandas>=2.2
 pyarrow>=15      # newhigh-backtest.yml (marcap parquet) 용
 pykrx>=1.0.45
+lxml>=5.0        # flow_screener.py — pandas.read_html 파서 (네이버 수급 표)
 finance-datareader>=0.9.90
 # ipo-backtest.yml (ipo_fetcher.py) 용
 requests>=2.31
