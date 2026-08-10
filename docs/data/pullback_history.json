@@ -345,5 +345,43 @@
     "last_price": 55000.0
    }
   ]
+ },
+ {
+  "date": "2026-08-10",
+  "added": [
+   {
+    "code": "095610",
+    "name": "테스",
+    "score": 6
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "score": 5
+   },
+   {
+    "code": "037460",
+    "name": "삼지전자",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "010950",
+    "name": "S-Oil",
+    "first_seen": "2026-08-07",
+    "days": 3,
+    "last_score": 3,
+    "last_price": 137600.0
+   },
+   {
+    "code": "079940",
+    "name": "가비아",
+    "first_seen": "2026-08-07",
+    "days": 3,
+    "last_score": 2,
+    "last_price": 43000.0
+   }
+  ]
  }
 ]
