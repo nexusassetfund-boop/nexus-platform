@@ -509,6 +509,59 @@ def collect_strategy_cross():
             "sources": sources, "rows": rows}
 
 
+TRADE_FRESH_DAYS = 7   # 확정치 리포트가 이 기간 안에 나왔으면 '이번 갱신'으로 본다
+
+
+def collect_trade_export(today_str):
+    """관세청 수출 통관 데이터 — **갱신된 직후에만** 반환, 평소엔 None.
+
+    종목별 월간 수출액을 매출 프록시로 보는 데이터(분기 실적을 2~7주 선행 관측).
+    예전엔 이 블록을 '모멘텀 원장'이라 잘못 부르고 유니버스 종목 수·샘플 이름만 실어
+    브리핑 마지막 문단이 정보량 0이었다.
+
+    관세청 확정치는 월 1회(15일경) 들어온다. 매일 아침 같은 달 수치를 반복하면
+    그 자체가 노이즈이므로, 새 확정치가 막 들어온 브리핑에서만 넘긴다. 판정은 둘 중 하나:
+      1) trade_report.json(확정치 갱신마다 생성되는 리포트)이 TRADE_FRESH_DAYS 안에 나왔다
+      2) trade.json의 기준월이 리포트 기준월보다 앞선다 — 데이터는 굴렀는데 리포트가 아직인 경우
+    리포트를 못 가져오면 넘기지 않는다(조용히 반복 언급하느니 빠지는 쪽).
+    """
+    td = _get_json("/data/trade.json")
+    data_month = str(td.get("data_month") or "")
+    rep = _get_json("/data/trade_report.json")
+    items = rep.get("items") or []
+    latest = items[0] if items and isinstance(items[0], dict) else {}
+    rep_month = str(latest.get("month") or "")
+
+    age = None
+    upd = str(rep.get("updated") or "")[:10]
+    try:
+        age = (datetime.strptime(today_str, "%Y-%m-%d") - datetime.strptime(upd, "%Y-%m-%d")).days
+    except ValueError:
+        pass
+    rolled_ahead = bool(data_month and rep_month and data_month > rep_month)
+    if not (rolled_ahead or (age is not None and 0 <= age <= TRADE_FRESH_DAYS)):
+        return None
+
+    stocks = [s for s in (td.get("stocks") or []) if isinstance(s, dict)]
+    surge = sorted([s for s in stocks if s.get("q_sum_yoy") is not None],
+                   key=lambda s: -s["q_sum_yoy"])[:5]
+    out = {
+        "what": "관세청 시군구별 품목별 통관실적 기반 종목 수출 추적 — 월간 확정치, 매출 프록시",
+        "why_now": f"{data_month} 확정치가 새로 반영됐다 (리포트 {upd}, {age}일 전)"
+                   if not rolled_ahead else f"{data_month} 데이터가 새로 들어왔다 (리포트는 {rep_month}까지)",
+        "data_month": data_month, "universe_count": len(stocks),
+        "surge": [{"name": s.get("name"), "item": s.get("label"),
+                   "q_yoy_pct": s.get("q_sum_yoy"), "flags": s.get("flags")} for s in surge],
+        # 분기 -30% 급감은 백테스트에서 가장 신뢰도 높았던 신호 (6개월 초과수익 중앙 -16.1%)
+        "drop": [{"name": s.get("name"), "item": s.get("label"), "q_yoy_pct": s.get("q_sum_yoy")}
+                 for s in stocks if "q_drop" in (s.get("flags") or [])][:5],
+    }
+    if not rolled_ahead and latest.get("title"):
+        # 확정치 리포트는 이미 사람이 읽을 문장으로 정리돼 있다 — 브리핑이 다시 짜낼 필요 없다
+        out["report"] = {"title": latest.get("title"), "summary": latest.get("summary")}
+    return out
+
+
 def collect_platform(today_str):
     """장전 전용 — 넥서스 전략실·섹터맵 요약 (전부 공개 KV 데이터, 탭별 핵심만 압축)"""
     out = {}
@@ -526,22 +579,10 @@ def collect_platform(today_str):
         out["cross"] = collect_strategy_cross()
     except Exception as e:
         out["cross_error"] = str(e)[:100]
-    try:  # 관세청 수출 통관 데이터 — 종목별 월간 수출액(매출 프록시). 분기 실적을 2~7주 선행 관측.
-        # 예전엔 이 블록을 '모멘텀 원장'이라 잘못 부르고 유니버스 종목 수·샘플 이름만 실어
-        # 브리핑 마지막 문단이 정보량 0이었다. 실제 신호(분기 급증·급감)만 넘긴다.
-        td = _get_json("/data/trade.json")
-        stocks = [s for s in (td.get("stocks") or []) if isinstance(s, dict)]
-        surge = sorted([s for s in stocks if s.get("q_sum_yoy") is not None],
-                       key=lambda s: -s["q_sum_yoy"])[:5]
-        out["trade_export"] = {
-            "what": "관세청 시군구별 품목별 통관실적 기반 종목 수출 추적 — 월간 확정치, 매출 프록시",
-            "data_month": td.get("data_month"), "universe_count": len(stocks),
-            "surge": [{"name": s.get("name"), "item": s.get("label"),
-                       "q_yoy_pct": s.get("q_sum_yoy"), "flags": s.get("flags")} for s in surge],
-            # 분기 -30% 급감은 백테스트에서 가장 신뢰도 높았던 신호 (6개월 초과수익 중앙 -16.1%)
-            "drop": [{"name": s.get("name"), "item": s.get("label"), "q_yoy_pct": s.get("q_sum_yoy")}
-                     for s in stocks if "q_drop" in (s.get("flags") or [])][:5],
-        }
+    try:  # 관세청 수출 통관 데이터 — 갱신된 직후에만 (아래 collect_trade_export 주석 참고)
+        te = collect_trade_export(today_str)
+        if te:
+            out["trade_export"] = te
     except Exception as e:
         out["trade_export_error"] = str(e)[:100]
     try:  # 실적 캘린더 — 오늘·내일 예정 최대 5건
