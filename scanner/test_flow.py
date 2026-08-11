@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from flow_history import metrics, side_metrics, tolerance_streak
+from flow_history import join_detail, metrics, reversal, side_metrics, tolerance_streak
 
 
 def test_clean_streak():
@@ -51,6 +51,43 @@ def test_side_metrics():
 def test_metrics_needs_full_window():
     rows = [{"date": "20260801", "close": 1, "volume": 1, "frgn": 1, "inst": 1}]
     assert metrics(rows, window=10) is None
+
+
+def test_reversal_detects_flip():
+    """5일 연속 매도 후 2일 순매수 전환 → (전환 2일, 직전 매도 5일)."""
+    nets = [-100.0] * 5 + [50.0, 60.0]
+    assert reversal(nets) == (2, 5)
+
+
+def test_reversal_rejects_long_buy_run():
+    """순매수 4일째면 '전환 시점'이 아니다 (REV_MAX_FLIP=3) — 스트릭 후보 영역."""
+    nets = [-100.0] * 5 + [50.0] * 4
+    assert reversal(nets) == (0, 0)
+
+
+def test_reversal_rejects_no_prior_selling():
+    """직전에 매도 스트릭이 없으면 전환이 아니다."""
+    flip, sell = reversal([100.0, 100.0, 50.0])
+    assert sell == 0
+
+
+def test_reversal_sell_streak_tolerates_noise_buy():
+    """매도 스트릭도 흠집 허용 — 노이즈 매수일 하루가 매도 연속을 끊지 않는다."""
+    nets = [-100.0, -100.0, 10.0, -100.0, -100.0, 50.0]
+    flip, sell = reversal(nets)
+    assert flip == 1 and sell == 5, (flip, sell)
+
+
+def test_join_detail():
+    rows = [{"date": f"2026080{i}", "close": 100, "volume": 1000,
+             "frgn": 0, "inst": 100} for i in range(1, 6)]
+    detail = {f"2026080{i}": {"fin": 70, "pension": 30} for i in range(1, 6)}
+    assert join_detail(rows, detail, window=5)
+    assert rows[-1]["inst_xf"] == 30 and rows[-1]["pension"] == 30
+    assert side_metrics(rows, "pension", window=5)["streak"] == 5
+    # 창에 구멍이 있으면 병합 거부
+    rows2 = [dict(r) for r in rows]
+    assert not join_detail(rows2, {k: v for k, v in detail.items() if k != "20260803"}, window=5)
 
 
 def test_concentration_flags_one_day_event():

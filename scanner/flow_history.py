@@ -230,6 +230,21 @@ def _hard_streak(nets: list[float]) -> int:
     return s
 
 
+REV_MAX_FLIP = 3     # 순매수 전환 인정 일수 — 이보다 길면 '전환 시점'이 아니라 스트릭 후보
+
+
+def reversal(nets: list[float]) -> tuple[int, int]:
+    """매도→매수 전환 감지: (전환 순매수일수, 직전 흠집허용 연속 순매도일수).
+
+    최근 1~REV_MAX_FLIP일 순매수이고 그 직전이 연속 순매도(흠집 허용 — 매수 방향과
+    같은 규칙을 부호만 뒤집어 적용)면 전환. 조건 미충족이면 (0, 0)."""
+    flip = _hard_streak(nets)
+    if not 1 <= flip <= REV_MAX_FLIP:
+        return (0, 0)
+    sell_streak, _ = tolerance_streak([-v for v in nets[:-flip]])
+    return (flip, sell_streak)
+
+
 def side_metrics(rows: list[dict], side: str, window: int = WINDOW) -> dict:
     """한 주체(frgn|inst)의 창 지표. rows는 오름차순, 마지막이 기준일."""
     w = rows[-window:]
@@ -239,6 +254,7 @@ def side_metrics(rows: list[dict], side: str, window: int = WINDOW) -> dict:
     net_sum = sum(nets)
     abs_sum = sum(abs(n) for n in nets) or 1.0
     streak, blemish = tolerance_streak(nets)
+    rev_flip, rev_sell = reversal(nets)
     return {
         "net": net_sum,
         "intensity": net_sum / tot_vol,
@@ -247,7 +263,57 @@ def side_metrics(rows: list[dict], side: str, window: int = WINDOW) -> dict:
         "blemish": blemish,
         "concentr": max(abs(n) for n in nets) / abs_sum,
         "hard_streak": _hard_streak(nets),          # 비교용 — 옛 방식(무관용 연속)
+        "rev_flip": rev_flip,                       # 매도→매수 전환: 전환 후 순매수일수
+        "rev_sell": rev_sell,                       # 전환 직전 연속 순매도일수
     }
+
+
+# ── KRX 투자자 상세 (금융투자·연기금 분리) ──────────────
+# 네이버 '기관'은 기관합계라 금융투자(ETF LP·차익거래)를 못 걷어낸다. KRX 상세가
+# 닿을 때만 기관합계−금융투자와 연기금을 얹는다. KRX는 클라우드 IP 상습 차단이고
+# 지금은 로그인(KRX_ID/KRX_PW)까지 요구하므로 probe 실패 시 전체 폴백(기관합계 유지).
+_detail_ok: bool | None = None
+
+
+def detail_available() -> bool:
+    """런당 1회 삼성전자로 KRX 상세 접근 probe. 실패하면 이번 런은 상세 없이 간다."""
+    global _detail_ok
+    if _detail_ok is None:
+        import datetime as _dt
+        end = _dt.date.today()
+        start = end - _dt.timedelta(days=14)
+        _detail_ok = bool(fetch_detail("005930", start.strftime("%Y%m%d"), end.strftime("%Y%m%d")))
+        logger.info("KRX 투자자 상세: %s", "사용" if _detail_ok else "차단 — 기관합계로 폴백")
+    return _detail_ok
+
+
+def fetch_detail(code: str, start: str, end: str) -> dict[str, dict] | None:
+    """{date: {"fin": 금융투자, "pension": 연기금}} 순매수 주수. 실패·빈 응답이면 None."""
+    try:
+        from pykrx import stock
+        df = stock.get_market_trading_volume_by_date(start, end, code, detail=True)
+        if df is None or df.empty:
+            return None
+        fin_col = next(c for c in df.columns if "금융투자" in str(c))
+        pen_col = next(c for c in df.columns if "연기금" in str(c))
+        return {d.strftime("%Y%m%d"): {"fin": int(r[fin_col]), "pension": int(r[pen_col])}
+                for d, r in df.iterrows()}
+    except Exception as e:                          # noqa: BLE001
+        logger.debug("KRX 상세 %s 실패: %s", code, e)
+        return None
+
+
+def join_detail(rows: list[dict], detail: dict[str, dict], window: int = WINDOW) -> bool:
+    """네이버 rows에 inst_xf(기관합계−금융투자)·pension을 날짜로 병합.
+    창 안에 구멍이 하나라도 있으면 섞인 지표가 되므로 병합하지 않고 False."""
+    w = rows[-window:]
+    if any(r["date"] not in detail for r in w):
+        return False
+    for r in w:
+        d = detail[r["date"]]
+        r["inst_xf"] = r["inst"] - d["fin"]
+        r["pension"] = d["pension"]
+    return True
 
 
 def metrics(rows: list[dict], window: int = WINDOW) -> dict | None:

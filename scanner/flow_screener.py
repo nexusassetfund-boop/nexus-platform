@@ -26,8 +26,14 @@
 등급 (위 결과 반영):
   S  외국인 자격 + 추세형(종가≥MA20) + 외국인 우위(edge>0) — 백테스트 최선 조합
   A  외국인 자격
+  P  연기금 자격 — KRX 상세가 닿을 때만. 백테스트 미검증(상세 이력 확보 시 IC 측정)
   C  기관 단독 자격 — 백테스트상 (−) 신호라 경고 표시용으로만 남긴다
   자격 = 흠집 허용 스트릭 ≥ MIN_STREAK 이고 해당 주체 강도 ≥ MIN_INTENSITY
+별도 플래그 rev: 연속 순매도(흠집 허용 ≥ MIN_STREAK)를 지속하다 최근 1~3일 순매수로
+  전환한 종목(외국인·기관). 등급과 직교 — 프론트에서 '전환' 필터로 따로 본다. 미검증.
+
+기관은 KRX 상세가 닿으면 기관합계−금융투자(ETF LP·차익거래 제거) 기준, 아니면
+기관합계 폴백(inst_basis 필드로 구분). KRX는 로그인(KRX_ID/KRX_PW) 없인 차단 상습.
 
 실행: 매일 장마감 후. 테스트: FLOW_LIMIT=20 python scanner/flow_screener.py
 실패 정책: 수급 확보가 유니버스의 절반 미만이면 기존 출력 보존 후 exit 1.
@@ -60,6 +66,9 @@ MIN_STREAK = 4              # 흠집 허용 연속 순매수일
 # 유니버스 상위 20% 언저리(실측 p80 ≈ 13%, 완화해서 5%)에 맞춘다. 2%로 두면 300종목 중
 # 115종목이 후보로 잡혀 관찰 리스트 구실을 못 했다.
 MIN_INTENSITY = 0.05
+# 연기금은 매매 규모가 기관합계·외국인보다 한참 작다 — 같은 5%를 걸면 후보가 안 나온다.
+# ponytail: 0.02는 감(백테스트 미검증). KRX 상세 이력이 쌓이면 IC로 재측정할 것.
+MIN_INTENSITY_PENSION = 0.02
 MAX_CONCENTR = 0.6          # 1일 집중도 상한 (리밸런싱·블록딜 배제)
 WORKERS = 8
 
@@ -68,10 +77,17 @@ def _row(code: str, name: str) -> dict | None:
     rows = fh._safe_fetch(code, pages=2)            # 40거래일 — MA20 + 창 여유
     if len(rows) < 20:
         return None
+    detail_ok = False
+    if fh.detail_available():
+        detail = fh.fetch_detail(code, rows[0]["date"], rows[-1]["date"])
+        detail_ok = bool(detail) and fh.join_detail(rows, detail)
     m = fh.metrics(rows)
     if m is None:
         return None
-    f, i = m["frgn"], m["inst"]
+    f = m["frgn"]
+    # 기관: 상세가 닿으면 기관합계−금융투자, 아니면 기관합계 폴백
+    i = fh.side_metrics(rows, "inst_xf") if detail_ok else m["inst"]
+    p = fh.side_metrics(rows, "pension") if detail_ok else None
     ma20 = statistics.fmean(r["close"] for r in rows[-20:])
     close = m["close"]
     concentr = max(f["concentr"], i["concentr"])
@@ -79,7 +95,13 @@ def _row(code: str, name: str) -> dict | None:
     edge = f["intensity"] - i["intensity"]          # 백테스트 최강 신호 (IC 0.033, t=3.96)
     f_ok = f["streak"] >= MIN_STREAK and f["intensity"] >= MIN_INTENSITY
     i_ok = i["streak"] >= MIN_STREAK and i["intensity"] >= MIN_INTENSITY
-    grade = "S" if (f_ok and trend and edge > 0) else "A" if f_ok else "C" if i_ok else "-"
+    p_ok = p is not None and p["streak"] >= MIN_STREAK and p["intensity"] >= MIN_INTENSITY_PENSION
+    grade = ("S" if (f_ok and trend and edge > 0) else "A" if f_ok
+             else "P" if p_ok else "C" if i_ok else "-")
+    # 매도→매수 전환 (등급과 직교): 직전 매도 스트릭이 자격 기준 이상일 때만
+    f_rev = f["rev_flip"] > 0 and f["rev_sell"] >= MIN_STREAK
+    i_rev = i["rev_flip"] > 0 and i["rev_sell"] >= MIN_STREAK
+    rev = "both" if (f_rev and i_rev) else "frgn" if f_rev else "inst" if i_rev else None
     return {
         "ticker": code,
         "name": name,
@@ -101,12 +123,21 @@ def _row(code: str, name: str) -> dict | None:
         "regime": "trend" if trend else "contra",
         "edge_pct": round(edge * 100, 2),           # 외국인 우위 강도 — 랭킹 기준
         "grade": grade,
-        "is_candidate": int(grade != "-" and concentr <= MAX_CONCENTR),
+        "inst_basis": "ex_fin" if detail_ok else "total",
+        "pension_net": int(p["net"]) if p else None,
+        "pension_streak": p["streak"] if p else None,
+        "pension_blemish": p["blemish"] if p else None,
+        "pension_intensity_pct": round(p["intensity"] * 100, 2) if p else None,
+        "rev": rev,
+        "frgn_rev_flip": f["rev_flip"], "frgn_rev_sell": f["rev_sell"],
+        "inst_rev_flip": i["rev_flip"], "inst_rev_sell": i["rev_sell"],
+        "is_candidate": int((grade != "-" or rev is not None) and concentr <= MAX_CONCENTR),
     }
 
 
 def build() -> dict | None:
     univ = fh.universe(UNIVERSE_N, UNIV_CACHE)
+    fh.detail_available()                           # 스레드 시작 전 1회 probe (레이스 방지)
     logger.info("유니버스 %d종목 수급 조회", len(univ))
     rows: list[dict] = []
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
@@ -118,8 +149,8 @@ def build() -> dict | None:
         return None
 
     cands = [r for r in rows if r["is_candidate"]]
-    _ORDER = {"S": 0, "A": 1, "C": 2}
-    cands.sort(key=lambda r: (_ORDER.get(r["grade"], 9), -r["edge_pct"]))
+    _ORDER = {"S": 0, "A": 1, "P": 2, "C": 4}       # 3 = 전환 전용(무등급) — C(역신호)보다 위
+    cands.sort(key=lambda r: (_ORDER.get(r["grade"], 3 if r["rev"] else 9), -r["edge_pct"]))
     for n, r in enumerate(cands, 1):
         r["rank"] = n
     base = max((r["base_date"] for r in rows), default="")
@@ -130,12 +161,16 @@ def build() -> dict | None:
             "window": fh.WINDOW, "min_streak": MIN_STREAK,
             "tol_ratio": fh.TOL_RATIO, "max_blemish": fh.MAX_BLEMISH,
             "min_intensity_pct": MIN_INTENSITY * 100,
+            "min_intensity_pension_pct": MIN_INTENSITY_PENSION * 100,
             "max_concentr": MAX_CONCENTR,
+            "rev_max_flip": fh.REV_MAX_FLIP,
             "universe_n": UNIVERSE_N,
+            "detail": "krx" if fh.detail_available() else "none",
             "note": "스트릭은 '흠집 허용' — 직전 평균 순매수의 30% 미만인 매도일은 연속을 끊지 않는다. "
-                    "강도는 순매수주수/거래량(주수 정규화). 기관은 네이버 기준 기관합계로 "
-                    "금융투자(ETF LP·차익거래)가 섞여 있다. 초과수익이 20거래일 +0.6% 수준이라 "
-                    "거래비용 감안 시 매수 신호가 아니라 관찰 리스트다.",
+                    "강도는 순매수주수/거래량(주수 정규화). 기관은 KRX 상세가 닿으면 "
+                    "기관합계−금융투자(ETF LP·차익거래 제거), 차단 시 기관합계 폴백(inst_basis 참조). "
+                    "전환(rev)은 연속 순매도 지속 후 최근 1~3일 순매수 전환. "
+                    "초과수익이 20거래일 +0.6% 수준이라 매수 신호가 아니라 관찰 리스트다.",
         },
         # 프론트가 그대로 노출하는 검증 요약 — 근거 없는 등급으로 보이지 않게 한다
         "evidence": {
@@ -145,13 +180,17 @@ def build() -> dict | None:
             "inst_negative": "기관 강도 IC −0.029 (t=−2.85) · 기관 지속성 −0.031 (t=−3.14)",
             "streak_weak": "연속일수(무관용·흠집허용, 4·5일) 전부 |t| < 2 — 랭킹은 강도로 한다",
             "both_bad": "쌍끌이(양쪽 스트릭) IC −0.011 — 기관을 AND로 걸면 외국인 신호가 죽는다",
+            "unverified": "연기금(P)·전환(rev)·금융투자 제외 기관은 백테스트 미검증 — "
+                          "KRX 상세 이력이 쌓이면 IC 측정 예정",
             "caveat": "생존편향(현 상장사 스냅샷) · 기관합계 · 거래비용 미반영",
         },
         "scanned": len(rows),
         "count": len(cands),
         "s_count": sum(1 for r in cands if r["grade"] == "S"),
         "a_count": sum(1 for r in cands if r["grade"] == "A"),
+        "p_count": sum(1 for r in cands if r["grade"] == "P"),
         "c_count": sum(1 for r in cands if r["grade"] == "C"),
+        "rev_count": sum(1 for r in cands if r["rev"]),
         "trend_count": sum(1 for r in cands if r["regime"] == "trend"),
         "candidates": cands,
     }
