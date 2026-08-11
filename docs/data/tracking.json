@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-11T13:37:54+09:00",
+ "updated": "2026-08-11T14:09:33+09:00",
  "kospi": {
-  "price": 6356.7,
-  "ma200": 5829.05,
-  "ma50": 7525.66,
+  "price": 6387.46,
+  "ma200": 5829.2,
+  "ma50": 7526.27,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-11T13:37:54+09:00"
+  "updated": "2026-08-11T14:09:33+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7240.0,
+   "last_price": 7360.0,
    "peak_price": 7940.0,
-   "return_pct": -8.82,
-   "total_return_pct": -8.82,
+   "return_pct": -7.3,
+   "total_return_pct": -7.3,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -40,7 +40,7 @@
     "RS 신고점",
     "전고점 돌파! 거래량 2.3x"
    ],
-   "stop_warning": true
+   "stop_warning": false
   },
   {
    "ticker": "282330",
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 151800.0,
+   "last_price": 151900.0,
    "peak_price": 153100.0,
-   "return_pct": -0.85,
-   "total_return_pct": -0.85,
+   "return_pct": -0.78,
+   "total_return_pct": -0.78,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -81,10 +81,10 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 315500.0,
+   "last_price": 318000.0,
    "peak_price": 333500.0,
-   "return_pct": -2.62,
-   "total_return_pct": -2.62,
+   "return_pct": -1.85,
+   "total_return_pct": -1.85,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -111,10 +111,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7240.0,
+   "last_price": 7360.0,
    "peak_price": 7940.0,
-   "return_pct": -8.82,
-   "total_return_pct": -8.82,
+   "return_pct": -7.3,
+   "total_return_pct": -7.3,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -130,7 +130,7 @@
     "반전 확장 후 저점 상승",
     "RS 96 — 최상위 강세"
    ],
-   "stop_warning": true
+   "stop_warning": false
   },
   {
    "ticker": "008930",
@@ -141,10 +141,10 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 45500.0,
+   "last_price": 45800.0,
    "peak_price": 45700.0,
-   "return_pct": 3.88,
-   "total_return_pct": 3.88,
+   "return_pct": 4.57,
+   "total_return_pct": 4.57,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -171,10 +171,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 151800.0,
+   "last_price": 151900.0,
    "peak_price": 153100.0,
-   "return_pct": -0.85,
-   "total_return_pct": -0.85,
+   "return_pct": -0.78,
+   "total_return_pct": -0.78,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -231,10 +231,10 @@
    "entry_price": 130900.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.6,
-   "last_price": 126200.0,
+   "last_price": 127900.0,
    "peak_price": 130900.0,
-   "return_pct": -3.59,
-   "total_return_pct": -3.59,
+   "return_pct": -2.29,
+   "total_return_pct": -2.29,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -298,7 +298,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -4.83
+    "cum": -4.04
    }
   ],
   "1": [
@@ -344,7 +344,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -2.62
+    "cum": -1.89
    }
   ]
  },
@@ -392,7 +392,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -4.88
+    "cum": -4.07
    }
   ],
   "1": [
@@ -438,7 +438,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -2.53
+    "cum": -1.79
    }
   ]
  },
@@ -446,7 +446,7 @@
  "stats": {
   "holding_count": 8,
   "exited_count": 0,
-  "avg_return": -3.17,
+  "avg_return": -2.43,
   "exited_avg_return": 0,
   "win_rate": 0
  }
