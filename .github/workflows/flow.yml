@@ -1,7 +1,8 @@
 name: 수급 감지기 일간 스캔
 on:
   schedule:
-    - cron: "50 7 * * 1-5"    # 매일 평일 16:50 KST (CANSLIM 이후 — 네이버 부하 분산)
+    - cron: "0 10 * * 1-5"    # 매일 평일 19:00 KST — 네이버 투자자별 확정치 게시 이후.
+                              # 16:50에 돌리면 당일 순매수가 아직 안 붙어 매일 T-1 데이터를 잡았다.
   workflow_dispatch: {}
 permissions:
   contents: write
