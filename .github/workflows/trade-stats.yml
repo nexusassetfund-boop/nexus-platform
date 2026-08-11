@@ -53,7 +53,9 @@ jobs:
       - name: 결과 커밋
         run: |
           test -f docs/data/trade.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
-          bash .github/scripts/commit-data.sh "trade: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data
+          # 주석 캐시도 함께 커밋한다 — 빠지면 매 실행이 전 품목을 다시 LLM 주석한다.
+          bash .github/scripts/commit-data.sh "trade: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" \
+            docs/data scanner/data/discover_annotations.json
       - name: KV 즉시 반영 (다음 스캔 동기화 대기 없이)
         env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
         run: |
