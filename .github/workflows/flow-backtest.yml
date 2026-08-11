@@ -1,0 +1,37 @@
+name: 수급 백테스트 (KRX 상세 포함)
+# 수동 실행 전용 — 연기금·기관(−금융투자)·전환(rev) 신호의 IC/초과수익 검증.
+# 결과는 잡 Summary와 아티팩트(flow-backtest)로 나온다. 저장소엔 아무것도 커밋하지 않는다.
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency: { group: flow-backtest, cancel-in-progress: false }
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60    # 네이버 300종목×26페이지 + KRX 상세 300콜(순차)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+      - name: 백테스트
+        env:
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
+        run: python scanner/flow_backtest.py
+      - name: 결과 요약
+        if: always()
+        run: |
+          test -f tmp/flow_backtest.json || exit 0
+          { echo '```'; cat tmp/flow_backtest.json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: flow-backtest
+          path: |
+            tmp/flow_backtest.json
+            tmp/flow_cache.json
+            tmp/flow_detail.json
+          if-no-files-found: ignore

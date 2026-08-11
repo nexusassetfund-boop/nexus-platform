@@ -8,16 +8,22 @@
   Q4. 외국인 / 기관 / 쌍끌이 중 어느 주체가 정보를 갖는가
   Q5. 1일 집중도 필터(리밸런싱·블록딜 배제)가 개선을 주는가
   Q6. 추세형(종가>MA20) vs 역발상형(종가<MA20) — 어느 쪽에서 수급이 먹히는가
+  Q7. 매도→매수 전환(rev)이 신호인가 — 직전 매도 스트릭 문턱 3/4/5 민감도 포함
+  Q8. KRX 상세가 닿을 때: 연기금(P 등급 조건), 기관합계−금융투자(inst_xf)가
+      기관합계보다 나은가 — 스크리너가 실제로 쓰는 기준의 사후 검증
   대조군: mom20(20일 모멘텀). 수급이 모멘텀의 재탕이면 IC가 이것과 겹친다.
 
 데이터: flow_history.FlowCache (네이버 일별 수급). 종가도 같은 표에서 나오므로
-        수익률 계산에 추가 API가 필요 없다.
+        수익률 계산에 추가 API가 필요 없다. KRX 상세(연기금·금융투자)는
+        detail_available() 통과 시(KRX_ID/KRX_PW 필요)만 수집 — 차단 환경에선
+        해당 신호가 표에서 빠질 뿐 나머지는 그대로 돈다.
 평가:  주간(5거래일) 리밸런싱 시점마다 횡단면 스피어만 IC(fwd 20거래일) →
        평균 IC·t값, 그리고 상·하위 분위 평균수익률.
 
 한계 (해석 시 반드시 감안):
   · 생존편향 — 유니버스가 '현재' 상장사 스냅샷이다. 상방 편향.
-  · 네이버 '기관'은 기관합계 — 금융투자(ETF LP·차익) 분리 불가 (flow_history 참조).
+  · 네이버 '기관'은 기관합계 — inst_xf(−금융투자)는 KRX 상세가 닿을 때만 별도 신호로 검증.
+  · rev 같은 희소 이벤트는 횡단면 IC가 무의미하다(대부분 0) — 초과수익%·초과t·건수로 판단.
   · 종가는 네이버 수정주가 기준이나 권리락 처리 검증은 안 했다. 극단치 윈저라이즈로 방어.
   · 거래비용 미반영 — IC 비교용이지 수익률 약속이 아니다.
 
@@ -35,6 +41,7 @@ import math
 import os
 import statistics
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -88,12 +95,18 @@ def tstat(xs: list[float]) -> float:
 
 
 # ── 신호 정의 ───────────────────────────────────────────
-def signals(m: dict, mom20: float | None, trend: bool = True) -> dict[str, float]:
-    """지표 → 검증할 신호 값들. 이산 신호는 0/1, 연속 신호는 값 그대로."""
+def _rev(side: dict, min_sell: int) -> float:
+    return 1.0 if (side["rev_flip"] and side["rev_sell"] >= min_sell) else 0.0
+
+
+def signals(m: dict, mom20: float | None, trend: bool = True,
+            pen: dict | None = None, ixf: dict | None = None) -> dict[str, float]:
+    """지표 → 검증할 신호 값들. 이산 신호는 0/1, 연속 신호는 값 그대로.
+    pen/ixf: KRX 상세가 병합된 종목만 전달 — 없으면 해당 신호가 빠진다."""
     f, i = m["frgn"], m["inst"]
     both_streak_tol = min(f["streak"], i["streak"])
     conc_ok = max(f["concentr"], i["concentr"]) <= 0.6
-    return {
+    out = {
         # Q1 무관용 연속일수
         "hard_frgn_ge4": 1.0 if f["hard_streak"] >= 4 else 0.0,
         "hard_frgn_ge5": 1.0 if f["hard_streak"] >= 5 else 0.0,
@@ -120,9 +133,34 @@ def signals(m: dict, mom20: float | None, trend: bool = True) -> dict[str, float
         "frgn_pos_inst_neg": 1.0 if (f["streak"] >= 4 and i["intensity"] < 0) else 0.0,
         "intensity_frgn_trend": f["intensity"] if trend else 0.0,
         "tol_frgn_ge4_trend": 1.0 if (f["streak"] >= 4 and trend) else 0.0,
+        # Q7 매도→매수 전환 (스크리너 rev 플래그) — 매도 스트릭 문턱 민감도
+        "rev_frgn_s3": _rev(f, 3),
+        "rev_frgn_s4": _rev(f, 4),      # 스크리너 실제 조건 (MIN_STREAK=4)
+        "rev_frgn_s5": _rev(f, 5),
+        "rev_inst_s3": _rev(i, 3),
+        "rev_inst_s4": _rev(i, 4),
+        "rev_inst_s5": _rev(i, 5),
         # 대조군
         "mom20": mom20 if mom20 is not None else 0.0,
     }
+    if pen is not None:                 # Q8 연기금 (KRX 상세)
+        out.update({
+            "pension_intensity": pen["intensity"],
+            "pension_persist": pen["persist"],
+            "pension_tol_ge4": 1.0 if pen["streak"] >= 4 else 0.0,
+            # 스크리너 P 등급 조건 그대로: 스트릭≥4 & 강도≥2%
+            "pension_grade_P": 1.0 if (pen["streak"] >= 4 and pen["intensity"] >= 0.02) else 0.0,
+            "rev_pension_s4": _rev(pen, 4),
+        })
+    if ixf is not None:                 # Q8 기관합계−금융투자 (KRX 상세)
+        out.update({
+            "instxf_intensity": ixf["intensity"],
+            "instxf_persist": ixf["persist"],
+            "instxf_tol_ge4": 1.0 if ixf["streak"] >= 4 else 0.0,
+            "frgn_minus_instxf": f["intensity"] - ixf["intensity"],
+            "rev_instxf_s4": _rev(ixf, 4),
+        })
+    return out
 
 
 def _mom20(rows: list[dict]) -> float | None:
@@ -154,7 +192,9 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
 
     for di in range(window - 1, len(dates) - FWD_TD, STEP_TD):
         t, t_fwd = dates[di], dates[di + FWD_TD]
-        sig_vals: dict[str, list[float]] = {}
+        # 신호 → [(값, 수익률, 레짐)]. KRX 상세 신호는 병합된 종목에만 있으므로
+        # 인덱스 정렬 가정을 버리고 튜플로 묶는다.
+        sig_vals: dict[str, list[tuple[float, float, str]]] = {}
         rets: list[float] = []
         regimes: list[str] = []
         for code in codes:
@@ -172,25 +212,31 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
             if m is None:
                 continue
             ma20 = _ma20(rows)
-            s = signals(m, _mom20(rows), trend=bool(ma20 and p0 >= ma20))
+            reg = "trend" if (ma20 and p0 >= ma20) else "contra"
+            has_det = all("pension" in r for r in rows[-window:])
+            s = signals(m, _mom20(rows), trend=reg == "trend",
+                        pen=fh.side_metrics(rows, "pension", window) if has_det else None,
+                        ixf=fh.side_metrics(rows, "inst_xf", window) if has_det else None)
             for k, v in s.items():
-                sig_vals.setdefault(k, []).append(v)
+                sig_vals.setdefault(k, []).append((v, ret, reg))
             rets.append(ret)
-            regimes.append("trend" if (ma20 and p0 >= ma20) else "contra")
+            regimes.append(reg)
         if len(rets) < 20:
             continue
         n_obs += len(rets)
         mkt = statistics.fmean(rets)
-        for k, vals in sig_vals.items():
-            ic = spearman(vals, rets)
+        for k, triples in sig_vals.items():
+            vals = [v for v, _, _ in triples]
+            krets = [r for _, r, _ in triples]
+            ic = spearman(vals, krets)
             if ic is not None:
                 per_date.setdefault(k, []).append(ic)
             # 이산 신호: 초과수익 집계 / 연속 신호: 상위 20% 초과수익
-            hits = [r - mkt for v, r in zip(vals, rets) if v > 0] if set(vals) <= {0.0, 1.0} \
-                else _top_quintile(vals, rets, mkt)
+            hits = [r - mkt for v, r in zip(vals, krets) if v > 0] if set(vals) <= {0.0, 1.0} \
+                else _top_quintile(vals, krets, mkt)
             bins.setdefault(k, []).extend((1.0, h) for h in hits)
             for reg in ("trend", "contra"):
-                sub = [(v, r - mkt) for v, r, g in zip(vals, rets, regimes) if g == reg]
+                sub = [(v, r - mkt) for v, r, g in triples if g == reg]
                 if sub:
                     split_sig[reg].setdefault(k, []).extend(sub)
         for r, g in zip(rets, regimes):
@@ -213,17 +259,18 @@ def report(res: dict, window: int) -> str:
         "",
         "IC = 횡단면 스피어만 상관(신호 vs 20거래일 수익률)의 신호일 평균. |t|>2 면 통계적으로 유의.",
         "초과수익 = 신호 종목(연속형은 상위 20%)의 시장평균 대비 20거래일 초과수익.",
+        "rev·pension 같은 희소 이벤트는 IC가 아니라 초과수익%·초과t·건수로 판단할 것.",
         "",
-        f"{'신호':<24}{'평균IC':>9}{'t값':>8}{'초과수익%':>11}{'건수':>9}",
-        "-" * 61,
+        f"{'신호':<24}{'평균IC':>9}{'t값':>8}{'초과수익%':>11}{'초과t':>8}{'건수':>9}",
+        "-" * 69,
     ]
     rows = []
     for k, ics in res["per_date"].items():
         ex = [h for _, h in res["bins"].get(k, [])]
         rows.append((k, statistics.fmean(ics), tstat(ics),
-                     statistics.fmean(ex) * 100 if ex else 0.0, len(ex)))
-    for k, ic, t, ex, n in sorted(rows, key=lambda r: -abs(r[1])):
-        lines.append(f"{k:<24}{ic:>9.4f}{t:>8.2f}{ex:>11.2f}{n:>9,}")
+                     statistics.fmean(ex) * 100 if ex else 0.0, tstat(ex), len(ex)))
+    for k, ic, t, ex, ext, n in sorted(rows, key=lambda r: -abs(r[1])):
+        lines.append(f"{k:<24}{ic:>9.4f}{t:>8.2f}{ex:>11.2f}{ext:>8.2f}{n:>9,}")
 
     lines += ["", "## 추세형(종가≥MA20) vs 역발상형(종가<MA20) — 초과수익%", "",
               f"{'신호':<24}{'추세형':>10}{'역발상형':>11}"]
@@ -240,6 +287,46 @@ def report(res: dict, window: int) -> str:
     return "\n".join(lines)
 
 
+DETAIL_CACHE = CACHE_DIR / "flow_detail.json"
+
+
+def warm_detail(cache: fh.FlowCache, codes: list[str]) -> int:
+    """KRX 상세(금융투자·연기금) 이력을 네이버 캐시 기간만큼 수집해 rows에 병합.
+    detail_available() 실패(무자격 환경)면 0 — 상세 신호만 빠지고 나머지는 그대로.
+    반환: 병합된 종목 수."""
+    if not fh.detail_available():
+        return 0
+    det: dict[str, dict] = {}
+    if DETAIL_CACHE.exists():
+        try:
+            det = json.loads(DETAIL_CACHE.read_text(encoding="utf-8"))
+        except Exception as e:                      # noqa: BLE001
+            logger.warning("상세 캐시 무시: %s", e)
+    todo = [c for c in codes if c not in det and cache.data.get(c)]
+    if todo:
+        logger.info("KRX 상세 수집 %d종목 (순차 — 차단 회피)", len(todo))
+    for n, c in enumerate(todo, 1):
+        rows = cache.data[c]
+        det[c] = fh.fetch_detail(c, rows[0]["date"], rows[-1]["date"]) or {}
+        if n % 25 == 0:
+            logger.info("  %d/%d", n, len(todo))
+            DETAIL_CACHE.write_text(json.dumps(det), encoding="utf-8")
+        time.sleep(0.3)
+    if todo:
+        DETAIL_CACHE.write_text(json.dumps(det), encoding="utf-8")
+    merged = 0
+    for c in codes:
+        hit = False
+        for r in cache.data.get(c, []):
+            x = det.get(c, {}).get(r["date"])
+            if x:
+                r["inst_xf"] = r["inst"] - x["fin"]
+                r["pension"] = x["pension"]
+                hit = True
+        merged += hit
+    return merged
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--warm", action="store_true", help="수급 이력 수집만")
@@ -254,6 +341,8 @@ def main() -> None:
     cache.warm(codes, a.pages)
     have = [c for c in codes if len(cache.data.get(c, [])) >= a.window + FWD_TD]
     logger.info("이력 확보 %d/%d 종목", len(have), len(codes))
+    n_det = warm_detail(cache, have)
+    logger.info("KRX 상세 병합 %d종목", n_det)
     if a.warm:
         return
     res = evaluate(cache, have, a.window)

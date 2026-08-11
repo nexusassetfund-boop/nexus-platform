@@ -90,6 +90,25 @@ def test_join_detail():
     assert not join_detail(rows2, {k: v for k, v in detail.items() if k != "20260803"}, window=5)
 
 
+def test_backtest_detail_and_rev_signals():
+    """백테스트 신호: 전환(rev) 플래그와 연기금·기관(−금투) 신호가 스크리너 조건과 일치."""
+    import flow_backtest as fb
+    rows = [{"date": f"202608{i:02d}", "close": 100, "volume": 1000,
+             "frgn": -100, "inst": -100, "inst_xf": -100, "pension": 30} for i in range(1, 11)]
+    for r in rows[-2:]:                             # 최근 2일 순매수 전환 (외국인·기관-금투)
+        r["frgn"] = 50
+        r["inst_xf"] = 50
+    m = metrics(rows, window=10)
+    pen = side_metrics(rows, "pension", window=10)
+    ixf = side_metrics(rows, "inst_xf", window=10)
+    s = fb.signals(m, 0.0, trend=True, pen=pen, ixf=ixf)
+    assert s["rev_frgn_s4"] == 1.0 and s["rev_inst_s4"] == 0.0
+    assert s["rev_instxf_s4"] == 1.0
+    # 연기금: 10일 연속 매수, 강도 300/10000=3% ≥ 2% → P 등급 조건 충족
+    assert s["pension_grade_P"] == 1.0
+    assert s["instxf_intensity"] == ixf["intensity"]
+
+
 def test_concentration_flags_one_day_event():
     """지수 리밸런싱형: 하루에 몰린 수급은 concentr이 1에 가깝다."""
     rows = [{"date": f"2026080{i}", "close": 100, "volume": 1000,
