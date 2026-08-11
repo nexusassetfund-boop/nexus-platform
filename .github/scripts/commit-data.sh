@@ -27,7 +27,10 @@ git commit -m "$MSG"
 # 증분돼 push 유실 시 복구 경로가 없으므로, 지속 경합에도 살아남도록 재시도를 넉넉히 둔다.
 ATTEMPTS=8
 for i in $(seq 1 $ATTEMPTS); do
-  if git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; then
+  # --autostash: 커밋 대상 밖의 추적 파일이 수정돼 있으면(예: 주석 캐시) rebase가
+  # "cannot pull with rebase: You have unstaged changes"로 8회 전부 실패한다.
+  # 경합이 아니라 더러운 작업트리가 원인이므로 재시도로는 절대 풀리지 않는다.
+  if git pull --rebase --autostash -X theirs origin "${GITHUB_REF_NAME}" && git push; then
     echo "push 성공 (시도 $i)"
     exit 0
   fi

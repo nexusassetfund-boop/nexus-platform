@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-10T15:00:42+09:00",
+ "updated": "2026-08-11T13:12:35+09:00",
  "kospi": {
-  "price": 6276.38,
-  "ma200": 5815.89,
-  "ma50": 7567.58,
+  "price": 6356.7,
+  "ma200": 5829.05,
+  "ma50": 7525.66,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-10T15:00:42+09:00"
+  "updated": "2026-08-11T13:12:35+09:00"
  },
  "holdings": [
   {
@@ -21,26 +21,26 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7330.0,
+   "last_price": 7230.0,
    "peak_price": 7940.0,
-   "return_pct": -7.68,
-   "total_return_pct": -7.68,
+   "return_pct": -8.94,
+   "total_return_pct": -8.94,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 4,
+   "days_held": 5,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
     "RS 신고점",
     "전고점 돌파! 거래량 2.3x"
    ],
-   "stop_warning": false
+   "stop_warning": true
   },
   {
    "ticker": "282330",
@@ -51,19 +51,19 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 150400.0,
+   "last_price": 151400.0,
    "peak_price": 153100.0,
-   "return_pct": -1.76,
-   "total_return_pct": -1.76,
+   "return_pct": -1.11,
+   "total_return_pct": -1.11,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 3,
+   "days_held": 4,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "MTT 통과",
     "RS 90 — 최상위 강세",
@@ -81,19 +81,19 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 317500.0,
+   "last_price": 315500.0,
    "peak_price": 333500.0,
-   "return_pct": -2.01,
-   "total_return_pct": -2.01,
+   "return_pct": -2.62,
+   "total_return_pct": -2.62,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 4,
+   "days_held": 5,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.36x",
     "불 스노트 — 거래량 폭증 3.36x",
@@ -111,26 +111,26 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7330.0,
+   "last_price": 7230.0,
    "peak_price": 7940.0,
-   "return_pct": -7.68,
-   "total_return_pct": -7.68,
+   "return_pct": -8.94,
+   "total_return_pct": -8.94,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 4,
+   "days_held": 5,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.25x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승",
     "RS 96 — 최상위 강세"
    ],
-   "stop_warning": false
+   "stop_warning": true
   },
   {
    "ticker": "008930",
@@ -141,19 +141,19 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 45800.0,
-   "peak_price": 44650.0,
-   "return_pct": 4.57,
-   "total_return_pct": 4.57,
+   "last_price": 45600.0,
+   "peak_price": 45700.0,
+   "return_pct": 4.11,
+   "total_return_pct": 4.11,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 4,
+   "days_held": 5,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -171,19 +171,19 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 150400.0,
+   "last_price": 151400.0,
    "peak_price": 153100.0,
-   "return_pct": -1.76,
-   "total_return_pct": -1.76,
+   "return_pct": -1.11,
+   "total_return_pct": -1.11,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 3,
+   "days_held": 4,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-07",
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.22x",
     "불 스노트 — 거래량 폭증 3.22x",
@@ -201,22 +201,52 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 28300.0,
-   "peak_price": 28350.0,
-   "return_pct": -0.18,
-   "total_return_pct": -0.18,
+   "last_price": 27400.0,
+   "peak_price": 28400.0,
+   "return_pct": -3.35,
+   "total_return_pct": -3.35,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
-   "days_held": 3,
+   "days_held": 4,
    "stage_now": 1,
-   "confidence_now": 65,
-   "last_updated": "2026-08-07",
+   "confidence_now": 60,
+   "last_updated": "2026-08-10",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.08x",
     "불 스노트 — 거래량 폭증 3.08x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ],
+   "stop_warning": false
+  },
+  {
+   "ticker": "280360",
+   "name": "롯데웰푸드",
+   "sector": "기타 식품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-10",
+   "entry_price": 130900.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -6.6,
+   "last_price": 127100.0,
+   "peak_price": 130900.0,
+   "return_pct": -2.9,
+   "total_return_pct": -2.9,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 1,
+   "stage_now": null,
+   "confidence_now": 0,
+   "last_updated": "2026-08-10",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.89x",
+    "불 스노트 — 거래량 폭증 4.89x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
    ],
@@ -264,7 +294,11 @@
    },
    {
     "date": "2026-08-10",
-    "cum": -4.72
+    "cum": -4.28
+   },
+   {
+    "date": "2026-08-11",
+    "cum": -5.02
    }
   ],
   "1": [
@@ -306,7 +340,11 @@
    },
    {
     "date": "2026-08-10",
-    "cum": -1.41
+    "cum": -0.88
+   },
+   {
+    "date": "2026-08-11",
+    "cum": -2.47
    }
   ]
  },
@@ -350,7 +388,11 @@
    },
    {
     "date": "2026-08-10",
-    "cum": -4.74
+    "cum": -4.29
+   },
+   {
+    "date": "2026-08-11",
+    "cum": -5.07
    }
   ],
   "1": [
@@ -392,15 +434,19 @@
    },
    {
     "date": "2026-08-10",
-    "cum": -1.43
+    "cum": -0.78
+   },
+   {
+    "date": "2026-08-11",
+    "cum": -2.38
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
-  "holding_count": 7,
+  "holding_count": 8,
   "exited_count": 0,
-  "avg_return": -2.36,
+  "avg_return": -3.11,
   "exited_avg_return": 0,
   "win_rate": 0
  }

@@ -236,6 +236,16 @@ def latest_confirmed_month(today: dt.date) -> str:
     return _prev_yymm(f"{today.year:04d}{today.month:02d}", 1)
 
 
+def latest_month_in(series: dict, cap: str) -> str | None:
+    """계열에 실제로 들어온 달 중 cap 이하 최신월. 없으면 None.
+
+    YYYYMM 문자열은 사전순 비교가 곧 시간순이라 그대로 비교한다. cap을 두는 이유는
+    월중 부분 집계를 걸러내기 위해서다 — 상한이 없으면 아직 안 끝난 달이 완결월처럼
+    최신값이 돼 가짜 급감으로 보인다.
+    """
+    return max((m for m in series if m <= cap), default=None)
+
+
 # 순별 잠정치 응답은 itemUsdAmt00~10 열로 오고 품목명이 없다. 순서는 실측으로 검증했다
 # (반도체 221억달러·+180.6%, 컴퓨터주변기기 +231.9%, 승용차 -10.6%가 관세청 보도자료와 일치).
 _PROV_EXP = ["전체", "반도체", "철강제품", "승용차", "석유제품", "무선통신기기",
@@ -296,6 +306,9 @@ def build() -> dict | None:
     api_key = capi.require_key()
     today = dt.datetime.now(tz=KST).date()
     month = latest_confirmed_month(today)
+    # month는 아래에서 시군구 응답에 맞춰 뒤로 물러날 수 있다. 수입 워치는 다른 API를
+    # 쓰므로 그 후퇴에 끌려가면 안 된다 — 물러나기 전의 상한을 따로 붙잡아 둔다.
+    confirmed_cap = month
     chunks = capi.month_range(month, MONTHS)
 
     scan = _load_json(SCAN_PATH, {})
@@ -498,11 +511,20 @@ def build() -> dict | None:
             cur = ser.setdefault(p, {"amt": 0.0, "qty": 0.0})
             cur["amt"] += r["imp_amt"] / 1000.0          # USD → 천USD
             cur["qty"] += (r.get("imp_wgt") or 0.0)
-        met = compute_metrics(ser, month)
+        # 기준월을 종목 카드(시군구별)와 공유하지 않는다. 품목별 통계는 시군구별보다
+        # 먼저 갱신돼, 시군구가 한 달 물러난 기간(매월 1~14일)에는 이미 받아둔 최신월을
+        # 통째로 버리게 된다 — 8/11 실행에서 202607이 시리즈에 있는데도 202606으로
+        # 표시됐다. 원재료·장비 수입은 생산 확대를 앞서 보는 선행 지표라 시의성이 핵심이다.
+        # 품목마다 갱신이 어긋날 수 있으므로 각자의 최신월을 쓴다. 서로 비교하는 카드가
+        # 아니라 각 품목을 자기 이력과 대조하는 카드라 기준월이 달라도 읽는 데 문제없다.
+        # 상한(confirmed_cap)은 둔다 — 없으면 월중 부분 집계가 완결월처럼 찍혀 가짜 급감이 된다.
+        imp_month = latest_month_in(ser, confirmed_cap)
+        met = compute_metrics(ser, imp_month) if imp_month else None
         if not met:
             continue
         imports.append({
             "hs": hs, "label": w.get("label"), "note": w.get("note"),
+            "month": imp_month,
             "stocks": w.get("stocks") or [],
             "series": [{"m": k, "amt": round(ser[k]["amt"], 1)} for k in sorted(ser)][-24:],
             **met,
