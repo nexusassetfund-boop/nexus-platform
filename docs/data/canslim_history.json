@@ -1,0 +1,35 @@
+[
+ {
+  "date": "2026-08-11",
+  "added": [
+   {
+    "code": "093320",
+    "name": "케이아이엔엑스",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "007070",
+    "name": "GS리테일",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 20
+   },
+   {
+    "code": "039830",
+    "name": "오로라",
+    "days": 1,
+    "last_score": 6,
+    "last_rank": 6
+   },
+   {
+    "code": "204610",
+    "name": "티쓰리",
+    "days": 1,
+    "last_score": 6,
+    "last_rank": 5
+   }
+  ]
+ }
+]
