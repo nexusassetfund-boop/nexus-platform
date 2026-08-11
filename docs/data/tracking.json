@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-11T15:12:19+09:00",
+ "updated": "2026-08-11T15:37:06+09:00",
  "kospi": {
   "price": 6340.67,
   "ma200": 5828.97,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-11T15:12:19+09:00"
+  "updated": "2026-08-11T15:37:06+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7490.0,
+   "last_price": 7520.0,
    "peak_price": 7940.0,
-   "return_pct": -5.67,
-   "total_return_pct": -5.67,
+   "return_pct": -5.29,
+   "total_return_pct": -5.29,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -33,7 +33,7 @@
    "days_held": 5,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 150900.0,
+   "last_price": 150500.0,
    "peak_price": 153100.0,
-   "return_pct": -1.44,
-   "total_return_pct": -1.44,
+   "return_pct": -1.7,
+   "total_return_pct": -1.7,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -63,7 +63,7 @@
    "days_held": 4,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "MTT 통과",
     "RS 90 — 최상위 강세",
@@ -71,6 +71,93 @@
     "전고점 돌파! 거래량 3.25x"
    ],
    "stop_warning": false
+  },
+  {
+   "ticker": "001450",
+   "name": "현대해상",
+   "sector": "보험업",
+   "entry_stage": 3,
+   "entry_date": "2026-08-11",
+   "entry_price": 44050.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 44050.0,
+   "peak_price": 44050.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 96 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 2.21x"
+   ]
+  },
+  {
+   "ticker": "241710",
+   "name": "코스메카코리아",
+   "sector": "기타 화학제품 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-08-11",
+   "entry_price": 109400.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 109400.0,
+   "peak_price": 109400.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 100,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 95 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 8.27x"
+   ]
+  },
+  {
+   "ticker": "096530",
+   "name": "씨젠",
+   "sector": "의료용품 및 기타 의약 관련제품 제조업",
+   "entry_stage": 3,
+   "entry_date": "2026-08-11",
+   "entry_price": 32550.0,
+   "entry_confidence": 90,
+   "init_stop_pct": -10.0,
+   "last_price": 32550.0,
+   "peak_price": 32550.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 90,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 88 — 상위 강세",
+    "전고점 돌파! 거래량 3.7x",
+    "거래량 폭증 3.7x"
+   ]
   },
   {
    "ticker": "051900",
@@ -81,10 +168,10 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 318000.0,
+   "last_price": 318500.0,
    "peak_price": 333500.0,
-   "return_pct": -1.85,
-   "total_return_pct": -1.85,
+   "return_pct": -1.7,
+   "total_return_pct": -1.7,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -93,7 +180,7 @@
    "days_held": 5,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.36x",
     "불 스노트 — 거래량 폭증 3.36x",
@@ -111,10 +198,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7490.0,
+   "last_price": 7520.0,
    "peak_price": 7940.0,
-   "return_pct": -5.67,
-   "total_return_pct": -5.67,
+   "return_pct": -5.29,
+   "total_return_pct": -5.29,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -123,7 +210,7 @@
    "days_held": 5,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.25x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -142,7 +229,7 @@
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
    "last_price": 46200.0,
-   "peak_price": 45700.0,
+   "peak_price": 46200.0,
    "return_pct": 5.48,
    "total_return_pct": 5.48,
    "qty_frac": 1.0,
@@ -153,7 +240,7 @@
    "days_held": 5,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -171,10 +258,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 150900.0,
+   "last_price": 150500.0,
    "peak_price": 153100.0,
-   "return_pct": -1.44,
-   "total_return_pct": -1.44,
+   "return_pct": -1.7,
+   "total_return_pct": -1.7,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -183,7 +270,7 @@
    "days_held": 4,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.22x",
     "불 스노트 — 거래량 폭증 3.22x",
@@ -201,10 +288,10 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 27600.0,
+   "last_price": 27550.0,
    "peak_price": 28400.0,
-   "return_pct": -2.65,
-   "total_return_pct": -2.65,
+   "return_pct": -2.82,
+   "total_return_pct": -2.82,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -213,7 +300,7 @@
    "days_held": 4,
    "stage_now": 1,
    "confidence_now": 60,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.08x",
     "불 스노트 — 거래량 폭증 3.08x",
@@ -231,10 +318,10 @@
    "entry_price": 130900.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.6,
-   "last_price": 127900.0,
+   "last_price": 127200.0,
    "peak_price": 130900.0,
-   "return_pct": -2.29,
-   "total_return_pct": -2.29,
+   "return_pct": -2.83,
+   "total_return_pct": -2.83,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -243,7 +330,7 @@
    "days_held": 1,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-10",
+   "last_updated": "2026-08-11",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.89x",
     "불 스노트 — 거래량 폭증 4.89x",
@@ -251,6 +338,93 @@
     "반전 확장 후 저점 상승"
    ],
    "stop_warning": false
+  },
+  {
+   "ticker": "241710",
+   "name": "코스메카코리아",
+   "sector": "기타 화학제품 제조업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-11",
+   "entry_price": 109400.0,
+   "entry_confidence": 98,
+   "init_stop_pct": -6.4,
+   "last_price": 109400.0,
+   "peak_price": 109400.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 98,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 8.15x",
+    "불 스노트 — 거래량 폭증 8.15x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
+  },
+  {
+   "ticker": "036570",
+   "name": "NC",
+   "sector": "소프트웨어 개발 및 공급업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-11",
+   "entry_price": 255500.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -5.7,
+   "last_price": 255500.0,
+   "peak_price": 255500.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 93,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.87x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "베이스 거래량 마름 후 폭증",
+    "반전 확장 후 저점 상승"
+   ]
+  },
+  {
+   "ticker": "001450",
+   "name": "현대해상",
+   "sector": "보험업",
+   "entry_stage": 1,
+   "entry_date": "2026-08-11",
+   "entry_price": 44050.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -6.8,
+   "last_price": 44050.0,
+   "peak_price": 44050.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 3,
+   "confidence_now": 93,
+   "last_updated": "2026-08-11",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.26x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 96 — 최상위 강세"
+   ]
   }
  ],
  "exited": [],
@@ -298,7 +472,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -3.55
+    "cum": -1.4
    }
   ],
   "1": [
@@ -344,7 +518,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -1.4
+    "cum": -0.98
    }
   ]
  },
@@ -392,7 +566,7 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -3.55
+    "cum": -3.97
    }
   ],
   "1": [
@@ -438,15 +612,15 @@
    },
    {
     "date": "2026-08-11",
-    "cum": -1.29
+    "cum": -1.17
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
-  "holding_count": 8,
+  "holding_count": 14,
   "exited_count": 0,
-  "avg_return": -1.94,
+  "avg_return": -1.13,
   "exited_avg_return": 0,
   "win_rate": 0
  }
