@@ -3,8 +3,8 @@ name: 수급 백테스트 (KRX 상세 포함)
 # 결과는 잡 Summary와 아티팩트(flow-backtest)로 나온다. 저장소엔 아무것도 커밋하지 않는다.
 on:
   workflow_dispatch: {}
-  pull_request:
-    # 백테스트 로직이 바뀌는 PR에서만 자동 재검증 (같은 repo 브랜치라 시크릿 사용 가능)
+  push:
+    # 백테스트 로직이 바뀐 푸시에서만 자동 재검증 (머지 전 브랜치에서도 실행됨)
     paths:
       - .github/workflows/flow-backtest.yml
       - scanner/flow_backtest.py
