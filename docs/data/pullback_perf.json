@@ -7,9 +7,9 @@
    "entry_price": 624000.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 513000.0,
-   "trading_days": 11,
-   "ret_pct": -17.8,
+   "last_close": 524000.0,
+   "trading_days": 12,
+   "ret_pct": -16.0,
    "removed_date": "2026-08-04"
   },
   {
@@ -19,9 +19,9 @@
    "entry_price": 63200.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 63800.0,
-   "trading_days": 11,
-   "ret_pct": 0.9,
+   "last_close": 63400.0,
+   "trading_days": 12,
+   "ret_pct": 0.3,
    "removed_date": "2026-08-04"
   },
   {
@@ -31,9 +31,9 @@
    "entry_price": 143700.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 132700.0,
-   "trading_days": 11,
-   "ret_pct": -7.7,
+   "last_close": 129100.0,
+   "trading_days": 12,
+   "ret_pct": -10.2,
    "removed_date": "2026-08-04"
   },
   {
@@ -43,9 +43,9 @@
    "entry_price": 249500.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 230000.0,
-   "trading_days": 11,
-   "ret_pct": -7.8,
+   "last_close": 239500.0,
+   "trading_days": 12,
+   "ret_pct": -4.0,
    "removed_date": "2026-08-06"
   },
   {
@@ -55,9 +55,9 @@
    "entry_price": 100200.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 85000.0,
-   "trading_days": 11,
-   "ret_pct": -15.2,
+   "last_close": 86000.0,
+   "trading_days": 12,
+   "ret_pct": -14.2,
    "removed_date": "2026-08-04"
   },
   {
@@ -67,9 +67,9 @@
    "entry_price": 47550.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 70000.0,
-   "trading_days": 11,
-   "ret_pct": 47.2,
+   "last_close": 69900.0,
+   "trading_days": 12,
+   "ret_pct": 47.0,
    "removed_date": "2026-08-04"
   },
   {
@@ -79,9 +79,9 @@
    "entry_price": 13370.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 15650.0,
-   "trading_days": 11,
-   "ret_pct": 17.1,
+   "last_close": 14750.0,
+   "trading_days": 12,
+   "ret_pct": 10.3,
    "removed_date": "2026-08-04"
   },
   {
@@ -91,9 +91,9 @@
    "entry_price": 32650.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 40950.0,
-   "trading_days": 11,
-   "ret_pct": 25.4,
+   "last_close": 41000.0,
+   "trading_days": 12,
+   "ret_pct": 25.6,
    "removed_date": "2026-08-04"
   },
   {
@@ -103,9 +103,9 @@
    "entry_price": 165900.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 120300.0,
-   "trading_days": 11,
-   "ret_pct": -27.5,
+   "last_close": 118500.0,
+   "trading_days": 12,
+   "ret_pct": -28.6,
    "removed_date": "2026-07-27"
   },
   {
@@ -115,9 +115,9 @@
    "entry_price": 202000.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 227000.0,
-   "trading_days": 11,
-   "ret_pct": 12.4
+   "last_close": 244500.0,
+   "trading_days": 12,
+   "ret_pct": 21.0
   },
   {
    "code": "005090",
@@ -127,7 +127,7 @@
    "entry_score": 5,
    "status": "open",
    "last_close": 56200.0,
-   "trading_days": 11,
+   "trading_days": 12,
    "ret_pct": 13.0,
    "removed_date": "2026-07-27"
   },
@@ -138,9 +138,9 @@
    "entry_price": 47250.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 48800.0,
-   "trading_days": 11,
-   "ret_pct": 3.3
+   "last_close": 48950.0,
+   "trading_days": 12,
+   "ret_pct": 3.6
   },
   {
    "code": "006340",
@@ -149,9 +149,9 @@
    "entry_price": 13730.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 14950.0,
-   "trading_days": 11,
-   "ret_pct": 8.9
+   "last_close": 14520.0,
+   "trading_days": 12,
+   "ret_pct": 5.8
   },
   {
    "code": "019210",
@@ -160,9 +160,9 @@
    "entry_price": 18450.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 18410.0,
-   "trading_days": 11,
-   "ret_pct": -0.2
+   "last_close": 18160.0,
+   "trading_days": 12,
+   "ret_pct": -1.6
   },
   {
    "code": "278470",
@@ -171,9 +171,9 @@
    "entry_price": 361500.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 387000.0,
-   "trading_days": 10,
-   "ret_pct": 7.1,
+   "last_close": 385500.0,
+   "trading_days": 11,
+   "ret_pct": 6.6,
    "removed_date": "2026-07-27"
   },
   {
@@ -183,9 +183,9 @@
    "entry_price": 512000.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 432000.0,
-   "trading_days": 10,
-   "ret_pct": -15.6,
+   "last_close": 428500.0,
+   "trading_days": 11,
+   "ret_pct": -16.3,
    "removed_date": "2026-08-04"
   },
   {
@@ -195,9 +195,9 @@
    "entry_price": 57900.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 51300.0,
-   "trading_days": 10,
-   "ret_pct": -11.4,
+   "last_close": 51100.0,
+   "trading_days": 11,
+   "ret_pct": -11.7,
    "removed_date": "2026-08-07"
   },
   {
@@ -207,9 +207,9 @@
    "entry_price": 137500.0,
    "entry_score": 1,
    "status": "open",
-   "last_close": 139600.0,
-   "trading_days": 10,
-   "ret_pct": 1.5,
+   "last_close": 141600.0,
+   "trading_days": 11,
+   "ret_pct": 3.0,
    "removed_date": "2026-08-04"
   },
   {
@@ -219,9 +219,9 @@
    "entry_price": 111500.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 105000.0,
-   "trading_days": 10,
-   "ret_pct": -5.8,
+   "last_close": 109100.0,
+   "trading_days": 11,
+   "ret_pct": -2.2,
    "removed_date": "2026-08-04"
   },
   {
@@ -231,9 +231,9 @@
    "entry_price": 44000.0,
    "entry_score": 7,
    "status": "open",
-   "last_close": 49500.0,
-   "trading_days": 10,
-   "ret_pct": 12.5
+   "last_close": 50800.0,
+   "trading_days": 11,
+   "ret_pct": 15.5
   },
   {
    "code": "069960",
@@ -242,9 +242,9 @@
    "entry_price": 137100.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 103800.0,
-   "trading_days": 10,
-   "ret_pct": -24.3,
+   "last_close": 101300.0,
+   "trading_days": 11,
+   "ret_pct": -26.1,
    "removed_date": "2026-08-04"
   },
   {
@@ -254,9 +254,9 @@
    "entry_price": 76500.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 66400.0,
-   "trading_days": 10,
-   "ret_pct": -13.2,
+   "last_close": 69300.0,
+   "trading_days": 11,
+   "ret_pct": -9.4,
    "removed_date": "2026-08-04"
   },
   {
@@ -266,9 +266,9 @@
    "entry_price": 142100.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 142600.0,
-   "trading_days": 10,
-   "ret_pct": 0.4,
+   "last_close": 146000.0,
+   "trading_days": 11,
+   "ret_pct": 2.7,
    "removed_date": "2026-08-04"
   },
   {
@@ -279,7 +279,7 @@
    "entry_score": 5,
    "status": "open",
    "last_close": 56200.0,
-   "trading_days": 4,
+   "trading_days": 5,
    "ret_pct": 11.5
   },
   {
@@ -289,9 +289,9 @@
    "entry_price": 359500.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 387000.0,
-   "trading_days": 4,
-   "ret_pct": 7.6,
+   "last_close": 385500.0,
+   "trading_days": 5,
+   "ret_pct": 7.2,
    "removed_date": "2026-08-05"
   },
   {
@@ -301,9 +301,9 @@
    "entry_price": 42850.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 48450.0,
-   "trading_days": 4,
-   "ret_pct": 13.1,
+   "last_close": 47900.0,
+   "trading_days": 5,
+   "ret_pct": 11.8,
    "removed_date": "2026-08-06"
   },
   {
@@ -313,9 +313,9 @@
    "entry_price": 562000.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 513000.0,
-   "trading_days": 3,
-   "ret_pct": -8.7,
+   "last_close": 524000.0,
+   "trading_days": 4,
+   "ret_pct": -6.8,
    "removed_date": "2026-08-06"
   },
   {
@@ -325,9 +325,9 @@
    "entry_price": 56700.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 70000.0,
-   "trading_days": 3,
-   "ret_pct": 23.5,
+   "last_close": 69900.0,
+   "trading_days": 4,
+   "ret_pct": 23.3,
    "removed_date": "2026-08-06"
   },
   {
@@ -337,9 +337,9 @@
    "entry_price": 64800.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 63800.0,
-   "trading_days": 3,
-   "ret_pct": -1.5,
+   "last_close": 63400.0,
+   "trading_days": 4,
+   "ret_pct": -2.2,
    "removed_date": "2026-08-06"
   },
   {
@@ -349,9 +349,9 @@
    "entry_price": 103000.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 115900.0,
-   "trading_days": 3,
-   "ret_pct": 12.5
+   "last_close": 113900.0,
+   "trading_days": 4,
+   "ret_pct": 10.6
   },
   {
    "code": "006360",
@@ -360,9 +360,9 @@
    "entry_price": 31150.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 34900.0,
-   "trading_days": 3,
-   "ret_pct": 12.0
+   "last_close": 34750.0,
+   "trading_days": 4,
+   "ret_pct": 11.6
   },
   {
    "code": "375500",
@@ -371,9 +371,9 @@
    "entry_price": 72100.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 72900.0,
-   "trading_days": 2,
-   "ret_pct": 1.1
+   "last_close": 73000.0,
+   "trading_days": 3,
+   "ret_pct": 1.2
   },
   {
    "code": "278470",
@@ -382,9 +382,9 @@
    "entry_price": 378000.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 387000.0,
-   "trading_days": 2,
-   "ret_pct": 2.4
+   "last_close": 385500.0,
+   "trading_days": 3,
+   "ret_pct": 2.0
   },
   {
    "code": "181710",
@@ -393,9 +393,9 @@
    "entry_price": 43100.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 41750.0,
-   "trading_days": 2,
-   "ret_pct": -3.1,
+   "last_close": 54200.0,
+   "trading_days": 3,
+   "ret_pct": 25.8,
    "removed_date": "2026-08-07"
   },
   {
@@ -405,9 +405,9 @@
    "entry_price": 91100.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 85000.0,
-   "trading_days": 2,
-   "ret_pct": -6.7,
+   "last_close": 86000.0,
+   "trading_days": 3,
+   "ret_pct": -5.6,
    "removed_date": "2026-08-07"
   },
   {
@@ -417,9 +417,9 @@
    "entry_price": 40100.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 40950.0,
-   "trading_days": 2,
-   "ret_pct": 2.1
+   "last_close": 41000.0,
+   "trading_days": 3,
+   "ret_pct": 2.2
   },
   {
    "code": "010060",
@@ -428,9 +428,9 @@
    "entry_price": 272500.0,
    "entry_score": 4,
    "status": "open",
-   "last_close": 284500.0,
-   "trading_days": 1,
-   "ret_pct": 4.4
+   "last_close": 273500.0,
+   "trading_days": 2,
+   "ret_pct": 0.4
   },
   {
    "code": "010950",
@@ -439,9 +439,9 @@
    "entry_price": 137600.0,
    "entry_score": 3,
    "status": "open",
-   "last_close": 139600.0,
-   "trading_days": 1,
-   "ret_pct": 1.5,
+   "last_close": 141600.0,
+   "trading_days": 2,
+   "ret_pct": 2.9,
    "removed_date": "2026-08-10"
   },
   {
@@ -451,9 +451,9 @@
    "entry_price": 43000.0,
    "entry_score": 2,
    "status": "open",
-   "last_close": 45500.0,
-   "trading_days": 1,
-   "ret_pct": 5.8,
+   "last_close": 43650.0,
+   "trading_days": 2,
+   "ret_pct": 1.5,
    "removed_date": "2026-08-10"
   },
   {
@@ -463,9 +463,9 @@
    "entry_price": 142600.0,
    "entry_score": 6,
    "status": "open",
-   "last_close": 142600.0,
-   "trading_days": 0,
-   "ret_pct": 0.0
+   "last_close": 146000.0,
+   "trading_days": 1,
+   "ret_pct": 2.4
   },
   {
    "code": "080220",
@@ -474,9 +474,9 @@
    "entry_price": 87700.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 87700.0,
-   "trading_days": 0,
-   "ret_pct": 0.0
+   "last_close": 90400.0,
+   "trading_days": 1,
+   "ret_pct": 3.1
   },
   {
    "code": "037460",
@@ -485,7 +485,62 @@
    "entry_price": 38050.0,
    "entry_score": 5,
    "status": "open",
-   "last_close": 38050.0,
+   "last_close": 37950.0,
+   "trading_days": 1,
+   "ret_pct": -0.3
+  },
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "entry_date": "2026-08-11",
+   "entry_price": 239500.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 239500.0,
+   "trading_days": 0,
+   "ret_pct": 0.0
+  },
+  {
+   "code": "018260",
+   "name": "삼성에스디에스",
+   "entry_date": "2026-08-11",
+   "entry_price": 237000.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 237000.0,
+   "trading_days": 0,
+   "ret_pct": 0.0
+  },
+  {
+   "code": "031980",
+   "name": "피에스케이홀딩스",
+   "entry_date": "2026-08-11",
+   "entry_price": 109100.0,
+   "entry_score": 6,
+   "status": "open",
+   "last_close": 109100.0,
+   "trading_days": 0,
+   "ret_pct": 0.0
+  },
+  {
+   "code": "181710",
+   "name": "NHN",
+   "entry_date": "2026-08-11",
+   "entry_price": 54200.0,
+   "entry_score": 4,
+   "status": "open",
+   "last_close": 54200.0,
+   "trading_days": 0,
+   "ret_pct": 0.0
+  },
+  {
+   "code": "079940",
+   "name": "가비아",
+   "entry_date": "2026-08-11",
+   "entry_price": 43650.0,
+   "entry_score": 2,
+   "status": "open",
+   "last_close": 43650.0,
    "trading_days": 0,
    "ret_pct": 0.0
   }
@@ -495,9 +550,9 @@
   "closed_n": 0,
   "closed_win_rate": null,
   "closed_avg_ret": null,
-  "open_n": 42,
-  "open_avg_ret": 1.9,
+  "open_n": 47,
+  "open_avg_ret": 2.5,
   "note": "편입일 종가 진입 근사 · 90거래일 보유(B90) 시뮬 · 거래비용 미반영"
  },
- "updated": "2026-08-10"
+ "updated": "2026-08-11"
 }
