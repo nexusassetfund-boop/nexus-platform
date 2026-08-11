@@ -17,6 +17,11 @@ jobs:
       - name: 의존성 설치
         run: pip install -r requirements.txt
       - name: 수급 스크리닝
+        env:
+          # KRX 투자자 상세(금융투자·연기금 분리)용 — data.krx.co.kr 무료 계정.
+          # 없으면 상세 없이 기관합계로 자동 폴백된다.
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
         run: python scanner/flow_screener.py
       - name: 결과 커밋
         run: |
