@@ -12,6 +12,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -420,8 +421,92 @@ def collect_top_caps(today_str, n=15):
     return out
 
 
+_JSON_CACHE = {}
+
+
 def _get_json(path, timeout=15):
-    return requests.get(f"{WORKER}{path}", timeout=timeout).json()
+    # 한 번 실행하고 끝나는 스크립트라 프로세스 캐시로 충분하다. scan.json은 350종목
+    # 짜리 큰 파일인데 감지기·섹터RS·전략교차 세 군데서 같은 URL을 부른다.
+    if path not in _JSON_CACHE:
+        _JSON_CACHE[path] = requests.get(f"{WORKER}{path}", timeout=timeout).json()
+    return _JSON_CACHE[path]
+
+
+def _note(*parts):
+    return " · ".join(str(p) for p in parts if p)
+
+
+CODE_RE = re.compile(r"\d[0-9A-Z]{5}")   # 신형 영숫자 코드(0156T0) 포함
+
+# 전략 소스 — 홈 화면 '전략 교차' 카드(nexus-cloud/public/index.html의 _HOME_X)와 같은 규칙.
+# '지금 후보 명단'을 내놓는 소스만 넣는다. 백테스터 3종(무상증자·52주 신고가·Post IPO)은
+# 과거 이벤트 시뮬레이션이라 현재 명단이 아니므로 제외.
+# (키, 라벨, 경로, 리스트필드, 코드필드, 필터, 근거)
+STRATEGY_SOURCES = [
+    ("stage", "스테이지 감지기", "/data/scan.json", "results", "ticker",
+     lambda r: (r.get("stage") or 0) >= 1,
+     lambda r: _note(r.get("stage_label") or f"Stage {r.get('stage')}",
+                     f"RS {round(r['rs_rank'])}" if r.get("rs_rank") is not None else None)),
+    ("portfolio", "전략 포트폴리오 보유", "/data/tracking.json", "holdings", "ticker", None,
+     lambda r: _note(f"보유 {r.get('days_held', '-')}일",
+                     f"{r['return_pct']:+.1f}%" if r.get("return_pct") is not None else None)),
+    ("quality", "퀄리티 성장", "/data/quality_growth.json", "candidates", "code", None,
+     lambda r: _note(f"종합Z {r['composite']:.2f}" if r.get("composite") is not None else None,
+                     f"ROE {r['roe']:.1f}%" if r.get("roe") is not None else None)),
+    ("value", "가치투자", "/data/value_screen.json", "candidates", "code", None,
+     lambda r: _note(f"안전마진 {r.get('margin')}%" if r.get("margin") is not None else None,
+                     f"신뢰 {r['conf']}" if r.get("conf") else None)),
+    ("pullback", "눌림목", "/data/pullback.json", "candidates", "ticker", None,
+     lambda r: _note(f"점수 {r.get('pullback_score', '-')}/7")),
+    ("canslim", "CANSLIM", "/data/canslim.json", "candidates", "ticker", None,
+     lambda r: _note(f"점수 {r.get('canslim_score', '-')}", "7요건" if r.get("strict") == 1 else None)),
+    # 수급은 S·A(외국인 기준)만 교차 대상. C(기관 단독)는 백테스트에서 (−) 신호라
+    # 섞으면 교차 명단이 오히려 나쁜 종목을 추천하는 꼴이 된다.
+    ("flow", "수급", "/data/flow.json", "candidates", "ticker",
+     lambda r: r.get("grade") in ("S", "A"),
+     lambda r: _note(f"{r.get('grade')}등급", f"외인 {r.get('frgn_streak', '-')}일")),
+]
+
+
+def collect_strategy_cross():
+    """2개 이상 전략에 동시에 이름을 올린 종목 — 전략실 탭들의 교집합.
+
+    탭별 상위 종목을 나열하는 것보다 교집합이 브리핑에서 훨씬 쓸모 있다.
+    소스마다 갱신 주기가 달라(감지기·수급은 매 거래일, 퀄리티·가치는 주 1회)
+    as_of를 반드시 함께 넘긴다 — 없으면 전부 '오늘 명단'으로 읽힌다.
+    """
+    sources, by_code, quotes = {}, {}, {}
+    for key, label, path, list_field, code_field, flt, note in STRATEGY_SOURCES:
+        try:
+            d = _get_json(path)
+        except Exception as e:
+            sources[key] = {"label": label, "error": str(e)[:80]}
+            continue
+        rows = [r for r in (d.get(list_field) or []) if isinstance(r, dict)]
+        if key == "stage":
+            quotes = {r.get("ticker"): r for r in rows}   # 등락률 조인용 (스캔 유니버스 350종목)
+        rows = [r for r in rows if flt(r)] if flt else rows
+        members = []
+        for r in rows:
+            code = str(r.get(code_field) or "")
+            if not CODE_RE.fullmatch(code):
+                continue
+            members.append(r)
+            rec = by_code.setdefault(code, {"code": code, "name": r.get("name"), "hits": []})
+            # 원장 2트랙처럼 한 소스에 같은 종목이 두 줄일 수 있다 — 소스당 1건만
+            if not any(h["key"] == key for h in rec["hits"]):
+                rec["hits"].append({"key": key, "label": label, "why": note(r)})
+        sources[key] = {"label": label, "count": len(members),
+                        "as_of": str(d.get("updated") or d.get("scan_time") or "")[:10] or None,
+                        "top": [{"name": r.get("name"), "why": note(r)} for r in members[:3]]}
+    rows = sorted((r for r in by_code.values() if len(r["hits"]) >= 2),
+                  key=lambda r: (-len(r["hits"]), r["name"] or ""))[:12]
+    for r in rows:
+        r["change_pct"] = (quotes.get(r["code"]) or {}).get("change_pct")
+        r["strategies"] = [f"{h['label']}({h['why']})" if h["why"] else h["label"]
+                           for h in r.pop("hits")]
+    return {"rule": "2개 이상 전략에 동시에 잡힌 종목 (수급은 외국인 S·A등급만 집계)",
+            "sources": sources, "rows": rows}
 
 
 def collect_platform(today_str):
@@ -437,30 +522,28 @@ def collect_platform(today_str):
         out["sector_rs"] = {"top": rows[:3], "bottom": rows[-3:]}
     except Exception as e:
         out["sector_rs_error"] = str(e)[:100]
-    try:  # 퀄리티 성장 상위 5
-        qg = (_get_json("/data/quality_growth.json").get("candidates") or [])[:5]
-        out["quality_growth"] = [{"name": c.get("name"), "composite": c.get("composite")} for c in qg]
+    try:  # 전략 교차 — 이 섹션의 머리. 탭별 상위 종목(sources[].top)도 여기서 함께 나온다
+        out["cross"] = collect_strategy_cross()
     except Exception as e:
-        out["quality_growth_error"] = str(e)[:100]
-    try:  # 눌림목 — 후보 수 + 상위 3
-        cands = _get_json("/data/pullback.json").get("candidates") or []
-        out["pullback"] = {"count": len(cands),
-                           "top": [{"name": c.get("name"), "score": c.get("pullback_score")}
-                                   for c in cands[:3]]}
-    except Exception as e:
-        out["pullback_error"] = str(e)[:100]
-    try:  # 밸류 보드 상위 3
-        vs = (_get_json("/data/value_screen.json").get("candidates") or [])[:3]
-        out["value_screen"] = [{"name": c.get("name")} for c in vs]
-    except Exception as e:
-        out["value_screen_error"] = str(e)[:100]
-    try:  # 모멘텀 원장(웨지팝) — 커버리지 유니버스 요약 (보유 현황은 detector.tracking에 있음)
+        out["cross_error"] = str(e)[:100]
+    try:  # 관세청 수출 통관 데이터 — 종목별 월간 수출액(매출 프록시). 분기 실적을 2~7주 선행 관측.
+        # 예전엔 이 블록을 '모멘텀 원장'이라 잘못 부르고 유니버스 종목 수·샘플 이름만 실어
+        # 브리핑 마지막 문단이 정보량 0이었다. 실제 신호(분기 급증·급감)만 넘긴다.
         td = _get_json("/data/trade.json")
-        stocks = td.get("stocks") or []
-        out["momentum_ledger"] = {"data_month": td.get("data_month"), "universe_count": len(stocks),
-                                  "sample_names": [s.get("name") for s in stocks[:5] if isinstance(s, dict)]}
+        stocks = [s for s in (td.get("stocks") or []) if isinstance(s, dict)]
+        surge = sorted([s for s in stocks if s.get("q_sum_yoy") is not None],
+                       key=lambda s: -s["q_sum_yoy"])[:5]
+        out["trade_export"] = {
+            "what": "관세청 시군구별 품목별 통관실적 기반 종목 수출 추적 — 월간 확정치, 매출 프록시",
+            "data_month": td.get("data_month"), "universe_count": len(stocks),
+            "surge": [{"name": s.get("name"), "item": s.get("label"),
+                       "q_yoy_pct": s.get("q_sum_yoy"), "flags": s.get("flags")} for s in surge],
+            # 분기 -30% 급감은 백테스트에서 가장 신뢰도 높았던 신호 (6개월 초과수익 중앙 -16.1%)
+            "drop": [{"name": s.get("name"), "item": s.get("label"), "q_yoy_pct": s.get("q_sum_yoy")}
+                     for s in stocks if "q_drop" in (s.get("flags") or [])][:5],
+        }
     except Exception as e:
-        out["momentum_ledger_error"] = str(e)[:100]
+        out["trade_export_error"] = str(e)[:100]
     try:  # 실적 캘린더 — 오늘·내일 예정 최대 5건
         ev = _get_json("/data/earnings_calendar.json").get("events") or []
         soon = [e for e in ev if e.get("date") and today_str <= e["date"] <=
@@ -475,7 +558,7 @@ def collect_detector():
     """감지기·전략 포트폴리오 요약 (KV 데이터) — 우리 플랫폼만의 차별점"""
     out = {}
     try:
-        scan = requests.get(f"{WORKER}/data/scan.json", timeout=15).json()
+        scan = _get_json("/data/scan.json")
         rs = scan.get("results") or []
         stages = {}
         for r in rs:
@@ -491,7 +574,7 @@ def collect_detector():
     except Exception as e:
         out["scan_error"] = str(e)[:100]
     try:
-        tr = requests.get(f"{WORKER}/data/tracking.json", timeout=15).json()
+        tr = _get_json("/data/tracking.json")
         out["tracking"] = {
             "holdings": [{"name": h.get("name"), "return_pct": h.get("return_pct"), "entry_date": h.get("entry_date")}
                          for h in (tr.get("holdings") or [])],
