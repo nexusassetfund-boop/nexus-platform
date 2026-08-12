@@ -140,6 +140,14 @@ def test_liquidity_floor_boundary(tmp):
     assert "000160" in got and "000170" not in got, sorted(got)
 
 
+def test_emits_avg20_denominator_for_intraday(tmp):
+    # 워커가 장중 배수를 다시 계산하려면 분모(직전 20일 평균)가 산출물에 있어야 한다
+    closes = [100.0] * (DAYS - 1) + [99.0]
+    r = by_code(build([make("000180", closes, amount=3e10)], tmp))["000180"]
+    assert r["amount_avg20_eok"] == 300.0, r
+    assert abs(r["amount_eok"] / r["amount_avg20_eok"] - r["amt_vs20"]) < 0.1, r
+
+
 def test_market_cap_floor(tmp):
     closes = [100.0] * (DAYS - 1) + [99.0]           # 신고가 문턱 — 시총만 다르게 준다
     big = make("000110", closes, marcap=nf.MIN_MARCAP)          # 하한 정확히 = 통과

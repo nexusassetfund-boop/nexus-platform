@@ -60,7 +60,7 @@ HIGH52_BARS = 250        # 52주 ≈ 250거래일. 당일 제외(shift 1)한 직
 HIGH52_MIN_BARS = 120    # 상장 6개월 미만은 기준가를 못 만든다 — 후보에서 자동 제외
 GAP_IMMINENT = 3.0       # 이하 = 임박
 GAP_NEAR = 7.0           # 이하 = 근접
-GAP_WATCH = 15.0         # 이하 = 관찰. 초과하면 워치리스트에서 탈락
+GAP_WATCH = 12.0         # 이하 = 관찰. 초과하면 워치리스트에서 탈락 (스탁이지 "후보 범위 12% 이내")
 WATCH_WINDOW = 60        # 등재 후 추적하는 영업일 수 (스탁이지 "최근 60영업일 기준"과 동일)
 MIN_MARCAP = 2_000e8     # 시총 하한 2,000억원 (marcap의 Marcap은 원 단위)
 # 유동성 하한 — 시총만으로는 지주사·리츠·인프라펀드처럼 '덩치는 큰데 거래가 없는' 종목이
@@ -274,6 +274,9 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             # 소액 종목은 정수로 반올림하면 0억이 되어 데이터 누락처럼 보인다 → 10억 미만은 소수 1자리
             "amount_eok": (lambda v: round(v, 1) if v < 10 else round(v))(
                 float(amount.loc[today, c]) / 1e8),
+            # 배수의 분모. 워커가 장중 누적 거래대금으로 배수를 다시 계산할 때 필요하다
+            # — 이 값이 없으면 장중에 배수가 종가 기준으로 굳어버린다.
+            "amount_avg20_eok": round(float(cur_avg20[c]) / 1e8, 1),
             "amt_vs20": round(float(ratio), 1) if pd.notna(ratio) else None,
             "rs": None if rs_12m.empty or pd.isna(rs_12m.get(c)) else int(rs_12m[c]),
             "rs_1m": None if rs_1m.empty or pd.isna(rs_1m.get(c)) else int(rs_1m[c]),
