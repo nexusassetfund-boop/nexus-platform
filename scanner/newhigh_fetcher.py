@@ -37,6 +37,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sector_master  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / "marcap_cache"
 OUT = ROOT / "docs" / "data" / "newhigh_backtest.json"
@@ -247,6 +250,8 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             sectors = json.loads(SECTOR_CACHE.read_text(encoding="utf-8")).get("sectors", {})
         except Exception as e:
             print(f"  섹터 캐시 읽기 실패, 섹터 없이 진행: {e}")
+    # 산업분류 마스터가 KRX 표준산업분류를 덮는다 (run_scan 과 동일 규칙)
+    sectors.update(sector_master.level1())
 
     rows, history = [], {}
     for c in codes:

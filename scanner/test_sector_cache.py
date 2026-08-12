@@ -12,6 +12,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_scan  # noqa: E402
 
@@ -23,6 +25,13 @@ def _use_tmp_cache(tmp_path, payload=None):
         p.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
     run_scan._SECTOR_CACHE = p
     return p
+
+
+@pytest.fixture(autouse=True)
+def _no_master(monkeypatch):
+    """이 파일은 캐시 폴백 계층만 본다 — 그 위에 얹히는 산업분류 마스터는 끄고 검사한다.
+    (마스터 동작은 test_sector_master.py 담당)"""
+    monkeypatch.setattr(run_scan.sector_master, "level1", lambda: {})
 
 
 def test_save_then_load_roundtrip(tmp_path):

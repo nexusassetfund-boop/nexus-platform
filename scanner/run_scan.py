@@ -35,6 +35,7 @@ from data_provider import (
     is_market_hours,
     load_config,
 )
+import sector_master
 import sector_rrg
 from stage_detector import analyze_stock
 from drawdown_metrics import derive_drawdown_metrics
@@ -222,7 +223,6 @@ def _save_json(path: Path, data):
 # 마지막 정상값을 캐시해 두고 실패 시 그대로 쓴다.
 _SECTOR_CACHE = Path(__file__).resolve().parents[1] / "docs" / "data" / "sector_cache.json"
 
-
 def _load_sector_cache() -> dict:
     try:
         d = json.loads(_SECTOR_CACHE.read_text("utf-8"))
@@ -288,7 +288,37 @@ def _sector_and_names() -> tuple[dict, dict, bool]:
         logger.warning("FDR 섹터 조회 실패 — 섹터 캐시 %d종목 사용", len(sector_map))
     else:
         logger.error("섹터 조회 실패 + 캐시 없음 — 이번 스캔의 섹터는 전부 빈 값이 된다")
+
+    # 캐시 저장 뒤에 덮어쓴다 — 캐시는 FDR 폴백용이므로 KRX 원본값을 유지해야 한다
+    master = sector_master.level1()
+    if master:
+        uncovered = sum(1 for c in sector_map if c not in master)
+        sector_map.update(master)
+        logger.info("산업분류 마스터 %d종목 적용 (미커버 %d종목은 KRX 분류 유지)",
+                    len(master), uncovered)
     return ticker_map, sector_map, from_cache
+
+
+def _apply_master_names(ticker_map: dict) -> None:
+    """엑셀 종목명은 KRX/FDR **뒤**에 붙인다 — 스냅샷이라 사명변경이 나면 옛 이름이 살아난다.
+
+    두 가지 일만 한다:
+      1) 실시간 조회가 못 준 종목만 채운다 (엑셀이 FDR보다 최신인 신규 상장분 등)
+      2) 이름이 어긋난 종목을 로그로 남긴다 — 엑셀이 낡았다는 신호이자 갱신 대상 목록
+    """
+    master = sector_master.names()
+    if not master:
+        return
+    filled = [c for c in master if c not in ticker_map]
+    for code in filled:
+        ticker_map[code] = master[code]
+    drift = [(c, ticker_map[c], master[c]) for c in master
+             if c not in filled and ticker_map[c] != master[c]]
+    if filled:
+        logger.info("종목명 마스터 폴백 %d종목 (실시간 조회 누락분)", len(filled))
+    if drift:
+        logger.warning("종목명 불일치 %d종목 — 엑셀 갱신 대상 (실시간 → 엑셀): %s",
+                       len(drift), "; ".join(f"{c} {live}→{xls}" for c, live, xls in drift[:10]))
 
 
 # ── RS 유니버스 계산 (main.py에서 이식, 섹터 RS 집계 제외) ──
@@ -320,6 +350,8 @@ def _compute_rs_sync() -> tuple[dict, dict, dict]:
                 ticker_map.setdefault(str(code), str(name))
         except Exception:
             pass
+
+    _apply_master_names(ticker_map)
 
     period_returns: dict = {}
     for label, days, _w in RS_PERIODS:
@@ -1151,6 +1183,13 @@ async def main():
                                    rs_momentum=momentum, rs_new_high=new_high)
             result.sector = sector_map.get(ticker, "")
             out = _sanitize(result.to_dict())
+            # 중분류·주요제품은 종목 상세에서만 쓰므로 값이 있을 때만 실어보낸다
+            m = sector_master.load().get(ticker)
+            if m:
+                if m[1]:
+                    out["sector_sub"] = m[1]
+                if m[2]:
+                    out["product"] = m[2]
             if len(df) >= 2:
                 prev = df.iloc[-2]["close"]
                 out["change_pct"] = round((float(df.iloc[-1]["close"]) / float(prev) - 1) * 100, 2) if prev else 0.0
