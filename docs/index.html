@@ -991,7 +991,8 @@
         ${row('252일 RS', d.rs_detail?.q4?.toFixed(0) || '-')}
         ${row('RS 모멘텀', (d.rs_momentum > 0 ? `<span style="color:#8a7238">+${d.rs_momentum?.toFixed(1)}</span>` : `<span style="color:#ef4444">${d.rs_momentum?.toFixed(1)}</span>`) || '0')}
         ${row('RS 신고점', d.rs_new_high ? 'YES ★' : '-')}
-        ${row('업종', d.sector || '-')}
+        ${row('업종', d.sector ? _esc(d.sector) + (d.sector_sub ? ` <span style="color:#8b8fa3">› ${_esc(d.sector_sub)}</span>` : '') : '-')}
+        ${d.product ? row('주요제품', _esc(d.product)) : ''}
       </div>
       <div class="section">
         <h3>이동평균</h3>
