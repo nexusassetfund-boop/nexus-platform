@@ -206,6 +206,39 @@ def test_output_is_json_serialisable(tmp):
     assert set(out) >= {"updated_at", "counts", "candidates", "history", "params"}, set(out)
 
 
+def test_daily_accumulates_past_lists(tmp):
+    """일자별 명단은 그날 기준으로 다시 계산된다 — 오늘 명단에서 빠진 종목도 그날엔 남아야 한다."""
+    # A: 계속 문턱 근처 → 매일 후보
+    a = [100.0] * (DAYS - 1) + [96.0]
+    # B: 과거엔 문턱 근처였다가 최근 크게 밀림 → 오늘 명단엔 없지만 과거 일자엔 있어야 한다
+    faded = [70.0] * 20
+    b = [100.0] * (DAYS - 1 - len(faded)) + [96.0] + faded
+    out = build([make("000210", a), make("000220", b)], tmp)
+
+    today = {r["code"] for r in out["candidates"]}
+    assert "000210" in today and "000220" not in today, sorted(today)
+
+    daily = out["daily"]
+    assert daily, "일자별 명단이 비었다"
+    assert out["data_last_date"] not in daily, "오늘은 candidates 가 담당한다 — daily 에 중복 저장하면 안 된다"
+    ci = out["daily_cols"].index("code")
+    seen_b = [dt for dt, v in daily.items() if any(x[ci] == "000220" for x in v["items"])]
+    assert seen_b, "오늘 빠진 종목이 과거 일자에도 없다 — 누적이 안 되고 있다"
+
+    # 과거 항목은 배열 + meta 로 싣는다 (dict로 담으면 키 이름만 수백 KB)
+    one = next(iter(daily.values()))["items"][0]
+    assert isinstance(one, list) and len(one) == len(out["daily_cols"]), one
+    assert out["meta"]["000220"]["name"], out["meta"].get("000220")
+
+
+def test_daily_counts_match_items(tmp):
+    closes = [100.0] * (DAYS - 1) + [96.0]
+    out = build([make("000230", closes)], tmp)
+    for dt, v in out["daily"].items():
+        n = sum(v["counts"][s] for s in ("breaking", "imminent", "near", "watch", "touched_failed"))
+        assert n == len(v["items"]), f"{dt}: counts {v['counts']} vs items {len(v['items'])}"
+
+
 if __name__ == "__main__":
     import tempfile
     fails = 0
