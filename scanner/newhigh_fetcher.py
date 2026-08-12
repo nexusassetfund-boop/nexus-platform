@@ -91,6 +91,11 @@ FRESH_MAX_BREAKOUT_DAYS = 1   # 신선 후보: 창 안 돌파일이 이 이하
 FRESH_MAX_GAP = 5.0           # 신선 후보: 현재 gap 상한
 FRESH_MIN_AMT_RATIO = 1.2     # 신선 후보: 거래대금 20일 평균 대비 하한
 SPARK_BARS = 60          # 미니 차트에 실을 종가 개수
+DAILY_DAYS = 60          # 일자별 명단을 몇 영업일치 담을지 (참고 화면도 60일치를 보여준다)
+# 과거 일자 항목의 컬럼 순서. dict로 담으면 키 이름만 300KB가 넘어 배열로 싣는다.
+# seen_days·breakout_days(오늘 기준 집계)와 amount_avg20_eok(장중 재계산용 분모)는 뺀다.
+DAILY_COLS = ("code", "status", "gap", "price", "high52", "change",
+              "marcap_eok", "amount_eok", "amt_vs20", "rs", "rs_1m", "fresh")
 
 
 def download_marcap() -> pd.DataFrame:
@@ -212,14 +217,16 @@ def _wide(df: pd.DataFrame, col: str, like: pd.DataFrame | None = None) -> pd.Da
 
 
 def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
-    """52주 신고가 문턱에 닿았던 종목의 관찰 리스트를 만든다.
+    """52주 신고가 문턱에 닿은 종목의 관찰 리스트를, 최근 DAILY_DAYS 영업일치까지 만든다.
 
     상태 파일 없이 매번 전체 이력에서 다시 계산한다. 편입은 그날 gap이 ENTER_GAP 안에
-    들어오고 규모·유동성 게이트를 통과하면 성립하며, 그 뒤 CARRY_DAYS 동안은 gap이
-    벌어져도 CARRY_MAX_GAP 안이면 명단에 남긴다.
+    들어오면 성립하고, 그 뒤 CARRY_DAYS 동안은 gap이 벌어져도 CARRY_MAX_GAP 안이면
+    남긴다. 규모·유동성·RS 게이트는 매일 다시 건다.
+
+    스테이트리스라 과거 날짜도 같은 코드로 재현된다 — 날짜별 명단은 그 성질을 그대로 쓴다.
     """
-    # 250일 룩백 + 60일 창 + 여유. 전 구간을 행렬로 펴면 메모리가 커서 뒤쪽만 자른다.
-    need = HIGH52_BARS + WATCH_WINDOW + 20
+    # 250일 룩백 + 일자별 창 + 여유. 전 구간을 행렬로 펴면 메모리가 커서 뒤쪽만 자른다.
+    need = HIGH52_BARS + max(WATCH_WINDOW, DAILY_DAYS) + 40
     dates = np.sort(df_all.loc[~df_all["halted"], "Date"].unique())[-need:]
     d = df_all[df_all["Date"] >= dates[0]]
 
@@ -236,46 +243,10 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     # 유동성 하한을 통과시키고, 배수도 그만큼 눌려 '평소의 몇 배인가'를 과소평가한다.
     avg20 = amount.rolling(20, min_periods=10).mean().shift(1)
     amt_ratio = amount / avg20
-
-    # 끌고 가는 건 'gap이 후보 범위에 들어왔다'는 사실뿐이다. 규모·유동성·RS는 매일 다시 건다
-    # — 저쪽 08-11 리스트의 gap 12% 초과 4종목도 당일 거래대금은 전부 50억을 넘었다.
+    # 끌고 가는 건 'gap이 후보 범위에 들어왔다'는 사실뿐이다 — 게이트는 매일 다시 건다.
     gap_ok = gap <= ENTER_GAP
-    win_gap = gap.tail(WATCH_WINDOW)
-    seen_days = (win_gap <= GAP_WATCH).sum()                  # 후보로 노출된 일수
-    breakout_days = (win_gap <= 0).sum()                      # 종가 기준 돌파 성공 일수
+    watch_cap = CARRY_MAX_GAP if CARRY_DAYS > 0 else GAP_WATCH
 
-    today = gap.index[-1]
-    cur_gap, cur_close = gap.loc[today], close.loc[today]
-
-    # RS: 전 종목 수익률 백분위 (0~100). 같은 행렬을 재사용하므로 추가 조회가 없다.
-    def rs_of(bars: int) -> pd.Series:
-        if len(close) <= bars:
-            return pd.Series(dtype=float)
-        ret = close.iloc[-1] / close.iloc[-1 - bars] - 1
-        return (ret.rank(pct=True) * 100).round()
-
-    rs_12m, rs_1m = rs_of(HIGH52_BARS), rs_of(20)
-    cur_cap, cur_avg20 = marcap.loc[today], avg20.loc[today]
-
-    # 오늘 자격을 얻었거나, 최근 CARRY_DAYS 안에 얻고 아직 CARRY_MAX_GAP 안에 있는 종목.
-    # RS는 오늘 값만 있으므로(과거 시점 RS를 되살리려면 별도 이력이 필요) 오늘 기준으로 건다.
-    carry = gap_ok.tail(max(CARRY_DAYS, 1)).any() if CARRY_DAYS > 0 else gap_ok.loc[today]
-    cur_amt = amount.loc[today]
-
-    def gates_today(c):
-        """규모·유동성·RS는 매일 건다. 값이 비면(거래정지 등) 통과시키지 않는다."""
-        cap, a20, amt, rs = cur_cap.get(c), cur_avg20.get(c), cur_amt.get(c), rs_12m.get(c)
-        return (pd.notna(cap) and float(cap) >= MIN_MARCAP
-                and pd.notna(a20) and float(a20) >= MIN_AMOUNT_AVG20
-                and pd.notna(amt) and float(amt) >= MIN_AMOUNT_TODAY
-                and pd.notna(rs) and float(rs) >= MIN_RS)
-
-    codes = [
-        c for c in gap.columns
-        if bool(carry.get(c, False)) and pd.notna(cur_gap[c])
-        and cur_gap[c] <= (CARRY_MAX_GAP if CARRY_DAYS > 0 else GAP_WATCH)
-        and not rs_12m.empty and gates_today(c)
-    ]
     names = (df_all.sort_values("Date").groupby("Code")[["Name", "Market"]].last())
     sectors = {}
     if SECTOR_CACHE.exists():
@@ -286,48 +257,97 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     # 산업분류 마스터가 KRX 표준산업분류를 덮는다 (run_scan 과 동일 규칙)
     sectors.update(sector_master.level1())
 
-    watch_cap = CARRY_MAX_GAP if CARRY_DAYS > 0 else GAP_WATCH
-    rows, history = [], {}
-    for c in codes:
-        g_now = float(cur_gap[c])
-        status = classify(g_now, bool(touched.loc[today, c]), watch_cap)
-        if not status:
-            continue
-        px = raw_close[c].dropna()
-        # 등락률은 수정주가로 — 원시 종가끼리 나누면 액면분할일에 -50% 같은 값이 찍힌다
-        adj_px = close[c].dropna()
-        chg = round(float(adj_px.iloc[-1] / adj_px.iloc[-2] - 1) * 100, 2) if len(adj_px) >= 2 else 0.0
-        ratio = amt_ratio.loc[today, c]
-        n_break = int(breakout_days.get(c, 0))
-        rows.append({
-            "code": c,
-            "name": str(names["Name"].get(c, c)),
-            "market": str(names["Market"].get(c, "")),
-            "sector": sectors.get(c, ""),
-            "status": status,
-            "gap": round(g_now, 2),
-            "price": int(px.iloc[-1]),
-            "high52": int(round(float(base.loc[today, c]) / float(cur_close[c]) * px.iloc[-1])),
-            "change": chg,
-            "marcap_eok": round(float(cur_cap[c]) / 1e8),
-            # 당일 거래대금 게이트(50억)를 통과한 종목만 오므로 여기선 정수로 충분하다.
-            # 장중엔 누적 거래대금이 10억 미만일 수 있어 워커 쪽이 소수 1자리로 다시 쓴다.
-            "amount_eok": round(float(cur_amt[c]) / 1e8),
-            # 배수의 분모. 워커가 장중 누적 거래대금으로 배수를 다시 계산할 때 필요하다
-            # — 이 값이 없으면 장중에 배수가 종가 기준으로 굳어버린다.
-            "amount_avg20_eok": round(float(cur_avg20[c]) / 1e8, 1),
-            "amt_vs20": round(float(ratio), 1) if pd.notna(ratio) else None,
-            "rs": None if rs_12m.empty or pd.isna(rs_12m.get(c)) else int(rs_12m[c]),
-            "rs_1m": None if rs_1m.empty or pd.isna(rs_1m.get(c)) else int(rs_1m[c]),
-            "seen_days": int(seen_days.get(c, 0)),
-            "breakout_days": n_break,
-            # 신선 후보 = 아직 많이 안 뚫렸는데 거래대금이 붙기 시작한 종목 (스탁이지 동일 조건)
-            "fresh": (n_break <= FRESH_MAX_BREAKOUT_DAYS and g_now <= FRESH_MAX_GAP
-                      and pd.notna(ratio) and float(ratio) >= FRESH_MIN_AMT_RATIO),
-            "spark": [round(float(v), 1) for v in close[c].tail(SPARK_BARS).dropna()],
-        })
-        # 일자별 이력 — 후보로 노출된 날만 (전체 60일을 담으면 payload가 5배가 된다)
-        hist = []
+    def rs_at(pos: int, bars: int) -> pd.Series:
+        """그 시점 기준 전 종목 수익률 백분위 (0~100). 과거 날짜도 그날 기준으로 다시 매긴다
+        — 오늘 RS로 과거 명단을 판정하면 그날 없던 정보로 거르는 셈이 된다."""
+        if pos - bars < 0:
+            return pd.Series(dtype=float)
+        ret = close.iloc[pos] / close.iloc[pos - bars] - 1
+        return (ret.rank(pct=True) * 100).round()
+
+    def snapshot(pos: int, full: bool) -> tuple[list, dict]:
+        """pos 시점의 후보 명단.
+
+        full=True면 종목명·섹터·스파크라인까지 담은 dict(오늘용), False면 DAILY_COLS 순서의
+        배열(과거 일자용)을 돌려준다. 날짜 60일치를 dict로 담으면 키 반복만 300KB가 넘는다
+        — history 가 이미 배열 형식이라 표기도 일관된다.
+        """
+        dt = gap.index[pos]
+        cur_gap, cur_close = gap.iloc[pos], close.iloc[pos]
+        cur_cap, cur_avg20, cur_amt = marcap.iloc[pos], avg20.iloc[pos], amount.iloc[pos]
+        rs_12m, rs_1m = rs_at(pos, HIGH52_BARS), rs_at(pos, 20)
+        if rs_12m.empty:
+            return [], {}
+        lo = max(0, pos + 1 - max(CARRY_DAYS, 1))
+        carry = gap_ok.iloc[lo:pos + 1].any() if CARRY_DAYS > 0 else gap_ok.iloc[pos]
+        win = gap.iloc[max(0, pos + 1 - WATCH_WINDOW):pos + 1]
+        seen_days, breakout_days = (win <= GAP_WATCH).sum(), (win <= 0).sum()
+
+        rows = []
+        for c in gap.columns:
+            if not bool(carry.get(c, False)) or pd.isna(cur_gap[c]) or cur_gap[c] > watch_cap:
+                continue
+            cap, a20, amt, rs = cur_cap.get(c), cur_avg20.get(c), cur_amt.get(c), rs_12m.get(c)
+            if not (pd.notna(cap) and float(cap) >= MIN_MARCAP
+                    and pd.notna(a20) and float(a20) >= MIN_AMOUNT_AVG20
+                    and pd.notna(amt) and float(amt) >= MIN_AMOUNT_TODAY
+                    and pd.notna(rs) and float(rs) >= MIN_RS):
+                continue
+            g_now = float(cur_gap[c])
+            status = classify(g_now, bool(touched.iloc[pos][c]), watch_cap)
+            if not status:
+                continue
+            px = raw_close[c].iloc[:pos + 1].dropna()
+            adj = close[c].iloc[:pos + 1].dropna()      # 등락률은 수정주가로 — 분할일 왜곡 방지
+            if px.empty:
+                continue
+            ratio = amt_ratio.iloc[pos][c]
+            n_break = int(breakout_days.get(c, 0))
+            r = {
+                "code": c,
+                "status": status,
+                "gap": round(g_now, 2),
+                "price": int(px.iloc[-1]),
+                "high52": int(round(float(base.iloc[pos][c]) / float(cur_close[c]) * px.iloc[-1])),
+                "change": round(float(adj.iloc[-1] / adj.iloc[-2] - 1) * 100, 2) if len(adj) >= 2 else 0.0,
+                "marcap_eok": round(float(cap) / 1e8),
+                # 당일 거래대금 게이트(50억)를 통과한 종목만 오므로 정수로 충분하다.
+                # 장중엔 누적 거래대금이 10억 미만일 수 있어 워커 쪽이 소수 1자리로 다시 쓴다.
+                "amount_eok": round(float(amt) / 1e8),
+                # 배수의 분모. 워커가 장중 누적 거래대금으로 배수를 다시 계산할 때 필요하다.
+                "amount_avg20_eok": round(float(a20) / 1e8, 1),
+                "amt_vs20": round(float(ratio), 1) if pd.notna(ratio) else None,
+                "rs": int(rs),
+                "rs_1m": None if rs_1m.empty or pd.isna(rs_1m.get(c)) else int(rs_1m[c]),
+                "seen_days": int(seen_days.get(c, 0)),
+                "breakout_days": n_break,
+                # 신선 후보 = 아직 많이 안 뚫렸는데 거래대금이 붙기 시작한 종목
+                "fresh": (n_break <= FRESH_MAX_BREAKOUT_DAYS and g_now <= FRESH_MAX_GAP
+                          and pd.notna(ratio) and float(ratio) >= FRESH_MIN_AMT_RATIO),
+            }
+            if full:
+                r["name"] = str(names["Name"].get(c, c))
+                r["market"] = str(names["Market"].get(c, ""))
+                r["sector"] = sectors.get(c, "")
+                r["spark"] = [round(float(v), 1) for v in close[c].iloc[:pos + 1].tail(SPARK_BARS).dropna()]
+            rows.append(r)
+        rows.sort(key=lambda x: x["gap"])
+        counts = {s: sum(1 for x in rows if x["status"] == s)
+                  for s in ("breaking", "imminent", "near", "watch", "touched_failed")}
+        counts["fresh"] = sum(1 for x in rows if x["fresh"])
+        if not full:
+            rows = [[x[k] for k in DAILY_COLS] for x in rows]
+        return rows, counts
+
+    last = len(gap.index) - 1
+    rows, counts = snapshot(last, full=True)
+    today = gap.index[last]
+
+    # ── 종목별 일자별 이력 (오늘 명단 종목만) ──
+    win_gap = gap.iloc[max(0, last + 1 - WATCH_WINDOW):last + 1]
+    history = {}
+    for r in rows:
+        c, hist = r["code"], []
         for dt_ in win_gap.index:
             gv = win_gap.loc[dt_, c]
             if pd.isna(gv) or gv > GAP_WATCH:
@@ -338,10 +358,22 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
                              int(raw_close.loc[dt_, c]) if pd.notna(raw_close.loc[dt_, c]) else None])
         history[c] = hist
 
-    rows.sort(key=lambda r: r["gap"])
-    counts = {s: sum(1 for r in rows if r["status"] == s)
-              for s in ("breaking", "imminent", "near", "watch", "touched_failed")}
-    counts["fresh"] = sum(1 for r in rows if r["fresh"])
+    # ── 일자별 명단 누적 ──
+    # 종목명·시장·섹터는 날짜마다 반복하면 payload가 커진다 — meta로 한 번만 싣고 코드로 잇는다.
+    daily, meta = {}, {}
+    for pos in range(max(0, last - DAILY_DAYS + 1), last):     # 오늘은 candidates 가 담당
+        drows, dcounts = snapshot(pos, full=False)
+        if not drows:
+            continue
+        daily[gap.index[pos].strftime("%Y-%m-%d")] = {"counts": dcounts, "items": drows}
+        for x in drows:
+            meta.setdefault(x[0], None)          # DAILY_COLS[0] == "code"
+    for r in rows:
+        meta.setdefault(r["code"], None)
+    for c in list(meta):
+        meta[c] = {"name": str(names["Name"].get(c, c)),
+                   "market": str(names["Market"].get(c, "")), "sector": sectors.get(c, "")}
+
     out = {
         "updated_at": datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
         "data_last_date": str(pd.Timestamp(today).date()),
@@ -353,15 +385,19 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "min_amount_eok": round(MIN_AMOUNT_TODAY / 1e8),
             "min_amount_avg20_eok": round(MIN_AMOUNT_AVG20 / 1e8),
             "min_rs": MIN_RS, "carry_days": CARRY_DAYS, "carry_max_gap": CARRY_MAX_GAP,
+            "daily_days": DAILY_DAYS,
         },
         "counts": counts,
         "candidates": rows,
         "history": history,
+        "meta": meta,
+        "daily_cols": list(DAILY_COLS),
+        "daily": daily,
     }
     OUT_CAND.parent.mkdir(parents=True, exist_ok=True)
     OUT_CAND.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")),
                         encoding="utf-8")
-    print(f"  신고가 후보: {len(rows)}종목 {counts} → {OUT_CAND} "
+    print(f"  신고가 후보: {len(rows)}종목 {counts} · 일자별 {len(daily)}일 → {OUT_CAND} "
           f"({OUT_CAND.stat().st_size / 1024:.0f}KB)")
     return out
 
