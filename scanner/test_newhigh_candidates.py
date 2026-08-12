@@ -119,6 +119,27 @@ def test_kosdaq_included_and_history_shape(tmp):
     assert hist[-1][0] == out["data_last_date"], hist[-1]      # 최근 항목이 마지막 거래일
 
 
+def test_liquidity_floor_uses_20day_average_not_today(tmp):
+    closes = [100.0] * (DAYS - 1) + [99.0]
+    # 평소 거래가 없다가 오늘만 크게 터진 종목 — 20일 평균이 낮아 탈락해야 한다
+    thin = make("000140", closes, amount=nf.MIN_AMOUNT_AVG20 / 5)
+    thin.loc[thin.index[-1], "Amount"] = nf.MIN_AMOUNT_AVG20 * 50
+    # 평소 거래가 충분한데 오늘만 조용한 종목 — 통과해야 한다
+    liquid = make("000150", closes, amount=nf.MIN_AMOUNT_AVG20 * 3)
+    liquid.loc[liquid.index[-1], "Amount"] = nf.MIN_AMOUNT_AVG20 / 10
+    got = by_code(build([thin, liquid], tmp))
+    assert "000140" not in got, "당일만 터진 종목이 통과했다 — 당일 거래대금으로 걸렸다는 뜻"
+    assert "000150" in got, "평소 거래가 충분한데 오늘 조용하다고 탈락했다"
+
+
+def test_liquidity_floor_boundary(tmp):
+    closes = [100.0] * (DAYS - 1) + [99.0]
+    ok = make("000160", closes, amount=nf.MIN_AMOUNT_AVG20)          # 하한과 동일 = 통과
+    no = make("000170", closes, amount=nf.MIN_AMOUNT_AVG20 * 0.9)    # 미달 = 탈락
+    got = by_code(build([ok, no], tmp))
+    assert "000160" in got and "000170" not in got, sorted(got)
+
+
 def test_market_cap_floor(tmp):
     closes = [100.0] * (DAYS - 1) + [99.0]           # 신고가 문턱 — 시총만 다르게 준다
     big = make("000110", closes, marcap=nf.MIN_MARCAP)          # 하한 정확히 = 통과
@@ -138,10 +159,13 @@ def test_unknown_market_cap_is_excluded(tmp):
 
 
 def test_small_trading_value_keeps_a_decimal(tmp):
-    # 6천만원(0.6억)짜리 소액 종목이 0억으로 뭉개지면 데이터 누락처럼 보인다
+    # 유동성 하한은 직전 20일 평균에 걸리므로, 평소엔 거래가 있어도 당일만 조용할 수 있다
+    # (실데이터: 코람코더원리츠 평균 18억 / 당일 7.3억). 그 값이 0억으로 뭉개지면 누락처럼 보인다.
     closes = [100.0] * (DAYS - 1) + [99.0]
-    out = build([make("000090", closes, amount=6e7)], tmp)
-    assert by_code(out)["000090"]["amount_eok"] == 0.6, by_code(out)["000090"]
+    quiet = make("000090", closes, amount=3e10)
+    quiet.loc[quiet.index[-1], "Amount"] = 6e7            # 당일만 0.6억
+    assert by_code(build([quiet], tmp))["000090"]["amount_eok"] == 0.6
+
     out2 = build([make("000100", closes, amount=3e10)], tmp)   # 300억 → 정수
     assert by_code(out2)["000100"]["amount_eok"] == 300, by_code(out2)["000100"]
 

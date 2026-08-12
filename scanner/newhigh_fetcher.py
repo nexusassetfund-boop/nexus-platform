@@ -63,6 +63,10 @@ GAP_NEAR = 7.0           # 이하 = 근접
 GAP_WATCH = 15.0         # 이하 = 관찰. 초과하면 워치리스트에서 탈락
 WATCH_WINDOW = 60        # 등재 후 추적하는 영업일 수 (스탁이지 "최근 60영업일 기준"과 동일)
 MIN_MARCAP = 2_000e8     # 시총 하한 2,000억원 (marcap의 Marcap은 원 단위)
+# 유동성 하한 — 시총만으로는 지주사·리츠·인프라펀드처럼 '덩치는 큰데 거래가 없는' 종목이
+# 남는다. 당일 거래대금이 아니라 20거래일 평균으로 재는 게 중요하다: 당일로 걸면 오늘만
+# 조용했던 종목이 탈락하고, 평소 거래가 없다가 오늘 반짝한 종목이 통과해 정확히 거꾸로 걸린다.
+MIN_AMOUNT_AVG20 = 10e8  # 20거래일 평균 거래대금 10억원
 ENTER_GAP = GAP_IMMINENT  # 이 거리 안에 한 번이라도 들어오면 워치리스트 등재
 FRESH_MAX_BREAKOUT_DAYS = 1   # 신선 후보: 창 안 돌파일이 이 이하
 FRESH_MAX_GAP = 5.0           # 신선 후보: 현재 gap 상한
@@ -178,9 +182,14 @@ def classify(gap: float, touched: bool) -> str:
     return ""
 
 
-def _wide(df: pd.DataFrame, col: str) -> pd.DataFrame:
-    """(날짜 × 종목) 행렬. 거래정지일은 NaN으로 빼서 rolling 통계를 오염시키지 않는다."""
-    return df.loc[~df["halted"]].pivot_table(index="Date", columns="Code", values=col)
+def _wide(df: pd.DataFrame, col: str, like: pd.DataFrame | None = None) -> pd.DataFrame:
+    """(날짜 × 종목) 행렬. 거래정지일은 NaN으로 빼서 rolling 통계를 오염시키지 않는다.
+
+    pivot_table은 값이 전부 비는 날짜·종목을 통째로 떨어뜨려 컬럼별로 축이 어긋난다
+    (예: 시총이 없는 날). like를 주면 그 축에 맞춰 정렬해 .loc[날짜]가 항상 통하게 한다.
+    """
+    w = df.loc[~df["halted"]].pivot_table(index="Date", columns="Code", values=col)
+    return w if like is None else w.reindex(index=like.index, columns=like.columns)
 
 
 def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
@@ -195,15 +204,19 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     dates = np.sort(df_all.loc[~df_all["halted"], "Date"].unique())[-need:]
     d = df_all[df_all["Date"] >= dates[0]]
 
-    close, high = _wide(d, "adjClose"), _wide(d, "adjHigh")
-    amount, raw_close = _wide(d, "Amount"), _wide(d, "Close")
-    marcap = _wide(d, "Marcap")
+    close = _wide(d, "adjClose")            # 축의 기준 — 나머지는 여기에 맞춘다
+    high = _wide(d, "adjHigh", close)
+    amount, raw_close = _wide(d, "Amount", close), _wide(d, "Close", close)
+    marcap = _wide(d, "Marcap", close)
     # 기준가 = 당일을 뺀 직전 52주 고가. shift(1)을 빼면 gap이 항상 0 이하가 되어 무의미해진다.
     base = high.rolling(HIGH52_BARS, min_periods=HIGH52_MIN_BARS).max().shift(1)
 
     gap = (base - close) / close * 100
     touched = (high >= base) & (close < base)
-    amt_ratio = amount / amount.rolling(20, min_periods=10).mean()
+    # 당일을 뺀 직전 20거래일 평균(shift 1). 당일을 포함하면 하루 급등이 스스로 평균을 끌어올려
+    # 유동성 하한을 통과시키고, 배수도 그만큼 눌려 '평소의 몇 배인가'를 과소평가한다.
+    avg20 = amount.rolling(20, min_periods=10).mean().shift(1)
+    amt_ratio = amount / avg20
 
     win_gap = gap.tail(WATCH_WINDOW)
     entered = (win_gap <= ENTER_GAP).any()                    # 창 안에서 한 번이라도 문턱 도달
@@ -212,12 +225,12 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
 
     today = gap.index[-1]
     cur_gap, cur_close = gap.loc[today], close.loc[today]
-    cur_cap = marcap.loc[today] if today in marcap.index else pd.Series(dtype=float)
-    # 시총 하한 — 소형주는 문턱에 자주 닿았다 밀리기만 해 명단만 늘린다.
-    # 시총을 못 구한 종목은 통과시키지 않는다 (조용히 섞이면 하한이 무의미해진다).
+    cur_cap, cur_avg20 = marcap.loc[today], avg20.loc[today]
+    # 규모·유동성 하한. 둘 다 값이 없으면 통과시키지 않는다 — 조용히 섞이면 하한이 무의미해진다.
     codes = [c for c in gap.columns
              if entered.get(c, False) and pd.notna(cur_gap[c]) and cur_gap[c] <= GAP_WATCH
-             and pd.notna(cur_cap.get(c)) and float(cur_cap[c]) >= MIN_MARCAP]
+             and pd.notna(cur_cap.get(c)) and float(cur_cap[c]) >= MIN_MARCAP
+             and pd.notna(cur_avg20.get(c)) and float(cur_avg20[c]) >= MIN_AMOUNT_AVG20]
 
     # RS: 전 종목 수익률 백분위 (0~100). 같은 행렬을 재사용하므로 추가 조회가 없다.
     def rs_of(bars: int) -> pd.Series:
@@ -295,6 +308,7 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "high52_bars": HIGH52_BARS, "enter_gap": ENTER_GAP, "watch_gap": GAP_WATCH,
             "window": WATCH_WINDOW, "imminent": GAP_IMMINENT, "near": GAP_NEAR,
             "min_marcap_eok": round(MIN_MARCAP / 1e8),
+            "min_amount_avg20_eok": round(MIN_AMOUNT_AVG20 / 1e8),
         },
         "counts": counts,
         "candidates": rows,
