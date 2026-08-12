@@ -14,7 +14,7 @@ from newhigh_fetcher import add_adjusted, build_candidates, classify
 DAYS = nf.HIGH52_BARS + nf.WATCH_WINDOW + 40   # 기준가(shift 포함) 확보용
 
 
-def make(code, closes, highs=None, market="KOSPI", amount=1e9):
+def make(code, closes, highs=None, market="KOSPI", amount=1e9, marcap=1e12):
     """종가 리스트로 일봉 프레임 생성. 액면분할 없음(Changes = 전일 대비)."""
     highs = highs if highs is not None else list(closes)
     dates = pd.bdate_range("2023-01-02", periods=len(closes))
@@ -23,7 +23,7 @@ def make(code, closes, highs=None, market="KOSPI", amount=1e9):
         "Code": code, "Name": "종목" + code, "Date": dates,
         "High": highs, "Low": [c * 0.98 for c in closes], "Close": closes,
         "Changes": [c - p for c, p in zip(closes, prev)],
-        "Volume": 1000, "Amount": amount, "Marcap": 1e12, "Market": market,
+        "Volume": 1000, "Amount": amount, "Marcap": marcap, "Market": market,
     })
 
 
@@ -117,6 +117,24 @@ def test_kosdaq_included_and_history_shape(tmp):
     hist = out["history"]["000070"]
     assert hist and len(hist[0]) == 4, hist[:1]
     assert hist[-1][0] == out["data_last_date"], hist[-1]      # 최근 항목이 마지막 거래일
+
+
+def test_market_cap_floor(tmp):
+    closes = [100.0] * (DAYS - 1) + [99.0]           # 신고가 문턱 — 시총만 다르게 준다
+    big = make("000110", closes, marcap=nf.MIN_MARCAP)          # 하한 정확히 = 통과
+    small = make("000120", closes, marcap=nf.MIN_MARCAP - 1)    # 1원 미달 = 탈락
+    got = by_code(build([big, small], tmp))
+    assert "000110" in got, "시총 하한과 같으면 통과해야 한다"
+    assert "000120" not in got, "시총 하한 미달인데 남았다"
+    assert got["000110"]["marcap_eok"] == round(nf.MIN_MARCAP / 1e8), got["000110"]
+
+
+def test_unknown_market_cap_is_excluded(tmp):
+    # 시총이 비면 하한을 우회한다 — 조용히 통과시키면 필터가 무의미해진다
+    closes = [100.0] * (DAYS - 1) + [99.0]
+    frame = make("000130", closes)
+    frame.loc[frame.index[-1], "Marcap"] = float("nan")
+    assert by_code(build([frame], tmp)) == {}, "시총 미상 종목이 통과했다"
 
 
 def test_small_trading_value_keeps_a_decimal(tmp):

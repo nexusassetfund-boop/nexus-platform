@@ -62,6 +62,7 @@ GAP_IMMINENT = 3.0       # 이하 = 임박
 GAP_NEAR = 7.0           # 이하 = 근접
 GAP_WATCH = 15.0         # 이하 = 관찰. 초과하면 워치리스트에서 탈락
 WATCH_WINDOW = 60        # 등재 후 추적하는 영업일 수 (스탁이지 "최근 60영업일 기준"과 동일)
+MIN_MARCAP = 2_000e8     # 시총 하한 2,000억원 (marcap의 Marcap은 원 단위)
 ENTER_GAP = GAP_IMMINENT  # 이 거리 안에 한 번이라도 들어오면 워치리스트 등재
 FRESH_MAX_BREAKOUT_DAYS = 1   # 신선 후보: 창 안 돌파일이 이 이하
 FRESH_MAX_GAP = 5.0           # 신선 후보: 현재 gap 상한
@@ -196,6 +197,7 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
 
     close, high = _wide(d, "adjClose"), _wide(d, "adjHigh")
     amount, raw_close = _wide(d, "Amount"), _wide(d, "Close")
+    marcap = _wide(d, "Marcap")
     # 기준가 = 당일을 뺀 직전 52주 고가. shift(1)을 빼면 gap이 항상 0 이하가 되어 무의미해진다.
     base = high.rolling(HIGH52_BARS, min_periods=HIGH52_MIN_BARS).max().shift(1)
 
@@ -210,8 +212,12 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
 
     today = gap.index[-1]
     cur_gap, cur_close = gap.loc[today], close.loc[today]
+    cur_cap = marcap.loc[today] if today in marcap.index else pd.Series(dtype=float)
+    # 시총 하한 — 소형주는 문턱에 자주 닿았다 밀리기만 해 명단만 늘린다.
+    # 시총을 못 구한 종목은 통과시키지 않는다 (조용히 섞이면 하한이 무의미해진다).
     codes = [c for c in gap.columns
-             if entered.get(c, False) and pd.notna(cur_gap[c]) and cur_gap[c] <= GAP_WATCH]
+             if entered.get(c, False) and pd.notna(cur_gap[c]) and cur_gap[c] <= GAP_WATCH
+             and pd.notna(cur_cap.get(c)) and float(cur_cap[c]) >= MIN_MARCAP]
 
     # RS: 전 종목 수익률 백분위 (0~100). 같은 행렬을 재사용하므로 추가 조회가 없다.
     def rs_of(bars: int) -> pd.Series:
@@ -251,6 +257,7 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "price": int(px.iloc[-1]),
             "high52": int(round(float(base.loc[today, c]) / float(cur_close[c]) * px.iloc[-1])),
             "change": chg,
+            "marcap_eok": round(float(cur_cap[c]) / 1e8),
             # 소액 종목은 정수로 반올림하면 0억이 되어 데이터 누락처럼 보인다 → 10억 미만은 소수 1자리
             "amount_eok": (lambda v: round(v, 1) if v < 10 else round(v))(
                 float(amount.loc[today, c]) / 1e8),
@@ -287,6 +294,7 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
         "params": {
             "high52_bars": HIGH52_BARS, "enter_gap": ENTER_GAP, "watch_gap": GAP_WATCH,
             "window": WATCH_WINDOW, "imminent": GAP_IMMINENT, "near": GAP_NEAR,
+            "min_marcap_eok": round(MIN_MARCAP / 1e8),
         },
         "counts": counts,
         "candidates": rows,
