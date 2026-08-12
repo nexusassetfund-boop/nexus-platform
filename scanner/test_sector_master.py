@@ -136,46 +136,40 @@ def fake_names(monkeypatch):
     return _set
 
 
-def test_live_name_wins_over_master(fake_names):
-    """엑셀은 스냅샷이다 — 사명변경이 나면 실시간 이름이 이겨야 한다."""
-    fake_names({"005930": "옛이름전자"})
+def test_name_drift_never_touches_names(fake_names):
+    """엑셀은 스냅샷이다 — 사명변경이 나면 옛 이름이 되살아나므로 절대 덮거나 채우지 않는다."""
+    fake_names({"005930": "옛이름전자", "0126Z0": "삼성에피스홀딩스"})
     tmap = {"005930": "삼성전자"}
-    run_scan._apply_master_names(tmap)
-    assert tmap["005930"] == "삼성전자"
-
-
-def test_master_name_fills_only_gaps(fake_names):
-    """FDR·pykrx 둘 다 못 준 종목만 채운다 (엑셀이 더 최신인 신규 상장분)."""
-    fake_names({"005930": "삼성전자", "0126Z0": "삼성에피스홀딩스"})
-    tmap = {"005930": "삼성전자"}
-    run_scan._apply_master_names(tmap)
-    assert tmap["0126Z0"] == "삼성에피스홀딩스"
+    run_scan._report_name_drift(tmap)
+    assert tmap == {"005930": "삼성전자"}   # 덮지도, 0126Z0 을 채우지도 않았다
 
 
 def test_name_drift_is_logged(fake_names, caplog):
     """이름이 어긋나면 경고로 남긴다 — 엑셀 갱신 대상 목록이다."""
     fake_names({"005930": "옛이름전자"})
-    tmap = {"005930": "삼성전자"}
     with caplog.at_level("WARNING"):
-        run_scan._apply_master_names(tmap)
+        drift = run_scan._report_name_drift({"005930": "삼성전자"})
+    assert drift == [("005930", "삼성전자", "옛이름전자")]
     assert "종목명 불일치" in caplog.text
     assert "삼성전자→옛이름전자" in caplog.text
 
 
-def test_filled_names_are_not_counted_as_drift(fake_names, caplog):
-    """방금 채워 넣은 이름을 불일치로 세면 매 실행마다 가짜 경고가 뜬다."""
+def test_unscanned_code_is_not_drift(fake_names, caplog):
+    """스캔 유니버스 밖 종목(2,200여개)을 불일치로 세면 매 실행마다 가짜 경고가 뜬다."""
     fake_names({"0126Z0": "삼성에피스홀딩스"})
-    tmap = {}
     with caplog.at_level("WARNING"):
-        run_scan._apply_master_names(tmap)
+        assert run_scan._report_name_drift({}) == []
     assert "종목명 불일치" not in caplog.text
+
+
+def test_matching_names_are_not_drift(fake_names):
+    fake_names({"005930": "삼성전자"})
+    assert run_scan._report_name_drift({"005930": "삼성전자"}) == []
 
 
 def test_empty_master_names_is_noop(fake_names):
     fake_names({})
-    tmap = {"005930": "삼성전자"}
-    run_scan._apply_master_names(tmap)
-    assert tmap == {"005930": "삼성전자"}
+    assert run_scan._report_name_drift({"005930": "삼성전자"}) == []
 
 
 # ── 커밋된 실제 마스터 ──

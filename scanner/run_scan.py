@@ -299,26 +299,20 @@ def _sector_and_names() -> tuple[dict, dict, bool]:
     return ticker_map, sector_map, from_cache
 
 
-def _apply_master_names(ticker_map: dict) -> None:
-    """엑셀 종목명은 KRX/FDR **뒤**에 붙인다 — 스냅샷이라 사명변경이 나면 옛 이름이 살아난다.
+def _report_name_drift(ticker_map: dict) -> list:
+    """엑셀 종목명이 실시간과 어긋난 종목을 로그로 남긴다 — 엑셀 갱신 대상 목록.
 
-    두 가지 일만 한다:
-      1) 실시간 조회가 못 준 종목만 채운다 (엑셀이 FDR보다 최신인 신규 상장분 등)
-      2) 이름이 어긋난 종목을 로그로 남긴다 — 엑셀이 낡았다는 신호이자 갱신 대상 목록
+    **이름을 덮지도, 채우지도 않는다.** 엑셀은 스냅샷이라 사명변경이 나면 옛 이름이
+    되살아나고(한글과컴퓨터→한컴 등 실측 5건), 종목명은 유니버스 캐시·pykrx·FDR가
+    이미 채운다. 여기서 이름을 넣으면 '종목명 해결률' 열화 가드까지 무뎌진다.
     """
     master = sector_master.names()
-    if not master:
-        return
-    filled = [c for c in master if c not in ticker_map]
-    for code in filled:
-        ticker_map[code] = master[code]
     drift = [(c, ticker_map[c], master[c]) for c in master
-             if c not in filled and ticker_map[c] != master[c]]
-    if filled:
-        logger.info("종목명 마스터 폴백 %d종목 (실시간 조회 누락분)", len(filled))
+             if ticker_map.get(c) and ticker_map[c] != master[c]]
     if drift:
-        logger.warning("종목명 불일치 %d종목 — 엑셀 갱신 대상 (실시간 → 엑셀): %s",
+        logger.warning("종목명 불일치 %d종목 — 엑셀이 낡았다 (실시간 → 엑셀): %s",
                        len(drift), "; ".join(f"{c} {live}→{xls}" for c, live, xls in drift[:10]))
+    return drift
 
 
 # ── RS 유니버스 계산 (main.py에서 이식, 섹터 RS 집계 제외) ──
@@ -350,8 +344,6 @@ def _compute_rs_sync() -> tuple[dict, dict, dict]:
                 ticker_map.setdefault(str(code), str(name))
         except Exception:
             pass
-
-    _apply_master_names(ticker_map)
 
     period_returns: dict = {}
     for label, days, _w in RS_PERIODS:
@@ -1151,6 +1143,8 @@ async def main():
     loop = asyncio.get_event_loop()
     tmap, sector_map, period_returns = await loop.run_in_executor(None, _compute_rs_sync)
     ticker_map.update({k: v for k, v in tmap.items() if v})
+    # 이름이 다 모인 뒤에 검사한다 — 러너에선 FDR·pykrx가 자주 막혀 유니버스 캐시가 출처다
+    _report_name_drift(ticker_map)
     if not period_returns:
         period_returns = _rs_from_ohlcv_map(ohlcv_map)
     rs_map = _composite_rs(period_returns)
