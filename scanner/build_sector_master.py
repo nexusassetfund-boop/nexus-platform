@@ -1,7 +1,13 @@
 """산업분류 엑셀 → scanner/data/sector_master.json 변환 (로컬 1회성, CI에서는 안 돈다).
 
 엑셀 컬럼: 종목코드 | 종목명 | 시장 | 산업명(대) | 산업명(중) | 주요제품
-출력: {"updated": ..., "stocks": {"005930": ["반도체", "메모리반도체", "DRAM, NAND 등"]}}
+출력: {"updated": ...,
+       "stocks": {"005930": ["반도체", "메모리반도체", "DRAM, NAND 등"]},
+       "names":  {"005930": "삼성전자"}}
+
+종목명은 KRX/FDR 실시간 값이 우선이다 — 엑셀은 스냅샷이라 사명변경이 나면 옛 이름이
+살아난다. 여기 담는 건 (a) FDR·pykrx 둘 다 못 준 종목의 최후 폴백, (b) 엑셀이 낡았는지
+알려주는 드리프트 감지용이다.
 
 run_scan.py 가 이 파일을 읽어 KRX 표준산업분류(FDR)를 덮어쓴다. 마스터에 없는 종목은
 기존 KRX 분류를 그대로 쓰므로, 엑셀이 전 종목을 덮지 않아도 안전하다.
@@ -31,7 +37,7 @@ def build(src: Path) -> dict:
     ws = openpyxl.load_workbook(src, read_only=True, data_only=True).worksheets[0]
     rows = list(ws.iter_rows(values_only=True))[1:]
 
-    stocks, dupes, skipped = {}, [], []
+    stocks, names, dupes, skipped = {}, {}, [], []
     for r in rows:
         if not r or r[0] is None:
             continue
@@ -46,11 +52,14 @@ def build(src: Path) -> dict:
         if code in stocks and stocks[code] != clean:
             dupes.append((code, r[1]))
         stocks[code] = clean
+        if r[1]:
+            names[code] = str(r[1]).strip()
 
     return {
         "updated": dt.datetime.now().strftime("%Y-%m-%d"),
         "source": src.name,
         "stocks": dict(sorted(stocks.items())),
+        "names": dict(sorted(names.items())),
     }, dupes, skipped
 
 
@@ -63,7 +72,8 @@ def main() -> None:
 
     l1 = {v[0] for v in data["stocks"].values()}
     l2 = {v[1] for v in data["stocks"].values() if v[1]}
-    print(f"{OUT} — {len(data['stocks'])}종목 / 대분류 {len(l1)} / 중분류 {len(l2)}")
+    print(f"{OUT} — {len(data['stocks'])}종목 / 대분류 {len(l1)} / 중분류 {len(l2)} "
+          f"/ 종목명 {len(data['names'])}")
     if dupes:
         print(f"  중복 코드(값 불일치, 마지막 행 채택) {len(dupes)}건: {dupes[:5]}")
     if skipped:

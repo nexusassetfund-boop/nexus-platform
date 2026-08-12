@@ -56,22 +56,22 @@ def test_level1_takes_first_column(fake_master):
 
 def test_missing_master_file_is_harmless(monkeypatch, tmp_path):
     monkeypatch.setattr(sector_master, "PATH", tmp_path / "없는파일.json")
-    sector_master.load.cache_clear()
+    sector_master.reset()
     try:
         assert sector_master.load() == {}
     finally:
-        sector_master.load.cache_clear()
+        sector_master.reset()
 
 
 def test_corrupt_master_file_is_harmless(monkeypatch, tmp_path):
     p = tmp_path / "sector_master.json"
     p.write_text("{깨진 json", encoding="utf-8")
     monkeypatch.setattr(sector_master, "PATH", p)
-    sector_master.load.cache_clear()
+    sector_master.reset()
     try:
         assert sector_master.load() == {}
     finally:
-        sector_master.load.cache_clear()
+        sector_master.reset()
 
 
 def test_blank_level1_rows_are_dropped(monkeypatch, tmp_path):
@@ -80,11 +80,11 @@ def test_blank_level1_rows_are_dropped(monkeypatch, tmp_path):
     p.write_text(json.dumps({"stocks": {"005930": ["반도체", "", ""], "000660": ["", "", ""]}},
                             ensure_ascii=False), encoding="utf-8")
     monkeypatch.setattr(sector_master, "PATH", p)
-    sector_master.load.cache_clear()
+    sector_master.reset()
     try:
         assert set(sector_master.load()) == {"005930"}
     finally:
-        sector_master.load.cache_clear()
+        sector_master.reset()
 
 
 # ── run_scan 오버레이 ──
@@ -128,9 +128,59 @@ def test_master_adds_codes_missing_from_fdr(monkeypatch, tmp_path, fake_master):
     assert sector_map["0126Z0"] == "헬스케어"
 
 
+# ── 종목명: 실시간이 우선, 엑셀은 폴백 + 드리프트 감지 ──
+@pytest.fixture
+def fake_names(monkeypatch):
+    def _set(d):
+        monkeypatch.setattr(sector_master, "names", lambda: d)
+    return _set
+
+
+def test_live_name_wins_over_master(fake_names):
+    """엑셀은 스냅샷이다 — 사명변경이 나면 실시간 이름이 이겨야 한다."""
+    fake_names({"005930": "옛이름전자"})
+    tmap = {"005930": "삼성전자"}
+    run_scan._apply_master_names(tmap)
+    assert tmap["005930"] == "삼성전자"
+
+
+def test_master_name_fills_only_gaps(fake_names):
+    """FDR·pykrx 둘 다 못 준 종목만 채운다 (엑셀이 더 최신인 신규 상장분)."""
+    fake_names({"005930": "삼성전자", "0126Z0": "삼성에피스홀딩스"})
+    tmap = {"005930": "삼성전자"}
+    run_scan._apply_master_names(tmap)
+    assert tmap["0126Z0"] == "삼성에피스홀딩스"
+
+
+def test_name_drift_is_logged(fake_names, caplog):
+    """이름이 어긋나면 경고로 남긴다 — 엑셀 갱신 대상 목록이다."""
+    fake_names({"005930": "옛이름전자"})
+    tmap = {"005930": "삼성전자"}
+    with caplog.at_level("WARNING"):
+        run_scan._apply_master_names(tmap)
+    assert "종목명 불일치" in caplog.text
+    assert "삼성전자→옛이름전자" in caplog.text
+
+
+def test_filled_names_are_not_counted_as_drift(fake_names, caplog):
+    """방금 채워 넣은 이름을 불일치로 세면 매 실행마다 가짜 경고가 뜬다."""
+    fake_names({"0126Z0": "삼성에피스홀딩스"})
+    tmap = {}
+    with caplog.at_level("WARNING"):
+        run_scan._apply_master_names(tmap)
+    assert "종목명 불일치" not in caplog.text
+
+
+def test_empty_master_names_is_noop(fake_names):
+    fake_names({})
+    tmap = {"005930": "삼성전자"}
+    run_scan._apply_master_names(tmap)
+    assert tmap == {"005930": "삼성전자"}
+
+
 # ── 커밋된 실제 마스터 ──
 def test_committed_master_covers_universe():
-    sector_master.load.cache_clear()
+    sector_master.reset()
     stocks = sector_master.load()
     assert len(stocks) > 2000, f"마스터가 너무 적다: {len(stocks)}"
     assert stocks["005930"][0] == "반도체"
@@ -144,6 +194,12 @@ def test_committed_master_codes_are_wellformed():
     import re
     bad = [c for c in sector_master.load() if not re.fullmatch(r"\d[0-9A-Z]{5}", c)]
     assert not bad, f"코드 형식 위반: {bad[:10]}"
+
+
+def test_committed_master_has_names_for_every_stock():
+    sector_master.reset()
+    assert set(sector_master.names()) == set(sector_master.load())
+    assert sector_master.names()["005930"] == "삼성전자"
 
 
 def test_committed_master_covers_seeded_sector_cache():

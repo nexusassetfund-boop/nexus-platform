@@ -299,6 +299,28 @@ def _sector_and_names() -> tuple[dict, dict, bool]:
     return ticker_map, sector_map, from_cache
 
 
+def _apply_master_names(ticker_map: dict) -> None:
+    """엑셀 종목명은 KRX/FDR **뒤**에 붙인다 — 스냅샷이라 사명변경이 나면 옛 이름이 살아난다.
+
+    두 가지 일만 한다:
+      1) 실시간 조회가 못 준 종목만 채운다 (엑셀이 FDR보다 최신인 신규 상장분 등)
+      2) 이름이 어긋난 종목을 로그로 남긴다 — 엑셀이 낡았다는 신호이자 갱신 대상 목록
+    """
+    master = sector_master.names()
+    if not master:
+        return
+    filled = [c for c in master if c not in ticker_map]
+    for code in filled:
+        ticker_map[code] = master[code]
+    drift = [(c, ticker_map[c], master[c]) for c in master
+             if c not in filled and ticker_map[c] != master[c]]
+    if filled:
+        logger.info("종목명 마스터 폴백 %d종목 (실시간 조회 누락분)", len(filled))
+    if drift:
+        logger.warning("종목명 불일치 %d종목 — 엑셀 갱신 대상 (실시간 → 엑셀): %s",
+                       len(drift), "; ".join(f"{c} {live}→{xls}" for c, live, xls in drift[:10]))
+
+
 # ── RS 유니버스 계산 (main.py에서 이식, 섹터 RS 집계 제외) ──
 def _compute_rs_sync() -> tuple[dict, dict, dict]:
     """returns (ticker_map, sector_map, period_returns)"""
@@ -328,6 +350,8 @@ def _compute_rs_sync() -> tuple[dict, dict, dict]:
                 ticker_map.setdefault(str(code), str(name))
         except Exception:
             pass
+
+    _apply_master_names(ticker_map)
 
     period_returns: dict = {}
     for label, days, _w in RS_PERIODS:
