@@ -32,3 +32,9 @@ jobs:
         env:
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
         run: python scanner/kv_push.py docs/data/newhigh_backtest.json --list-key events --min 400 --check-prices
+      # 후보 리스트는 장세에 따라 0건도 정상이라 --min을 걸지 않는다. 산출 실패 시엔
+      # 파일 자체가 없으므로 --optional이 걸러 이전 KV본이 그대로 남는다(fail-soft).
+      - name: Worker KV 게시 (신고가 후보)
+        env:
+          NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
+        run: python scanner/kv_push.py docs/data/newhigh_candidates.json --optional

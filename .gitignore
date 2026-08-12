@@ -18,6 +18,7 @@ briefing_output.json
 tmp/
 marcap_cache/
 docs/data/newhigh_backtest.json
+docs/data/newhigh_candidates.json
 earnings_input.json
 earnings_output.json
 docs/data/trade_raw_cache.json
