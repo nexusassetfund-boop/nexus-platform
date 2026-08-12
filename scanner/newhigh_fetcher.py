@@ -64,13 +64,29 @@ HIGH52_MIN_BARS = 120    # 상장 6개월 미만은 기준가를 못 만든다 �
 GAP_IMMINENT = 3.0       # 이하 = 임박
 GAP_NEAR = 7.0           # 이하 = 근접
 GAP_WATCH = 12.0         # 이하 = 관찰. 초과하면 워치리스트에서 탈락 (스탁이지 "후보 범위 12% 이내")
-WATCH_WINDOW = 60        # 등재 후 추적하는 영업일 수 (스탁이지 "최근 60영업일 기준"과 동일)
-MIN_MARCAP = 2_000e8     # 시총 하한 2,000억원 (marcap의 Marcap은 원 단위)
-# 유동성 하한 — 시총만으로는 지주사·리츠·인프라펀드처럼 '덩치는 큰데 거래가 없는' 종목이
-# 남는다. 당일 거래대금이 아니라 20거래일 평균으로 재는 게 중요하다: 당일로 걸면 오늘만
-# 조용했던 종목이 탈락하고, 평소 거래가 없다가 오늘 반짝한 종목이 통과해 정확히 거꾸로 걸린다.
-MIN_AMOUNT_AVG20 = 10e8  # 20거래일 평균 거래대금 10억원
-ENTER_GAP = GAP_IMMINENT  # 이 거리 안에 한 번이라도 들어오면 워치리스트 등재
+WATCH_WINDOW = 60        # 일자별 이력을 보여주는 영업일 수 (스탁이지 "최근 60영업일 기준"과 동일)
+
+# ── 편입 게이트 ───────────────────────────────────────────────────
+# 스탁이지 daily API가 settings를 그대로 내려준다(2026-08-11 실측):
+#   max_gap 12 · near 7 · imminent 3 · min_rs 60 · min_market_cap_eok 500(우리는 2,000)
+#   · min_latest_trading_value_eok 50 · min_avg_trading_value_20d_eok 30
+# 그 값을 그대로 쓴다. 이전 규칙은 "최근 60영업일 중 하루라도 gap ≤ 3%"로 넓게 잡고
+# RS·당일 거래대금 게이트가 없어, 문턱 근처에서 조용히 머무는 종목까지 전부 담겼다
+# (2026-08-11 기준 우리 25종목 vs 저쪽 17종목, 교집합 4).
+# 시총만 저쪽(500억)보다 높게 유지한다 — 사용자 지시. 2026-08-10 기준 이 차이로 빠지는 건
+# 아이크래프트(1,037억) 하나뿐이고, 재현율은 65%로 같으면서 정밀도는 48%→50%로 오른다.
+MIN_MARCAP = 2_000e8          # 시총 하한 2,000억원 (marcap의 Marcap은 원 단위)
+MIN_AMOUNT_TODAY = 50e8       # 당일 거래대금 50억원 — '오늘 실제로 거래가 붙었나'
+# 평소 유동성은 당일이 아니라 20거래일 평균으로 재야 한다. 당일로만 걸면 오늘 조용했던
+# 종목이 탈락하고 평소 거래가 없다가 오늘 반짝한 종목이 통과해 거꾸로 걸린다 — 둘 다 본다.
+MIN_AMOUNT_AVG20 = 30e8       # 직전 20거래일 평균 거래대금 30억원
+MIN_RS = 60                   # 12개월 상대강도 하한. 저쪽 실측 최소치는 73.6이라 여유가 있다
+ENTER_GAP = GAP_WATCH         # 후보 범위(12%) 안에 들어오면 그날 편입 — 스냅샷 방식
+# 편입된 뒤 gap이 상한을 넘어도 이 영업일 수만큼은 명단에 남긴다. 저쪽 08-11 리스트에
+# gap 13.3~17.6%짜리가 4건 섞여 있어 '한 번 들어오면 얼마간 끌고 간다'가 확인됐다.
+# 정확한 기간은 공개되지 않아 실측으로 맞춰야 하는 값이다.
+CARRY_DAYS = 5
+CARRY_MAX_GAP = 20.0          # 끌고 가는 동안의 gap 상한 — 이보다 멀어지면 그때는 뺀다
 FRESH_MAX_BREAKOUT_DAYS = 1   # 신선 후보: 창 안 돌파일이 이 이하
 FRESH_MAX_GAP = 5.0           # 신선 후보: 현재 gap 상한
 FRESH_MIN_AMT_RATIO = 1.2     # 신선 후보: 거래대금 20일 평균 대비 하한
@@ -169,7 +185,7 @@ def supplement_krx(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def classify(gap: float, touched: bool) -> str:
+def classify(gap: float, touched: bool, watch_max: float = GAP_WATCH) -> str:
     """gap(%)과 장중 터치 여부로 상태를 정한다. 임계값은 스탁이지 화면 실측치.
     터치 후 밀림은 '고가는 기준가에 닿았는데 종가가 아래'라 gap 구간과 별개로 먼저 본다."""
     if gap <= 0:
@@ -180,7 +196,7 @@ def classify(gap: float, touched: bool) -> str:
         return "imminent"
     if gap <= GAP_NEAR:
         return "near"
-    if gap <= GAP_WATCH:
+    if gap <= watch_max:
         return "watch"
     return ""
 
@@ -198,9 +214,9 @@ def _wide(df: pd.DataFrame, col: str, like: pd.DataFrame | None = None) -> pd.Da
 def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     """52주 신고가 문턱에 닿았던 종목의 관찰 리스트를 만든다.
 
-    상태 파일 없이 매번 전체 이력에서 다시 계산한다. 등재 규칙은
-    "최근 WATCH_WINDOW 영업일 중 하루라도 gap ≤ ENTER_GAP" 이고,
-    현재 gap이 GAP_WATCH를 넘으면 탈락한다.
+    상태 파일 없이 매번 전체 이력에서 다시 계산한다. 편입은 그날 gap이 ENTER_GAP 안에
+    들어오고 규모·유동성 게이트를 통과하면 성립하며, 그 뒤 CARRY_DAYS 동안은 gap이
+    벌어져도 CARRY_MAX_GAP 안이면 명단에 남긴다.
     """
     # 250일 룩백 + 60일 창 + 여유. 전 구간을 행렬로 펴면 메모리가 커서 뒤쪽만 자른다.
     need = HIGH52_BARS + WATCH_WINDOW + 20
@@ -221,19 +237,15 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     avg20 = amount.rolling(20, min_periods=10).mean().shift(1)
     amt_ratio = amount / avg20
 
+    # 끌고 가는 건 'gap이 후보 범위에 들어왔다'는 사실뿐이다. 규모·유동성·RS는 매일 다시 건다
+    # — 저쪽 08-11 리스트의 gap 12% 초과 4종목도 당일 거래대금은 전부 50억을 넘었다.
+    gap_ok = gap <= ENTER_GAP
     win_gap = gap.tail(WATCH_WINDOW)
-    entered = (win_gap <= ENTER_GAP).any()                    # 창 안에서 한 번이라도 문턱 도달
     seen_days = (win_gap <= GAP_WATCH).sum()                  # 후보로 노출된 일수
     breakout_days = (win_gap <= 0).sum()                      # 종가 기준 돌파 성공 일수
 
     today = gap.index[-1]
     cur_gap, cur_close = gap.loc[today], close.loc[today]
-    cur_cap, cur_avg20 = marcap.loc[today], avg20.loc[today]
-    # 규모·유동성 하한. 둘 다 값이 없으면 통과시키지 않는다 — 조용히 섞이면 하한이 무의미해진다.
-    codes = [c for c in gap.columns
-             if entered.get(c, False) and pd.notna(cur_gap[c]) and cur_gap[c] <= GAP_WATCH
-             and pd.notna(cur_cap.get(c)) and float(cur_cap[c]) >= MIN_MARCAP
-             and pd.notna(cur_avg20.get(c)) and float(cur_avg20[c]) >= MIN_AMOUNT_AVG20]
 
     # RS: 전 종목 수익률 백분위 (0~100). 같은 행렬을 재사용하므로 추가 조회가 없다.
     def rs_of(bars: int) -> pd.Series:
@@ -243,6 +255,27 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
         return (ret.rank(pct=True) * 100).round()
 
     rs_12m, rs_1m = rs_of(HIGH52_BARS), rs_of(20)
+    cur_cap, cur_avg20 = marcap.loc[today], avg20.loc[today]
+
+    # 오늘 자격을 얻었거나, 최근 CARRY_DAYS 안에 얻고 아직 CARRY_MAX_GAP 안에 있는 종목.
+    # RS는 오늘 값만 있으므로(과거 시점 RS를 되살리려면 별도 이력이 필요) 오늘 기준으로 건다.
+    carry = gap_ok.tail(max(CARRY_DAYS, 1)).any() if CARRY_DAYS > 0 else gap_ok.loc[today]
+    cur_amt = amount.loc[today]
+
+    def gates_today(c):
+        """규모·유동성·RS는 매일 건다. 값이 비면(거래정지 등) 통과시키지 않는다."""
+        cap, a20, amt, rs = cur_cap.get(c), cur_avg20.get(c), cur_amt.get(c), rs_12m.get(c)
+        return (pd.notna(cap) and float(cap) >= MIN_MARCAP
+                and pd.notna(a20) and float(a20) >= MIN_AMOUNT_AVG20
+                and pd.notna(amt) and float(amt) >= MIN_AMOUNT_TODAY
+                and pd.notna(rs) and float(rs) >= MIN_RS)
+
+    codes = [
+        c for c in gap.columns
+        if bool(carry.get(c, False)) and pd.notna(cur_gap[c])
+        and cur_gap[c] <= (CARRY_MAX_GAP if CARRY_DAYS > 0 else GAP_WATCH)
+        and not rs_12m.empty and gates_today(c)
+    ]
     names = (df_all.sort_values("Date").groupby("Code")[["Name", "Market"]].last())
     sectors = {}
     if SECTOR_CACHE.exists():
@@ -253,10 +286,11 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
     # 산업분류 마스터가 KRX 표준산업분류를 덮는다 (run_scan 과 동일 규칙)
     sectors.update(sector_master.level1())
 
+    watch_cap = CARRY_MAX_GAP if CARRY_DAYS > 0 else GAP_WATCH
     rows, history = [], {}
     for c in codes:
         g_now = float(cur_gap[c])
-        status = classify(g_now, bool(touched.loc[today, c]))
+        status = classify(g_now, bool(touched.loc[today, c]), watch_cap)
         if not status:
             continue
         px = raw_close[c].dropna()
@@ -276,9 +310,9 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "high52": int(round(float(base.loc[today, c]) / float(cur_close[c]) * px.iloc[-1])),
             "change": chg,
             "marcap_eok": round(float(cur_cap[c]) / 1e8),
-            # 소액 종목은 정수로 반올림하면 0억이 되어 데이터 누락처럼 보인다 → 10억 미만은 소수 1자리
-            "amount_eok": (lambda v: round(v, 1) if v < 10 else round(v))(
-                float(amount.loc[today, c]) / 1e8),
+            # 당일 거래대금 게이트(50억)를 통과한 종목만 오므로 여기선 정수로 충분하다.
+            # 장중엔 누적 거래대금이 10억 미만일 수 있어 워커 쪽이 소수 1자리로 다시 쓴다.
+            "amount_eok": round(float(cur_amt[c]) / 1e8),
             # 배수의 분모. 워커가 장중 누적 거래대금으로 배수를 다시 계산할 때 필요하다
             # — 이 값이 없으면 장중에 배수가 종가 기준으로 굳어버린다.
             "amount_avg20_eok": round(float(cur_avg20[c]) / 1e8, 1),
@@ -316,7 +350,9 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "high52_bars": HIGH52_BARS, "enter_gap": ENTER_GAP, "watch_gap": GAP_WATCH,
             "window": WATCH_WINDOW, "imminent": GAP_IMMINENT, "near": GAP_NEAR,
             "min_marcap_eok": round(MIN_MARCAP / 1e8),
+            "min_amount_eok": round(MIN_AMOUNT_TODAY / 1e8),
             "min_amount_avg20_eok": round(MIN_AMOUNT_AVG20 / 1e8),
+            "min_rs": MIN_RS, "carry_days": CARRY_DAYS, "carry_max_gap": CARRY_MAX_GAP,
         },
         "counts": counts,
         "candidates": rows,
