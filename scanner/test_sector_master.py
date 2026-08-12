@@ -172,6 +172,36 @@ def test_empty_master_names_is_noop(fake_names):
     assert run_scan._report_name_drift({"005930": "삼성전자"}) == []
 
 
+# ── 원장 섹터 재적용 ──
+def test_ledger_sectors_are_restamped(fake_master):
+    """편입 시점 섹터가 굳어 있으면 분류를 바꿔도 보유 종목은 옛 값을 든다 (실측 13/15)."""
+    fake_master({"005930": ["반도체", "", ""], "000660": ["반도체", "", ""]})
+    lv = {"holdings": [{"ticker": "005930", "sector": "통신 및 방송 장비 제조업"}],
+          "exited": [{"ticker": "000660", "sector": "전자부품 제조업"}]}
+    assert run_scan._stamp_sectors(lv) == 2
+    assert lv["holdings"][0]["sector"] == "반도체"
+    assert lv["exited"][0]["sector"] == "반도체"      # 이탈 기록도 같이 — 프론트 '이탈' 탭에 뜬다
+
+
+def test_restamp_keeps_uncovered_sector(fake_master):
+    fake_master({"005930": ["반도체", "", ""]})
+    lv = {"holdings": [{"ticker": "123456", "sector": "기타 화학제품 제조업"}], "exited": []}
+    assert run_scan._stamp_sectors(lv) == 0
+    assert lv["holdings"][0]["sector"] == "기타 화학제품 제조업"
+
+
+def test_restamp_is_idempotent(fake_master):
+    """이미 맞는 값은 세지 않는다 — 매 실행 '재적용 N건' 로그가 뜨면 노이즈다."""
+    fake_master({"005930": ["반도체", "", ""]})
+    lv = {"holdings": [{"ticker": "005930", "sector": "반도체"}], "exited": []}
+    assert run_scan._stamp_sectors(lv) == 0
+
+
+def test_restamp_handles_missing_keys(fake_master):
+    fake_master({"005930": ["반도체", "", ""]})
+    assert run_scan._stamp_sectors({}) == 0
+
+
 # ── 커밋된 실제 마스터 ──
 def test_committed_master_covers_universe():
     sector_master.reset()
