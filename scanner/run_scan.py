@@ -716,6 +716,25 @@ def _update_ledger(ledger: dict, results: list[dict], kospi: dict, params: dict)
     return {"holdings": new_holdings, "exited": exited}
 
 
+def _stamp_sectors(ledger_view: dict) -> int:
+    """원장(보유·이탈)의 섹터를 현재 분류로 다시 찍는다.
+
+    섹터는 파생값인데 편입 시점에 한 번 박고 갱신 대상에서 빠져 있었다. 그래서 분류
+    체계를 바꿔도 기존 보유 종목은 옛 값을 그대로 들고 있다 — 워크플로를 다시 돌려도
+    안 고쳐진다. 마스터에 없는 종목은 기존 값을 유지한다.
+    """
+    master = sector_master.level1()
+    if not master:
+        return 0
+    changed = 0
+    for row in list(ledger_view.get("holdings") or []) + list(ledger_view.get("exited") or []):
+        s = master.get(row.get("ticker"))
+        if s and row.get("sector") != s:
+            row["sector"] = s
+            changed += 1
+    return changed
+
+
 def _refresh_ledger_view(ledger: dict, results: list[dict]) -> dict:
     """장중 표시용 원장 뷰 — 편입/이탈/부분익절 확정 없이 보유종목의
     현재가·수익률만 최신 스캔 시세로 갱신한 사본을 돌려준다.
@@ -1273,6 +1292,11 @@ async def main():
     else:
         ledger_view = ledger
         logger.info("휴장일 실행 — 전략 포트폴리오는 직전 마감 상태 유지")
+
+    # 세 갈래 모두 통과 — 마감 실행에선 ledger_view is ledger 라 state.json 원본까지 함께 고쳐진다
+    stamped = _stamp_sectors(ledger_view)
+    if stamped:
+        logger.info("원장 섹터 재적용: %d건", stamped)
 
     # RS 히스토리 스냅샷 (스캔 대상만, 최대 8개)
     snap_rs = {t: round(rs_map.get(t, 0)) for t, _ in scan_targets if t in rs_map}
