@@ -119,6 +119,15 @@ def test_kosdaq_included_and_history_shape(tmp):
     assert hist[-1][0] == out["data_last_date"], hist[-1]      # 최근 항목이 마지막 거래일
 
 
+def test_small_trading_value_keeps_a_decimal(tmp):
+    # 6천만원(0.6억)짜리 소액 종목이 0억으로 뭉개지면 데이터 누락처럼 보인다
+    closes = [100.0] * (DAYS - 1) + [99.0]
+    out = build([make("000090", closes, amount=6e7)], tmp)
+    assert by_code(out)["000090"]["amount_eok"] == 0.6, by_code(out)["000090"]
+    out2 = build([make("000100", closes, amount=3e10)], tmp)   # 300억 → 정수
+    assert by_code(out2)["000100"]["amount_eok"] == 300, by_code(out2)["000100"]
+
+
 def test_output_is_json_serialisable(tmp):
     out = build([make("000080", [100.0] * (DAYS - 1) + [99.0])], tmp)
     json.loads(tmp.read_text(encoding="utf-8"))                 # 파일이 실제로 파싱되는지

@@ -439,8 +439,9 @@ def _note(*parts):
 CODE_RE = re.compile(r"\d[0-9A-Z]{5}")   # 신형 영숫자 코드(0156T0) 포함
 
 # 전략 소스 — 홈 화면 '전략 교차' 카드(nexus-cloud/public/index.html의 _HOME_X)와 같은 규칙.
-# '지금 후보 명단'을 내놓는 소스만 넣는다. 백테스터 3종(무상증자·52주 신고가·Post IPO)은
-# 과거 이벤트 시뮬레이션이라 현재 명단이 아니므로 제외.
+# '지금 후보 명단'을 내놓는 소스만 넣는다. 백테스터 3종(무상증자·주도주 승격·Post IPO)은
+# 과거 이벤트 시뮬레이션이라 현재 명단이 아니므로 제외. 반면 신고가 후보는 매일 갱신되는
+# 현재 명단이라 포함한다.
 # (키, 라벨, 경로, 리스트필드, 코드필드, 필터, 근거)
 STRATEGY_SOURCES = [
     ("stage", "스테이지 감지기", "/data/scan.json", "results", "ticker",
@@ -460,6 +461,13 @@ STRATEGY_SOURCES = [
      lambda r: _note(f"점수 {r.get('pullback_score', '-')}/7")),
     ("canslim", "CANSLIM", "/data/canslim.json", "candidates", "ticker", None,
      lambda r: _note(f"점수 {r.get('canslim_score', '-')}", "7요건" if r.get("strict") == 1 else None)),
+    # 관찰(고가까지 7% 초과)까지 넣으면 명단이 묽어진다 — 실제로 문턱에 붙은 상태만 교차에 태운다.
+    ("nhcand", "신고가 후보", "/data/newhigh_candidates.json", "candidates", "code",
+     lambda r: r.get("status") in ("breaking", "imminent", "near", "touched_failed"),
+     # gap은 0 이하가 '이미 넘었다'는 뜻 — 부호를 그대로 쓰면 돌파를 '남음'으로 읽는다
+     lambda r: _note((f"{abs(r['gap']):.1f}% 돌파" if r["gap"] <= 0 else f"고가까지 {r['gap']:.1f}%")
+                     if r.get("gap") is not None else None,
+                     f"RS {r['rs']}" if r.get("rs") is not None else None)),
     # 수급은 S·A(외국인 기준)만 교차 대상. C(기관 단독)는 백테스트에서 (−) 신호라
     # 섞으면 교차 명단이 오히려 나쁜 종목을 추천하는 꼴이 된다.
     ("flow", "수급", "/data/flow.json", "candidates", "ticker",
@@ -497,7 +505,8 @@ def collect_strategy_cross():
             if not any(h["key"] == key for h in rec["hits"]):
                 rec["hits"].append({"key": key, "label": label, "why": note(r)})
         sources[key] = {"label": label, "count": len(members),
-                        "as_of": str(d.get("updated") or d.get("scan_time") or "")[:10] or None,
+                        "as_of": str(d.get("updated") or d.get("scan_time")
+                                     or d.get("data_last_date") or "")[:10] or None,
                         "top": [{"name": r.get("name"), "why": note(r)} for r in members[:3]]}
     rows = sorted((r for r in by_code.values() if len(r["hits"]) >= 2),
                   key=lambda r: (-len(r["hits"]), r["name"] or ""))[:12]
@@ -544,6 +553,15 @@ def collect_platform(today_str):
         }
     except Exception as e:
         out["trade_export_error"] = str(e)[:100]
+    try:  # 신고가 후보 상태 분포 — 개별 종목은 cross.sources.nhcand가 이미 싣는다.
+        # 돌파 11 / 관찰 14는 같은 후보 수라도 장세 해석이 정반대라 분포만 따로 넘긴다.
+        nc = _get_json("/data/newhigh_candidates.json")
+        out["newhigh_candidates"] = {
+            "what": "52주 신고가까지 남은 거리로 추린 관찰 리스트 — 돌파한 뒤가 아니라 돌파 전을 본다",
+            "as_of": nc.get("data_last_date"), "counts": nc.get("counts"),
+        }
+    except Exception as e:
+        out["newhigh_candidates_error"] = str(e)[:100]
     try:  # 실적 캘린더 — 오늘·내일 예정 최대 5건
         ev = _get_json("/data/earnings_calendar.json").get("events") or []
         soon = [e for e in ev if e.get("date") and today_str <= e["date"] <=

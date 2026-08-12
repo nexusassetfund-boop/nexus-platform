@@ -251,7 +251,9 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             "price": int(px.iloc[-1]),
             "high52": int(round(float(base.loc[today, c]) / float(cur_close[c]) * px.iloc[-1])),
             "change": chg,
-            "amount_eok": round(float(amount.loc[today, c]) / 1e8),
+            # 소액 종목은 정수로 반올림하면 0억이 되어 데이터 누락처럼 보인다 → 10억 미만은 소수 1자리
+            "amount_eok": (lambda v: round(v, 1) if v < 10 else round(v))(
+                float(amount.loc[today, c]) / 1e8),
             "amt_vs20": round(float(ratio), 1) if pd.notna(ratio) else None,
             "rs": None if rs_12m.empty or pd.isna(rs_12m.get(c)) else int(rs_12m[c]),
             "rs_1m": None if rs_1m.empty or pd.isna(rs_1m.get(c)) else int(rs_1m[c]),
