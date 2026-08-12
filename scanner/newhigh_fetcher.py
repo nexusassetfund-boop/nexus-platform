@@ -274,6 +274,9 @@ def build_candidates(df_all: pd.DataFrame, last_date: pd.Timestamp) -> dict:
             # 소액 종목은 정수로 반올림하면 0억이 되어 데이터 누락처럼 보인다 → 10억 미만은 소수 1자리
             "amount_eok": (lambda v: round(v, 1) if v < 10 else round(v))(
                 float(amount.loc[today, c]) / 1e8),
+            # 배수의 분모. 워커가 장중 누적 거래대금으로 배수를 다시 계산할 때 필요하다
+            # — 이 값이 없으면 장중에 배수가 종가 기준으로 굳어버린다.
+            "amount_avg20_eok": round(float(cur_avg20[c]) / 1e8, 1),
             "amt_vs20": round(float(ratio), 1) if pd.notna(ratio) else None,
             "rs": None if rs_12m.empty or pd.isna(rs_12m.get(c)) else int(rs_12m[c]),
             "rs_1m": None if rs_1m.empty or pd.isna(rs_1m.get(c)) else int(rs_1m[c]),
