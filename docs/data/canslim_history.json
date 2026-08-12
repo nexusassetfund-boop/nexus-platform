@@ -31,5 +31,68 @@
     "last_rank": 5
    }
   ]
+ },
+ {
+  "date": "2026-08-12",
+  "added": [
+   {
+    "code": "483650",
+    "name": "달바글로벌",
+    "score": 7
+   },
+   {
+    "code": "192820",
+    "name": "코스맥스",
+    "score": 7
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "score": 6
+   },
+   {
+    "code": "241710",
+    "name": "코스메카코리아",
+    "score": 6
+   },
+   {
+    "code": "161890",
+    "name": "한국콜마",
+    "score": 5
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "score": 5
+   },
+   {
+    "code": "013700",
+    "name": "까뮤이앤씨",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "001540",
+    "name": "안국약품",
+    "days": 2,
+    "last_score": 5,
+    "last_rank": 16
+   },
+   {
+    "code": "003650",
+    "name": "미창석유",
+    "days": 2,
+    "last_score": 5,
+    "last_rank": 18
+   },
+   {
+    "code": "052460",
+    "name": "아이크래프트",
+    "days": 2,
+    "last_score": 5,
+    "last_rank": 8
+   }
+  ]
  }
 ]
