@@ -414,5 +414,72 @@
    }
   ],
   "removed": []
+ },
+ {
+  "date": "2026-08-12",
+  "added": [
+   {
+    "code": "036930",
+    "name": "주성엔지니어링",
+    "score": 5
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "score": 4
+   },
+   {
+    "code": "475150",
+    "name": "SK이터닉스",
+    "score": 4
+   },
+   {
+    "code": "007340",
+    "name": "DN오토모티브",
+    "score": 3
+   }
+  ],
+  "removed": [
+   {
+    "code": "018260",
+    "name": "삼성에스디에스",
+    "first_seen": "2026-08-11",
+    "days": 1,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "031980",
+    "name": "피에스케이홀딩스",
+    "first_seen": "2026-08-11",
+    "days": 1,
+    "last_score": 6,
+    "last_price": 108700.0
+   },
+   {
+    "code": "079940",
+    "name": "가비아",
+    "first_seen": "2026-08-11",
+    "days": 1,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "first_seen": "2026-08-10",
+    "days": 2,
+    "last_score": null,
+    "last_price": null
+   },
+   {
+    "code": "181710",
+    "name": "NHN",
+    "first_seen": "2026-08-11",
+    "days": 1,
+    "last_score": null,
+    "last_price": null
+   }
+  ]
  }
 ]
