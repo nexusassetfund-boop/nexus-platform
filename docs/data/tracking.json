@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-13T13:13:05+09:00",
+ "updated": "2026-08-13T13:29:45+09:00",
  "kospi": {
   "price": 6848.39,
   "ma200": 5857.94,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-13T13:13:05+09:00"
+  "updated": "2026-08-13T13:29:44+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7880.0,
+   "last_price": 7910.0,
    "peak_price": 7940.0,
-   "return_pct": -0.76,
-   "total_return_pct": -0.76,
+   "return_pct": -0.38,
+   "total_return_pct": -0.38,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 142600.0,
+   "last_price": 142900.0,
    "peak_price": 153100.0,
-   "return_pct": -6.86,
-   "total_return_pct": -6.86,
+   "return_pct": -6.66,
+   "total_return_pct": -6.66,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -81,10 +81,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 43000.0,
+   "last_price": 43150.0,
    "peak_price": 44050.0,
-   "return_pct": -2.38,
-   "total_return_pct": -2.38,
+   "return_pct": -2.04,
+   "total_return_pct": -2.04,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -111,10 +111,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 128500.0,
+   "last_price": 129100.0,
    "peak_price": 123400.0,
-   "return_pct": 17.46,
-   "total_return_pct": 15.13,
+   "return_pct": 18.01,
+   "total_return_pct": 15.4,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -130,7 +130,7 @@
    "was_extended": true,
    "days_held": 2,
    "stage_now": 3,
-   "confidence_now": 95,
+   "confidence_now": 100,
    "last_updated": "2026-08-12",
    "signals_at_entry": [
     "MTT 통과",
@@ -150,10 +150,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 90,
    "init_stop_pct": -10.0,
-   "last_price": 31550.0,
+   "last_price": 31600.0,
    "peak_price": 32550.0,
-   "return_pct": -3.07,
-   "total_return_pct": -3.07,
+   "return_pct": -2.92,
+   "total_return_pct": -2.92,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -180,10 +180,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 134300.0,
+   "last_price": 133600.0,
    "peak_price": 132500.0,
-   "return_pct": 1.36,
-   "total_return_pct": 0.68,
+   "return_pct": 0.83,
+   "total_return_pct": 0.42,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -219,10 +219,10 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 302000.0,
+   "last_price": 302500.0,
    "peak_price": 333500.0,
-   "return_pct": -6.79,
-   "total_return_pct": -6.79,
+   "return_pct": -6.64,
+   "total_return_pct": -6.64,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -249,10 +249,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7880.0,
+   "last_price": 7910.0,
    "peak_price": 7940.0,
-   "return_pct": -0.76,
-   "total_return_pct": -0.76,
+   "return_pct": -0.38,
+   "total_return_pct": -0.38,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -279,10 +279,10 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 44500.0,
+   "last_price": 44550.0,
    "peak_price": 46200.0,
-   "return_pct": 1.6,
-   "total_return_pct": 1.6,
+   "return_pct": 1.71,
+   "total_return_pct": 1.71,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -309,10 +309,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 142600.0,
+   "last_price": 142900.0,
    "peak_price": 153100.0,
-   "return_pct": -6.86,
-   "total_return_pct": -6.86,
+   "return_pct": -6.66,
+   "total_return_pct": -6.66,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -339,10 +339,10 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 26500.0,
+   "last_price": 26450.0,
    "peak_price": 28400.0,
-   "return_pct": -6.53,
-   "total_return_pct": -6.53,
+   "return_pct": -6.7,
+   "total_return_pct": -6.7,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -369,10 +369,10 @@
    "entry_price": 130900.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.6,
-   "last_price": 120000.0,
+   "last_price": 119600.0,
    "peak_price": 130900.0,
-   "return_pct": -8.33,
-   "total_return_pct": -8.33,
+   "return_pct": -8.63,
+   "total_return_pct": -8.63,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -399,10 +399,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 98,
    "init_stop_pct": -6.4,
-   "last_price": 128500.0,
+   "last_price": 129100.0,
    "peak_price": 123400.0,
-   "return_pct": 17.46,
-   "total_return_pct": 15.13,
+   "return_pct": 18.01,
+   "total_return_pct": 15.4,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -418,7 +418,7 @@
    "was_extended": true,
    "days_held": 2,
    "stage_now": 3,
-   "confidence_now": 95,
+   "confidence_now": 100,
    "last_updated": "2026-08-12",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 8.15x",
@@ -438,10 +438,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.8,
-   "last_price": 43000.0,
+   "last_price": 43150.0,
    "peak_price": 44050.0,
-   "return_pct": -2.38,
-   "total_return_pct": -2.38,
+   "return_pct": -2.04,
+   "total_return_pct": -2.04,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -468,10 +468,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 93,
    "init_stop_pct": -7.4,
-   "last_price": 31550.0,
+   "last_price": 31600.0,
    "peak_price": 32550.0,
-   "return_pct": -3.07,
-   "total_return_pct": -3.07,
+   "return_pct": -2.92,
+   "total_return_pct": -2.92,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -498,10 +498,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -12.0,
-   "last_price": 134300.0,
+   "last_price": 133600.0,
    "peak_price": 132500.0,
-   "return_pct": 1.36,
-   "total_return_pct": 0.68,
+   "return_pct": 0.83,
+   "total_return_pct": 0.42,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -616,7 +616,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": 0.46
+    "cum": 0.64
    }
   ],
   "1": [
@@ -670,7 +670,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.89
+    "cum": -1.81
    }
   ]
  },
@@ -726,7 +726,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.96
+    "cum": -1.78
    }
   ],
   "1": [
@@ -780,7 +780,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.93
+    "cum": -1.85
    }
   ]
  },
@@ -788,7 +788,7 @@
  "stats": {
   "holding_count": 16,
   "exited_count": 1,
-  "avg_return": -0.91,
+  "avg_return": -0.79,
   "exited_avg_return": -3.52,
   "win_rate": 0.0
  }
