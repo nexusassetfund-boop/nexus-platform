@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-13T14:12:57+09:00",
+ "updated": "2026-08-13T15:04:31+09:00",
  "kospi": {
-  "price": 6848.39,
-  "ma200": 5857.94,
-  "ma50": 7442.19,
+  "price": 6833.0,
+  "ma200": 5857.86,
+  "ma50": 7441.88,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-13T14:12:57+09:00"
+  "updated": "2026-08-13T15:04:31+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7970.0,
+   "last_price": 8170.0,
    "peak_price": 7940.0,
-   "return_pct": 0.38,
-   "total_return_pct": 0.38,
+   "return_pct": 2.9,
+   "total_return_pct": 2.9,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 142800.0,
+   "last_price": 142700.0,
    "peak_price": 153100.0,
-   "return_pct": -6.73,
-   "total_return_pct": -6.73,
+   "return_pct": -6.79,
+   "total_return_pct": -6.79,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -81,10 +81,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 42450.0,
+   "last_price": 42800.0,
    "peak_price": 44050.0,
-   "return_pct": -3.63,
-   "total_return_pct": -3.63,
+   "return_pct": -2.84,
+   "total_return_pct": -2.84,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -111,10 +111,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 127900.0,
+   "last_price": 125500.0,
    "peak_price": 123400.0,
-   "return_pct": 16.91,
-   "total_return_pct": 14.86,
+   "return_pct": 14.72,
+   "total_return_pct": 13.76,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -180,10 +180,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 133500.0,
+   "last_price": 134300.0,
    "peak_price": 132500.0,
-   "return_pct": 0.75,
-   "total_return_pct": 0.38,
+   "return_pct": 1.36,
+   "total_return_pct": 0.68,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -219,10 +219,10 @@
    "entry_price": 324000.0,
    "entry_confidence": 93,
    "init_stop_pct": -9.0,
-   "last_price": 302000.0,
+   "last_price": 303500.0,
    "peak_price": 333500.0,
-   "return_pct": -6.79,
-   "total_return_pct": -6.79,
+   "return_pct": -6.33,
+   "total_return_pct": -6.33,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -249,10 +249,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7970.0,
+   "last_price": 8170.0,
    "peak_price": 7940.0,
-   "return_pct": 0.38,
-   "total_return_pct": 0.38,
+   "return_pct": 2.9,
+   "total_return_pct": 2.9,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -279,18 +279,18 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 44500.0,
+   "last_price": 44000.0,
    "peak_price": 46200.0,
-   "return_pct": 1.6,
-   "total_return_pct": 1.6,
+   "return_pct": 0.46,
+   "total_return_pct": 0.46,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
    "tp_3r_done": false,
    "was_extended": false,
    "days_held": 7,
-   "stage_now": null,
-   "confidence_now": 0,
+   "stage_now": 0,
+   "confidence_now": 45,
    "last_updated": "2026-08-12",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
@@ -309,10 +309,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 142800.0,
+   "last_price": 142700.0,
    "peak_price": 153100.0,
-   "return_pct": -6.73,
-   "total_return_pct": -6.73,
+   "return_pct": -6.79,
+   "total_return_pct": -6.79,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -339,10 +339,10 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 26400.0,
+   "last_price": 26500.0,
    "peak_price": 28400.0,
-   "return_pct": -6.88,
-   "total_return_pct": -6.88,
+   "return_pct": -6.53,
+   "total_return_pct": -6.53,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -369,10 +369,10 @@
    "entry_price": 130900.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.6,
-   "last_price": 119300.0,
+   "last_price": 121500.0,
    "peak_price": 130900.0,
-   "return_pct": -8.86,
-   "total_return_pct": -8.86,
+   "return_pct": -7.18,
+   "total_return_pct": -7.18,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -399,10 +399,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 98,
    "init_stop_pct": -6.4,
-   "last_price": 127900.0,
+   "last_price": 125500.0,
    "peak_price": 123400.0,
-   "return_pct": 16.91,
-   "total_return_pct": 14.86,
+   "return_pct": 14.72,
+   "total_return_pct": 13.76,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -438,10 +438,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.8,
-   "last_price": 42450.0,
+   "last_price": 42800.0,
    "peak_price": 44050.0,
-   "return_pct": -3.63,
-   "total_return_pct": -3.63,
+   "return_pct": -2.84,
+   "total_return_pct": -2.84,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -498,10 +498,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -12.0,
-   "last_price": 133500.0,
+   "last_price": 134300.0,
    "peak_price": 132500.0,
-   "return_pct": 0.75,
-   "total_return_pct": 0.38,
+   "return_pct": 1.36,
+   "total_return_pct": 0.68,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -616,7 +616,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": 0.52
+    "cum": 0.93
    }
   ],
   "1": [
@@ -670,7 +670,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.92
+    "cum": -1.59
    }
   ]
  },
@@ -726,7 +726,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.98
+    "cum": -1.64
    }
   ],
   "1": [
@@ -780,7 +780,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -2.02
+    "cum": -1.68
    }
   ]
  },
@@ -788,7 +788,7 @@
  "stats": {
   "holding_count": 16,
   "exited_count": 1,
-  "avg_return": -0.91,
+  "avg_return": -0.53,
   "exited_avg_return": -3.52,
   "win_rate": 0.0
  }
