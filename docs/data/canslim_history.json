@@ -94,5 +94,57 @@
     "last_rank": 8
    }
   ]
+ },
+ {
+  "date": "2026-08-13",
+  "added": [
+   {
+    "code": "039830",
+    "name": "오로라",
+    "score": 6
+   },
+   {
+    "code": "052460",
+    "name": "아이크래프트",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "005430",
+    "name": "한국공항",
+    "days": 3,
+    "last_score": 5,
+    "last_rank": 20
+   },
+   {
+    "code": "008490",
+    "name": "서흥",
+    "days": 3,
+    "last_score": 6,
+    "last_rank": 7
+   },
+   {
+    "code": "093320",
+    "name": "케이아이엔엑스",
+    "days": 2,
+    "last_score": 5,
+    "last_rank": 23
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 15
+   },
+   {
+    "code": "483650",
+    "name": "달바글로벌",
+    "days": 1,
+    "last_score": 7,
+    "last_rank": 2
+   }
+  ]
  }
 ]
