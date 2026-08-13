@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-13T15:39:56+09:00",
+ "updated": "2026-08-13T15:42:13+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 143788196.0,
@@ -164,8 +164,8 @@
    "code": "000660",
    "subclass": "HBM",
    "name": "SK하이닉스",
-   "price": 1593000.0,
-   "change_pct": 5.92,
+   "price": 1598000.0,
+   "change_pct": 6.25,
    "target_price": null,
    "upside_pct": -100.0,
    "mktcap": "11,600,222억",
