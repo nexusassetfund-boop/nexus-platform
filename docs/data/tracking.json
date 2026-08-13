@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-13T15:09:36+09:00",
+ "updated": "2026-08-13T15:13:17+09:00",
  "kospi": {
   "price": 6833.0,
   "ma200": 5857.86,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-13T15:09:36+09:00"
+  "updated": "2026-08-13T15:13:17+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 8190.0,
+   "last_price": 8240.0,
    "peak_price": 7940.0,
-   "return_pct": 3.15,
-   "total_return_pct": 3.15,
+   "return_pct": 3.78,
+   "total_return_pct": 3.78,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -111,10 +111,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 125800.0,
+   "last_price": 125100.0,
    "peak_price": 123400.0,
-   "return_pct": 14.99,
-   "total_return_pct": 13.9,
+   "return_pct": 14.35,
+   "total_return_pct": 13.58,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -150,10 +150,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 90,
    "init_stop_pct": -10.0,
-   "last_price": 31900.0,
+   "last_price": 32000.0,
    "peak_price": 32550.0,
-   "return_pct": -2.0,
-   "total_return_pct": -2.0,
+   "return_pct": -1.69,
+   "total_return_pct": -1.69,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -180,10 +180,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 134600.0,
+   "last_price": 134400.0,
    "peak_price": 132500.0,
-   "return_pct": 1.58,
-   "total_return_pct": 0.79,
+   "return_pct": 1.43,
+   "total_return_pct": 0.72,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -249,10 +249,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 8190.0,
+   "last_price": 8240.0,
    "peak_price": 7940.0,
-   "return_pct": 3.15,
-   "total_return_pct": 3.15,
+   "return_pct": 3.78,
+   "total_return_pct": 3.78,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -369,10 +369,10 @@
    "entry_price": 130900.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.6,
-   "last_price": 121500.0,
+   "last_price": 121200.0,
    "peak_price": 130900.0,
-   "return_pct": -7.18,
-   "total_return_pct": -7.18,
+   "return_pct": -7.41,
+   "total_return_pct": -7.41,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -399,10 +399,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 98,
    "init_stop_pct": -6.4,
-   "last_price": 125800.0,
+   "last_price": 125100.0,
    "peak_price": 123400.0,
-   "return_pct": 14.99,
-   "total_return_pct": 13.9,
+   "return_pct": 14.35,
+   "total_return_pct": 13.58,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -468,10 +468,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 93,
    "init_stop_pct": -7.4,
-   "last_price": 31900.0,
+   "last_price": 32000.0,
    "peak_price": 32550.0,
-   "return_pct": -2.0,
-   "total_return_pct": -2.0,
+   "return_pct": -1.69,
+   "total_return_pct": -1.69,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -498,10 +498,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -12.0,
-   "last_price": 134600.0,
+   "last_price": 134400.0,
    "peak_price": 132500.0,
-   "return_pct": 1.58,
-   "total_return_pct": 0.79,
+   "return_pct": 1.43,
+   "total_return_pct": 0.72,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -616,7 +616,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": 1.06
+    "cum": 1.17
    }
   ],
   "1": [
@@ -670,7 +670,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.56
+    "cum": -1.52
    }
   ]
  },
@@ -726,7 +726,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.46
+    "cum": -1.41
    }
   ],
   "1": [
@@ -780,7 +780,7 @@
    },
    {
     "date": "2026-08-13",
-    "cum": -1.62
+    "cum": -1.61
    }
   ]
  },
@@ -788,7 +788,7 @@
  "stats": {
   "holding_count": 16,
   "exited_count": 1,
-  "avg_return": -0.45,
+  "avg_return": -0.39,
   "exited_avg_return": -3.52,
   "win_rate": 0.0
  }
