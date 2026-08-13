@@ -481,5 +481,64 @@
     "last_price": null
    }
   ]
+ },
+ {
+  "date": "2026-08-13",
+  "added": [
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "score": 6
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "score": 6
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "score": 4
+   },
+   {
+    "code": "332570",
+    "name": "PS일렉트로닉스",
+    "score": 4
+   }
+  ],
+  "removed": [
+   {
+    "code": "007340",
+    "name": "DN오토모티브",
+    "first_seen": "2026-08-12",
+    "days": 1,
+    "last_score": 3,
+    "last_price": 47050.0
+   },
+   {
+    "code": "019210",
+    "name": "와이지-원",
+    "first_seen": "2026-07-24",
+    "days": 20,
+    "last_score": 5,
+    "last_price": 18050.0
+   },
+   {
+    "code": "037460",
+    "name": "삼지전자",
+    "first_seen": "2026-08-10",
+    "days": 3,
+    "last_score": 5,
+    "last_price": 39600.0
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "first_seen": "2026-08-06",
+    "days": 7,
+    "last_score": 3,
+    "last_price": 41600.0
+   }
+  ]
  }
 ]
