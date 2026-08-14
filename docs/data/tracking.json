@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-14T12:31:06+09:00",
+ "updated": "2026-08-14T13:09:40+09:00",
  "kospi": {
-  "price": 6912.87,
-  "ma200": 5872.91,
-  "ma50": 7406.95,
+  "price": 6883.72,
+  "ma200": 5872.76,
+  "ma50": 7406.37,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-14T12:31:06+09:00"
+  "updated": "2026-08-14T13:09:40+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 8025.0,
+   "last_price": 7980.0,
    "peak_price": 8140.0,
-   "return_pct": 1.07,
-   "total_return_pct": 1.07,
+   "return_pct": 0.5,
+   "total_return_pct": 0.5,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 147000.0,
+   "last_price": 145800.0,
    "peak_price": 153100.0,
-   "return_pct": -3.98,
-   "total_return_pct": -3.98,
+   "return_pct": -4.77,
+   "total_return_pct": -4.77,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -111,10 +111,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 126100.0,
+   "last_price": 127000.0,
    "peak_price": 124500.0,
-   "return_pct": 15.27,
-   "total_return_pct": 14.03,
+   "return_pct": 16.09,
+   "total_return_pct": 14.44,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -150,10 +150,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 90,
    "init_stop_pct": -10.0,
-   "last_price": 32100.0,
+   "last_price": 32250.0,
    "peak_price": 32550.0,
-   "return_pct": -1.38,
-   "total_return_pct": -1.38,
+   "return_pct": -0.92,
+   "total_return_pct": -0.92,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -180,10 +180,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 136200.0,
+   "last_price": 137200.0,
    "peak_price": 135200.0,
-   "return_pct": 2.79,
-   "total_return_pct": 1.4,
+   "return_pct": 3.55,
+   "total_return_pct": 1.77,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -249,10 +249,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 8025.0,
+   "last_price": 7980.0,
    "peak_price": 8140.0,
-   "return_pct": 1.07,
-   "total_return_pct": 1.07,
+   "return_pct": 0.5,
+   "total_return_pct": 0.5,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -309,10 +309,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 147000.0,
+   "last_price": 145800.0,
    "peak_price": 153100.0,
-   "return_pct": -3.98,
-   "total_return_pct": -3.98,
+   "return_pct": -4.77,
+   "total_return_pct": -4.77,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -339,10 +339,10 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 27600.0,
+   "last_price": 27450.0,
    "peak_price": 28400.0,
-   "return_pct": -2.65,
-   "total_return_pct": -2.65,
+   "return_pct": -3.17,
+   "total_return_pct": -3.17,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -369,10 +369,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 98,
    "init_stop_pct": -6.4,
-   "last_price": 126100.0,
+   "last_price": 127000.0,
    "peak_price": 124500.0,
-   "return_pct": 15.27,
-   "total_return_pct": 14.03,
+   "return_pct": 16.09,
+   "total_return_pct": 14.44,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -438,10 +438,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 93,
    "init_stop_pct": -7.4,
-   "last_price": 32100.0,
+   "last_price": 32250.0,
    "peak_price": 32550.0,
-   "return_pct": -1.38,
-   "total_return_pct": -1.38,
+   "return_pct": -0.92,
+   "total_return_pct": -0.92,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -468,10 +468,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -12.0,
-   "last_price": 136200.0,
+   "last_price": 137200.0,
    "peak_price": 135200.0,
-   "return_pct": 2.79,
-   "total_return_pct": 1.4,
+   "return_pct": 3.55,
+   "total_return_pct": 1.77,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -507,10 +507,10 @@
    "entry_price": 29350.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.8,
-   "last_price": 28100.0,
+   "last_price": 28050.0,
    "peak_price": 29350.0,
-   "return_pct": -4.26,
-   "total_return_pct": -4.26,
+   "return_pct": -4.43,
+   "total_return_pct": -4.43,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -653,7 +653,7 @@
    },
    {
     "date": "2026-08-14",
-    "cum": 2.2
+    "cum": 2.18
    }
   ],
   "1": [
@@ -711,7 +711,7 @@
    },
    {
     "date": "2026-08-14",
-    "cum": -1.09
+    "cum": -1.16
    }
   ]
  },
@@ -771,7 +771,7 @@
    },
    {
     "date": "2026-08-14",
-    "cum": -0.18
+    "cum": -0.09
    }
   ],
   "1": [
@@ -829,7 +829,7 @@
    },
    {
     "date": "2026-08-14",
-    "cum": -1.17
+    "cum": -1.19
    }
   ]
  },
@@ -837,7 +837,7 @@
  "stats": {
   "holding_count": 16,
   "exited_count": 2,
-  "avg_return": 0.78,
+  "avg_return": 0.72,
   "exited_avg_return": -6.23,
   "win_rate": 0.0
  }
