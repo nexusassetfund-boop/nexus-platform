@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-14T15:37:06+09:00",
+ "updated": "2026-08-14T17:00:33+09:00",
  "kospi": {
-  "price": 6936.97,
-  "ma200": 5873.03,
-  "ma50": 7407.44,
+  "price": 6967.62,
+  "ma200": 5873.18,
+  "ma50": 7408.05,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-14T15:37:06+09:00"
+  "updated": "2026-08-14T17:00:33+09:00"
  },
  "holdings": [
   {
@@ -223,11 +223,19 @@
    "peak_price": 58900.0,
    "return_pct": 0.0,
    "total_return_pct": 0.0,
-   "qty_frac": 1.0,
+   "qty_frac": 0.5,
    "realized_pct": 0.0,
-   "partials": [],
+   "partials": [
+    {
+     "date": "2026-08-14",
+     "price": 58900.0,
+     "frac": 0.5,
+     "ret_pct": 0.0,
+     "reason": "소진 확장 익절 (10 EMA +20% 이격)"
+    }
+   ],
    "tp_3r_done": false,
-   "was_extended": false,
+   "was_extended": true,
    "days_held": 0,
    "stage_now": 3,
    "confidence_now": 100,
@@ -237,7 +245,9 @@
     "RS 96 — 최상위 강세",
     "RS 신고점",
     "전고점 돌파! 거래량 4.61x"
-   ]
+   ],
+   "stop_warning": false,
+   "last_action": "2026-08-14 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
   },
   {
    "ticker": "051900",
