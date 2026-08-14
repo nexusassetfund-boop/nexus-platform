@@ -1,0 +1,80 @@
+name: 전략 조합 백테스트 (연구용·수동)
+# 퀄리티성장×눌림목×신고가×CANSLIM 교집합/개선안 조합 검증. 정기 실행 안 함.
+# DART_API_KEY가 시크릿에만 있어 quality/canslim 멤버 생성은 여기서 돈다.
+# 캐시 접두사를 canslim-backtest와 공유(cbt-cache-)해 가격 pkl·DART NI 캐시를 즉시 상속한다.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "members(멤버 생성) | probe(멤버 수·교집합 점검) | run(본 실행) | grid(민감도)"
+        type: choice
+        default: members
+        options: [members, probe, run, grid]
+      strategy:
+        description: "members 전용 — 생성할 전략"
+        type: choice
+        default: all
+        options: [all, quality, canslim, pullback, newhigh]
+      window:
+        description: "교집합 판정 창 (거래일)"
+        default: "20"
+      start:
+        default: "2021-07-01"
+      end:
+        default: "2026-06-30"
+      tag:
+        description: "출력 파일 접미사"
+        default: ""
+permissions:
+  contents: read
+concurrency: { group: combo-backtest, cancel-in-progress: false }
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350   # 최악: 가격 pkl 재수집 ~75분 + quality DART 워밍 ~2시간
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 캐시 복원
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: tmp
+          key: cbt-cache-${{ github.run_id }}
+          restore-keys: cbt-cache-
+
+      - name: 로직 테스트
+        run: python scanner/test_combo_backtest.py
+
+      - name: 백테스트 실행
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: |
+          set -o pipefail
+          mkdir -p tmp
+          python scanner/combo_backtest.py \
+            --${{ inputs.mode }} --strategy "${{ inputs.strategy }}" \
+            --window "${{ inputs.window }}" \
+            --start "${{ inputs.start }}" --end "${{ inputs.end }}" \
+            --tag "${{ inputs.tag }}" 2>&1 | tee tmp/combo_run_${{ inputs.mode }}.log
+
+      - name: 캐시 저장
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: tmp
+          key: cbt-cache-${{ github.run_id }}
+
+      - name: 결과 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: combo-backtest-${{ inputs.mode }}${{ inputs.tag }}
+          retention-days: 30
+          path: |
+            tmp/combo_*.json
+            tmp/combo_run_*.log
