@@ -540,5 +540,82 @@
     "last_price": 41600.0
    }
   ]
+ },
+ {
+  "date": "2026-08-14",
+  "added": [
+   {
+    "code": "034730",
+    "name": "SK",
+    "score": 7
+   },
+   {
+    "code": "018260",
+    "name": "삼성에스디에스",
+    "score": 6
+   },
+   {
+    "code": "019210",
+    "name": "와이지-원",
+    "score": 5
+   },
+   {
+    "code": "008060",
+    "name": "대덕",
+    "score": 5
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "score": 4
+   },
+   {
+    "code": "041830",
+    "name": "인바디",
+    "score": 3
+   }
+  ],
+  "removed": [
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "first_seen": "2026-08-12",
+    "days": 2,
+    "last_score": 6,
+    "last_price": 14370.0
+   },
+   {
+    "code": "005090",
+    "name": "SGC에너지",
+    "first_seen": "2026-08-04",
+    "days": 10,
+    "last_score": 2,
+    "last_price": 61800.0
+   },
+   {
+    "code": "006400",
+    "name": "삼성SDI",
+    "first_seen": "2026-08-13",
+    "days": 1,
+    "last_score": 6,
+    "last_price": 487000.0
+   },
+   {
+    "code": "080220",
+    "name": "제주반도체",
+    "first_seen": "2026-08-13",
+    "days": 1,
+    "last_score": 4,
+    "last_price": 88300.0
+   },
+   {
+    "code": "332570",
+    "name": "PS일렉트로닉스",
+    "first_seen": "2026-08-13",
+    "days": 1,
+    "last_score": 4,
+    "last_price": 11160.0
+   }
+  ]
  }
 ]
