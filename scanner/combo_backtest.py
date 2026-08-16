@@ -428,8 +428,7 @@ def _bench_fill_row(nav: pd.Series, cash_w: pd.Series, bench: pd.Series) -> dict
     }
 
 
-def run_portfolios(days, rebals, names, defs: dict, bench, tag="", slip_mult=1.0,
-                   with_bench_fill: set | None = None) -> dict:
+def run_portfolios(days, rebals, names, defs: dict, bench, tag="", slip_mult=1.0) -> dict:
     all_codes = set()
     screens_map = {}
     for label, (fn, top) in defs.items():
@@ -451,12 +450,15 @@ def run_portfolios(days, rebals, names, defs: dict, bench, tag="", slip_mult=1.0
         fn = defs[label][0]
         if getattr(fn, "gate_n", 0):
             row["ranker_coverage_pct"] = round(fn.cov_n / fn.gate_n * 100, 1)
-        if with_bench_fill and label in with_bench_fill:
-            row["bench_fill"] = _bench_fill_row(nav, aux["cash_w"], bench)
+        # 교집합은 후보가 top 슬롯보다 적으면 나머지가 자동 현금이 된다. 하락장에서는
+        # '현금이라서' 벤치를 이기는데 그건 알파가 아니다 — 남는 현금을 벤치에 넣은
+        # 대안 수익률을 항상 같이 낸다. 이걸 이기지 못하면 그 조합의 초과수익은 현금 효과다.
+        row["bench_fill"] = _bench_fill_row(nav, aux["cash_w"], bench)
+        row["bf_excess_cagr_pct"] = round(row["bench_fill"]["cagr_pct"] - m["bench_cagr_pct"], 2)
         results[label] = row
-        logger.info("[%s] CAGR %.2f%% (초과 %.2f%%p) MDD %.1f%% 보유 %.1f 공집합 %.0f%%%s",
-                    label, row["cagr_pct"], row["excess_cagr_pct"], row["mdd_pct"],
-                    row["avg_holdings"], row["empty_month_pct"],
+        logger.info("[%s] 초과 %.2f%%p (현금중립 %.2f%%p) MDD %.1f%% 보유 %.1f 현금 %.0f%% 공집합 %.0f%%%s",
+                    label, row["excess_cagr_pct"], row["bf_excess_cagr_pct"], row["mdd_pct"],
+                    row["avg_holdings"], row["avg_cash_pct"], row["empty_month_pct"],
                     " [표본부족]" if row["low_sample"] else "")
     return results
 
@@ -560,9 +562,11 @@ def main():
               if k.startswith("x_") and "P" in k}
         grid["pullback_s3"] = run_portfolios(days, rebals, names, d3, bench, args.tag)
         # 상위 조합(표본 충분 + 초과수익 순) 3개: top5/top15 + slip_x2 + bench_fill
+        # 상위 선정은 현금중립 초과수익(bf_excess) 기준 — 그냥 초과수익으로 뽑으면
+        # 하락장에 현금만 들고 있던 조합이 올라온다 (bench_fill 주석 참조)
         ranked = sorted((k for k, v in base.items()
                          if not v["low_sample"] and (k.startswith("x_") or k.startswith("g_") or k == "blend3")),
-                        key=lambda k: -base[k]["excess_cagr_pct"])[:3]
+                        key=lambda k: -base[k]["bf_excess_cagr_pct"])[:3]
         for label in ranked:
             fn = portfolio_defs(members, sig_keys, args.window)[label][0]
             for top in (5, 15):
@@ -571,9 +575,6 @@ def main():
             grid[f"{label}_slip_x2"] = run_portfolios(
                 days, rebals, names, {label: (fn, TOP_COMBO)}, bench, args.tag,
                 slip_mult=2.0)[label]
-            grid[f"{label}_bench_fill"] = run_portfolios(
-                days, rebals, names, {label: (fn, TOP_COMBO)}, bench, args.tag,
-                with_bench_fill={label})[label]
         out = CBT_CACHE / f"combo_grid{args.tag}.json"
         out.write_text(json.dumps(grid, ensure_ascii=False, indent=1), encoding="utf-8")
         logger.info("저장: %s", out)
