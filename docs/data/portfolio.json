@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-17T14:48:59+09:00",
+ "updated": "2026-08-17T16:37:39+09:00",
  "source": "https://docs.google.com/spreadsheets/d/1dpKl_YP9eAquU-G0Et9tcpyzw1YlziKvwoJzH4OsHfw",
  "kpi": {
   "portfolio_value": 142554389.0,
@@ -37,8 +37,8 @@
     "change": -13.2
    },
    "usdkrw": {
-    "value": 1414.5,
-    "change": 4.7
+    "value": 1411.9,
+    "change": 5.7
    }
   }
  },
@@ -1160,12 +1160,18 @@
     "nav": 950.36,
     "kospi": 838.37,
     "kosdaq": 930.81
+   },
+   {
+    "date": "2026.8.17",
+    "nav": 950.36,
+    "kospi": 838.37,
+    "kosdaq": 930.81
    }
   ],
   "value": [
    {
     "date": "2026-8-17",
-    "portfolio_value": 142554389.0,
+    "portfolio_value": 142554388.97,
     "total_value": 75312830.0,
     "eval_pnl": 5292239.06
    },
