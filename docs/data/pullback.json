@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-14 17:42",
+ "updated": "2026-08-17 17:06",
  "snap_date": "2026-08-14",
  "history": [
   {
@@ -985,9 +985,9 @@
   "status": "under_pressure",
   "label": "상승 압박",
   "color": "yellow",
-  "kospi_close": 6967.62,
-  "ma200": 5873.18,
-  "ma200_ratio_pct": 18.63,
+  "kospi_close": 6977.94,
+  "ma200": 5873.23,
+  "ma200_ratio_pct": 18.81,
   "dist_days": 4,
   "dist_window": 20,
   "base_date": "2026-08-14"
@@ -1034,9 +1034,9 @@
    "fwd_year1": "2026/12(E)",
    "fwd_year2": "2027/12(E)",
    "per_fwd1": 28.1,
-   "per_fwd2": 22.0,
+   "per_fwd2": 21.0,
    "per_accel": 1,
-   "per_delta_pct": 21.7,
+   "per_delta_pct": 25.3,
    "pullback_score": 7,
    "score_bits": {
     "per_accel": 1,
@@ -1248,10 +1248,10 @@
    "vol_2x_bo": 1,
    "fwd_year1": "2026/12(E)",
    "fwd_year2": "2027/12(E)",
-   "per_fwd1": 65.5,
+   "per_fwd1": 68.0,
    "per_fwd2": 39.1,
    "per_accel": 1,
-   "per_delta_pct": 40.3,
+   "per_delta_pct": 42.5,
    "pullback_score": 6,
    "score_bits": {
     "per_accel": 1,
@@ -1311,49 +1311,6 @@
    "days_in_list": 3
   },
   {
-   "ticker": "018260",
-   "name": "삼성에스디에스",
-   "sector": "인터넷",
-   "market": "KOSPI",
-   "pct_3m": 42.4,
-   "pct_6m": 41.9,
-   "pct_12m": 59.7,
-   "rs_kkangto": 90,
-   "per_trailing": 24.8,
-   "market_cap_억": 188415,
-   "current_price": 243500.0,
-   "w52_high": 362000.0,
-   "proximity_52w": 0.6727,
-   "retrace_pct": 32.7,
-   "pivot": 362000.0,
-   "distance_to_pivot_pct": 48.7,
-   "consolidation_days": 52,
-   "vol_contracting": 0,
-   "vol_dry_ratio": 0.48,
-   "vol_drying": 1,
-   "vol_2x_bo": 0,
-   "fwd_year1": "2026/12(E)",
-   "fwd_year2": "2027/12(E)",
-   "per_fwd1": 26.9,
-   "per_fwd2": 21.5,
-   "per_accel": 1,
-   "per_delta_pct": 20.1,
-   "pullback_score": 6,
-   "score_bits": {
-    "per_accel": 1,
-    "deep_pullback": 1,
-    "base_short": 1,
-    "base_tight": 1,
-    "vcp": 0,
-    "vol_dry": 1,
-    "rs_leader": 1
-   },
-   "rank": 8,
-   "first_seen": "2026-08-14",
-   "is_new": 1,
-   "days_in_list": 0
-  },
-  {
    "ticker": "083450",
    "name": "GST",
    "sector": null,
@@ -1391,7 +1348,7 @@
     "vol_dry": 1,
     "rs_leader": 1
    },
-   "rank": 9,
+   "rank": 8,
    "first_seen": "2026-07-27",
    "is_new": 0,
    "days_in_list": 18
@@ -1434,7 +1391,7 @@
     "vol_dry": 1,
     "rs_leader": 1
    },
-   "rank": 10,
+   "rank": 9,
    "first_seen": "2026-08-06",
    "is_new": 0,
    "days_in_list": 8
@@ -1463,10 +1420,10 @@
    "vol_2x_bo": 1,
    "fwd_year1": "2026/12(E)",
    "fwd_year2": "2027/12(E)",
-   "per_fwd1": 22.5,
-   "per_fwd2": 13.3,
+   "per_fwd1": 21.8,
+   "per_fwd2": 13.0,
    "per_accel": 1,
-   "per_delta_pct": 40.9,
+   "per_delta_pct": 40.4,
    "pullback_score": 5,
    "score_bits": {
     "per_accel": 1,
@@ -1477,7 +1434,7 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 11,
+   "rank": 10,
    "first_seen": "2026-08-05",
    "is_new": 0,
    "days_in_list": 9
@@ -1520,7 +1477,7 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 12,
+   "rank": 11,
    "first_seen": "2026-08-07",
    "is_new": 0,
    "days_in_list": 7
@@ -1555,6 +1512,43 @@
     "base_tight": 1,
     "vcp": 1,
     "vol_dry": 0,
+    "rs_leader": 1
+   },
+   "rank": 12,
+   "first_seen": "2026-08-14",
+   "is_new": 1,
+   "days_in_list": 0
+  },
+  {
+   "ticker": "018260",
+   "name": "삼성에스디에스",
+   "sector": "인터넷",
+   "market": "KOSPI",
+   "pct_3m": 42.4,
+   "pct_6m": 41.9,
+   "pct_12m": 59.7,
+   "rs_kkangto": 90,
+   "per_trailing": 24.8,
+   "market_cap_억": 188415,
+   "current_price": 243500.0,
+   "w52_high": 362000.0,
+   "proximity_52w": 0.6727,
+   "retrace_pct": 32.7,
+   "pivot": 362000.0,
+   "distance_to_pivot_pct": 48.7,
+   "consolidation_days": 52,
+   "vol_contracting": 0,
+   "vol_dry_ratio": 0.48,
+   "vol_drying": 1,
+   "vol_2x_bo": 0,
+   "pullback_score": 5,
+   "score_bits": {
+    "per_accel": 0,
+    "deep_pullback": 1,
+    "base_short": 1,
+    "base_tight": 1,
+    "vcp": 0,
+    "vol_dry": 1,
     "rs_leader": 1
    },
    "rank": 13,
