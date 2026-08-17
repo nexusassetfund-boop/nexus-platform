@@ -22,7 +22,8 @@
       받아야 해서, 주식수 변동이 없는 대부분의 종목에서 동일한 근사다. 유상증자·
       대규모 자사주 소각 종목은 C/A가 실제 EPS와 벌어질 수 있다.
 실행: 매일 장마감 후 canslim.yml. 테스트: CANSLIM_LIMIT=5.
-실패 정책: 일봉 확보가 후보의 절반 미만이면 기존 출력 보존 후 exit 1 (눌림목과 동일).
+실패 정책: 일봉 확보가 후보의 절반 미만이거나 corp_code 매핑이 0건이면
+      기존 출력 보존 후 exit 1 (눌림목과 동일).
 """
 from __future__ import annotations
 import datetime as dt
@@ -334,6 +335,12 @@ def build() -> dict | None:
 
     import fetch_value as fv
     corp_map = fv._corp_map()
+    # corp_map이 비면 DART발 3비트(C·A_growth·A_roe)가 통째로 0이 되어 최대 4점 —
+    # 통과선 5점을 아무도 못 넘어 "0건 통과"가 그대로 배포된다(2026-08-14 실제 사고,
+    # 러너에서 corpCode.xml 3회 타임아웃). 개별 조회 300여 건을 돌기 전에 끊는다.
+    if not corp_map:
+        logger.error("corp_code 매핑 0건 — DART 접근 불가, 기존 파일 보존")
+        return None
     start = (dt.datetime.now(tz=KST).date() - dt.timedelta(days=400)).strftime("%Y%m%d")
     out, fails = [], 0
     for code, p3, p6, p12, rs in pool:
