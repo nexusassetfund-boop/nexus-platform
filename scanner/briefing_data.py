@@ -46,6 +46,12 @@ def yahoo_quote(sym):
         return None
     out = {"value": round(last, 2), "change": round(last - prev, 2),
            "change_pct": round((last / prev - 1) * 100, 2)}
+    # 52주 고점 대비 위치 — 이게 없으면 브리핑이 큰 조정 뒤 반등장을 "랠리 연장·신고가 도전"으로
+    # 서술한다(2026-08: 코스피 6,978이 6월 고점 9,385 대비 -25.6%인데 "7000 안착"만 논함).
+    w52 = res["meta"].get("fiftyTwoWeekHigh")
+    if isinstance(w52, (int, float)) and w52 > 0:
+        out["w52_high"] = round(w52, 2)
+        out["off_high_pct"] = round((last / w52 - 1) * 100, 2)
     # 이 값이 어느 세션의 것인지 거래소 현지 날짜로 못박는다 — 브리핑이 "밤사이"를 하루 전 세션으로
     # 잘못 잡아 이틀 전 종목 등락률을 끌어오는 사고(2026-07-23 pm: 7/21 마이크론 +12.17%)를 막는 앵커.
     if bars:
