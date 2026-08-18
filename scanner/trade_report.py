@@ -106,10 +106,36 @@ def prepare() -> int:
     return 0
 
 
+def _push_kv(doc: dict) -> None:
+    """리포트 문서를 KV로 민다. 토큰이 없으면 조용히 넘어간다(다음 동기화가 받는다)."""
+    token = os.environ.get("NEXUS_ADMIN_TOKEN", "").strip()
+    if not token:
+        logger.warning("NEXUS_ADMIN_TOKEN 없음 — KV push 생략(다음 동기화 때 반영)")
+        return
+    req = urllib.request.Request(
+        f"{WORKER}/api/push",
+        data=json.dumps({"files": {"trade_report.json": doc}}, ensure_ascii=False).encode(),
+        # user-agent 필수 — Python-urllib 기본 UA는 Cloudflare가 403으로 차단한다
+        headers={"authorization": f"Bearer {token}", "content-type": "application/json",
+                 "user-agent": "nexus-scanner"},
+        method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            logger.info("KV push: %s", r.read().decode()[:100])
+    except Exception as e:
+        logger.warning("KV push 실패(%s) — 다음 스캔 동기화 때 자동 반영", e)
+
+
 def publish() -> int:
     inp = _load(INPUT_PATH, {})
     if inp.get("skip"):
-        logger.info("skip 마커 — 게시 생략")
+        # 생성만 건너뛰고 게시는 한다. 리포트를 손으로 써서 커밋한 회차는 publish를 한 번도
+        # 타지 않아 KV에만 빠진 채 남는데(202607 실측 — 저장소 8/18, KV 7/30), 그 뒤 실행은
+        # 전부 skip이라 스스로 복구되지 않는다. 같은 문서를 다시 미는 것뿐이라 멱등하다.
+        doc = _load(REPORT_PATH, None)
+        if doc:
+            logger.info("skip 마커 — 생성 생략, 기존 리포트만 게시한다")
+            _push_kv(doc)
         return 0
     out = _load(OUTPUT_PATH, None)
     if not out:
@@ -143,22 +169,7 @@ def publish() -> int:
     REPORT_PATH.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
     logger.info("저장: %s (%d회분, 최신 '%s')", REPORT_PATH, len(doc["items"]), out["title"])
 
-    token = os.environ.get("NEXUS_ADMIN_TOKEN", "").strip()
-    if not token:
-        logger.warning("NEXUS_ADMIN_TOKEN 없음 — KV push 생략(다음 동기화 때 반영)")
-        return 0
-    req = urllib.request.Request(
-        f"{WORKER}/api/push",
-        data=json.dumps({"files": {"trade_report.json": doc}}, ensure_ascii=False).encode(),
-        # user-agent 필수 — Python-urllib 기본 UA는 Cloudflare가 403으로 차단한다
-        headers={"authorization": f"Bearer {token}", "content-type": "application/json",
-                 "user-agent": "nexus-scanner"},
-        method="POST")
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            logger.info("KV push: %s", r.read().decode()[:100])
-    except Exception as e:
-        logger.warning("KV push 실패(%s) — 다음 스캔 동기화 때 자동 반영", e)
+    _push_kv(doc)
     return 0
 
 
