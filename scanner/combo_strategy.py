@@ -45,6 +45,7 @@ STATE_PATH = DATA / "combo_state.json"
 TOP_N = 10          # 동일비중 종목 수 (백테스트 top10)
 WINDOW_TD = 20      # 신고가 명단 창 — 검증된 값 (10/40 민감도에서 부호 안정)
 LEDGER_MAX = 60     # 원장 보관 개월 수
+HISTORY_MAX = 90    # 후보 풀 편입·편출 이력 보관 건수
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -194,6 +195,10 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
                     "n": len(closed), "avg_ret_pct": round(sum(rets) / len(rets), 2) if rets else None,
                     "win_rate": (round(sum(1 for r in rets if r > 0) / len(rets) * 100, 1)
                                  if rets else None),
+                    "added": [[p["code"], p["name"]] for p in picks
+                              if p["code"] not in {c["code"] for c in closed}],
+                    "removed": [[c["code"], c["name"]] for c in closed
+                                if c["code"] not in {p["code"] for p in picks}],
                     "holdings": closed,
                 })
                 ledger = ledger[-LEDGER_MAX:]
@@ -232,10 +237,27 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
             "in_current_pick": h["code"] in live_pick,   # 지금 뽑아도 들어오는가
         })
 
-    preview = select(nhc, qg)
+    # 후보 풀 전체 — 상위 10만 보여주면 11·12위가 안 보여 왜 안 뽑혔는지 알 수 없다
+    eligible = select(nhc, qg, top=10 ** 9)
     held = {h["code"] for h in holdings}
-    for p in preview:
-        p["is_held"] = p["code"] in held
+    for r in eligible:
+        r["is_held"] = r["code"] in held
+        r["would_buy"] = r["rank"] <= TOP_N
+    preview = eligible[:TOP_N]
+
+    # 후보 풀 편입·편출 이력 (append-only) — 명단이 왜 바뀌었는지 추적
+    history = list(state.get("history") or [])
+    prev = dict(state.get("eligible") or [])
+    cur = {r["code"]: r["name"] for r in eligible}
+    if prev:   # 첫 실행에 전량 '편입'으로 찍히는 걸 막는다
+        added = [[c, n] for c, n in cur.items() if c not in prev]
+        removed = [[c, n] for c, n in prev.items() if c not in cur]
+        if added or removed:
+            if history and history[-1]["date"] == today:
+                history[-1] = {"date": today, "added": added, "removed": removed}
+            else:
+                history.append({"date": today, "added": added, "removed": removed})
+            history = history[-HISTORY_MAX:]
     closed_rets = [l["avg_ret_pct"] for l in ledger if l.get("avg_ret_pct") is not None]
 
     out = {
@@ -262,7 +284,9 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
         "counts": {"gate": len(gate_now), "pool": len(pool_now),
                    "eligible": len(set(gate_now) & set(pool_now))},
         "portfolio": port,
+        "eligible": eligible,
         "preview": preview,
+        "history": history,
         "ledger": ledger,
         "ledger_stats": {
             "months": len(closed_rets),
@@ -270,7 +294,8 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
             "win_months": sum(1 for r in closed_rets if r > 0),
         },
     }
-    new_state = {"month": cur_month, "holdings": holdings, "ledger": ledger}
+    new_state = {"month": cur_month, "holdings": holdings, "ledger": ledger,
+                 "eligible": [[r["code"], r["name"]] for r in eligible], "history": history}
     return out, new_state
 
 

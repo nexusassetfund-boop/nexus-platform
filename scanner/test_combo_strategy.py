@@ -154,6 +154,62 @@ def test_current_price_uses_latest_close():
     assert out["sources"]["price_asof"] == "2026-08-17"
 
 
+def test_eligible_exposes_full_pool_not_just_top10():
+    """상위 10만 내보내면 11·12위가 왜 빠졌는지 알 수 없다 — 후보 풀 전체를 낸다."""
+    daily = {"2026-08-12": [f"{i:06d}" for i in range(1, 13)]}
+    nhc = _nhc(daily, "2026-08-13", [])
+    qg = _qg([(f"{i:06d}", float(13 - i)) for i in range(1, 13)])
+    out, _ = cs.build(nhc, qg, {}, {}, now=dt.date(2026, 8, 13))
+    assert len(out["eligible"]) == 12, "12종목 전부"
+    assert len(out["preview"]) == 10, "매수 대상은 상위 10"
+    assert out["eligible"][9]["would_buy"] is True
+    assert out["eligible"][10]["would_buy"] is False, "11위는 대기"
+
+
+def test_history_records_pool_changes_not_first_run():
+    """첫 실행에 전량 '편입'으로 찍히면 이력이 무의미해진다."""
+    daily = {"2026-08-12": ["000010", "000020"]}
+    nhc = _nhc(daily, "2026-08-13", [])
+    qg = _qg([("000010", 1.0), ("000020", 0.5), ("000030", 2.0)])
+    out1, st1 = cs.build(nhc, qg, {}, {}, now=dt.date(2026, 8, 13))
+    assert out1["history"] == [], "첫 실행은 이력을 남기지 않는다"
+
+    daily2 = {"2026-08-13": ["000020", "000030"]}          # 10 빠지고 30 들어옴
+    nhc2 = _nhc(daily2, "2026-08-14", [])
+    out2, _ = cs.build(nhc2, qg, st1, {}, now=dt.date(2026, 8, 14))
+    h = out2["history"][-1]
+    assert h["date"] == "2026-08-14"
+    assert [c for c, _n in h["added"]] == ["000030"]
+    assert [c for c, _n in h["removed"]] == ["000010"]
+
+
+def test_history_does_not_duplicate_same_day_reruns():
+    daily = {"2026-08-12": ["000010"]}
+    nhc = _nhc(daily, "2026-08-13", [])
+    qg = _qg([("000010", 1.0), ("000020", 2.0)])
+    _o, st = cs.build(nhc, qg, {}, {}, now=dt.date(2026, 8, 13))
+    daily2 = {"2026-08-13": ["000020"]}
+    nhc2 = _nhc(daily2, "2026-08-14", [])
+    _o2, st2 = cs.build(nhc2, qg, st, {}, now=dt.date(2026, 8, 14))
+    out3, _ = cs.build(nhc2, qg, st2, {}, now=dt.date(2026, 8, 14))   # 같은 날 재실행
+    assert len(out3["history"]) == 1, "같은 날 두 번 돌아도 한 건"
+
+
+def test_ledger_records_portfolio_turnover():
+    """월별 원장에 어느 종목이 새로 들어오고 빠졌는지 남는다."""
+    daily = {"2026-07-31": ["000020"], "2026-08-03": ["000020"]}
+    nhc = _nhc(daily, "2026-08-03", ["000020"])
+    qg = _qg([("000010", 1.0), ("000020", 2.0)])
+    bars = _bars({"000010": {"2026-08-03": (100.0, 100.0)},
+                  "000020": {"2026-08-03": (50.0, 50.0)}})
+    state = {"month": "2026-07", "holdings": [
+        {"code": "000010", "name": "종목000010", "entry_date": "2026-07-01", "entry_price": 80.0}], "ledger": []}
+    _out, st = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 3))
+    row = st["ledger"][-1]
+    assert [c for c, _n in row["added"]] == ["000020"]
+    assert [c for c, _n in row["removed"]] == ["000010"]
+
+
 def main():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:
