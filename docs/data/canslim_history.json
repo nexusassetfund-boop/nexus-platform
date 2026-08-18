@@ -146,5 +146,70 @@
     "last_rank": 2
    }
   ]
+ },
+ {
+  "date": "2026-08-18",
+  "added": [
+   {
+    "code": "003010",
+    "name": "혜인",
+    "score": 6
+   },
+   {
+    "code": "181710",
+    "name": "NHN",
+    "score": 5
+   },
+   {
+    "code": "298000",
+    "name": "효성화학",
+    "score": 5
+   },
+   {
+    "code": "001450",
+    "name": "현대해상",
+    "score": 5
+   },
+   {
+    "code": "011560",
+    "name": "세보엠이씨",
+    "score": 5
+   },
+   {
+    "code": "377450",
+    "name": "리파인",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "013700",
+    "name": "까뮤이앤씨",
+    "days": 6,
+    "last_score": 5,
+    "last_rank": 17
+   },
+   {
+    "code": "039830",
+    "name": "오로라",
+    "days": 5,
+    "last_score": 6,
+    "last_rank": 5
+   },
+   {
+    "code": "222040",
+    "name": "코스맥스엔비티",
+    "days": 8,
+    "last_score": 5,
+    "last_rank": 12
+   },
+   {
+    "code": "252990",
+    "name": "샘씨엔에스",
+    "days": 8,
+    "last_score": 5,
+    "last_rank": 15
+   }
+  ]
  }
 ]
