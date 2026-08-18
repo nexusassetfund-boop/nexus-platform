@@ -316,6 +316,9 @@ def build() -> dict | None:
 
     # 같은 (시도, HS)를 쓰는 종목이 여럿이면 호출을 한 번만 한다.
     raw: dict[tuple[str, str], list[dict]] = {}
+    # 예외만 보면 시도 하나가 통째로 비는 사고를 놓친다. 2026-07 행정구역 개편 때
+    # 인천·광주가 정상 응답(200) 안에 0행으로 돌아와, 5종목이 경고 한 줄 없이 빠졌다.
+    fetch_failed: list[tuple[str, str]] = []
     entries = tmap["entries"]
     for e in entries:
         key = (e.get("sido"), e.get("hs_used"))
@@ -327,8 +330,18 @@ def build() -> dict | None:
                 rows.extend(capi.fetch_district(key[1], key[0], s, en, api_key, CACHE_PATH))
         except capi.CustomsError as ex:
             logger.warning("수집 실패 sido=%s hs=%s: %s", key[0], key[1], ex)
+            fetch_failed.append((key[0], key[1]))
             continue
+        if not rows:
+            logger.warning("수집 0행 sido=%s hs=%s — 행정구역 개편으로 시도코드가 바뀌었거나 "
+                           "통계 제공범위가 바뀌었을 수 있습니다", key[0], key[1])
+            fetch_failed.append((key[0], key[1]))
         raw[key] = rows
+
+    failed_sido = sorted({sd for sd, _ in fetch_failed})
+    if fetch_failed:
+        logger.warning("시군구 수집 실패 %d건 — 시도코드 %s. 해당 시도의 종목은 통째로 빠집니다.",
+                       len(fetch_failed), ", ".join(failed_sido))
 
     # 확정치 공개 직후에는 M-1이 아직 비어 있을 수 있다. 실제로 데이터가 들어온
     # 최신월을 기준월로 삼는다 — 이렇게 해야 15일 실행이 새 확정치를 바로 집는다.
@@ -551,7 +564,8 @@ def build() -> dict | None:
                     "잡히지 않고, 통관 시점과 매출 인식 시점에 시차가 있습니다. "
                     "금액 단위는 천USD입니다.",
         },
-        "coverage": {"stocks": len(out), "mapped": len(entries), "failed": failed},
+        "coverage": {"stocks": len(out), "mapped": len(entries), "failed": failed,
+                     "failed_sido": failed_sido},
     }
 
 
@@ -572,6 +586,10 @@ def main():
     logger.info("저장: %s (기준월 %s · 종목 %d/%d · 역대최고 %d · 매크로 %s)",
                 OUT_PATH, data["data_month"], cov["stocks"], cov["mapped"], ath,
                 "있음" if data.get("macro") else "없음")
+    if cov.get("failed"):
+        logger.warning("수집 실패 %d개%s — 화면 헤더에 경고 배지가 뜹니다",
+                       cov["failed"],
+                       f" (시도코드 {', '.join(cov['failed_sido'])})" if cov.get("failed_sido") else "")
 
 
 if __name__ == "__main__":

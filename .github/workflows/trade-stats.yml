@@ -41,8 +41,12 @@ jobs:
         env:
           CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
         run: |
-          python scanner/trade_stats.py
+          # 발굴을 먼저 돌린다. 발굴은 전국 품목별 API를 쓰고 종목 카드는 시군구별
+          # API를 쓰는 별개 데이터원인데, 뒤에 두면 trade_stats 가 exit 1 할 때 같은
+          # 스텝이 그대로 끊겨 발굴까지 못 돌았다. 순서만 바꾸면 시군구가 끊긴 회차에도
+          # 발굴 뷰는 갱신되고, trade_stats 실패는 여전히 잡을 빨갛게 만든다.
           python scanner/trade_discover.py || echo "발굴 실패 — 스캔 산출물은 유지"
+          python scanner/trade_stats.py
       # 스크리닝 직후에 저장한다 — 여기까지 받아온 응답이 캐시의 전부이고, 이후 단계가
       # 실패해도 다음 실행이 콜드로 떨어지지 않는다. 취소로 파일이 잘렸어도 로더가
       # 예외를 삼키고 빈 캐시로 떨어지므로 잘못된 값이 섞이지는 않는다.
@@ -66,13 +70,18 @@ jobs:
             --max-turns 20 || echo "주석 생성 실패 — 기존 주석 유지"
       - name: 주석 병합
         run: python -X utf8 scanner/trade_discover_annotate.py publish || echo "병합 실패 — 계속"
+      # trade_stats 가 exit 1 해도 커밋한다. 발굴(전국 품목별 API)은 시군구별과
+      # 별개 데이터원이라 시군구가 끊긴 회차에도 멀쩡히 갱신되는데, 여기서 함께
+      # 끊기면 그 산출물이 버려졌다. 잡은 그대로 빨갛게 남으니 실패는 여전히 보인다.
       - name: 결과 커밋
+        if: always()
         run: |
           test -f docs/data/trade.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
           # 주석 캐시도 함께 커밋한다 — 빠지면 매 실행이 전 품목을 다시 LLM 주석한다.
           bash .github/scripts/commit-data.sh "trade: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" \
             docs/data scanner/data/discover_annotations.json
       - name: KV 즉시 반영 (다음 스캔 동기화 대기 없이)
+        if: always()
         env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
         run: |
           test -f docs/data/trade.json || exit 0
