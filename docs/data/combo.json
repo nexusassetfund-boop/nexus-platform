@@ -1,9 +1,9 @@
 {
- "updated_at": "2026-08-18 13:35",
- "updated": "2026-08-14",
- "asof": "2026-08-14",
+ "updated_at": "2026-08-18 17:17",
+ "updated": "2026-08-18",
+ "asof": "2026-08-18",
  "month": "2026-08",
- "rebalanced_today": true,
+ "rebalanced_today": false,
  "forced_entry": true,
  "rule": {
   "gate": "신고가 후보 명단 최근 20거래일 창",
@@ -15,16 +15,16 @@
   "caveat": "슬리피지 편도 0.5% 가정 — 1.0%면 초과수익 +1.66%p로 축소. 원장으로 실측 중"
  },
  "sources": {
-  "newhigh_asof": "2026-08-14",
+  "newhigh_asof": "2026-08-18",
   "price_asof": "2026-08-18",
   "quality_base": "20260818",
   "quality_updated": "2026-08-18T11:37:53+09:00",
   "quality_pool_n": 166
  },
  "counts": {
-  "gate": 40,
+  "gate": 42,
   "pool": 166,
-  "eligible": 12
+  "eligible": 13
  },
  "portfolio": [
   {
@@ -36,8 +36,8 @@
    "composite_at_entry": 0.774,
    "rank_at_entry": 1,
    "forced_entry": true,
-   "price": 64200.0,
-   "ret_pct": -3.89,
+   "price": 64900.0,
+   "ret_pct": -2.84,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 15,
@@ -52,8 +52,8 @@
    "composite_at_entry": 0.718,
    "rank_at_entry": 2,
    "forced_entry": true,
-   "price": 119400.0,
-   "ret_pct": 3.11,
+   "price": 119300.0,
+   "ret_pct": 3.02,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 17,
@@ -68,8 +68,8 @@
    "composite_at_entry": 0.666,
    "rank_at_entry": 3,
    "forced_entry": true,
-   "price": 68200.0,
-   "ret_pct": -3.81,
+   "price": 69100.0,
+   "ret_pct": -2.54,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 19,
@@ -84,8 +84,8 @@
    "composite_at_entry": 0.514,
    "rank_at_entry": 4,
    "forced_entry": true,
-   "price": 79800.0,
-   "ret_pct": -6.23,
+   "price": 80900.0,
+   "ret_pct": -4.94,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 26,
@@ -100,8 +100,8 @@
    "composite_at_entry": 0.417,
    "rank_at_entry": 5,
    "forced_entry": true,
-   "price": 7750.0,
-   "ret_pct": -4.56,
+   "price": 7790.0,
+   "ret_pct": -4.06,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 36,
@@ -116,8 +116,8 @@
    "composite_at_entry": 0.372,
    "rank_at_entry": 6,
    "forced_entry": true,
-   "price": 62900.0,
-   "ret_pct": -4.55,
+   "price": 62800.0,
+   "ret_pct": -4.7,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 39,
@@ -132,8 +132,8 @@
    "composite_at_entry": 0.319,
    "rank_at_entry": 7,
    "forced_entry": true,
-   "price": 125200.0,
-   "ret_pct": -6.57,
+   "price": 125100.0,
+   "ret_pct": -6.64,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 44,
@@ -148,8 +148,8 @@
    "composite_at_entry": 0.245,
    "rank_at_entry": 8,
    "forced_entry": true,
-   "price": 142500.0,
-   "ret_pct": -2.8,
+   "price": 143200.0,
+   "ret_pct": -2.32,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 49,
@@ -164,8 +164,8 @@
    "composite_at_entry": 0.124,
    "rank_at_entry": 9,
    "forced_entry": true,
-   "price": 128200.0,
-   "ret_pct": -3.75,
+   "price": 129700.0,
+   "ret_pct": -2.63,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 54,
@@ -180,8 +180,8 @@
    "composite_at_entry": 0.049,
    "rank_at_entry": 10,
    "forced_entry": true,
-   "price": 6050.0,
-   "ret_pct": 5.77,
+   "price": 6040.0,
+   "ret_pct": 5.59,
    "days_held": 0,
    "in_gate": true,
    "quality_rank": 61,
@@ -300,13 +300,24 @@
    "would_buy": true
   },
   {
+   "code": "011200",
+   "name": "HMM",
+   "composite": -0.273,
+   "quality_z": -0.074,
+   "mom_z": -0.472,
+   "sector": "운송",
+   "rank": 11,
+   "is_held": false,
+   "would_buy": false
+  },
+  {
    "code": "280360",
    "name": "롯데웰푸드",
    "composite": -0.437,
    "quality_z": -0.284,
    "mom_z": -0.59,
    "sector": "음식료",
-   "rank": 11,
+   "rank": 12,
    "is_held": false,
    "would_buy": false
   },
@@ -317,7 +328,7 @@
    "quality_z": -0.447,
    "mom_z": -0.747,
    "sector": "화장품",
-   "rank": 12,
+   "rank": 13,
    "is_held": false,
    "would_buy": false
   }
@@ -434,7 +445,18 @@
    "would_buy": true
   }
  ],
- "history": [],
+ "history": [
+  {
+   "date": "2026-08-18",
+   "added": [
+    {
+     "code": "011200",
+     "name": "HMM"
+    }
+   ],
+   "removed": []
+  }
+ ],
  "ledger": [],
  "ledger_stats": {
   "months": 0,
