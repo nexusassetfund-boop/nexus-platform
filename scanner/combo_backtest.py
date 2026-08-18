@@ -331,13 +331,51 @@ def _sig_dict(mj: dict, sig_keys: list[str], i: int, window: int, field: str) ->
     return out
 
 
-def _build_screens(rebals, names, select_fn, top) -> list[dict]:
+def _build_screens(rebals, names, select_fn, top, keep_rank=None, hold_every=1, hold_phase=0) -> list[dict]:
     out = []
+    held: list[str] = []
     for i, (sig, ex) in enumerate(rebals):
         codes = select_fn(i)
-        sel = [{"code": c, "name": names.get(c, c)} for c in codes[:top]]
+        if hold_every > 1 and i % hold_every != hold_phase:
+            # 리밸런싱 안 하는 달 — 직전 목표를 그대로 유지하면 simulate가 매매를 내지 않는다.
+            # 회전율만 줄이고 종목 선정 로직은 건드리지 않는다.
+            pass
+        elif keep_rank:
+            # 잔류 규칙 — 매수는 top위, 매도는 keep_rank 밖으로 밀릴 때만.
+            # 순위가 11위와 10위를 오가는 종목을 매달 갈아타는 낭비를 막는다.
+            rank = {c: r for r, c in enumerate(codes)}
+            keep = [c for c in held if rank.get(c, 10**9) < keep_rank]
+            fill = [c for c in codes[:top] if c not in keep]
+            held = (keep + fill)[:top]
+        else:
+            held = codes[:top]
+        sel = [{"code": c, "name": names.get(c, c)} for c in held]
         out.append({"sig": sig, "ex": ex, "selected": sel,
                     "n_prelim": len(codes), "uni_src": "combo", "top": top})
+    return out
+
+
+def _turnover_variants(days, rebals, names, fn, top, bench, slip_mult):
+    """잔류 규칙·분기 리밸런싱 조합별 (회전율, 성과) 매트릭스."""
+    grid = [("기준 (매월 전량)", None, 1)]
+    grid += [(f"잔류 {k}위", k, 1) for k in (15, 20, 30)]
+    grid += [("분기 리밸런싱", None, 3)]
+    grid += [(f"분기 + 잔류 {k}위", k, 3) for k in (20, 30)]
+    grid += [(f"분기 위상{ph}", None, 3) for ph in (1, 2)]   # 시작 시점 우연 검증
+    out = {}
+    for label, keep, every in grid:
+        ph = int(label[-1]) if label.startswith("분기 위상") else 0
+        screens = _build_screens(rebals, names, fn, top, keep_rank=keep, hold_every=every, hold_phase=ph)
+        codes = {r["code"] for s in screens for r in s["selected"]}
+        o, c, _m = vb.load_prices(codes, PX_START, PX_END)
+        nav, trades, aux = vb.simulate(days, screens, o, c, {"top": top}, slip_mult, False)
+        m = vb.metrics(nav, trades, bench, screens, aux, [])
+        bf = _bench_fill_row(nav, aux["cash_w"], bench)
+        out[label] = {"cagr_pct": m["cagr_pct"], "mdd_pct": m["mdd_pct"], "sharpe": m["sharpe"],
+                      "bf_excess_cagr_pct": round(bf["cagr_pct"] - m["bench_cagr_pct"], 2),
+                      "turnover_annual_pct": m["turnover_annual_pct"],
+                      "closed_trades": m["closed_trades"], "win_rate": m["win_rate"],
+                      "avg_holdings": m["avg_holdings"], "avg_days": m["avg_days"]}
     return out
 
 
@@ -463,6 +501,122 @@ def run_portfolios(days, rebals, names, defs: dict, bench, tag="", slip_mult=1.0
     return results
 
 
+# ── 돌파 매수 + 트레일링 스탑 (달력 리밸런싱 대체) ──
+# 분기 리밸런싱이 '몇 월에 시작하느냐'에 12%p 흔들린 원인은 매매 시점을 달력이 정했기 때문이다.
+# 여기서는 가격이 정한다 — 52주 고가 돌파일에 사고, 고점 대비 trail% 밀리면 판다.
+# 위상이라는 자유 파라미터가 애초에 존재하지 않는다.
+
+def _quality_daily(members: dict, sig_keys: list[str], days) -> list[dict]:
+    """거래일별 '그 시점 최신 신호일'의 퀄리티 점수맵 (전진 채움 — look-ahead 없음)."""
+    sig_ts = [pd.Timestamp(k) for k in sig_keys]
+    pools = [{c: v[1] for c, v in members["quality"]["sigs"][k]["p"].items() if v[1] is not None}
+             for k in sig_keys]
+    out, j = [], -1
+    for d in days:
+        while j + 1 < len(sig_ts) and sig_ts[j + 1] <= d:
+            j += 1
+        out.append(pools[j] if j >= 0 else {})
+    return out
+
+
+def simulate_breakout(days, member, gap, qdaily, opens, closes, bench,
+                      trail=0.20, max_pos=10, slip_mult=1.0, fresh_only=True):
+    """돌파일 매수 → 트레일링 스탑 매도. 신호는 종가로 판정하고 체결은 익일 시가(look-ahead 차단)."""
+    buy_slip, sell_slip = vb.BUY_SLIP * slip_mult, vb.SELL_SLIP * slip_mult
+    sell_cost = vb.SELL_TAX + vb.COMMISSION_RT
+    cf = closes.ffill()
+    cash, pos, trades = 1.0, {}, []
+    nav_hist, cash_hist, hold_hist, traded = [], [], [], 0.0
+    pend_buy: list[str] = []
+    pend_sell: list[str] = []
+
+    def px(m, d, c):
+        if c in m.columns and d in m.index:
+            v = m.at[d, c]
+            if v == v and v > 0:
+                return float(v)
+        return None
+
+    for i, d in enumerate(days):
+        # 1) 전일 신호 체결 — 매도 먼저 (현금 확보 후 매수)
+        for c in pend_sell:
+            if c not in pos:
+                continue
+            o = px(opens, d, c) or px(cf, d, c)
+            if o is None:
+                continue
+            h = pos.pop(c)
+            net = o * (1 - sell_slip) * (1 - sell_cost)
+            cash += h["shares"] * net
+            traded += h["shares"] * o
+            trades.append({"ticker": c, "ret": round((net / h["cost"] - 1) * 100, 2),
+                           "days": (d - h["entry"]).days, "reason": "trail_stop"})
+        pend_sell = []
+        if pend_buy:
+            nav_now = cash + sum(h["shares"] * (px(cf, d, c) or h["cost"]) for c, h in pos.items())
+            budget = nav_now / max_pos
+            for c in pend_buy:
+                if c in pos or len(pos) >= max_pos:
+                    continue
+                o = px(opens, d, c)
+                if o is None:
+                    continue
+                fill = o * (1 + buy_slip)
+                shares = min(budget, cash) / fill
+                if shares <= 0:
+                    continue
+                cash -= shares * fill
+                traded += shares * fill
+                pos[c] = {"shares": shares, "cost": fill, "entry": d, "peak": fill}
+            pend_buy = []
+
+        # 2) 당일 종가로 다음날 신호 산출
+        for c, h in pos.items():
+            p = px(cf, d, c)
+            if p:
+                h["peak"] = max(h["peak"], p)
+                if p < h["peak"] * (1 - trail):
+                    pend_sell.append(c)
+        if len(pos) - len(pend_sell) < max_pos and d in member.index:
+            m_now = member.loc[d]
+            g_now, g_prev = gap.loc[d], (gap.iloc[max(0, gap.index.get_loc(d) - 1)])
+            qs = qdaily[i]
+            cands = []
+            for c in member.columns[m_now.fillna(False).values.astype(bool)]:
+                if c in pos or c not in qs or c not in opens.columns:
+                    continue
+                gv, gp = g_now.get(c), g_prev.get(c)
+                if gv != gv or gv > 0:                      # 돌파 상태(gap<=0) 아니면 제외
+                    continue
+                if fresh_only and not (gp == gp and gp > 0):  # 전일엔 미돌파 = 돌파 당일만
+                    continue
+                cands.append(c)
+            cands.sort(key=lambda c: -qs[c])                 # 자리 경쟁은 퀄리티 점수 순
+            pend_buy = cands[:max_pos - len(pos) + len(pend_sell)]
+
+        nav = cash + sum(h["shares"] * (px(cf, d, c) or h["cost"]) for c, h in pos.items())
+        nav_hist.append((d, nav))
+        cash_hist.append((d, cash / nav if nav > 0 else 0.0))
+        hold_hist.append((d, len(pos)))
+
+    nav = pd.Series(dict(nav_hist)).sort_index()
+    aux = {"holdings": pd.Series(dict(hold_hist)).sort_index(),
+           "cash_w": pd.Series(dict(cash_hist)).sort_index(),
+           "traded_notional": traded, "n_forced": 0, "n_unpriced": 0, "n_unfilled": 0,
+           "open_positions": len(pos)}
+    screens = [{"selected": [], "top": max_pos, "uni_src": "breakout"}]
+    m = vb.metrics(nav, trades, bench, screens, aux, [])
+    bf = _bench_fill_row(nav, aux["cash_w"], bench)
+    return {"cagr_pct": m["cagr_pct"], "mdd_pct": m["mdd_pct"], "sharpe": m["sharpe"],
+            "excess_cagr_pct": m["excess_cagr_pct"],
+            "bf_excess_cagr_pct": round(bf["cagr_pct"] - m["bench_cagr_pct"], 2),
+            "turnover_annual_pct": m["turnover_annual_pct"], "closed_trades": m["closed_trades"],
+            "win_rate": m["win_rate"], "avg_win": m["avg_win"], "avg_loss": m["avg_loss"],
+            "avg_days": m["avg_days"], "avg_holdings": m["avg_holdings"],
+            "avg_cash_pct": m["avg_cash_pct"], "open_positions": aux["open_positions"],
+            "yearly_pct": m["yearly_pct"]}
+
+
 # ── 실행 ──
 def _calendar(args):
     days, rebals = vb.build_calendar(args.start, args.end)
@@ -481,6 +635,8 @@ def main():
     ap.add_argument("--probe", action="store_true", help="멤버 수·교집합 크기 점검 (멤버 캐시 필요)")
     ap.add_argument("--run", action="store_true", help="교집합 11 + 개선안 + 대조군 시뮬")
     ap.add_argument("--grid", action="store_true", help="창 10/40·pullback s3·blend2·top·slip_x2")
+    ap.add_argument("--turnover", action="store_true", help="회전율 감축(잔류 규칙·분기 리밸런싱) 실험")
+    ap.add_argument("--breakout", action="store_true", help="돌파 매수 + 트레일링 스탑 (달력 리밸런싱 대체)")
     ap.add_argument("--window", type=int, default=20)
     ap.add_argument("--limit-months", type=int, default=0)
     ap.add_argument("--tag", default="")
@@ -533,6 +689,88 @@ def main():
 
     names = _name_map()
     bench = vb.load_bench(PX_START, PX_END)
+
+    if args.turnover:
+        defs = portfolio_defs(members, sig_keys, args.window)
+        out = {}
+        for label in ("g_NrQ", "g_QrN"):
+            fn, _t = defs[label]
+            for slip in (1.0, 2.0):
+                key = f"{label}_slip{slip:g}x"
+                out[key] = _turnover_variants(days, rebals, names, fn, TOP_COMBO, bench, slip)
+                for v_label, v in out[key].items():
+                    logger.info("[%s | %s] 회전율 %6.1f%% CAGR %6.2f%% 현금중립 %6.2f%%p "
+                                "MDD %5.1f%% 거래 %3d 보유일 %.0f",
+                                key, v_label, v["turnover_annual_pct"], v["cagr_pct"],
+                                v["bf_excess_cagr_pct"], v["mdd_pct"], v["closed_trades"],
+                                v["avg_days"] or 0)
+        path = CBT_CACHE / f"combo_turnover{args.tag}.json"
+        path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", path)
+
+    if args.breakout:
+        df = nf.add_adjusted(nf.download_marcap())
+        df = df[df["Date"] <= pd.Timestamp(PX_END)].copy()
+        nh_member, nh_gap, _rs = newhigh_panels(df)
+        qsigs = members["quality"]["sigs"]
+        qcodes = {c for k in sig_keys if k in qsigs for c in qsigs[k]["p"]}
+        codes = sorted(qcodes & set(nh_member.columns))
+        logger.info("돌파 후보 유니버스 %d종목 (퀄리티 풀 ∩ 신고가 패널)", len(codes))
+        opens, closes, _miss = vb.load_prices(set(codes), PX_START, PX_END)
+        idx = [d for d in closes.index if pd.Timestamp(args.start) <= d <= pd.Timestamp(args.end)]
+        nh_member = nh_member.reindex(index=idx, columns=closes.columns).fillna(False)
+        nh_gap = nh_gap.reindex(index=idx, columns=closes.columns)
+        out = {}
+
+        def run(label, days_, **kw):
+            qd = _quality_daily(members, sig_keys, days_)
+            r = simulate_breakout(days_, nh_member, nh_gap, qd, opens, closes, bench, **kw)
+            out[label] = r
+            logger.info("  %-22s 현금중립초과 %6.2f%%p  CAGR %6.2f%%  MDD %5.1f%%  회전율 %5.0f%%  "
+                        "거래 %3d  승률 %s%%  보유일 %s  종목 %.1f",
+                        label, r["bf_excess_cagr_pct"], r["cagr_pct"], r["mdd_pct"],
+                        r["turnover_annual_pct"], r["closed_trades"], r["win_rate"],
+                        r["avg_days"], r["avg_holdings"])
+
+        logger.info("=== 트레일링 스탑 폭 ===")
+        for t in (0.10, 0.15, 0.20, 0.25, 0.30):
+            run(f"트레일 {t:.0%}", idx, trail=t)
+        logger.info("=== 동시 보유 종목 수 (트레일 20%%) ===")
+        for n in (5, 15):
+            run(f"트레일20 · {n}종목", idx, trail=0.20, max_pos=n)
+        logger.info("=== 진입 규칙 완화 ===")
+        run("돌파상태 진입", idx, trail=0.20, fresh_only=False)
+        logger.info("=== 슬리피지 ×2 ===")
+        for t in (0.15, 0.20, 0.25):
+            run(f"트레일 {t:.0%} · 슬립×2", idx, trail=t, slip_mult=2.0)
+        logger.info("=== 시작일 민감도 (달력 위상의 대체 검증) ===")
+        for off in (1, 2, 3, 6):
+            sub = [d for d in idx if d >= pd.Timestamp(args.start) + pd.DateOffset(months=off)]
+            run(f"시작 +{off}개월", sub, trail=0.20)
+        p = CBT_CACHE / f"combo_breakout{args.tag}.json"
+        p.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", p)
+        return
+
+    if args.turnover:
+        # 기본 케이스가 슬리피지 ×2에서 우위를 잃는다(회전율 472%). 잔류 규칙·분기 리밸런싱으로
+        # 회전율을 낮췄을 때 스트레스를 통과하는지가 채택/폐기를 가른다.
+        defs = portfolio_defs(members, sig_keys, args.window)
+        out = {}
+        for label in ("g_NrQ", "g_QrN"):
+            fn, _ = defs[label]
+            for slip in (1.0, 2.0):
+                key = f"{label}_slip{slip:g}x"
+                out[key] = _turnover_variants(days, rebals, names, fn, TOP_COMBO, bench, slip)
+                logger.info("=== %s ===", key)
+                for k, v in out[key].items():
+                    logger.info("  %-18s 회전율 %6.1f%%  현금중립초과 %6.2f%%p  CAGR %6.2f%%  MDD %5.1f%%  거래 %3d",
+                                k, v["turnover_annual_pct"], v["bf_excess_cagr_pct"],
+                                v["cagr_pct"], v["mdd_pct"], v["closed_trades"])
+        p = CBT_CACHE / f"combo_turnover{args.tag}.json"
+        p.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", p)
+        return
 
     if args.run:
         defs = portfolio_defs(members, sig_keys, args.window)
