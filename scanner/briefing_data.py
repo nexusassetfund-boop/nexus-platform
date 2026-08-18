@@ -241,13 +241,35 @@ def night_quote_is_preopen_reset(q):
 
     사후 조회로는 야간 종가를 복원할 수 없다(08시대에 부르면 장전에 흘러가는 또 다른 값이 온다).
     그래서 04:50 스냅샷이 정답이고, 이 판별기는 리셋된 값이 새어 나가는 것만 막는다.
+
+    판별은 KIS 원본 필드(prev_night_close·kis_change)로 한다 — 표에 싣는 change/change_pct 는
+    정규장 종가 기준으로 다시 계산한 값이라 리셋 여부를 말해 주지 않는다.
     """
     if not q:
         return True
     if (q.get("volume") or 0) > 0:
         return False
-    prev = q.get("prev_close")
-    return q.get("change") == 0 and (prev is None or q.get("value") == prev)
+    prev = q.get("prev_night_close")
+    return q.get("kis_change") == 0 and (prev is None or q.get("value") == prev)
+
+
+def _k200_regular_close():
+    """야간세션 직전 정규장의 코스피200 종가와 그 날짜 — 야간선물 등락의 기준가.
+
+    KIS가 주는 futs_prdy_clpr·futs_prdy_ctrt 는 **직전 야간세션** 종가 기준이다. 즉 방금 끝난
+    정규장을 통째로 건너뛴 밤-대-밤 등락이라, 장전 브리핑이 원하는 "전일 종가 대비 갭"이 아니다.
+    실제 오보: 2026-08-19 am "야간선물 -1.88%"(화요일 밤을 금요일 밤과 비교) — 전일 정규장
+    종가 1082.00 대비로는 -0.35%였다. 2026-08-13 am "+4.60%"도 실제로는 +0.57%.
+    """
+    # ponytail: 기준가는 선물 정규장 종가가 아니라 코스피200 현물 종가 — 베이시스(1~2p, 0.1~0.2%)만큼
+    # 치우친다. 밤-대-밤(1.5~4%p) 오차를 없애는 게 우선이고, 더 정밀해져야 하면 KIS 국내 선물
+    # 최근월물(fo_idx_code.mst) 일봉 종가로 바꾼다.
+    import FinanceDataReader as fdr
+    start = (datetime.now(KST) - timedelta(days=14)).strftime("%Y-%m-%d")
+    df = fdr.DataReader("KS200", start)
+    if df is None or df.empty:
+        return None, None
+    return float(df["Close"].iloc[-1]), df.index[-1].strftime("%Y-%m-%d")
 
 
 def collect_night_futures():
@@ -282,14 +304,27 @@ def collect_night_futures():
                 o = (data or {}).get("output1") or {}
                 sign = -1 if str(o.get("prdy_vrss_sign") or "3") in ("4", "5") else 1
                 last = _num(o.get("futs_prpr"))
-                if last is not None:
+                base, base_date = _k200_regular_close()
+                # 어젯밤 세션이 없었으면(주말·공휴일 다음 날) KIS는 마지막 세션 값을 그대로 준다.
+                # 거래량이 붙어 있어 리셋 판별로는 못 막으므로, 직전 정규장이 어제였는지로 막는다.
+                yesterday = (datetime.now(KST) - timedelta(days=1)).strftime("%Y-%m-%d")
+                if last is not None and not base:
+                    out["cme_night_error"] = "코스피200 정규장 종가(기준가) 조회 실패"
+                elif last is not None and base_date != yesterday:
+                    out["cme_night_error"] = f"어젯밤 야간세션 없음 — 직전 정규장이 {base_date}"
+                elif last is not None:
                     out["cme_night"] = {
                         "code": cme,
                         "name": o.get("hts_kor_isnm"),
                         "value": last,
-                        "change": sign * abs(_num(o.get("futs_prdy_vrss")) or 0),
-                        "change_pct": sign * abs(_num(o.get("futs_prdy_ctrt")) or 0),
-                        "prev_close": _num(o.get("futs_prdy_clpr")),
+                        # 등락은 전일 정규장 코스피200 종가 대비로 다시 계산한다 — KIS 원본은
+                        # 직전 '야간세션' 종가 기준이라 방금 끝난 정규장을 건너뛴다(_k200_regular_close 참고)
+                        "change": round(last - base, 2),
+                        "change_pct": round((last / base - 1) * 100, 2),
+                        "prev_close": base,
+                        "prev_close_date": base_date,
+                        "kis_change": sign * abs(_num(o.get("futs_prdy_vrss")) or 0),
+                        "prev_night_close": _num(o.get("futs_prdy_clpr")),
                         "high": _num(o.get("futs_hgpr")),
                         "low": _num(o.get("futs_lwpr")),
                         "basis": _num(o.get("basis")),          # 선물 - 현물
