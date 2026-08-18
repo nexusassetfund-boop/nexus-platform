@@ -157,7 +157,8 @@ def _latest_close(bars: dict, code: str):
     return (days[-1], bars[code][days[-1]]["close"]) if days else (None, None)
 
 
-def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = None) -> tuple[dict, dict]:
+def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = None,
+          confirm_now: bool = False) -> tuple[dict, dict]:
     """(combo.json, combo_state.json) 산출. bars 없이도 명단은 나온다(가격만 빈다)."""
     today = nhc.get("data_last_date")
     if not today:
@@ -170,7 +171,23 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
 
     # ── 월 첫 거래일 = 교체일. 신호는 전월 마지막 거래일 기준, 체결은 오늘 시가 ──
     stale = ((now or dt.datetime.now(tz=KST).date()) - dt.date.fromisoformat(today)).days
-    if cur_month != month and not cur_month:
+    if confirm_now and not holdings:
+        # 수동 확정(--confirm) — 검증 규칙(월 첫 거래일 진입)에서 벗어난 월중 진입이다.
+        # 원장이 부분 월로 남으므로 forced 플래그로 표시해 나중에 오독하지 않게 한다.
+        picks = select(nhc, qg)
+        pdates = sorted({d for c in bars for d in bars[c]})
+        entry_d = pdates[-1] if pdates else today
+        holdings = [{
+            "code": p["code"], "name": p["name"], "sector": p.get("sector", ""),
+            "entry_date": entry_d,
+            "entry_price": _px(bars, p["code"], entry_d, "open") or _last_close(bars, p["code"], entry_d),
+            "composite_at_entry": p["composite"], "rank_at_entry": p["rank"], "forced_entry": True,
+        } for p in picks]
+        cur_month = month
+        rebalanced = bool(holdings)
+        logger.info("수동 확정 — %s %d종목, 진입일 %s (월중 진입: 검증 규칙 밖)",
+                    month, len(holdings), entry_d)
+    elif cur_month != month and not cur_month:
         # 첫 실행 — 월 중간에 들어가면 검증된 규칙(월 첫 거래일 진입)과 어긋나고 원장도 더러워진다.
         # 기준월만 잡아두고 명단은 미리보기로만 보여준다. 확정은 다음 달 첫 거래일에.
         cur_month = month
@@ -193,6 +210,7 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
                 ledger.append({
                     "month": cur_month, "entry_date": closed[0]["entry_date"], "exit_date": today,
                     "n": len(closed), "avg_ret_pct": round(sum(rets) / len(rets), 2) if rets else None,
+                    "forced_entry": any(c.get("forced_entry") for c in closed),
                     "win_rate": (round(sum(1 for r in rets if r > 0) / len(rets) * 100, 1)
                                  if rets else None),
                     "added": [{"code": p["code"], "name": p["name"]} for p in picks
@@ -266,6 +284,7 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
         "asof": today,
         "month": cur_month,
         "rebalanced_today": rebalanced,
+        "forced_entry": any(h.get("forced_entry") for h in holdings),
         "rule": {
             "gate": f"신고가 후보 명단 최근 {WINDOW_TD}거래일 창",
             "ranker": "퀄리티 성장 composite (0.5·퀄리티Z + 0.5·모멘텀Z)",
@@ -301,7 +320,12 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
 
 
 def main():
+    import argparse
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--confirm", action="store_true",
+                    help="지금 명단을 확정 포트폴리오로 잡는다 (월중 진입 — 검증 규칙 밖, forced 표시)")
+    args = ap.parse_args()
     nhc = _load(NHC_PATH, "신고가 후보")
     qg = _load(QG_PATH, "퀄리티 성장")
     if not qg.get("pool"):
@@ -316,7 +340,7 @@ def main():
     codes = sorted({h["code"] for h in (state.get("holdings") or [])}
                    | {p["code"] for p in select(nhc, qg)})
     bars = asyncio.run(_prices(codes))
-    out, new_state = build(nhc, qg, state, bars)
+    out, new_state = build(nhc, qg, state, bars, confirm_now=args.confirm)
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

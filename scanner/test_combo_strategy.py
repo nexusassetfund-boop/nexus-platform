@@ -211,6 +211,33 @@ def test_ledger_records_portfolio_turnover():
     assert [x["code"] for x in row["removed"]] == ["000010"]
 
 
+def test_confirm_now_enters_mid_month_with_flag():
+    """수동 확정(--confirm)은 월중 진입 — 검증 규칙 밖이므로 forced 표시가 남아야 한다."""
+    daily = {"2026-08-12": ["000010", "000020"]}
+    nhc = _nhc(daily, "2026-08-13", [])
+    qg = _qg([("000010", 2.0), ("000020", 1.0)])
+    bars = _bars({"000010": {"2026-08-18": (100.0, 105.0)},
+                  "000020": {"2026-08-18": (50.0, 52.0)}})
+    out, st = cs.build(nhc, qg, {}, bars, now=dt.date(2026, 8, 18), confirm_now=True)
+    assert len(out["portfolio"]) == 2
+    assert out["forced_entry"] is True, "월중 진입 사실이 데이터에 남아야 한다"
+    assert out["portfolio"][0]["entry_date"] == "2026-08-18", "가장 최근 시세일 시가로 진입"
+    assert out["portfolio"][0]["entry_price"] == 100.0
+    assert st["month"] == "2026-08", "다음 교체는 9월 첫 거래일"
+
+
+def test_confirm_now_does_not_overwrite_existing_holdings():
+    """이미 보유 중이면 --confirm이 덮어쓰지 않는다 — 진입가가 날아가면 원장이 망가진다."""
+    daily = {"2026-08-12": ["000010"]}
+    nhc = _nhc(daily, "2026-08-13", [])
+    qg = _qg([("000010", 1.0)])
+    bars = _bars({"000010": {"2026-08-18": (100.0, 105.0)}})
+    state = {"month": "2026-08", "holdings": [
+        {"code": "000010", "name": "종목000010", "entry_date": "2026-08-03", "entry_price": 70.0}], "ledger": []}
+    out, _ = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 18), confirm_now=True)
+    assert out["portfolio"][0]["entry_price"] == 70.0, "기존 진입가 유지"
+
+
 def main():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:

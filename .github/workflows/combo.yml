@@ -5,7 +5,12 @@ name: 신고가×퀄리티 조합 전략
 on:
   schedule:
     - cron: "50 7 * * 1-5"    # 평일 16:50 KST (신고가 16:30 이후)
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "지금 명단을 확정 포트폴리오로 잡는다 (월중 진입 — 검증 규칙 밖)"
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency: { group: combo, cancel-in-progress: false }
@@ -32,7 +37,7 @@ jobs:
         run: python scanner/test_combo_strategy.py
 
       - name: 조합 전략 산출
-        run: python scanner/combo_strategy.py
+        run: python scanner/combo_strategy.py ${{ inputs.confirm && '--confirm' || '' }}
 
       - name: 결과 커밋 (원장 보존)
         run: |
