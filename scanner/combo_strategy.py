@@ -195,9 +195,9 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
                     "n": len(closed), "avg_ret_pct": round(sum(rets) / len(rets), 2) if rets else None,
                     "win_rate": (round(sum(1 for r in rets if r > 0) / len(rets) * 100, 1)
                                  if rets else None),
-                    "added": [[p["code"], p["name"]] for p in picks
+                    "added": [{"code": p["code"], "name": p["name"]} for p in picks
                               if p["code"] not in {c["code"] for c in closed}],
-                    "removed": [[c["code"], c["name"]] for c in closed
+                    "removed": [{"code": c["code"], "name": c["name"]} for c in closed
                                 if c["code"] not in {p["code"] for p in picks}],
                     "holdings": closed,
                 })
@@ -250,8 +250,8 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
     prev = dict(state.get("eligible") or [])
     cur = {r["code"]: r["name"] for r in eligible}
     if prev:   # 첫 실행에 전량 '편입'으로 찍히는 걸 막는다
-        added = [[c, n] for c, n in cur.items() if c not in prev]
-        removed = [[c, n] for c, n in prev.items() if c not in cur]
+        added = [{"code": c, "name": n} for c, n in cur.items() if c not in prev]
+        removed = [{"code": c, "name": n} for c, n in prev.items() if c not in cur]
         if added or removed:
             if history and history[-1]["date"] == today:
                 history[-1] = {"date": today, "added": added, "removed": removed}
@@ -262,6 +262,7 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = No
 
     out = {
         "updated_at": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
+        "updated": today,       # 홈 교차 카드가 읽는 하우스 키 (데이터 기준일)
         "asof": today,
         "month": cur_month,
         "rebalanced_today": rebalanced,

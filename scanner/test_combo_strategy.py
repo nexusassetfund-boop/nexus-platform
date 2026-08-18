@@ -179,8 +179,9 @@ def test_history_records_pool_changes_not_first_run():
     out2, _ = cs.build(nhc2, qg, st1, {}, now=dt.date(2026, 8, 14))
     h = out2["history"][-1]
     assert h["date"] == "2026-08-14"
-    assert [c for c, _n in h["added"]] == ["000030"]
-    assert [c for c, _n in h["removed"]] == ["000010"]
+    assert [x["code"] for x in h["added"]] == ["000030"]
+    assert [x["code"] for x in h["removed"]] == ["000010"]
+    assert h["added"][0]["name"], "홈 카드가 name을 읽는다"
 
 
 def test_history_does_not_duplicate_same_day_reruns():
@@ -206,8 +207,8 @@ def test_ledger_records_portfolio_turnover():
         {"code": "000010", "name": "종목000010", "entry_date": "2026-07-01", "entry_price": 80.0}], "ledger": []}
     _out, st = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 3))
     row = st["ledger"][-1]
-    assert [c for c, _n in row["added"]] == ["000020"]
-    assert [c for c, _n in row["removed"]] == ["000010"]
+    assert [x["code"] for x in row["added"]] == ["000020"]
+    assert [x["code"] for x in row["removed"]] == ["000010"]
 
 
 def main():
