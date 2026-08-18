@@ -64,7 +64,6 @@ SECTOR_ETFS = {
     "it-service-sw": ("0105D0", "SOL 한국AI소프트웨어"),
     "auto-mobility": ("091180", "KODEX 자동차"),
     "energy": ("377990", "TIGER Fn신재생에너지"),
-    "finance": ("139270", "TIGER 200 금융"),
     "aero-defense-space": ("449450", "PLUS K방산"),
     "resource-materials": ("139240", "TIGER 200 철강소재"),
     "battery-renewable": ("305720", "KODEX 2차전지산업"),
@@ -90,7 +89,7 @@ SECTOR_ETFS = {
     "insurance": ("140700", "KODEX 보험"),
 }
 
-# sector_map.json에 없는 RRG 전용 섹터의 표시 이름 (금융 하위는 세분 표시용)
+# sector_map.json에 없는 RRG 전용 섹터의 표시 이름 (금융은 은행·증권으로 세분 — 통합 금융 ETF 제외)
 RRG_EXTRA_NAMES = {
     "nuclear": "원전·원자력", "banks": "은행", "securities": "증권",
     "game": "게임", "semicon-front": "반도체 전공정", "semicon-back": "반도체 후공정",
