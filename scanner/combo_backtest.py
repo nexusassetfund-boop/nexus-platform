@@ -331,12 +331,12 @@ def _sig_dict(mj: dict, sig_keys: list[str], i: int, window: int, field: str) ->
     return out
 
 
-def _build_screens(rebals, names, select_fn, top, keep_rank=None, hold_every=1) -> list[dict]:
+def _build_screens(rebals, names, select_fn, top, keep_rank=None, hold_every=1, hold_phase=0) -> list[dict]:
     out = []
     held: list[str] = []
     for i, (sig, ex) in enumerate(rebals):
         codes = select_fn(i)
-        if hold_every > 1 and i % hold_every:
+        if hold_every > 1 and i % hold_every != hold_phase:
             # 리밸런싱 안 하는 달 — 직전 목표를 그대로 유지하면 simulate가 매매를 내지 않는다.
             # 회전율만 줄이고 종목 선정 로직은 건드리지 않는다.
             pass
@@ -361,9 +361,11 @@ def _turnover_variants(days, rebals, names, fn, top, bench, slip_mult):
     grid += [(f"잔류 {k}위", k, 1) for k in (15, 20, 30)]
     grid += [("분기 리밸런싱", None, 3)]
     grid += [(f"분기 + 잔류 {k}위", k, 3) for k in (20, 30)]
+    grid += [(f"분기 위상{ph}", None, 3) for ph in (1, 2)]   # 시작 시점 우연 검증
     out = {}
     for label, keep, every in grid:
-        screens = _build_screens(rebals, names, fn, top, keep_rank=keep, hold_every=every)
+        ph = int(label[-1]) if label.startswith("분기 위상") else 0
+        screens = _build_screens(rebals, names, fn, top, keep_rank=keep, hold_every=every, hold_phase=ph)
         codes = {r["code"] for s in screens for r in s["selected"]}
         o, c, _m = vb.load_prices(codes, PX_START, PX_END)
         nav, trades, aux = vb.simulate(days, screens, o, c, {"top": top}, slip_mult, False)
@@ -588,6 +590,26 @@ def main():
         path = CBT_CACHE / f"combo_turnover{args.tag}.json"
         path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
         logger.info("저장: %s", path)
+
+    if args.turnover:
+        # 기본 케이스가 슬리피지 ×2에서 우위를 잃는다(회전율 472%). 잔류 규칙·분기 리밸런싱으로
+        # 회전율을 낮췄을 때 스트레스를 통과하는지가 채택/폐기를 가른다.
+        defs = portfolio_defs(members, sig_keys, args.window)
+        out = {}
+        for label in ("g_NrQ", "g_QrN"):
+            fn, _ = defs[label]
+            for slip in (1.0, 2.0):
+                key = f"{label}_slip{slip:g}x"
+                out[key] = _turnover_variants(days, rebals, names, fn, TOP_COMBO, bench, slip)
+                logger.info("=== %s ===", key)
+                for k, v in out[key].items():
+                    logger.info("  %-18s 회전율 %6.1f%%  현금중립초과 %6.2f%%p  CAGR %6.2f%%  MDD %5.1f%%  거래 %3d",
+                                k, v["turnover_annual_pct"], v["bf_excess_cagr_pct"],
+                                v["cagr_pct"], v["mdd_pct"], v["closed_trades"])
+        p = CBT_CACHE / f"combo_turnover{args.tag}.json"
+        p.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", p)
+        return
 
     if args.run:
         defs = portfolio_defs(members, sig_keys, args.window)
