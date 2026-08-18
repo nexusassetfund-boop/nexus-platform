@@ -1,0 +1,96 @@
+{
+ "month": "2026-08",
+ "holdings": [
+  {
+   "code": "383220",
+   "name": "F&F",
+   "sector": "패션",
+   "entry_date": "2026-08-14",
+   "entry_price": 68200.0,
+   "composite_at_entry": 0.774,
+   "rank_at_entry": 1
+  },
+  {
+   "code": "078930",
+   "name": "GS",
+   "sector": "석유화학",
+   "entry_date": "2026-08-14",
+   "entry_price": 107000.0,
+   "composite_at_entry": 0.718,
+   "rank_at_entry": 2
+  },
+  {
+   "code": "161390",
+   "name": "한국타이어앤테크놀로지",
+   "sector": "Auto",
+   "entry_date": "2026-08-14",
+   "entry_price": 71200.0,
+   "composite_at_entry": 0.666,
+   "rank_at_entry": 3
+  },
+  {
+   "code": "111770",
+   "name": "영원무역",
+   "sector": "패션",
+   "entry_date": "2026-08-14",
+   "entry_price": 83700.0,
+   "composite_at_entry": 0.514,
+   "rank_at_entry": 4
+  },
+  {
+   "code": "073240",
+   "name": "금호타이어",
+   "sector": "Auto",
+   "entry_date": "2026-08-14",
+   "entry_price": 8210.0,
+   "composite_at_entry": 0.417,
+   "rank_at_entry": 5
+  },
+  {
+   "code": "007340",
+   "name": "DN오토모티브",
+   "sector": "Auto",
+   "entry_date": "2026-08-14",
+   "entry_price": 49150.0,
+   "composite_at_entry": 0.372,
+   "rank_at_entry": 6
+  },
+  {
+   "code": "271560",
+   "name": "오리온",
+   "sector": "음식료",
+   "entry_date": "2026-08-14",
+   "entry_price": 131600.0,
+   "composite_at_entry": 0.319,
+   "rank_at_entry": 7
+  },
+  {
+   "code": "282330",
+   "name": "BGF리테일",
+   "sector": "유통",
+   "entry_date": "2026-08-14",
+   "entry_price": 140700.0,
+   "composite_at_entry": 0.245,
+   "rank_at_entry": 8
+  },
+  {
+   "code": "161890",
+   "name": "한국콜마",
+   "sector": "화장품",
+   "entry_date": "2026-08-14",
+   "entry_price": 135200.0,
+   "composite_at_entry": 0.124,
+   "rank_at_entry": 9
+  },
+  {
+   "code": "028670",
+   "name": "팬오션",
+   "sector": "운송",
+   "entry_date": "2026-08-14",
+   "entry_price": 5680.0,
+   "composite_at_entry": 0.049,
+   "rank_at_entry": 10
+  }
+ ],
+ "ledger": []
+}
