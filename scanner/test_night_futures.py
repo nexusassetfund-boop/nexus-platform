@@ -22,7 +22,7 @@ def test_night_session_window():
 
 def test_preopen_reset_detected():
     assert night_quote_is_preopen_reset(
-        {"value": 981.15, "prev_night_close": 981.15, "kis_change": 0, "change_pct": 0, "volume": 0})
+        {"value": 981.15, "prev_close": 981.15, "change": 0, "change_pct": 0, "volume": 0})
 
 
 def test_real_night_session_kept():
@@ -30,13 +30,13 @@ def test_real_night_session_kept():
     # 사후 조회로는 이 값을 못 얻는다 — 07:20엔 리셋, 08:2x엔 장전에 흘러가는 다른 값이 온다.
     # 그래서 04:50 스냅샷이 필요하고, 이 판별기는 그 스냅샷이 진짜 세션 값일 때 통과시켜야 한다.
     assert not night_quote_is_preopen_reset(
-        {"value": 995.38, "prev_night_close": 981.15, "kis_change": 14.23, "change_pct": 1.45, "volume": 38000})
+        {"value": 995.38, "prev_close": 981.15, "change": 14.23, "change_pct": 1.45, "volume": 38000})
 
 
 def test_genuine_flat_with_volume_kept():
     # 진짜 보합이라도 거래가 있었으면 야간세션 값이다 — 버리면 안 된다
     assert not night_quote_is_preopen_reset(
-        {"value": 981.15, "prev_night_close": 981.15, "kis_change": 0, "change_pct": 0, "volume": 420})
+        {"value": 981.15, "prev_close": 981.15, "change": 0, "change_pct": 0, "volume": 420})
 
 
 def test_empty_is_reset():
@@ -44,16 +44,21 @@ def test_empty_is_reset():
     assert night_quote_is_preopen_reset({})
 
 
-def test_change_is_measured_against_regular_session_close():
-    """등락 기준가는 직전 정규장 코스피200 종가여야 한다 — KIS 원본(직전 야간세션)이 아니다.
+def test_night_market_div_code_is_cm():
+    """야간선물 조회는 FID_COND_MRKT_DIV_CODE="CM" — "F"는 주간 지수선물이다.
 
-    실제 오보 2026-08-19 am: 화요일 밤(1,078.25)을 금요일 밤(1,098.90)과 비교해 "-1.88%"가
-    나갔다. 그 사이 8/17은 대체공휴일, 8/18 정규장은 -1.47%였다. 전일 종가 1,082.00 기준으로는
-    -0.35%가 맞는 값이다.
+    2026-08-19 am 브리핑이 "야간선물 1,078.25 (-20.65, -1.88%)"로 나갔는데, 그건 div="F"가 주는
+    8/18 **정규장** 선물 종가와 그 전일 대비였다(직전 정규장 8/14 종가 1,098.90 대비 -1.88%).
+    같은 시각 div="CM"은 1,031.95 / -46.30 / -4.29%(기준가 futs_sdpr 1,078.25) — 이게 진짜다.
+    거래량이 붙어 있어 리셋 판별로는 절대 못 잡는다. 그래서 코드를 문자열로 고정해 지킨다.
     """
-    last, base, kis_prev = 1078.25, 1082.00, 1098.90
-    assert round((last / base - 1) * 100, 2) == -0.35
-    assert round((last / kis_prev - 1) * 100, 2) == -1.88   # 지금까지 나가던 틀린 값
+    import inspect
+
+    import briefing_data
+    src = inspect.getsource(briefing_data.collect_night_futures)
+    assert '"FID_COND_MRKT_DIV_CODE": "CM"' in src
+    # 기준가 대비가 맞는지 — 실측값으로 산수 확인
+    assert round((1031.95 / 1078.25 - 1) * 100, 2) == -4.29
 
 
 if __name__ == "__main__":
@@ -61,5 +66,5 @@ if __name__ == "__main__":
     test_real_night_session_kept()
     test_genuine_flat_with_volume_kept()
     test_empty_is_reset()
-    test_change_is_measured_against_regular_session_close()
+    test_night_market_div_code_is_cm()
     print("ok")
