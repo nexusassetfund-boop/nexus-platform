@@ -149,7 +149,14 @@ def _last_close(bars: dict, code: str, upto: str):
     return bars[code][days[-1]]["close"] if days else None
 
 
-def build(nhc: dict, qg: dict, state: dict, bars: dict) -> tuple[dict, dict]:
+def _latest_close(bars: dict, code: str):
+    """가장 최근 종가 — 신고가 명단(asof)이 하루 늦어도 평가액은 최신이어야 한다.
+    진입가는 진입일에 고정하고, 현재가만 최신으로 본다."""
+    days = sorted(bars.get(code) or {})
+    return (days[-1], bars[code][days[-1]]["close"]) if days else (None, None)
+
+
+def build(nhc: dict, qg: dict, state: dict, bars: dict, now: dt.date | None = None) -> tuple[dict, dict]:
     """(combo.json, combo_state.json) 산출. bars 없이도 명단은 나온다(가격만 빈다)."""
     today = nhc.get("data_last_date")
     if not today:
@@ -161,8 +168,16 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict) -> tuple[dict, dict]:
     rebalanced = False
 
     # ── 월 첫 거래일 = 교체일. 신호는 전월 마지막 거래일 기준, 체결은 오늘 시가 ──
-    if cur_month != month:
-        sig_date = _last_trading_day_of_prev_month(nhc, today) if cur_month else None
+    stale = ((now or dt.datetime.now(tz=KST).date()) - dt.date.fromisoformat(today)).days
+    if cur_month != month and not cur_month:
+        # 첫 실행 — 월 중간에 들어가면 검증된 규칙(월 첫 거래일 진입)과 어긋나고 원장도 더러워진다.
+        # 기준월만 잡아두고 명단은 미리보기로만 보여준다. 확정은 다음 달 첫 거래일에.
+        cur_month = month
+        logger.info("첫 실행 — 기준월 %s만 기록, 확정 진입은 다음 달 첫 거래일", month)
+    elif cur_month != month and stale > 5:
+        logger.warning("신고가 데이터가 %d일 지연(asof %s) — 교체 보류", stale, today)
+    elif cur_month != month:
+        sig_date = _last_trading_day_of_prev_month(nhc, today)
         picks = select(nhc, qg, asof=sig_date)
         if picks:
             # 직전 달 보유분 청산 기록 (같은 날 시가)
@@ -200,15 +215,18 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict) -> tuple[dict, dict]:
     rank_now = {r["code"]: i for i, r in enumerate(
         sorted(pool_now.values(), key=lambda r: -r["composite"]), 1)}
     live_pick = {p["code"]: p["rank"] for p in select(nhc, qg)}
-    port = []
+    port, price_dates = [], []
     for h in holdings:
-        last = _last_close(bars, h["code"], today)
+        pdate, last = _latest_close(bars, h["code"])
+        if pdate:
+            price_dates.append(pdate)
         port.append({
             **h,
             "price": last,
             "ret_pct": (round((last / h["entry_price"] - 1) * 100, 2)
                         if last and h.get("entry_price") else None),
-            "days_held": (dt.date.fromisoformat(today) - dt.date.fromisoformat(h["entry_date"])).days,
+            "days_held": (dt.date.fromisoformat(pdate or today)
+                          - dt.date.fromisoformat(h["entry_date"])).days,
             "in_gate": h["code"] in gate_now,            # 아직 신고가 창 안인가
             "quality_rank": rank_now.get(h["code"]),     # 퀄리티 풀 내 현재 순위
             "in_current_pick": h["code"] in live_pick,   # 지금 뽑아도 들어오는가
@@ -237,6 +255,7 @@ def build(nhc: dict, qg: dict, state: dict, bars: dict) -> tuple[dict, dict]:
         },
         "sources": {
             "newhigh_asof": nhc.get("data_last_date"),
+            "price_asof": max(price_dates) if price_dates else None,
             "quality_base": qg.get("base_date"), "quality_updated": qg.get("updated"),
             "quality_pool_n": len(pool_now),
         },

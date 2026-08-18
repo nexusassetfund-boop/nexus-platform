@@ -1,7 +1,11 @@
 """조합 전략 순수 로직 테스트 (네트워크 없음).
 실행: python scanner/test_combo_strategy.py
 """
+import datetime as dt
+
 import combo_strategy as cs
+
+NOW = dt.date(2026, 8, 3)   # 픽스처 기준일 — 신선도 가드가 테스트를 흔들지 않게 고정
 
 COLS = ["code", "status", "gap", "price"]
 
@@ -70,13 +74,13 @@ def test_rebalance_only_on_new_month():
     # 같은 달이면 교체하지 않는다
     state = {"month": "2026-08", "holdings": [
         {"code": "000010", "name": "종목000010", "entry_date": "2026-08-03", "entry_price": 90.0}], "ledger": []}
-    out, _ = cs.build(nhc, qg, state, bars)
+    out, _ = cs.build(nhc, qg, state, bars, now=NOW)
     assert out["rebalanced_today"] is False
     assert out["portfolio"][0]["entry_price"] == 90.0, "기존 진입가 유지"
     # 달이 바뀌면 교체 + 원장 적립
     state2 = {"month": "2026-07", "holdings": [
         {"code": "000010", "name": "종목000010", "entry_date": "2026-07-01", "entry_price": 50.0}], "ledger": []}
-    out2, st2 = cs.build(nhc, qg, state2, bars)
+    out2, st2 = cs.build(nhc, qg, state2, bars, now=NOW)
     assert out2["rebalanced_today"] is True
     assert out2["portfolio"][0]["entry_price"] == 100.0, "교체일 시가로 진입"
     assert len(st2["ledger"]) == 1
@@ -91,7 +95,7 @@ def test_signal_uses_previous_month_window():
     bars = _bars({"000010": {"2026-08-03": (100.0, 100.0)},
                   "000020": {"2026-08-03": (100.0, 100.0)}})
     state = {"month": "2026-07", "holdings": [], "ledger": []}
-    out, _ = cs.build(nhc, qg, state, bars)
+    out, _ = cs.build(nhc, qg, state, bars, now=NOW)
     assert [h["code"] for h in out["portfolio"]] == ["000010"], out["portfolio"]
     assert [p["code"] for p in out["preview"]][0] == "000020", "미리보기는 오늘 기준"
 
@@ -104,11 +108,50 @@ def test_portfolio_flags_are_informational():
     bars = _bars({"000010": {"2026-08-04": (100.0, 80.0)}})
     state = {"month": "2026-08", "holdings": [
         {"code": "000010", "name": "종목000010", "entry_date": "2026-08-03", "entry_price": 100.0}], "ledger": []}
-    out, _ = cs.build(nhc, qg, state, bars)
+    out, _ = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 4))
     h = out["portfolio"][0]
     assert h["code"] == "000010", "게이트를 벗어나도 계속 보유"
     assert h["in_gate"] is False and h["in_current_pick"] is False
     assert h["ret_pct"] == -20.0
+
+
+def test_first_run_does_not_enter_mid_month():
+    """첫 실행은 기준월만 잡는다 — 월 중간 진입은 검증된 규칙(월 첫 거래일)과 어긋난다."""
+    daily = {"2026-08-12": ["000010"]}
+    nhc = _nhc(daily, "2026-08-13", ["000010"])
+    qg = _qg([("000010", 1.0)])
+    bars = _bars({"000010": {"2026-08-13": (100.0, 105.0)}})
+    out, st = cs.build(nhc, qg, {}, bars, now=dt.date(2026, 8, 13))
+    assert out["portfolio"] == [], "첫 실행에 확정 진입하면 안 된다"
+    assert out["rebalanced_today"] is False
+    assert st["month"] == "2026-08", "기준월은 기록돼야 다음 달 경계에서 확정된다"
+    assert len(out["preview"]) == 1, "미리보기는 채워진다"
+
+
+def test_stale_newhigh_data_blocks_rebalance():
+    """신고가 데이터가 늦으면 교체를 건너뛴다 — 원장의 잘못된 진입일은 되돌릴 수 없다."""
+    daily = {"2026-07-31": ["000010"], "2026-08-03": ["000010"]}
+    nhc = _nhc(daily, "2026-08-03", ["000010"])
+    qg = _qg([("000010", 1.0)])
+    bars = _bars({"000010": {"2026-08-03": (100.0, 100.0)}})
+    state = {"month": "2026-07", "holdings": [], "ledger": []}
+    out, _ = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 20))   # 17일 지연
+    assert out["rebalanced_today"] is False, "지연 데이터로 교체하면 안 된다"
+
+
+def test_current_price_uses_latest_close():
+    """평가액은 최신 종가 — 신고가 명단이 하루 늦어도 수익률이 옛날에 묶이면 안 된다."""
+    daily = {"2026-08-12": ["000010"]}
+    nhc = _nhc(daily, "2026-08-13", ["000010"])
+    qg = _qg([("000010", 1.0)])
+    bars = _bars({"000010": {"2026-08-13": (100.0, 110.0), "2026-08-17": (109.0, 90.0)}})
+    state = {"month": "2026-08", "holdings": [
+        {"code": "000010", "name": "종목000010", "entry_date": "2026-08-13", "entry_price": 100.0}], "ledger": []}
+    out, _ = cs.build(nhc, qg, state, bars, now=dt.date(2026, 8, 17))
+    h = out["portfolio"][0]
+    assert h["price"] == 90.0, "8/17 종가를 써야 한다"
+    assert h["ret_pct"] == -10.0, "8/13 종가(110)로 재면 +10%로 잘못 나온다"
+    assert out["sources"]["price_asof"] == "2026-08-17"
 
 
 def main():
