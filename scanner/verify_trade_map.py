@@ -169,6 +169,7 @@ def verify_entry(e: dict, month: str, api_key: str) -> dict:
 def main():
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
     api_key = capi.require_key()
+    capi.preflight(api_key)          # 경로가 막혔으면 20초 안에 죽는다
     src = _load(SRC_PATH)
     if not src or not src.get("entries"):
         print(f"매핑 원본 없음: {SRC_PATH}")

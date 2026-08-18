@@ -304,6 +304,8 @@ def build() -> dict | None:
         return None
 
     api_key = capi.require_key()
+    # 경로가 막혔으면 20초 안에 죽는다 — 막힌 채로 돌면 잡 타임아웃까지 태우고 취소된다.
+    capi.preflight(api_key)
     today = dt.datetime.now(tz=KST).date()
     month = latest_confirmed_month(today)
     # month는 아래에서 시군구 응답에 맞춰 뒤로 물러날 수 있다. 수입 워치는 다른 API를

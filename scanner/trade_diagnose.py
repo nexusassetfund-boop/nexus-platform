@@ -112,6 +112,11 @@ def main() -> None:
     if not key:
         print("CUSTOMS_API_KEY 미설정 — 진단할 수 없습니다.")
         sys.exit(1)
+    try:
+        capi.preflight(key)
+    except capi.CustomsError as e:
+        print(e)
+        sys.exit(1)
     sweep(key)
     track_failures(key)
     print(f"\n실제 네트워크 호출 {capi.call_count()}회 (한도 10,000/월)")
