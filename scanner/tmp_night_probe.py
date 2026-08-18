@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""일회성 진단 — KIS 야간선물(A016xx) 원본 필드와 일봉을 그대로 덤프한다.
+"""일회성 진단 2 — 야간선물이 어느 시장구분코드에 있는지 찾는다.
 
-배경: 2026-08-19 am 브리핑이 야간선물 1,078.25(-1.88%)로 나갔는데 실제는 -4.29% 급락이었다.
-05:01 스냅샷이 잡은 값이 세션 종가가 아니었다는 뜻 — 어떤 필드가 진짜 종가를 담는지 확인한다.
+probe 1 결과: FID_COND_MRKT_DIV_CODE="F" 로 A01609 를 부르면 **주간 정규장** 선물이 온다.
+(전일 O/H/L/C = 1119.80/1144.90/1070.25/1078.25, 거래량 150,055 — 8/18 정규장 봉과 일치)
+즉 지금까지 야간선물을 한 번도 조회한 적이 없다. 야간 구분코드를 찾는다.
 """
 import asyncio
 import json
@@ -10,36 +11,26 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from briefing_data import _cme_front_month  # noqa: E402
 from data_provider import load_config, kis_get  # noqa: E402
+
+FIELDS = ("futs_prpr", "futs_prdy_vrss", "futs_prdy_ctrt", "futs_prdy_clpr", "futs_sdpr",
+          "futs_oprc", "futs_hgpr", "futs_lwpr", "acml_vol", "hts_kor_isnm")
 
 
 async def main():
     cfg = load_config()
-    code = _cme_front_month()
-    print("front month:", code)
-
-    data = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-price",
-                         "FHMIF10000000",
-                         {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code})
-    print("\n=== inquire-price output1 ===")
-    print(json.dumps((data or {}).get("output1") or {}, ensure_ascii=False, indent=1))
-    for k in ("output2", "output3"):
-        if (data or {}).get(k):
-            print(f"\n=== {k} ===")
-            print(json.dumps(data[k], ensure_ascii=False, indent=1)[:2000])
-
-    print("\n=== 야간선물 일봉 (inquire-daily-fuopchartprice, D) ===")
-    try:
-        d = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-daily-fuopchartprice",
-                          "FHKIF03020100",
-                          {"FID_COND_MRKT_DIV_CODE": "F", "FID_INPUT_ISCD": code,
-                           "FID_INPUT_DATE_1": "20260810", "FID_INPUT_DATE_2": "20260819",
-                           "FID_PERIOD_DIV_CODE": "D"})
-        print(json.dumps((d or {}).get("output1") or {}, ensure_ascii=False, indent=1))
-        print(json.dumps(((d or {}).get("output2") or [])[:12], ensure_ascii=False, indent=1))
-    except Exception as e:
-        print("daily chart error:", e)
+    for tr in ("FHMIF10000000", "FHMCF10000000"):
+        for div in ("F", "CF", "NF", "JF", "MF", "CM"):
+            try:
+                d = await kis_get(cfg, "/uapi/domestic-futureoption/v1/quotations/inquire-price",
+                                  tr, {"FID_COND_MRKT_DIV_CODE": div, "FID_INPUT_ISCD": "A01609"})
+                o = (d or {}).get("output1") or {}
+                if not o:
+                    print(f"{tr} div={div:<3} -> 빈 응답 {str(d)[:120]}")
+                    continue
+                print(f"{tr} div={div:<3} -> " + " ".join(f"{k}={o.get(k)}" for k in FIELDS))
+            except Exception as e:
+                print(f"{tr} div={div:<3} -> ERR {str(e)[:120]}")
 
 
 asyncio.run(main())
