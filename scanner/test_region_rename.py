@@ -14,7 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from trade_stats import series_for
+from trade_stats import series_for, _keys_for
 
 # 실측값 그대로 (천USD)
 ROWS = [
@@ -57,6 +57,24 @@ def test_split_district_sums_old_name_once():
     ]
     s = series_for(rows, "인천광역시 제물포구", ["인천광역시 중구"])
     assert s["202606"]["amt"] == 30.0 and s["202607"]["amt"] == 20.0, s
+
+
+def test_sido_change_also_fetches_the_old_code():
+    # 지명 별칭만으로는 부족하다. 시도코드가 바뀌면 새 코드로는 개편 이전 달이
+    # 한 건도 안 오므로, 옛 시도도 함께 요청해야 한다.
+    # 실측: 금호타이어가 이 처리 없이 60개월 중 1개월만 남았다.
+    e = {"sido": "12", "sido_prev": ["29"], "hs_used": "401110"}
+    assert _keys_for(e) == [("12", "401110"), ("29", "401110")], _keys_for(e)
+
+
+def test_no_sido_prev_is_single_key():
+    assert _keys_for({"sido": "41", "hs_used": "330499"}) == [("41", "330499")]
+
+
+def test_incomplete_entry_yields_no_key():
+    # hs_used 가 없으면 호출을 만들지 않는다 — 빈 HS로 시도 전체를 긁으면 안 된다.
+    assert _keys_for({"sido": "41"}) == []
+    assert _keys_for({"hs_used": "330499"}) == []
 
 
 if __name__ == "__main__":

@@ -104,6 +104,19 @@ def _quarter_months(yymm: str) -> list[str]:
     return [f"{y:04d}{q + i:02d}" for i in range(3)]
 
 
+def _keys_for(e: dict) -> list[tuple[str, str]]:
+    """이 항목을 채우는 데 필요한 (시도코드, HS) 조합.
+
+    sido_prev는 개편 전 시도코드다. 시도코드가 바뀌면(광주 29 → 전남광주통합특별시 12)
+    새 코드로는 개편 이전 달이 한 건도 안 온다 — sgg_prev 별칭은 이미 받아온 응답 안의
+    옛 지명만 이어 줄 뿐, 요청하지 않은 시도의 과거 행을 만들어내지는 못한다.
+    두 코드는 개편일을 경계로 서로 배타적이라(옛 코드는 개편 후 0행) 합쳐도 겹치지 않는다.
+    """
+    hs = e.get("hs_used")
+    keys = [(e.get("sido"), hs)] + [(p, hs) for p in (e.get("sido_prev") or [])]
+    return [k for k in keys if all(k)]
+
+
 def series_for(rows: list[dict], sgg: str, sgg_prev: list[str] | None = None) -> dict[str, dict]:
     """시도 응답에서 해당 시군구 행만 골라 {YYYYMM: {amt, qty}}.
 
@@ -331,23 +344,26 @@ def build() -> dict | None:
     # 인천·광주가 정상 응답(200) 안에 0행으로 돌아와, 5종목이 경고 한 줄 없이 빠졌다.
     fetch_failed: list[tuple[str, str]] = []
     entries = tmap["entries"]
+    # 시도코드가 바뀐 항목(광주 29 → 전남광주통합특별시 12)은 옛 시도도 함께 받아야
+    # 한다. sgg_prev 별칭은 같은 응답 안의 지명만 이어 주지, 요청하지 않은 시도의
+    # 과거 행을 만들어내지는 못한다 — 실제로 금호타이어 시계열이 1개월로 남았다.
     for e in entries:
-        key = (e.get("sido"), e.get("hs_used"))
-        if not all(key) or key in raw:
-            continue
-        rows: list[dict] = []
-        try:
-            for s, en in chunks:
-                rows.extend(capi.fetch_district(key[1], key[0], s, en, api_key, CACHE_PATH))
-        except capi.CustomsError as ex:
-            logger.warning("수집 실패 sido=%s hs=%s: %s", key[0], key[1], ex)
-            fetch_failed.append((key[0], key[1]))
-            continue
-        if not rows:
-            logger.warning("수집 0행 sido=%s hs=%s — 행정구역 개편으로 시도코드가 바뀌었거나 "
-                           "통계 제공범위가 바뀌었을 수 있습니다", key[0], key[1])
-            fetch_failed.append((key[0], key[1]))
-        raw[key] = rows
+        for key in _keys_for(e):
+            if key in raw:
+                continue
+            rows: list[dict] = []
+            try:
+                for s, en in chunks:
+                    rows.extend(capi.fetch_district(key[1], key[0], s, en, api_key, CACHE_PATH))
+            except capi.CustomsError as ex:
+                logger.warning("수집 실패 sido=%s hs=%s: %s", key[0], key[1], ex)
+                fetch_failed.append((key[0], key[1]))
+                continue
+            if not rows:
+                logger.warning("수집 0행 sido=%s hs=%s — 행정구역 개편으로 시도코드가 바뀌었거나 "
+                               "통계 제공범위가 바뀌었을 수 있습니다", key[0], key[1])
+                fetch_failed.append((key[0], key[1]))
+            raw[key] = rows
 
     failed_sido = sorted({sd for sd, _ in fetch_failed})
     if fetch_failed:
@@ -383,7 +399,7 @@ def build() -> dict | None:
 
     out, failed = [], 0
     for e in entries:
-        rows = raw.get((e.get("sido"), e.get("hs_used")))
+        rows = [r for k in _keys_for(e) for r in (raw.get(k) or [])]
         if not rows:
             failed += 1
             continue
