@@ -104,15 +104,24 @@ def _quarter_months(yymm: str) -> list[str]:
     return [f"{y:04d}{q + i:02d}" for i in range(3)]
 
 
-def series_for(rows: list[dict], sgg: str) -> dict[str, dict]:
+def series_for(rows: list[dict], sgg: str, sgg_prev: list[str] | None = None) -> dict[str, dict]:
     """시도 응답에서 해당 시군구 행만 골라 {YYYYMM: {amt, qty}}.
 
     시군구 API는 시도 단위로 요청하면 그 안의 모든 시군구가 함께 온다. 골라내지
     않으면 같은 도의 타 지역이 섞여 프록시가 무너진다. 중량이 없어 qty는 건수다.
+
+    sgg_prev는 행정구역 개편 전의 옛 지명이다. 이름이 바뀌면 그 시점 이전 행이
+    한 건도 안 잡혀 60개월 시계열이 한 달로 잘리고 YoY·TTM·역대최고가 전부
+    무의미해진다 — 2026-07-01 개편(인천 서구→서해구, 중구·동구→제물포구·영종구)에서
+    실제로 그렇게 된다. 옛 이름도 같은 계열로 합쳐 시계열을 잇는다.
+
+    주의: 분할된 구(중구 → 제물포구 + 영종구)는 옛 물량이 신 물량보다 크다.
+    수준이 어긋나므로 해당 항목에는 region_changed 플래그를 붙여 비교를 경계한다.
     """
+    names = {sgg, *(sgg_prev or [])}
     out: dict[str, dict] = {}
     for r in rows:
-        if str(r.get("sgg", "")).strip() != sgg:
+        if str(r.get("sgg", "")).strip() not in names:
             continue
         p = "".join(c for c in str(r.get("period", "")) if c.isdigit())[:6]
         if len(p) != 6:
@@ -378,11 +387,16 @@ def build() -> dict | None:
         if not rows:
             failed += 1
             continue
-        s = series_for(rows, e.get("sgg") or "")
+        s = series_for(rows, e.get("sgg") or "", e.get("sgg_prev"))
         m = compute_metrics(s, month)
         if not m:
             failed += 1
             continue
+
+        # 행정구역 개편으로 지명이 바뀐 항목은 개편 전후 수준이 어긋날 수 있다
+        # (중구 → 제물포구 + 영종구처럼 쪼개진 경우). 자동 보정하지 않고 표시만 한다.
+        if e.get("sgg_prev"):
+            m.setdefault("flags", []).append("region_changed")
 
         prev = _prev_yymm(month, 12)
         yoy_krw = None

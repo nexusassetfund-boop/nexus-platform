@@ -259,12 +259,15 @@
       "ticker": "950140",
       "name": "잉글우드랩",
       "sido": "28",
-      "sgg_hint": "인천",
+      "sgg_hint": "제물포",
       "hs": [
         "330499"
       ],
       "label": "기초화장용 제품류",
-      "seed_confidence": "low"
+      "seed_confidence": "low",
+      "sgg_prev": [
+        "인천광역시 중구"
+      ]
     },
     {
       "ticker": "018290",
@@ -373,12 +376,15 @@
       "ticker": "005290",
       "name": "동진쎄미켐",
       "sido": "28",
-      "sgg_hint": "인천",
+      "sgg_hint": "서해",
       "hs": [
         "370790"
       ],
       "label": "사진용 조제품(포토레지스트)",
-      "seed_confidence": "mid"
+      "seed_confidence": "mid",
+      "sgg_prev": [
+        "인천광역시 서구"
+      ]
     },
     {
       "ticker": "039030",
@@ -443,12 +449,15 @@
       "ticker": "042700",
       "name": "한미반도체",
       "sido": "28",
-      "sgg_hint": "인천",
+      "sgg_hint": "제물포",
       "hs": [
         "848620"
       ],
       "label": "반도체 제조용 장비",
-      "seed_confidence": "mid"
+      "seed_confidence": "mid",
+      "sgg_prev": [
+        "인천광역시 중구"
+      ]
     },
     {
       "ticker": "001820",
@@ -498,13 +507,16 @@
       "ticker": "092190",
       "name": "서울바이오시스",
       "sido": "28",
-      "sgg_hint": "인천",
+      "sgg_hint": "서해",
       "hs": [
         "853921"
       ],
       "label": "LED",
       "seed_confidence": "high",
-      "note": "인천공장. 실측 인천 1위 99% — 854140이 아니라 853921(램프)"
+      "note": "인천공장. 실측 인천 1위 99% — 854140이 아니라 853921(램프)",
+      "sgg_prev": [
+        "인천광역시 서구"
+      ]
     },
     {
       "ticker": "195870",
@@ -723,7 +735,10 @@
         "401110"
       ],
       "label": "고무타이어(승용차용)",
-      "seed_confidence": "mid"
+      "seed_confidence": "mid",
+      "sgg_prev": [
+        "광주광역시 광산구"
+      ]
     },
     {
       "ticker": "002350",
