@@ -34,4 +34,4 @@ jobs:
           KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
           KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
-        run: python scanner/tmp_night_probe.py
+        run: python scanner/briefing_data.py --mode night
