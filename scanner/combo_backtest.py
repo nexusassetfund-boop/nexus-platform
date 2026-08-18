@@ -617,6 +617,32 @@ def simulate_breakout(days, member, gap, qdaily, opens, closes, bench,
             "yearly_pct": m["yearly_pct"]}
 
 
+# ── 리밸런싱 주기 스윕 (회전율-알파 곡선의 꼭짓점 탐색) ──
+# §5-C에서 "회전이 곧 알파의 전달 경로"가 드러났다. 그렇다면 매월(회전 472%)이 정점인지
+# 그냥 시험 범위의 끝이었는지 모른다. 주기를 5·10·21·42·63거래일로 훑어 곡선을 그린다.
+# 분기 실험의 교훈대로 주기마다 위상을 여러 개 돌려 평균·분산을 함께 낸다.
+
+def _freq_rebals(days, n: int, phase: int = 0):
+    return [(days[i], days[i + 1]) for i in range(len(days) - 1) if i % n == phase]
+
+
+def freq_screens(rebals, names, mem_win, qdaily_by_date, top=10):
+    """신호일마다 (최근 창 내 신고가 멤버) ∩ (그 시점 퀄리티 풀) 중 점수 상위 top."""
+    out = []
+    for sig, ex in rebals:
+        qs = qdaily_by_date.get(sig, {})
+        row = mem_win.loc[sig] if sig in mem_win.index else None
+        codes = []
+        if row is not None and qs:
+            cand = [c for c in mem_win.columns[row.fillna(False).values.astype(bool)] if c in qs]
+            cand.sort(key=lambda c: -qs[c])
+            codes = cand[:top]
+        out.append({"sig": sig, "ex": ex,
+                    "selected": [{"code": c, "name": names.get(c, c)} for c in codes],
+                    "n_prelim": len(codes), "uni_src": "freq", "top": top})
+    return out
+
+
 # ── 실행 ──
 def _calendar(args):
     days, rebals = vb.build_calendar(args.start, args.end)
@@ -637,6 +663,8 @@ def main():
     ap.add_argument("--grid", action="store_true", help="창 10/40·pullback s3·blend2·top·slip_x2")
     ap.add_argument("--turnover", action="store_true", help="회전율 감축(잔류 규칙·분기 리밸런싱) 실험")
     ap.add_argument("--breakout", action="store_true", help="돌파 매수 + 트레일링 스탑 (달력 리밸런싱 대체)")
+    ap.add_argument("--freq", action="store_true", help="리밸런싱 주기 스윕 1주~3개월 (위상 전수)")
+    ap.add_argument("--slip", type=float, default=1.0, help="슬리피지 배수")
     ap.add_argument("--window", type=int, default=20)
     ap.add_argument("--limit-months", type=int, default=0)
     ap.add_argument("--tag", default="")
@@ -707,6 +735,53 @@ def main():
         path = CBT_CACHE / f"combo_turnover{args.tag}.json"
         path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
         logger.info("저장: %s", path)
+
+    if args.freq:
+        df = nf.add_adjusted(nf.download_marcap())
+        df = df[df["Date"] <= pd.Timestamp(PX_END)].copy()
+        nh_member, _g, _rs = newhigh_panels(df)
+        qsigs = members["quality"]["sigs"]
+        qcodes = {c for k in sig_keys if k in qsigs for c in qsigs[k]["p"]}
+        codes = sorted(qcodes & set(nh_member.columns))
+        opens, closes, _m = vb.load_prices(set(codes), PX_START, PX_END)
+        idx = [d for d in closes.index if pd.Timestamp(args.start) <= d <= pd.Timestamp(args.end)]
+        nh = nh_member.reindex(index=idx, columns=closes.columns).fillna(False)
+        mem_win = nh.rolling(args.window, min_periods=1).max().astype(bool)   # 창 내 1회라도 멤버
+        qd = dict(zip(idx, _quality_daily(members, sig_keys, idx)))
+        logger.info("주기 스윕 유니버스 %d종목, 거래일 %d", len(codes), len(idx))
+
+        out = {}
+        for n, label in ((5, "1주"), (10, "2주"), (21, "1개월"), (42, "2개월"), (63, "3개월")):
+            phases = sorted(set(round(k * n / 5) % n for k in range(5)))
+            rows = []
+            for ph in phases:
+                rb = _freq_rebals(idx, n, ph)
+                if len(rb) < 8:
+                    continue
+                sc = freq_screens(rb, names, mem_win, qd)
+                nav, tr, aux = vb.simulate(idx, sc, opens, closes, {"top": 10}, args.slip)
+                m = vb.metrics(nav, tr, bench, sc, aux, [])
+                bf = _bench_fill_row(nav, aux["cash_w"], bench)
+                rows.append({"phase": ph, "bf_excess": round(bf["cagr_pct"] - m["bench_cagr_pct"], 2),
+                             "cagr": m["cagr_pct"], "mdd": m["mdd_pct"], "sharpe": m["sharpe"],
+                             "turnover": m["turnover_annual_pct"], "trades": m["closed_trades"],
+                             "win_rate": m["win_rate"]})
+            ex = [r["bf_excess"] for r in rows]
+            out[label] = {"n_days": n, "phases": rows,
+                          "mean_bf_excess": round(float(np.mean(ex)), 2),
+                          "min_bf_excess": min(ex), "max_bf_excess": max(ex),
+                          "spread": round(max(ex) - min(ex), 2),
+                          "mean_turnover": round(float(np.mean([r["turnover"] for r in rows])), 1),
+                          "mean_mdd": round(float(np.mean([r["mdd"] for r in rows])), 1)}
+            logger.info("%-4s (%2d거래일) 회전율 %6.1f%%  현금중립초과 평균 %6.2f%%p "
+                        "[%6.2f ~ %6.2f, 폭 %5.2f]  MDD %5.1f%%  위상 %d개",
+                        label, n, out[label]["mean_turnover"], out[label]["mean_bf_excess"],
+                        out[label]["min_bf_excess"], out[label]["max_bf_excess"],
+                        out[label]["spread"], out[label]["mean_mdd"], len(rows))
+        p = CBT_CACHE / f"combo_freq{args.tag}.json"
+        p.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", p)
+        return
 
     if args.breakout:
         df = nf.add_adjusted(nf.download_marcap())
