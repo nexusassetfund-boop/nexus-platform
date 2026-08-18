@@ -20,6 +20,9 @@ jobs:
         run: python -X utf8 scanner/trade_report.py prepare
       - name: Claude Code 설치
         run: npm install -g @anthropic-ai/claude-code
+      # 30턴으로는 모자랐다 — 8/15 회차가 "Reached max turns (30)"로 출력을 못 쓰고
+      # 실패해 7월 확정치 리포트가 통째로 빠졌다. 프롬프트의 분량 규칙(1,500~2,500자)이
+      # 쓰고-재보고-줄이는 반복을 유도하므로 읽기 턴 외에 여유가 필요하다.
       - name: 리포트 생성 (Claude — 데이터만으로 작성, 웹 검색 없음)
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -27,7 +30,7 @@ jobs:
           claude -p "$(cat scanner/trade_report_prompt.md)" \
             --allowedTools "Read,Write" \
             --permission-mode acceptEdits \
-            --max-turns 30
+            --max-turns 60
       - name: 검증·게시
         env:
           NEXUS_ADMIN_TOKEN: ${{ secrets.NEXUS_ADMIN_TOKEN }}
