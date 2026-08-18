@@ -89,13 +89,38 @@ SECTOR_ETFS = {
     "insurance": ("140700", "KODEX 보험"),
 }
 
-# sector_map.json에 없는 RRG 전용 섹터의 표시 이름 (금융은 은행·증권으로 세분 — 통합 금융 ETF 제외)
-RRG_EXTRA_NAMES = {
-    "nuclear": "원전·원자력", "banks": "은행", "securities": "증권",
-    "game": "게임", "semicon-front": "반도체 전공정", "semicon-back": "반도체 후공정",
-    "power-equipment": "전력기기", "insurance": "보험",
-    # 표시명 개칭 — sector_map.json 이름을 덮어씀 (게임 분리, 화장품 대표성)
-    "media-ent-game": "엔터", "retail-fashion-beauty": "화장품",
+# RRG 인사이트 문장에 쓰는 섹터 표시명 — SECTOR_ETFS 의 모든 슬러그를 덮어야 한다.
+# (예전엔 sector_map.json 사본에서 읽었는데 사본이 낡으면 문장에 "transport-logistics" 처럼
+#  영문 슬러그가 그대로 나갔다. 이름은 SECTOR_ETFS 옆에 두는 편이 어긋날 여지가 없다.)
+SECTOR_NAMES = {
+    "semiconductor": "반도체",
+    "robotics": "로봇",
+    "it-service-sw": "IT 서비스·SW",
+    "auto-mobility": "자동차·모빌리티",
+    "energy": "전력·에너지·신재생",
+    "aero-defense-space": "항공·방산·우주",
+    "resource-materials": "자원·원자재",
+    "battery-renewable": "2차전지",
+    "bio-healthcare": "바이오·헬스케어",
+    "shipbuilding-shipping": "조선·해운",
+    "telecom": "통신",
+    "construction-realestate": "건설·시멘트·부동산",
+    "media-ent-game": "엔터",
+    "game": "게임",
+    "retail-fashion-beauty": "화장품",
+    "chem-materials": "화학·소재",
+    "food-agri-fishery": "음식료·농수산",
+    "machinery-industrial": "기계·산업재",
+    "transport-logistics": "운송·물류",
+    "travel-leisure": "여행·레저",
+    "holdings-company": "지주회사",
+    "nuclear": "원전·원자력",
+    "banks": "은행",
+    "securities": "증권",
+    "semicon-front": "반도체 전공정",
+    "semicon-back": "반도체 후공정",
+    "power-equipment": "전력기기",
+    "insurance": "보험",
 }
 
 # 신규 상장 ETF의 최소 이력 예외 (기본 150거래일)
@@ -1331,9 +1356,10 @@ async def main():
                     sector_rrg_out["stats"] = json.loads(stats_path.read_text(encoding="utf-8"))
             except Exception:
                 pass
-            names = {s["key"]: s["name"] for s in json.loads(
-                (Path(__file__).parent / "data" / "sector_map.json").read_text(encoding="utf-8"))["sectors"]}
-            names.update(RRG_EXTRA_NAMES)
+            names = dict(SECTOR_NAMES)
+            unnamed = [k for k in sector_rrg_out.get("sectors", {}) if k not in names]
+            if unnamed:
+                logger.warning("섹터 표시명 누락 — SECTOR_NAMES 에 추가 필요: %s", unnamed)
             d5 = {k: v.get("ret_d5") for k, v in sector_etf_rs.items() if v.get("ret_d5") is not None}
             sector_rrg_out["insight"] = sector_rrg.build_insight(
                 sector_rrg_out, names, now_str,
