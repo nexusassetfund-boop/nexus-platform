@@ -1,0 +1,136 @@
+{
+ "updated_at": "2026-08-18 11:45",
+ "asof": "2026-08-14",
+ "month": "2026-08",
+ "rebalanced_today": false,
+ "rule": {
+  "gate": "신고가 후보 명단 최근 20거래일 창",
+  "ranker": "퀄리티 성장 composite (0.5·퀄리티Z + 0.5·모멘텀Z)",
+  "top": 10,
+  "rebalance": "월 첫 거래일 시가 전량 교체, 한 달 유지 (중도 청산 없음)",
+  "inflow": "월중 유입 자금은 명단 변경 없이 기존 종목에 동일비중 편입",
+  "backtest": "2021-07~2026-06 CAGR 34.36% vs 벤치 26.83%, 현금중립 초과 +7.79%p, 샤프 1.13, MDD -34.9% (reports/backtest_combo.md)",
+  "caveat": "슬리피지 편도 0.5% 가정 — 1.0%면 초과수익 +1.66%p로 축소. 원장으로 실측 중"
+ },
+ "sources": {
+  "newhigh_asof": "2026-08-14",
+  "price_asof": null,
+  "quality_base": "20260818",
+  "quality_updated": "2026-08-18T11:37:53+09:00",
+  "quality_pool_n": 166
+ },
+ "counts": {
+  "gate": 40,
+  "pool": 166,
+  "eligible": 12
+ },
+ "portfolio": [],
+ "preview": [
+  {
+   "code": "383220",
+   "name": "F&F",
+   "composite": 0.774,
+   "quality_z": 1.275,
+   "mom_z": 0.273,
+   "sector": "패션",
+   "rank": 1,
+   "is_held": false
+  },
+  {
+   "code": "078930",
+   "name": "GS",
+   "composite": 0.718,
+   "quality_z": -0.153,
+   "mom_z": 1.588,
+   "sector": "석유화학",
+   "rank": 2,
+   "is_held": false
+  },
+  {
+   "code": "161390",
+   "name": "한국타이어앤테크놀로지",
+   "composite": 0.666,
+   "quality_z": -0.169,
+   "mom_z": 1.501,
+   "sector": "Auto",
+   "rank": 3,
+   "is_held": false
+  },
+  {
+   "code": "111770",
+   "name": "영원무역",
+   "composite": 0.514,
+   "quality_z": -0.011,
+   "mom_z": 1.038,
+   "sector": "패션",
+   "rank": 4,
+   "is_held": false
+  },
+  {
+   "code": "073240",
+   "name": "금호타이어",
+   "composite": 0.417,
+   "quality_z": 0.419,
+   "mom_z": 0.415,
+   "sector": "Auto",
+   "rank": 5,
+   "is_held": false
+  },
+  {
+   "code": "007340",
+   "name": "DN오토모티브",
+   "composite": 0.372,
+   "quality_z": -0.146,
+   "mom_z": 0.891,
+   "sector": "Auto",
+   "rank": 6,
+   "is_held": false
+  },
+  {
+   "code": "271560",
+   "name": "오리온",
+   "composite": 0.319,
+   "quality_z": 0.395,
+   "mom_z": 0.242,
+   "sector": "음식료",
+   "rank": 7,
+   "is_held": false
+  },
+  {
+   "code": "282330",
+   "name": "BGF리테일",
+   "composite": 0.245,
+   "quality_z": 0.461,
+   "mom_z": 0.028,
+   "sector": "유통",
+   "rank": 8,
+   "is_held": false
+  },
+  {
+   "code": "161890",
+   "name": "한국콜마",
+   "composite": 0.124,
+   "quality_z": 0.036,
+   "mom_z": 0.213,
+   "sector": "화장품",
+   "rank": 9,
+   "is_held": false
+  },
+  {
+   "code": "028670",
+   "name": "팬오션",
+   "composite": 0.049,
+   "quality_z": -0.394,
+   "mom_z": 0.493,
+   "sector": "운송",
+   "rank": 10,
+   "is_held": false
+  }
+ ],
+ "ledger": [],
+ "ledger_stats": {
+  "months": 0,
+  "avg_month_pct": null,
+  "win_months": 0
+ }
+}
