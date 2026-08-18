@@ -331,13 +331,49 @@ def _sig_dict(mj: dict, sig_keys: list[str], i: int, window: int, field: str) ->
     return out
 
 
-def _build_screens(rebals, names, select_fn, top) -> list[dict]:
+def _build_screens(rebals, names, select_fn, top, keep_rank=None, hold_every=1) -> list[dict]:
     out = []
+    held: list[str] = []
     for i, (sig, ex) in enumerate(rebals):
         codes = select_fn(i)
-        sel = [{"code": c, "name": names.get(c, c)} for c in codes[:top]]
+        if hold_every > 1 and i % hold_every:
+            # 리밸런싱 안 하는 달 — 직전 목표를 그대로 유지하면 simulate가 매매를 내지 않는다.
+            # 회전율만 줄이고 종목 선정 로직은 건드리지 않는다.
+            pass
+        elif keep_rank:
+            # 잔류 규칙 — 매수는 top위, 매도는 keep_rank 밖으로 밀릴 때만.
+            # 순위가 11위와 10위를 오가는 종목을 매달 갈아타는 낭비를 막는다.
+            rank = {c: r for r, c in enumerate(codes)}
+            keep = [c for c in held if rank.get(c, 10**9) < keep_rank]
+            fill = [c for c in codes[:top] if c not in keep]
+            held = (keep + fill)[:top]
+        else:
+            held = codes[:top]
+        sel = [{"code": c, "name": names.get(c, c)} for c in held]
         out.append({"sig": sig, "ex": ex, "selected": sel,
                     "n_prelim": len(codes), "uni_src": "combo", "top": top})
+    return out
+
+
+def _turnover_variants(days, rebals, names, fn, top, bench, slip_mult):
+    """잔류 규칙·분기 리밸런싱 조합별 (회전율, 성과) 매트릭스."""
+    grid = [("기준 (매월 전량)", None, 1)]
+    grid += [(f"잔류 {k}위", k, 1) for k in (15, 20, 30)]
+    grid += [("분기 리밸런싱", None, 3)]
+    grid += [(f"분기 + 잔류 {k}위", k, 3) for k in (20, 30)]
+    out = {}
+    for label, keep, every in grid:
+        screens = _build_screens(rebals, names, fn, top, keep_rank=keep, hold_every=every)
+        codes = {r["code"] for s in screens for r in s["selected"]}
+        o, c, _m = vb.load_prices(codes, PX_START, PX_END)
+        nav, trades, aux = vb.simulate(days, screens, o, c, {"top": top}, slip_mult, False)
+        m = vb.metrics(nav, trades, bench, screens, aux, [])
+        bf = _bench_fill_row(nav, aux["cash_w"], bench)
+        out[label] = {"cagr_pct": m["cagr_pct"], "mdd_pct": m["mdd_pct"], "sharpe": m["sharpe"],
+                      "bf_excess_cagr_pct": round(bf["cagr_pct"] - m["bench_cagr_pct"], 2),
+                      "turnover_annual_pct": m["turnover_annual_pct"],
+                      "closed_trades": m["closed_trades"], "win_rate": m["win_rate"],
+                      "avg_holdings": m["avg_holdings"], "avg_days": m["avg_days"]}
     return out
 
 
@@ -481,6 +517,7 @@ def main():
     ap.add_argument("--probe", action="store_true", help="멤버 수·교집합 크기 점검 (멤버 캐시 필요)")
     ap.add_argument("--run", action="store_true", help="교집합 11 + 개선안 + 대조군 시뮬")
     ap.add_argument("--grid", action="store_true", help="창 10/40·pullback s3·blend2·top·slip_x2")
+    ap.add_argument("--turnover", action="store_true", help="회전율 감축(잔류 규칙·분기 리밸런싱) 실험")
     ap.add_argument("--window", type=int, default=20)
     ap.add_argument("--limit-months", type=int, default=0)
     ap.add_argument("--tag", default="")
@@ -533,6 +570,24 @@ def main():
 
     names = _name_map()
     bench = vb.load_bench(PX_START, PX_END)
+
+    if args.turnover:
+        defs = portfolio_defs(members, sig_keys, args.window)
+        out = {}
+        for label in ("g_NrQ", "g_QrN"):
+            fn, _t = defs[label]
+            for slip in (1.0, 2.0):
+                key = f"{label}_slip{slip:g}x"
+                out[key] = _turnover_variants(days, rebals, names, fn, TOP_COMBO, bench, slip)
+                for v_label, v in out[key].items():
+                    logger.info("[%s | %s] 회전율 %6.1f%% CAGR %6.2f%% 현금중립 %6.2f%%p "
+                                "MDD %5.1f%% 거래 %3d 보유일 %.0f",
+                                key, v_label, v["turnover_annual_pct"], v["cagr_pct"],
+                                v["bf_excess_cagr_pct"], v["mdd_pct"], v["closed_trades"],
+                                v["avg_days"] or 0)
+        path = CBT_CACHE / f"combo_turnover{args.tag}.json"
+        path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        logger.info("저장: %s", path)
 
     if args.run:
         defs = portfolio_defs(members, sig_keys, args.window)
