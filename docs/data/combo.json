@@ -1,9 +1,10 @@
 {
- "updated_at": "2026-08-18 13:17",
+ "updated_at": "2026-08-18 13:35",
  "updated": "2026-08-14",
  "asof": "2026-08-14",
  "month": "2026-08",
- "rebalanced_today": false,
+ "rebalanced_today": true,
+ "forced_entry": true,
  "rule": {
   "gate": "신고가 후보 명단 최근 20거래일 창",
   "ranker": "퀄리티 성장 composite (0.5·퀄리티Z + 0.5·모멘텀Z)",
@@ -15,7 +16,7 @@
  },
  "sources": {
   "newhigh_asof": "2026-08-14",
-  "price_asof": null,
+  "price_asof": "2026-08-18",
   "quality_base": "20260818",
   "quality_updated": "2026-08-18T11:37:53+09:00",
   "quality_pool_n": 166
@@ -25,7 +26,168 @@
   "pool": 166,
   "eligible": 12
  },
- "portfolio": [],
+ "portfolio": [
+  {
+   "code": "383220",
+   "name": "F&F",
+   "sector": "패션",
+   "entry_date": "2026-08-18",
+   "entry_price": 66800.0,
+   "composite_at_entry": 0.774,
+   "rank_at_entry": 1,
+   "forced_entry": true,
+   "price": 64200.0,
+   "ret_pct": -3.89,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 15,
+   "in_current_pick": true
+  },
+  {
+   "code": "078930",
+   "name": "GS",
+   "sector": "석유화학",
+   "entry_date": "2026-08-18",
+   "entry_price": 115800.0,
+   "composite_at_entry": 0.718,
+   "rank_at_entry": 2,
+   "forced_entry": true,
+   "price": 119400.0,
+   "ret_pct": 3.11,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 17,
+   "in_current_pick": true
+  },
+  {
+   "code": "161390",
+   "name": "한국타이어앤테크놀로지",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 70900.0,
+   "composite_at_entry": 0.666,
+   "rank_at_entry": 3,
+   "forced_entry": true,
+   "price": 68200.0,
+   "ret_pct": -3.81,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 19,
+   "in_current_pick": true
+  },
+  {
+   "code": "111770",
+   "name": "영원무역",
+   "sector": "패션",
+   "entry_date": "2026-08-18",
+   "entry_price": 85100.0,
+   "composite_at_entry": 0.514,
+   "rank_at_entry": 4,
+   "forced_entry": true,
+   "price": 79800.0,
+   "ret_pct": -6.23,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 26,
+   "in_current_pick": true
+  },
+  {
+   "code": "073240",
+   "name": "금호타이어",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 8120.0,
+   "composite_at_entry": 0.417,
+   "rank_at_entry": 5,
+   "forced_entry": true,
+   "price": 7750.0,
+   "ret_pct": -4.56,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 36,
+   "in_current_pick": true
+  },
+  {
+   "code": "007340",
+   "name": "DN오토모티브",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 65900.0,
+   "composite_at_entry": 0.372,
+   "rank_at_entry": 6,
+   "forced_entry": true,
+   "price": 62900.0,
+   "ret_pct": -4.55,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 39,
+   "in_current_pick": true
+  },
+  {
+   "code": "271560",
+   "name": "오리온",
+   "sector": "음식료",
+   "entry_date": "2026-08-18",
+   "entry_price": 134000.0,
+   "composite_at_entry": 0.319,
+   "rank_at_entry": 7,
+   "forced_entry": true,
+   "price": 125200.0,
+   "ret_pct": -6.57,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 44,
+   "in_current_pick": true
+  },
+  {
+   "code": "282330",
+   "name": "BGF리테일",
+   "sector": "유통",
+   "entry_date": "2026-08-18",
+   "entry_price": 146600.0,
+   "composite_at_entry": 0.245,
+   "rank_at_entry": 8,
+   "forced_entry": true,
+   "price": 142500.0,
+   "ret_pct": -2.8,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 49,
+   "in_current_pick": true
+  },
+  {
+   "code": "161890",
+   "name": "한국콜마",
+   "sector": "화장품",
+   "entry_date": "2026-08-18",
+   "entry_price": 133200.0,
+   "composite_at_entry": 0.124,
+   "rank_at_entry": 9,
+   "forced_entry": true,
+   "price": 128200.0,
+   "ret_pct": -3.75,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 54,
+   "in_current_pick": true
+  },
+  {
+   "code": "028670",
+   "name": "팬오션",
+   "sector": "운송",
+   "entry_date": "2026-08-18",
+   "entry_price": 5720.0,
+   "composite_at_entry": 0.049,
+   "rank_at_entry": 10,
+   "forced_entry": true,
+   "price": 6050.0,
+   "ret_pct": 5.77,
+   "days_held": 0,
+   "in_gate": true,
+   "quality_rank": 61,
+   "in_current_pick": true
+  }
+ ],
  "eligible": [
   {
    "code": "383220",
@@ -35,7 +197,7 @@
    "mom_z": 0.273,
    "sector": "패션",
    "rank": 1,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -46,7 +208,7 @@
    "mom_z": 1.588,
    "sector": "석유화학",
    "rank": 2,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -57,7 +219,7 @@
    "mom_z": 1.501,
    "sector": "Auto",
    "rank": 3,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -68,7 +230,7 @@
    "mom_z": 1.038,
    "sector": "패션",
    "rank": 4,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -79,7 +241,7 @@
    "mom_z": 0.415,
    "sector": "Auto",
    "rank": 5,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -90,7 +252,7 @@
    "mom_z": 0.891,
    "sector": "Auto",
    "rank": 6,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -101,7 +263,7 @@
    "mom_z": 0.242,
    "sector": "음식료",
    "rank": 7,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -112,7 +274,7 @@
    "mom_z": 0.028,
    "sector": "유통",
    "rank": 8,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -123,7 +285,7 @@
    "mom_z": 0.213,
    "sector": "화장품",
    "rank": 9,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -134,7 +296,7 @@
    "mom_z": 0.493,
    "sector": "운송",
    "rank": 10,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -169,7 +331,7 @@
    "mom_z": 0.273,
    "sector": "패션",
    "rank": 1,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -180,7 +342,7 @@
    "mom_z": 1.588,
    "sector": "석유화학",
    "rank": 2,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -191,7 +353,7 @@
    "mom_z": 1.501,
    "sector": "Auto",
    "rank": 3,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -202,7 +364,7 @@
    "mom_z": 1.038,
    "sector": "패션",
    "rank": 4,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -213,7 +375,7 @@
    "mom_z": 0.415,
    "sector": "Auto",
    "rank": 5,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -224,7 +386,7 @@
    "mom_z": 0.891,
    "sector": "Auto",
    "rank": 6,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -235,7 +397,7 @@
    "mom_z": 0.242,
    "sector": "음식료",
    "rank": 7,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -246,7 +408,7 @@
    "mom_z": 0.028,
    "sector": "유통",
    "rank": 8,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -257,7 +419,7 @@
    "mom_z": 0.213,
    "sector": "화장품",
    "rank": 9,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   },
   {
@@ -268,7 +430,7 @@
    "mom_z": 0.493,
    "sector": "운송",
    "rank": 10,
-   "is_held": false,
+   "is_held": true,
    "would_buy": true
   }
  ],

@@ -1,6 +1,107 @@
 {
  "month": "2026-08",
- "holdings": [],
+ "holdings": [
+  {
+   "code": "383220",
+   "name": "F&F",
+   "sector": "패션",
+   "entry_date": "2026-08-18",
+   "entry_price": 66800.0,
+   "composite_at_entry": 0.774,
+   "rank_at_entry": 1,
+   "forced_entry": true
+  },
+  {
+   "code": "078930",
+   "name": "GS",
+   "sector": "석유화학",
+   "entry_date": "2026-08-18",
+   "entry_price": 115800.0,
+   "composite_at_entry": 0.718,
+   "rank_at_entry": 2,
+   "forced_entry": true
+  },
+  {
+   "code": "161390",
+   "name": "한국타이어앤테크놀로지",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 70900.0,
+   "composite_at_entry": 0.666,
+   "rank_at_entry": 3,
+   "forced_entry": true
+  },
+  {
+   "code": "111770",
+   "name": "영원무역",
+   "sector": "패션",
+   "entry_date": "2026-08-18",
+   "entry_price": 85100.0,
+   "composite_at_entry": 0.514,
+   "rank_at_entry": 4,
+   "forced_entry": true
+  },
+  {
+   "code": "073240",
+   "name": "금호타이어",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 8120.0,
+   "composite_at_entry": 0.417,
+   "rank_at_entry": 5,
+   "forced_entry": true
+  },
+  {
+   "code": "007340",
+   "name": "DN오토모티브",
+   "sector": "Auto",
+   "entry_date": "2026-08-18",
+   "entry_price": 65900.0,
+   "composite_at_entry": 0.372,
+   "rank_at_entry": 6,
+   "forced_entry": true
+  },
+  {
+   "code": "271560",
+   "name": "오리온",
+   "sector": "음식료",
+   "entry_date": "2026-08-18",
+   "entry_price": 134000.0,
+   "composite_at_entry": 0.319,
+   "rank_at_entry": 7,
+   "forced_entry": true
+  },
+  {
+   "code": "282330",
+   "name": "BGF리테일",
+   "sector": "유통",
+   "entry_date": "2026-08-18",
+   "entry_price": 146600.0,
+   "composite_at_entry": 0.245,
+   "rank_at_entry": 8,
+   "forced_entry": true
+  },
+  {
+   "code": "161890",
+   "name": "한국콜마",
+   "sector": "화장품",
+   "entry_date": "2026-08-18",
+   "entry_price": 133200.0,
+   "composite_at_entry": 0.124,
+   "rank_at_entry": 9,
+   "forced_entry": true
+  },
+  {
+   "code": "028670",
+   "name": "팬오션",
+   "sector": "운송",
+   "entry_date": "2026-08-18",
+   "entry_price": 5720.0,
+   "composite_at_entry": 0.049,
+   "rank_at_entry": 10,
+   "forced_entry": true
+  }
+ ],
  "ledger": [],
  "eligible": [
   [
