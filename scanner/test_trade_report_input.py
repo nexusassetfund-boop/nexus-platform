@@ -70,6 +70,42 @@ def test_skip_marker_when_month_already_reported():
         assert json.loads(tr.INPUT_PATH.read_text(encoding="utf-8"))["skip"] is True
 
 
+def test_skip_still_publishes_existing_report():
+    """생성을 건너뛴 회차도 KV 게시는 한다.
+
+    202607이 저장소엔 있고 KV엔 7/30치가 남아 있었다. 리포트를 손으로 커밋하면
+    publish를 타지 않는데, 그 뒤 실행은 전부 skip이라 영영 복구되지 않았다.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        tmp = Path(d)
+        _prepare_in_tmpdir(tmp)
+        doc = {"updated": "2026-08-18 12:07", "items": [{"month": "202607"}]}
+        tr.REPORT_PATH.write_text(json.dumps(doc), encoding="utf-8")
+        assert tr.prepare() == 0                       # skip 마커를 남긴다
+        pushed = []
+        orig, tr._push_kv = tr._push_kv, pushed.append
+        try:
+            assert tr.publish() == 0
+        finally:
+            tr._push_kv = orig
+        assert pushed == [doc], f"skip 회차가 게시되지 않았다: {pushed}"
+
+
+def test_skip_without_report_does_not_push():
+    # 리포트 자체가 없으면 밀 것도 없다 — 빈 문서를 올려 KV를 지우면 안 된다.
+    with tempfile.TemporaryDirectory() as d:
+        tmp = Path(d)
+        _prepare_in_tmpdir(tmp)
+        tr.INPUT_PATH.write_text(json.dumps({"skip": True}), encoding="utf-8")
+        pushed = []
+        orig, tr._push_kv = tr._push_kv, pushed.append
+        try:
+            assert tr.publish() == 0
+        finally:
+            tr._push_kv = orig
+        assert pushed == [], "리포트가 없는데 게시했다"
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_"):
