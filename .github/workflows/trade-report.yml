@@ -17,13 +17,20 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
       - name: 입력 준비 (같은 기준월 리포트가 있으면 skip)
-        run: python -X utf8 scanner/trade_report.py prepare
+        id: prep
+        run: |
+          python -X utf8 scanner/trade_report.py prepare
+          python -X utf8 -c "import json;d=json.load(open('trade_report_input.json'));print('skip='+str(bool(d.get('skip'))).lower())" >> "$GITHUB_OUTPUT"
+      # skip 회차엔 생성할 게 없다. 그냥 두면 Claude가 빈 입력으로 돌다 실패할 수 있고,
+      # 그러면 뒤의 게시까지 못 간다 — 게시는 skip 회차에도 해야 한다(KV 복구 경로).
       - name: Claude Code 설치
+        if: steps.prep.outputs.skip != 'true'
         run: npm install -g @anthropic-ai/claude-code
       # 30턴으로는 모자랐다 — 8/15 회차가 "Reached max turns (30)"로 출력을 못 쓰고
       # 실패해 7월 확정치 리포트가 통째로 빠졌다. 프롬프트의 분량 규칙(1,500~2,500자)이
       # 쓰고-재보고-줄이는 반복을 유도하므로 읽기 턴 외에 여유가 필요하다.
       - name: 리포트 생성 (Claude — 데이터만으로 작성, 웹 검색 없음)
+        if: steps.prep.outputs.skip != 'true'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
