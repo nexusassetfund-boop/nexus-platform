@@ -44,6 +44,10 @@ def _load(p: Path, default):
         return default
 
 
+def _no_series(d: dict) -> dict:
+    return {k: v for k, v in d.items() if k != "series"}
+
+
 def prepare() -> int:
     trade = _load(TRADE_PATH, None)
     if not trade or not trade.get("stocks"):
@@ -90,10 +94,15 @@ def prepare() -> int:
         "stocks": slim,
         "prev_report": prev_report,
         "earnings": earn,
-        "imports": trade.get("imports"),
-        "discover": (_load(DISC_PATH, {}) or {}).get("items", [])[:10],
+        # series(24개월 원배열)는 빼고 넘긴다. 프롬프트가 쓰는 건 amount·yoy·streak 같은
+        # 집계값뿐인데 원배열이 입력 3,909줄 중 1,744줄을 차지했다 — Read가 페이지네이션되고
+        # 그만큼 턴을 먹는다. 8/15 회차는 max-turns 30을 소진해 출력을 못 쓰고 실패했다.
+        "imports": [_no_series(i) for i in trade.get("imports") or []],
+        "discover": [_no_series(d)
+                     for d in (_load(DISC_PATH, {}) or {}).get("items", [])[:10]],
     }, ensure_ascii=False, indent=1), encoding="utf-8")
-    logger.info("입력 준비 완료 — 기준월 %s, 종목 %d, 발표예정 %d", month, len(slim), len(earn))
+    logger.info("입력 준비 완료 — 기준월 %s, 종목 %d, 발표예정 %d, %d줄", month, len(slim),
+                len(earn), len(INPUT_PATH.read_text(encoding="utf-8").splitlines()))
     return 0
 
 
