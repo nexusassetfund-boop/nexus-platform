@@ -1,0 +1,44 @@
+name: 신고가×퀄리티 조합 전략
+# 검증: reports/backtest_combo.md (25가지 결합 중 유일 생존, 현금중립 초과 +7.79%p)
+# 신고가 후보(매일 16:30) 다음에 돌아 그날 명단으로 판정한다.
+# 월 첫 거래일 16:50 실행분에서 교체가 확정된다 — 그날 시가가 진입가.
+on:
+  schedule:
+    - cron: "50 7 * * 1-5"    # 평일 16:50 KST (신고가 16:30 이후)
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: combo, cancel-in-progress: false }
+jobs:
+  combo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      # newhigh_candidates.json은 gitignore(KV 전용)라 워커에서 받아온다.
+      # quality_growth.json은 저장소에 커밋돼 있으므로 체크아웃분을 그대로 쓴다.
+      - name: 신고가 후보 명단 수신
+        run: |
+          curl -sf "https://nexus-platform.nexusassetfund.workers.dev/data/newhigh_candidates.json" \
+            -o docs/data/newhigh_candidates.json
+          python -c "import json;d=json.load(open('docs/data/newhigh_candidates.json'));print('신고가 asof',d['data_last_date'],'후보',len(d['candidates']))"
+
+      - name: 로직 테스트
+        run: python scanner/test_combo_strategy.py
+
+      - name: 조합 전략 산출
+        run: python scanner/combo_strategy.py
+
+      - name: 결과 커밋 (원장 보존)
+        run: |
+          test -f docs/data/combo.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
+          bash .github/scripts/commit-data.sh "combo: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" docs/data
+
+      - name: KV 반영
+        env: { NEXUS_ADMIN_TOKEN: "${{ secrets.NEXUS_ADMIN_TOKEN }}" }
+        run: python scanner/kv_push.py docs/data/combo.json --ignore-push-error

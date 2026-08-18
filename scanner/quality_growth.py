@@ -45,7 +45,10 @@ HISTORY_PATH = ROOT / "docs" / "data" / "quality_growth_history.json"
 MIN_CAP = 300_000_000_000   # 시총 3,000억↑ (마이크로캡 배제)
 PER_MAX = 40.0              # 극단 고평가만 컷 (정렬엔 미사용)
 TOP_OUT = 20                # 최종 출력
-TOP_TECH = 80               # 캔들(모멘텀) 조회 대상 = 퀄리티 Z 상위 N (API 보호)
+# 관문·재무를 통과한 전 종목에 모멘텀을 붙인다. 80으로 자르면 composite이 매겨지는 모집단이
+# 좁아져 backtest_quality.md(관문 통과 전체로 검증)와 어긋나고, 조합 전략(combo_strategy.py)이
+# 쓰는 퀄리티 풀도 같이 좁아진다. 현재 fin_ok가 ~166이라 250이면 사실상 전량.
+TOP_TECH = 250              # 캔들(모멘텀) 조회 상한 (API 보호용 안전장치)
 STALE_WEEKS = 39            # 장기잔류 기준 (약 9개월)
 # 퀄리티 Z 구성요소 (키, 부호). +높을수록 좋음 / −낮을수록 좋음.
 Z_COMPONENTS = [("roe", +1), ("gpa", +1), ("opm", +1), ("debt", -1), ("accruals", -1)]
@@ -333,6 +336,12 @@ async def build() -> dict | None:
         "passed_gate": len(prelim),
         "fin_ok": len(fetched),
         "candidates": survivors,
+        # composite이 매겨진 전 종목 — 조합 전략(신고가 게이트 × 퀄리티 랭크)이 랭커로 쓴다.
+        # candidates(상위 20)만으로는 교집합이 말라 검증본과 다른 물건이 된다.
+        "pool": [{"code": r["code"], "name": r["name"], "composite": r["composite"],
+                  "quality_z": r["quality_z"], "mom_z": r.get("mom_z")}
+                 for r in sorted((x for x in pool if x.get("composite") is not None),
+                                 key=lambda x: x["composite"], reverse=True)],
         "history": history,
         "_state": new_state,
     }
