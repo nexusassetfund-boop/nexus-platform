@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-18T15:40:28+09:00",
+ "updated": "2026-08-18T16:23:50+09:00",
  "kospi": {
   "price": 6792.93,
   "ma200": 5887.97,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-18T15:40:28+09:00"
+  "updated": "2026-08-18T16:23:50+09:00"
  },
  "holdings": [
   {
@@ -538,6 +538,37 @@
    "stop_warning": true
   },
   {
+   "ticker": "011200",
+   "name": "HMM",
+   "sector": "운송",
+   "entry_stage": 1,
+   "entry_date": "2026-08-18",
+   "entry_price": 22650.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -6.0,
+   "last_price": 22650.0,
+   "peak_price": 22650.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 93,
+   "last_updated": "2026-08-18",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.02x",
+    "불 스노트 — 거래량 폭증 4.02x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "베이스 거래량 마름 후 폭증"
+   ]
+  }
+ ],
+ "exited": [
+  {
    "ticker": "093370",
    "name": "후성",
    "sector": "석유화학",
@@ -557,17 +588,19 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": null,
-   "confidence_now": 98,
+   "confidence_now": 15,
    "last_updated": "2026-08-18",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.04x",
     "불 스노트 — 거래량 폭증 4.04x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
-  }
- ],
- "exited": [
+   ],
+   "stop_warning": false,
+   "exit_date": "2026-08-18",
+   "exit_price": 12970.0,
+   "exit_reason": "추세 이탈 (MA60 하회)"
+  },
   {
    "ticker": "051900",
    "name": "LG생활건강",
@@ -790,7 +823,7 @@
    },
    {
     "date": "2026-08-18",
-    "cum": -1.37
+    "cum": -1.27
    }
   ]
  },
@@ -916,16 +949,16 @@
    },
    {
     "date": "2026-08-18",
-    "cum": -1.9
+    "cum": -1.8
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
   "holding_count": 17,
-  "exited_count": 3,
+  "exited_count": 4,
   "avg_return": 0.85,
-  "exited_avg_return": -6.62,
+  "exited_avg_return": -4.97,
   "win_rate": 0.0
  }
 }
