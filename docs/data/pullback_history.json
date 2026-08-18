@@ -617,5 +617,80 @@
     "last_price": 11160.0
    }
   ]
+ },
+ {
+  "date": "2026-08-18",
+  "added": [
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "score": 6
+   },
+   {
+    "code": "420770",
+    "name": "기가비스",
+    "score": 6
+   },
+   {
+    "code": "252990",
+    "name": "샘씨엔에스",
+    "score": 5
+   },
+   {
+    "code": "005090",
+    "name": "SGC에너지",
+    "score": 2
+   }
+  ],
+  "removed": [
+   {
+    "code": "008060",
+    "name": "대덕",
+    "first_seen": "2026-08-14",
+    "days": 4,
+    "last_score": 5,
+    "last_price": 17000.0
+   },
+   {
+    "code": "009150",
+    "name": "삼성전기",
+    "first_seen": "2026-08-13",
+    "days": 5,
+    "last_score": 6,
+    "last_price": 1558000.0
+   },
+   {
+    "code": "018260",
+    "name": "삼성에스디에스",
+    "first_seen": "2026-08-14",
+    "days": 4,
+    "last_score": 5,
+    "last_price": 243500.0
+   },
+   {
+    "code": "019210",
+    "name": "와이지-원",
+    "first_seen": "2026-08-14",
+    "days": 4,
+    "last_score": 5,
+    "last_price": 18210.0
+   },
+   {
+    "code": "127120",
+    "name": "제이에스링크",
+    "first_seen": "2026-08-14",
+    "days": 4,
+    "last_score": 4,
+    "last_price": 40500.0
+   },
+   {
+    "code": "131290",
+    "name": "티에스이",
+    "first_seen": "2026-07-24",
+    "days": 25,
+    "last_score": 3,
+    "last_price": 260000.0
+   }
+  ]
  }
 ]
