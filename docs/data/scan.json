@@ -1,6 +1,6 @@
 {
  "schema_version": 3,
- "scan_time": "2026-08-19T15:37:14+09:00",
+ "scan_time": "2026-08-19T15:40:22+09:00",
  "universe_size": 350,
  "scanned": 350,
  "kospi": {
@@ -12,7 +12,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-19T15:37:14+09:00"
+  "updated": "2026-08-19T15:40:22+09:00"
  },
  "sector_etf_rs": {
   "semiconductor": {
@@ -2641,7 +2641,7 @@
    }
   },
   "insight": {
-   "generated_at": "2026-08-19T15:37:14+09:00",
+   "generated_at": "2026-08-19T15:40:22+09:00",
    "as_of": "2026-08-19",
    "lines": [
     "KOSPI 200일선 위 — 상대 강세 = 실제 강세로 읽을 수 있는 국면. 주도 5개 / 전체 28개 섹터, 최근 1주 사분면 전환 7건.",
