@@ -141,12 +141,14 @@ async def _fetch_sector_closes() -> dict:
     return closes_map
 
 
-def _compute_sector_rrg(closes_map: dict) -> dict:
+def _compute_sector_rrg(closes_map: dict, mode: str = "current") -> dict:
     """주간 RRG(계획안 v1) — sector_rrg 모듈에 위임하고 ETF 메타를 부착.
-    확정 금요일 종가만 쓰므로 장중 재실행에도 좌표는 불변(주 1회 갱신과 동치)."""
+    확정 금요일 종가만 쓰므로 장중 재실행에도 좌표는 불변(주 1회 갱신과 동치).
+    mode="cw" 는 시계방향이 보장되는 회전형 좌표(섹터맵 하위탭용)."""
     rrg = sector_rrg.compute_rrg(
         {slug: closes for slug, (_c, _n, closes) in closes_map.items()},
         dt.datetime.now(tz=KST).replace(tzinfo=None),
+        mode=mode,
     )
     for slug, sec in rrg["sectors"].items():
         code, name, closes = closes_map[slug]
@@ -1333,17 +1335,22 @@ async def main():
 
     # RRG 좌표 + 인사이트 — 매 거래일 장마감 실행에서 갱신, 장중 스캔은 직전 값 유지.
     # (스무딩 60일 SMA + 20일 ROC이 급변을 막고, 갱신 주기는 표·인사이트와 동일하게 일간)
-    prev_rrg = {}
+    prev_rrg, prev_rrg_cw = {}, {}
     try:
-        prev_rrg = (json.loads(SCAN_PATH.read_text(encoding="utf-8")).get("rrg") or {})
+        _prev_scan = json.loads(SCAN_PATH.read_text(encoding="utf-8"))
+        prev_rrg = _prev_scan.get("rrg") or {}
+        prev_rrg_cw = _prev_scan.get("rrg_cw") or {}
     except Exception:
         pass
     sector_rrg_out = prev_rrg  # 기본: 직전 장마감 좌표·인사이트 유지
+    sector_rrg_cw_out = prev_rrg_cw
     # 대표 ETF 교체·섹터 추가 직후엔 장중이라도 재계산 — 안 그러면 마감 전까지 옛 유니버스가 그대로 보인다.
     # (compute_rrg는 확정 금요일 종가만 쓰므로 장중 실행에도 좌표는 결정론적)
     universe_changed = ({k: (v or {}).get("etf") for k, v in (prev_rrg.get("sectors") or {}).items()}
                         != {k: code for k, (code, _n, _c) in sector_closes.items()})
-    if sector_closes and (is_close_run or not prev_rrg.get("sectors") or universe_changed):
+    if sector_closes and (is_close_run or not prev_rrg.get("sectors")
+                          or not prev_rrg_cw.get("sectors")   # 회전형 최초 배포 직후 부트스트랩
+                          or universe_changed):
         # 장마감 확정 실행 또는 부트스트랩(직전 rrg 없음 — 이때도 확정 종가 기준이라 결정론적)
         try:
             sector_rrg_out = _compute_sector_rrg(sector_closes)
@@ -1370,16 +1377,30 @@ async def main():
         except Exception as e:
             logger.warning("RRG 계산 실패 — 직전 값 유지: %s", e)
             sector_rrg_out = prev_rrg
+        # 회전형(cw) — 좌표만 다른 두 번째 벌. 섹터맵 하위탭 전용이라
+        # 인사이트·리플레이 통계는 만들지 않는다(해당 근거는 현행 좌표 기준이므로).
+        # 정규화 창이 길어 히스토리가 짧은 신설 ETF는 여기서 빠진다(프론트가 개수로 안내).
+        try:
+            sector_rrg_cw_out = _compute_sector_rrg(sector_closes, mode="cw")
+            dropped = sorted(set(sector_closes) - set(sector_rrg_cw_out.get("sectors", {})))
+            logger.info("회전형 RRG 갱신: %d 섹터 (as_of %s)%s",
+                        len(sector_rrg_cw_out.get("sectors", {})),
+                        sector_rrg_cw_out.get("as_of"),
+                        f", 히스토리 부족 제외: {dropped}" if dropped else "")
+        except Exception as e:
+            logger.warning("회전형 RRG 계산 실패 — 직전 값 유지: %s", e)
+            sector_rrg_cw_out = prev_rrg_cw
 
     # 상세 모달이 MA/MTT 필드까지 쓰므로 전체 필드를 그대로 내보낸다
     _save_json(SCAN_PATH, {
-        "schema_version": 2,          # v2: rrg 추가 — 구프론트는 sector_etf_rs 폴백
+        "schema_version": 3,          # v2: rrg / v3: rrg_cw(회전형) 추가 — 구프론트는 각각 폴백
         "scan_time": now_str,
         "universe_size": len(scan_targets),
         "scanned": len(results),
         "kospi": kospi,
         "sector_etf_rs": sector_etf_rs,
         "rrg": sector_rrg_out,
+        "rrg_cw": sector_rrg_cw_out,
         "results": results,
     })
     # tracking.json은 거래일이면 매 스캔 갱신 — 장중엔 표시용 뷰(ledger_view), 마감엔 확정 원장.

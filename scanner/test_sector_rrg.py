@@ -261,3 +261,62 @@ def test_quadrant_labels():
     assert sr._quadrant(101, 99) == ("weakening", "약화")
     assert sr._quadrant(99, 99) == ("lagging", "소외")
     assert sr._quadrant(99, 101) == ("improving", "부상")
+
+
+# ── 회전형(cw) 좌표 ────────────────────────────────────────────────────────
+# 회전 방향은 좌표 정의가 만드는 성질이라, 위상 관계가 깨지면 여기서 바로 잡힌다.
+
+def _cyclic_universe(period, n=6, days=520):
+    """1개 섹터만 주기 period(거래일)의 깨끗한 사이클, 나머지는 평탄."""
+    idx = pd.bdate_range(start="2024-06-03", periods=days)
+    t = np.arange(days)
+    uni = {"s0": pd.Series(100.0 * np.exp(0.10 * np.sin(2 * np.pi * t / period)), index=idx)}
+    for i in range(1, n):  # 레벨만 다른 평탄 시계열 (벤치마크 구성용)
+        uni[f"s{i}"] = pd.Series(np.full(days, 100.0 + i), index=idx)
+    return uni
+
+
+def _rotation(xy):
+    """주간 격자 궤적의 외적 합 — 음수면 시계방향."""
+    w = xy.iloc[::sr.TAIL_STEP]
+    ax, ay = w["x"].values - 100.0, w["y"].values - 100.0
+    return float(np.sum(ax[:-1] * ay[1:] - ay[:-1] * ax[1:]))
+
+
+@pytest.mark.parametrize("period", [24, 32, 45, 90, 180])
+def test_cw_rotates_clockwise_at_every_period(period):
+    """회전형은 전 주기 대역에서 시계방향 — y가 x를 90° 선행하도록 구성했기 때문."""
+    uni = _cyclic_universe(period)
+    xy_map, _b, _f = sr.daily_xy(uni, uni["s0"].index[-1].date(), mode="cw")
+    assert _rotation(xy_map["s0"]) < 0, f"주기 {period}일에서 반시계로 돌았다"
+
+
+@pytest.mark.parametrize("period,clockwise", [(28, False), (90, True)])
+def test_current_mode_flips_below_40_days(period, clockwise):
+    """현행은 2*ROC_DAYS(=40일)보다 짧은 주기에서 회전이 뒤집힌다 — 회전형 도입 근거."""
+    uni = _cyclic_universe(period)
+    xy_map, _b, _f = sr.daily_xy(uni, uni["s0"].index[-1].date(), mode="current")
+    assert (_rotation(xy_map["s0"]) < 0) is clockwise
+
+
+def test_cw_omits_scale_specific_fields():
+    """gate·y_only 임계값은 현행 x 스케일(89~117) 전용이라 σ 좌표에서는 내보내지 않는다."""
+    uni = _universe(noise=True)
+    cur, cw = sr.compute_rrg(uni, NOW), sr.compute_rrg(uni, NOW, mode="cw")
+    assert cur["mode"] == "current" and cw["mode"] == "cw"
+    assert all("gate" in s and "y_only" in s for s in cur["sectors"].values())
+    assert all("gate" not in s and "y_only" not in s for s in cw["sectors"].values())
+    # 사분면·heading·tail·comment 는 스케일 무관이라 그대로 재사용된다
+    labels = {q for q, _ko in sr.QUADRANTS.values()}
+    for s in cw["sectors"].values():
+        assert s["quadrant"] in labels
+        assert s["tail"] and s["comment"] and s["heading"]
+
+
+def test_cw_requires_more_history():
+    """회전형은 정규화 창이 길어 히스토리가 짧은 신설 ETF를 제외한다(현행엔 남는다)."""
+    uni = _universe(noise=True)
+    uni["short"] = _daily_series(seed=99).iloc[-(sr.MIN_DAYS + 10):]  # 현행 O / 회전형 X
+    assert sr.MIN_DAYS < len(uni["short"]) < sr.MIN_DAYS_CW
+    assert "short" in sr.compute_rrg(uni, NOW)["sectors"]
+    assert "short" not in sr.compute_rrg(uni, NOW, mode="cw")["sectors"]
