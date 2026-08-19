@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-19 16:30",
+ "updated": "2026-08-19 16:58",
  "snap_date": "2026-08-19",
  "history": [
   {
@@ -718,6 +718,11 @@
      "code": "007340",
      "name": "DN오토모티브",
      "score": 2
+    },
+    {
+     "code": "041830",
+     "name": "인바디",
+     "score": 3
     }
    ],
    "removed": [
@@ -770,7 +775,7 @@
    "closed_n": 0,
    "closed_win_rate": null,
    "closed_avg_ret": null,
-   "open_n": 69,
+   "open_n": 70,
    "open_avg_ret": 1.0,
    "note": "편입일 종가 진입 근사 · 90거래일 보유(B90) 시뮬 · 거래비용 미반영"
   },
@@ -816,6 +821,17 @@
     "entry_score": 2,
     "status": "open",
     "last_close": 54100.0,
+    "trading_days": 0,
+    "ret_pct": 0.0
+   },
+   {
+    "code": "041830",
+    "name": "인바디",
+    "entry_date": "2026-08-19",
+    "entry_price": 62400.0,
+    "entry_score": 3,
+    "status": "open",
+    "last_close": 62400.0,
     "trading_days": 0,
     "ret_pct": 0.0
    },
@@ -1112,18 +1128,6 @@
     "trading_days": 6,
     "ret_pct": -16.1,
     "removed_date": "2026-08-12"
-   },
-   {
-    "code": "037460",
-    "name": "삼지전자",
-    "entry_date": "2026-08-10",
-    "entry_price": 38050.0,
-    "entry_score": 5,
-    "status": "open",
-    "last_close": 30450.0,
-    "trading_days": 6,
-    "ret_pct": -20.0,
-    "removed_date": "2026-08-13"
    }
   ]
  },
@@ -1262,7 +1266,7 @@
    "vol_contracting": 1,
    "vol_dry_ratio": 0.68,
    "vol_drying": 1,
-   "vol_2x_bo": 0,
+   "vol_2x_bo": 1,
    "fwd_year1": "2026/12(E)",
    "fwd_year2": "2027/12(E)",
    "per_fwd1": 12.8,
@@ -1451,7 +1455,7 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 6,
+   "rank": 7,
    "first_seen": "2026-08-05",
    "is_new": 0,
    "days_in_list": 14
@@ -1623,49 +1627,6 @@
     "vol_dry": 0,
     "rs_leader": 1
    },
-   "rank": 10,
-   "first_seen": "2026-08-19",
-   "is_new": 1,
-   "days_in_list": 0
-  },
-  {
-   "ticker": "131290",
-   "name": "티에스이",
-   "sector": "반도체",
-   "market": "KOSDAQ",
-   "pct_3m": 13.0,
-   "pct_6m": 188.3,
-   "pct_12m": 576.4,
-   "rs_kkangto": 95,
-   "per_trailing": 72.6,
-   "market_cap_억": 28317,
-   "current_price": 256000.0,
-   "w52_high": 284500.0,
-   "proximity_52w": 0.8998,
-   "retrace_pct": 10.0,
-   "pivot": 284500.0,
-   "distance_to_pivot_pct": 11.1,
-   "consolidation_days": 23,
-   "vol_contracting": 0,
-   "vol_dry_ratio": 1.03,
-   "vol_drying": 0,
-   "vol_2x_bo": 0,
-   "fwd_year1": "2026/12(E)",
-   "fwd_year2": "2027/12(E)",
-   "per_fwd1": 19.8,
-   "per_fwd2": 15.3,
-   "per_accel": 1,
-   "per_delta_pct": 22.7,
-   "pullback_score": 4,
-   "score_bits": {
-    "per_accel": 1,
-    "deep_pullback": 0,
-    "base_short": 1,
-    "base_tight": 1,
-    "vcp": 0,
-    "vol_dry": 0,
-    "rs_leader": 1
-   },
    "rank": 11,
    "first_seen": "2026-08-19",
    "is_new": 1,
@@ -1790,9 +1751,9 @@
     "rs_leader": 1
    },
    "rank": 14,
-   "first_seen": "2026-08-14",
-   "is_new": 0,
-   "days_in_list": 5
+   "first_seen": "2026-08-19",
+   "is_new": 1,
+   "days_in_list": 0
   },
   {
    "ticker": "006360",
@@ -1922,43 +1883,6 @@
    "first_seen": "2026-08-19",
    "is_new": 1,
    "days_in_list": 0
-  },
-  {
-   "ticker": "041830",
-   "name": "인바디",
-   "sector": null,
-   "market": "KOSDAQ",
-   "pct_3m": 47.3,
-   "pct_6m": 75.3,
-   "pct_12m": 131.5,
-   "rs_kkangto": 91,
-   "per_trailing": 25.75,
-   "market_cap_억": 8412,
-   "current_price": 62400.0,
-   "w52_high": 70800.0,
-   "proximity_52w": 0.8814,
-   "retrace_pct": 11.9,
-   "pivot": 70800.0,
-   "distance_to_pivot_pct": 13.5,
-   "consolidation_days": 7,
-   "vol_contracting": 0,
-   "vol_dry_ratio": 0.99,
-   "vol_drying": 0,
-   "vol_2x_bo": 1,
-   "pullback_score": 2,
-   "score_bits": {
-    "per_accel": 0,
-    "deep_pullback": 0,
-    "base_short": 1,
-    "base_tight": 0,
-    "vcp": 0,
-    "vol_dry": 0,
-    "rs_leader": 1
-   },
-   "rank": 17,
-   "first_seen": "2026-08-14",
-   "is_new": 0,
-   "days_in_list": 5
   }
  ]
 }

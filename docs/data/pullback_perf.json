@@ -810,6 +810,17 @@
    "last_close": 54100.0,
    "trading_days": 0,
    "ret_pct": 0.0
+  },
+  {
+   "code": "041830",
+   "name": "인바디",
+   "entry_date": "2026-08-19",
+   "entry_price": 62400.0,
+   "entry_score": 3,
+   "status": "open",
+   "last_close": 62400.0,
+   "trading_days": 0,
+   "ret_pct": 0.0
   }
  ],
  "summary": {
@@ -817,7 +828,7 @@
   "closed_n": 0,
   "closed_win_rate": null,
   "closed_avg_ret": null,
-  "open_n": 69,
+  "open_n": 70,
   "open_avg_ret": 1.0,
   "note": "편입일 종가 진입 근사 · 90거래일 보유(B90) 시뮬 · 거래비용 미반영"
  },
