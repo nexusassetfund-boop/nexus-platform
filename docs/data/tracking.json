@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-19T16:24:07+09:00",
+ "updated": "2026-08-19T16:55:01+09:00",
  "kospi": {
   "price": 6467.77,
   "ma200": 5900.99,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-19T16:24:07+09:00"
+  "updated": "2026-08-19T16:55:01+09:00"
  },
  "holdings": [
   {
@@ -518,14 +518,15 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": null,
-   "confidence_now": 83,
+   "confidence_now": 0,
    "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.56x",
     "불 스노트 — 거래량 폭증 3.56x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승"
-   ]
+   ],
+   "stop_warning": false
   }
  ],
  "exited": [
