@@ -1,6 +1,8 @@
 """수급 감지기 — 외국인·기관 연속 순매수 종목 탐지. 출력: docs/data/flow.json
+      + flow_state.json(멤버십 스냅샷) / flow_members.json(편입·편출, flow.json에 동봉)
 
-프론트 '스테이지 감지기 > 수급' 하위탭이 읽는다.
+프론트 '스테이지 감지기 > 수급' 하위탭과 홈 '연동 전략 편입·편출' 카드가 읽는다.
+홈에 나가는 편입·편출 멤버십은 S·A(외국인 기준)만 — 아래 백테스트 결과 참조.
 
 설계 요지 (flow_history 참조):
   · '연속 N일'을 1차 기준으로 쓰지 않는다. 하루 노이즈 매도로 리셋되는 게 옛 방식의 결함.
@@ -71,6 +73,10 @@ KST = ZoneInfo("Asia/Seoul")
 ROOT = Path(__file__).parent.parent
 OUT_PATH = ROOT / "docs" / "data" / "flow.json"
 UNIV_CACHE = ROOT / "docs" / "data" / "flow_universe.json"
+STATE_PATH = ROOT / "docs" / "data" / "flow_state.json"      # 직전 멤버십 스냅샷
+HIST_PATH = ROOT / "docs" / "data" / "flow_members.json"     # append-only 편입/편출
+# 파일명이 flow_history.json이 아닌 건 scanner/flow_history.py(일별 수급 시계열)와
+# 헷갈리지 않기 위해서다 — 이쪽은 '명단에 들고 난' 이력이다.
 
 UNIVERSE_N = int(os.environ.get("FLOW_LIMIT", "300"))   # 시총 상위 N
 MIN_STREAK = 4              # 흠집 허용 연속 순매수일
@@ -148,6 +154,81 @@ def _row(code: str, name: str) -> dict | None:
     }
 
 
+# ── 편입/편출 이력 ──────────────────────────────────────
+# 홈 '연동 전략 편입·편출' 카드가 이 history를 그대로 읽는다(canslim·눌림목과 동일 규약).
+# 멤버십은 **S·A(외국인 기준)만** — C(기관 단독)·P(연기금)·rev(전환)는 백테스트에서
+# 전부 (−) 신호라 이걸 '편입'으로 내보내면 카드가 나쁜 종목을 추천하는 꼴이 된다.
+MEMBER_GRADES = ("S", "A")
+
+
+def _days(a: str, b: str) -> int | None:
+    try:
+        return (dt.date.fromisoformat(a) - dt.date.fromisoformat(b)).days
+    except Exception:                               # noqa: BLE001
+        return None
+
+
+def _track(cands: list[dict], snap: str) -> list[dict]:
+    """편입/편출 이력을 갱신하고 최근 30건을 돌려준다 (canslim _track과 같은 원칙).
+
+    확정 조건은 **데이터 기준일이 오늘**일 때뿐이다. 네이버 투자자별 확정치가 아직
+    안 붙은 시각에 돌면 base_date가 T-1이라, 그 실행이 어제 명단으로 오늘의 편입·편출을
+    확정해 버리는 걸 막는다(flow.yml 주석의 16:50 사례).
+    """
+    try:
+        state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    except Exception:                               # noqa: BLE001
+        state = {}
+    try:
+        history = json.loads(HIST_PATH.read_text(encoding="utf-8"))
+    except Exception:                               # noqa: BLE001
+        history = []
+
+    members = {r["ticker"]: r for r in cands if r["grade"] in MEMBER_GRADES}
+    for r in cands:
+        p = state.get(r["ticker"]) or {}
+        if r["ticker"] in members:
+            first = p.get("first") or snap
+            r["first_seen"] = first
+            r["is_new"] = int(bool(state) and first == snap)
+            r["days_in_list"] = _days(snap, first) or 0
+
+    today = dt.datetime.now(tz=KST).strftime("%Y-%m-%d")
+    if snap != today:
+        logger.info("비확정 실행 (기준일 %s ≠ 오늘 %s) — 이력/상태 동결", snap, today)
+        return history[-30:]
+    # 후보 급감 가드 — 네이버 부분 장애로 쪼그라든 실행이 대량 편출을 확정하는 것 방지
+    # (눌림목 7/28 사례). 진짜 시장 변화면 다음 실행이 하루 늦게 확정한다.
+    if len(state) >= 8 and len(members) < len(state) * 0.4:
+        logger.warning("멤버 급감 (%d→%d) — 일시 장애 의심, 이번 실행은 확정 보류",
+                       len(state), len(members))
+        return history[-30:]
+
+    new_state = {c: {"first": r["first_seen"], "name": r["name"],
+                     "grade": r["grade"], "rank": r["rank"]}
+                 for c, r in members.items()}
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATE_PATH.write_text(json.dumps(new_state, ensure_ascii=False, indent=1), encoding="utf-8")
+    if not state:                                   # 최초 실행 — diff 없이 시드만
+        return history[-30:]
+
+    added = [{"code": c, "name": r["name"], "grade": r["grade"]}
+             for c, r in members.items() if c not in state]
+    removed = [{"code": c, "name": (state[c].get("name") or c),
+                "days": _days(snap, state[c].get("first") or snap),
+                "last_grade": state[c].get("grade"), "last_rank": state[c].get("rank")}
+               for c in sorted(set(state) - set(members))]
+    if added or removed:
+        if history and history[-1].get("date") == snap:   # 같은 날 재실행 → 병합 (멱등)
+            last = history[-1]
+            last["added"] = list({a["code"]: a for a in last.get("added", []) + added}.values())
+            last["removed"] = list({r["code"]: r for r in last.get("removed", []) + removed}.values())
+        else:
+            history.append({"date": snap, "added": added, "removed": removed})
+        HIST_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=1), encoding="utf-8")
+    return history[-30:]
+
+
 def build() -> dict | None:
     univ = fh.universe(UNIVERSE_N, UNIV_CACHE)
     fh.detail_available()                           # 스레드 시작 전 1회 probe (레이스 방지)
@@ -168,9 +249,12 @@ def build() -> dict | None:
     for n, r in enumerate(cands, 1):
         r["rank"] = n
     base = max((r["base_date"] for r in rows), default="")
+    snap = f"{base[:4]}-{base[4:6]}-{base[6:]}" if base else ""
+    history = _track(cands, snap) if snap else []
     return {
         "updated": dt.datetime.now(tz=KST).strftime("%Y-%m-%d %H:%M"),
-        "snap_date": f"{base[:4]}-{base[4:6]}-{base[6:]}" if base else "",
+        "snap_date": snap,
+        "history": history,
         "thresholds": {
             "window": fh.WINDOW, "min_streak": MIN_STREAK,
             "tol_ratio": fh.TOL_RATIO, "max_blemish": fh.MAX_BLEMISH,
