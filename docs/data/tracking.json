@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-19T15:18:00+09:00",
+ "updated": "2026-08-19T15:37:14+09:00",
  "kospi": {
   "price": 6494.29,
   "ma200": 5901.12,
@@ -9,7 +9,7 @@
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-19T15:18:00+09:00"
+  "updated": "2026-08-19T15:37:14+09:00"
  },
  "holdings": [
   {
@@ -21,10 +21,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 95,
    "init_stop_pct": -10.0,
-   "last_price": 7620.0,
+   "last_price": 7600.0,
    "peak_price": 8140.0,
-   "return_pct": -4.03,
-   "total_return_pct": -4.03,
+   "return_pct": -4.28,
+   "total_return_pct": -4.28,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -33,7 +33,7 @@
    "days_held": 13,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -51,10 +51,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 142400.0,
+   "last_price": 142800.0,
    "peak_price": 153100.0,
-   "return_pct": -6.99,
-   "total_return_pct": -6.99,
+   "return_pct": -6.73,
+   "total_return_pct": -6.73,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -63,7 +63,7 @@
    "days_held": 12,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 90 — 최상위 강세",
@@ -81,10 +81,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 49800.0,
-   "peak_price": 49700.0,
-   "return_pct": 13.05,
-   "total_return_pct": 13.05,
+   "last_price": 50000.0,
+   "peak_price": 50000.0,
+   "return_pct": 13.51,
+   "total_return_pct": 13.51,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -93,7 +93,7 @@
    "days_held": 8,
    "stage_now": 1,
    "confidence_now": 65,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -111,10 +111,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 123300.0,
+   "last_price": 123600.0,
    "peak_price": 127200.0,
-   "return_pct": 12.71,
-   "total_return_pct": 12.75,
+   "return_pct": 12.98,
+   "total_return_pct": 12.89,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -131,7 +131,7 @@
    "days_held": 8,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 95 — 최상위 강세",
@@ -150,10 +150,10 @@
    "entry_price": 32550.0,
    "entry_confidence": 90,
    "init_stop_pct": -10.0,
-   "last_price": 29800.0,
+   "last_price": 30000.0,
    "peak_price": 32550.0,
-   "return_pct": -8.45,
-   "total_return_pct": -8.45,
+   "return_pct": -7.83,
+   "total_return_pct": -7.83,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -162,14 +162,14 @@
    "days_held": 8,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 88 — 상위 강세",
     "전고점 돌파! 거래량 3.7x",
     "거래량 폭증 3.7x"
    ],
-   "stop_warning": true
+   "stop_warning": false
   },
   {
    "ticker": "161890",
@@ -180,10 +180,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -10.0,
-   "last_price": 127400.0,
+   "last_price": 127800.0,
    "peak_price": 136700.0,
-   "return_pct": -3.85,
-   "total_return_pct": -1.92,
+   "return_pct": -3.55,
+   "total_return_pct": -1.77,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -200,7 +200,7 @@
    "days_held": 7,
    "stage_now": 1,
    "confidence_now": 80,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "MTT 통과",
     "RS 96 — 최상위 강세",
@@ -211,45 +211,6 @@
    "last_action": "2026-08-12 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
   },
   {
-   "ticker": "007340",
-   "name": "DN오토모티브",
-   "sector": "Auto",
-   "entry_stage": 3,
-   "entry_date": "2026-08-14",
-   "entry_price": 58900.0,
-   "entry_confidence": 100,
-   "init_stop_pct": -10.0,
-   "last_price": 53600.0,
-   "peak_price": 62800.0,
-   "return_pct": -9.0,
-   "total_return_pct": -4.5,
-   "qty_frac": 0.5,
-   "realized_pct": 0.0,
-   "partials": [
-    {
-     "date": "2026-08-14",
-     "price": 58900.0,
-     "frac": 0.5,
-     "ret_pct": 0.0,
-     "reason": "소진 확장 익절 (10 EMA +20% 이격)"
-    }
-   ],
-   "tp_3r_done": false,
-   "was_extended": true,
-   "days_held": 5,
-   "stage_now": 3,
-   "confidence_now": 80,
-   "last_updated": "2026-08-18",
-   "signals_at_entry": [
-    "MTT 통과",
-    "RS 96 — 최상위 강세",
-    "RS 신고점",
-    "전고점 돌파! 거래량 4.61x"
-   ],
-   "stop_warning": true,
-   "last_action": "2026-08-14 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
-  },
-  {
    "ticker": "073240",
    "name": "금호타이어",
    "sector": "Auto",
@@ -258,10 +219,10 @@
    "entry_price": 7940.0,
    "entry_confidence": 93,
    "init_stop_pct": -10.3,
-   "last_price": 7620.0,
+   "last_price": 7600.0,
    "peak_price": 8140.0,
-   "return_pct": -4.03,
-   "total_return_pct": -4.03,
+   "return_pct": -4.28,
+   "total_return_pct": -4.28,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -270,7 +231,7 @@
    "days_held": 13,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.25x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -288,10 +249,10 @@
    "entry_price": 43800.0,
    "entry_confidence": 88,
    "init_stop_pct": -8.8,
-   "last_price": 45050.0,
+   "last_price": 45150.0,
    "peak_price": 46200.0,
-   "return_pct": 2.85,
-   "total_return_pct": 2.85,
+   "return_pct": 3.08,
+   "total_return_pct": 3.08,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -300,7 +261,7 @@
    "days_held": 13,
    "stage_now": null,
    "confidence_now": 0,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.02x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -318,10 +279,10 @@
    "entry_price": 153100.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.8,
-   "last_price": 142400.0,
+   "last_price": 142800.0,
    "peak_price": 153100.0,
-   "return_pct": -6.99,
-   "total_return_pct": -6.99,
+   "return_pct": -6.73,
+   "total_return_pct": -6.73,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -330,7 +291,7 @@
    "days_held": 12,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.22x",
     "불 스노트 — 거래량 폭증 3.22x",
@@ -348,10 +309,10 @@
    "entry_price": 28350.0,
    "entry_confidence": 98,
    "init_stop_pct": -7.4,
-   "last_price": 26850.0,
+   "last_price": 26900.0,
    "peak_price": 28400.0,
-   "return_pct": -5.29,
-   "total_return_pct": -5.29,
+   "return_pct": -5.11,
+   "total_return_pct": -5.11,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -360,7 +321,7 @@
    "days_held": 12,
    "stage_now": 1,
    "confidence_now": 55,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.08x",
     "불 스노트 — 거래량 폭증 3.08x",
@@ -378,10 +339,10 @@
    "entry_price": 109400.0,
    "entry_confidence": 98,
    "init_stop_pct": -6.4,
-   "last_price": 123300.0,
+   "last_price": 123600.0,
    "peak_price": 127200.0,
-   "return_pct": 12.71,
-   "total_return_pct": 12.75,
+   "return_pct": 12.98,
+   "total_return_pct": 12.89,
    "qty_frac": 0.5,
    "realized_pct": 6.4,
    "partials": [
@@ -398,7 +359,7 @@
    "days_held": 8,
    "stage_now": 1,
    "confidence_now": 85,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 8.15x",
     "불 스노트 — 거래량 폭증 8.15x",
@@ -417,10 +378,10 @@
    "entry_price": 44050.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.8,
-   "last_price": 49800.0,
-   "peak_price": 49700.0,
-   "return_pct": 13.05,
-   "total_return_pct": 13.05,
+   "last_price": 50000.0,
+   "peak_price": 50000.0,
+   "return_pct": 13.51,
+   "total_return_pct": 13.51,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -429,7 +390,7 @@
    "days_held": 8,
    "stage_now": 1,
    "confidence_now": 65,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.26x",
     "10-20 EMA 압착 (변동성 수축)",
@@ -437,36 +398,6 @@
     "RS 96 — 최상위 강세"
    ],
    "stop_warning": false
-  },
-  {
-   "ticker": "096530",
-   "name": "씨젠",
-   "sector": "헬스케어",
-   "entry_stage": 1,
-   "entry_date": "2026-08-11",
-   "entry_price": 32550.0,
-   "entry_confidence": 93,
-   "init_stop_pct": -7.4,
-   "last_price": 29800.0,
-   "peak_price": 32550.0,
-   "return_pct": -8.45,
-   "total_return_pct": -8.45,
-   "qty_frac": 1.0,
-   "realized_pct": 0.0,
-   "partials": [],
-   "tp_3r_done": false,
-   "was_extended": false,
-   "days_held": 8,
-   "stage_now": null,
-   "confidence_now": 15,
-   "last_updated": "2026-08-18",
-   "signals_at_entry": [
-    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.56x",
-    "불 스노트 — 거래량 폭증 3.56x",
-    "10-20 EMA 압착 (변동성 수축)",
-    "반전 확장 후 저점 상승"
-   ],
-   "stop_warning": true
   },
   {
    "ticker": "161890",
@@ -477,10 +408,10 @@
    "entry_price": 132500.0,
    "entry_confidence": 100,
    "init_stop_pct": -12.0,
-   "last_price": 127400.0,
+   "last_price": 127800.0,
    "peak_price": 136700.0,
-   "return_pct": -3.85,
-   "total_return_pct": -1.92,
+   "return_pct": -3.55,
+   "total_return_pct": -1.77,
    "qty_frac": 0.5,
    "realized_pct": 0.0,
    "partials": [
@@ -497,7 +428,7 @@
    "days_held": 7,
    "stage_now": 1,
    "confidence_now": 80,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 7.95x",
     "불 스노트 — 거래량 폭증 7.95x",
@@ -508,36 +439,6 @@
    "last_action": "2026-08-12 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)"
   },
   {
-   "ticker": "175330",
-   "name": "JB금융지주",
-   "sector": "금융",
-   "entry_stage": 1,
-   "entry_date": "2026-08-13",
-   "entry_price": 29350.0,
-   "entry_confidence": 93,
-   "init_stop_pct": -6.8,
-   "last_price": 27050.0,
-   "peak_price": 29350.0,
-   "return_pct": -7.84,
-   "total_return_pct": -7.84,
-   "qty_frac": 1.0,
-   "realized_pct": 0.0,
-   "partials": [],
-   "tp_3r_done": false,
-   "was_extended": false,
-   "days_held": 6,
-   "stage_now": null,
-   "confidence_now": 0,
-   "last_updated": "2026-08-18",
-   "signals_at_entry": [
-    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.15x",
-    "10-20 EMA 압착 (변동성 수축)",
-    "베이스 거래량 마름 후 폭증",
-    "반전 확장 후 저점 상승"
-   ],
-   "stop_warning": true
-  },
-  {
    "ticker": "011200",
    "name": "HMM",
    "sector": "운송",
@@ -546,10 +447,10 @@
    "entry_price": 22650.0,
    "entry_confidence": 93,
    "init_stop_pct": -6.0,
-   "last_price": 21600.0,
+   "last_price": 21700.0,
    "peak_price": 22650.0,
-   "return_pct": -4.64,
-   "total_return_pct": -4.64,
+   "return_pct": -4.19,
+   "total_return_pct": -4.19,
    "qty_frac": 1.0,
    "realized_pct": 0.0,
    "partials": [],
@@ -558,7 +459,7 @@
    "days_held": 1,
    "stage_now": null,
    "confidence_now": 15,
-   "last_updated": "2026-08-18",
+   "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 4.02x",
     "불 스노트 — 거래량 폭증 4.02x",
@@ -566,9 +467,175 @@
     "베이스 거래량 마름 후 폭증"
    ],
    "stop_warning": true
+  },
+  {
+   "ticker": "108490",
+   "name": "로보티즈",
+   "sector": "기계",
+   "entry_stage": 1,
+   "entry_date": "2026-08-19",
+   "entry_price": 267000.0,
+   "entry_confidence": 88,
+   "init_stop_pct": -1.0,
+   "last_price": 267000.0,
+   "peak_price": 267000.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": 0,
+   "confidence_now": 88,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.1x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 85 — 상위 강세"
+   ]
+  },
+  {
+   "ticker": "403870",
+   "name": "HPSP",
+   "sector": "반도체",
+   "entry_stage": 1,
+   "entry_date": "2026-08-19",
+   "entry_price": 45700.0,
+   "entry_confidence": 88,
+   "init_stop_pct": -12.0,
+   "last_price": 45700.0,
+   "peak_price": 45700.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 88,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.52x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승",
+    "RS 84 — 상위 강세"
+   ]
   }
  ],
  "exited": [
+  {
+   "ticker": "175330",
+   "name": "JB금융지주",
+   "sector": "금융",
+   "entry_stage": 1,
+   "entry_date": "2026-08-13",
+   "entry_price": 29350.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -6.8,
+   "last_price": 27200.0,
+   "peak_price": 29350.0,
+   "return_pct": -7.33,
+   "total_return_pct": -7.33,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 6,
+   "stage_now": null,
+   "confidence_now": 0,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.15x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "베이스 거래량 마름 후 폭증",
+    "반전 확장 후 저점 상승"
+   ],
+   "stop_warning": false,
+   "exit_date": "2026-08-19",
+   "exit_price": 27200.0,
+   "exit_reason": "손절 (-7.33%)"
+  },
+  {
+   "ticker": "096530",
+   "name": "씨젠",
+   "sector": "헬스케어",
+   "entry_stage": 1,
+   "entry_date": "2026-08-11",
+   "entry_price": 32550.0,
+   "entry_confidence": 93,
+   "init_stop_pct": -7.4,
+   "last_price": 30000.0,
+   "peak_price": 32550.0,
+   "return_pct": -7.83,
+   "total_return_pct": -7.83,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 8,
+   "stage_now": null,
+   "confidence_now": 15,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.56x",
+    "불 스노트 — 거래량 폭증 3.56x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ],
+   "stop_warning": false,
+   "exit_date": "2026-08-19",
+   "exit_price": 30000.0,
+   "exit_reason": "손절 (-7.83%)"
+  },
+  {
+   "ticker": "007340",
+   "name": "DN오토모티브",
+   "sector": "Auto",
+   "entry_stage": 3,
+   "entry_date": "2026-08-14",
+   "entry_price": 58900.0,
+   "entry_confidence": 100,
+   "init_stop_pct": -10.0,
+   "last_price": 54100.0,
+   "peak_price": 62800.0,
+   "return_pct": -4.07,
+   "total_return_pct": -4.07,
+   "qty_frac": 0.5,
+   "realized_pct": 0.0,
+   "partials": [
+    {
+     "date": "2026-08-14",
+     "price": 58900.0,
+     "frac": 0.5,
+     "ret_pct": 0.0,
+     "reason": "소진 확장 익절 (10 EMA +20% 이격)"
+    }
+   ],
+   "tp_3r_done": false,
+   "was_extended": true,
+   "days_held": 5,
+   "stage_now": 3,
+   "confidence_now": 85,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "MTT 통과",
+    "RS 96 — 최상위 강세",
+    "RS 신고점",
+    "전고점 돌파! 거래량 4.61x"
+   ],
+   "stop_warning": false,
+   "last_action": "2026-08-14 · 소진 확장 익절 (10 EMA +20% 이격) (잔여 50%)",
+   "exit_date": "2026-08-19",
+   "exit_price": 54100.0,
+   "exit_reason": "손절 (-4.07%)"
+  },
   {
    "ticker": "093370",
    "name": "후성",
@@ -766,7 +833,7 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -0.01
+    "cum": 0.25
    }
   ],
   "1": [
@@ -832,7 +899,7 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -2.17
+    "cum": -1.73
    }
   ]
  },
@@ -900,7 +967,7 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -3.45
+    "cum": -3.1
    }
   ],
   "1": [
@@ -966,16 +1033,16 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -3.15
+    "cum": -2.68
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
-  "holding_count": 17,
-  "exited_count": 4,
-  "avg_return": -0.62,
-  "exited_avg_return": -4.97,
+  "holding_count": 16,
+  "exited_count": 7,
+  "avg_return": 0.82,
+  "exited_avg_return": -5.59,
   "win_rate": 0.0
  }
 }
