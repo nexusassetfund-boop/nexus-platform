@@ -2,7 +2,8 @@
 """시황 브리핑 입력 데이터 수집 — 확정 숫자는 코드가 만들고, 해설만 Claude가 쓴다.
 
 장전(am):  밤사이 글로벌 지수·금리·환율·원자재 + 전일 국내 마감 + 감지기 요약
-           + 전일 시총 상위 15 등락률·외인/기관 수급 + 전략실·섹터맵 요약
+           + 전일 시총 상위 15 등락률·외인/기관 수급 + 전일 외인·기관 순매수/순매도 상위 15
+           + 전략실·섹터맵 요약
 장마감(pm): 국내 지수·등락 종목수·투자자 수급·업종 등락 + 글로벌 + 감지기 요약 + 아침 브리핑(복기용)
 야간(night): 코스피200 야간선물 스냅샷만 Worker에 기록 (04:50 KST — 세션이 아직 열려 있을 때)
 
@@ -395,6 +396,17 @@ def collect_night_futures_for_am(today_str):
     return {"error": snap.get("error") or "야간선물 시세 없음(장전 리셋)", "dropped_live": q}
 
 
+_OHLCV_CACHE = {}
+
+
+def _prev_ohlcv(prev, mkt):
+    """전일 전종목 시세 — 시총 상위와 투자자별 순매매 상위가 같은 표를 두 번 받지 않게 메모."""
+    if (prev, mkt) not in _OHLCV_CACHE:
+        from pykrx import stock
+        _OHLCV_CACHE[(prev, mkt)] = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
+    return _OHLCV_CACHE[(prev, mkt)]
+
+
 def collect_top_caps(today_str, n=15):
     """장전 전용 — 전일 시총 상위 n종목의 등락률 + 외국인/기관 순매수 (KOSPI/KOSDAQ 각각)
 
@@ -415,7 +427,7 @@ def collect_top_caps(today_str, n=15):
             raise RuntimeError("직전 거래일 산출 실패")
         for mkt in ("KOSPI", "KOSDAQ"):
             caps = stock.get_market_cap_by_ticker(prev, market=mkt)
-            ohlcv = stock.get_market_ohlcv_by_ticker(prev, market=mkt)
+            ohlcv = _prev_ohlcv(prev, mkt)
             top = caps.sort_values("시가총액", ascending=False).head(n)
             out[mkt] = [{
                 "code": code,
@@ -455,6 +467,45 @@ def collect_top_caps(today_str, n=15):
         for r in out.get(mkt) or []:
             r.update(flows.get(r["code"], {}))
     out["unit"] = "foreign_bn/inst_bn=억원 순매수, mktcap_tr=조원"
+    return out
+
+
+def collect_investor_ranks(today_str, n=15):
+    """장전 전용 — 전일 외국인·기관 순매수/순매도 상위 n종목 (코스피·코스닥 통합 순위)
+
+    KRX 투자자별 순매수상위(pykrx)만 쓴다. 네이버 `sise_deal_rank`는 확정치가 늦게 붙어
+    폴백이 못 된다 — 2026-08-19 15시에 조회해도 여전히 08-14 자료였다(08-18 세션 누락).
+    KIS `foreign-institution-total`은 가집계라 이 파일의 '근사치는 쓰지 않는다' 원칙에 걸린다.
+    그래서 실패하면 빈 채로 두고 프롬프트가 섹션을 통째로 생략한다.
+
+    ETF·ETN은 뺀다. 안 빼면 기관 상위가 KODEX 레버리지·KODEX 200 같은 LP·차익거래
+    물량으로 채워져 종목 수급 정보가 사라진다(네이버 같은 화면 실측에서 상위 2행이 그랬다).
+    """
+    out = {"unit": "net_bn=억원 순매수(음수=순매도), 코스피·코스닥 통합 순위, ETF·ETN 제외",
+           "investor_basis": "외국인=외국인(기타외국인 제외), 기관=기관합계 — "
+                             "시총 상위 수급의 외국인합계와 정의가 조금 다르다"}
+    try:
+        from pykrx import stock
+        prev = _prev_trading_day(today_str)
+        out["base_date"] = f"{prev[:4]}-{prev[4:6]}-{prev[6:]}"
+        skip = set(stock.get_etf_ticker_list(prev)) | set(stock.get_etn_ticker_list(prev))
+        chg, mkt_of = {}, {}
+        for mkt in ("KOSPI", "KOSDAQ"):
+            for code, r in _prev_ohlcv(prev, mkt).iterrows():
+                chg[code], mkt_of[code] = round(float(r["등락률"]), 2), mkt
+        for inv, key in (("외국인", "foreign"), ("기관합계", "inst")):
+            rows = []
+            for mkt in ("KOSPI", "KOSDAQ"):
+                df = stock.get_market_net_purchases_of_equities(prev, prev, mkt, inv)
+                rows += [{"code": code, "name": r["종목명"], "market": mkt_of.get(code, mkt),
+                          "net_bn": round(float(r["순매수거래대금"]) / 1e8, 1),
+                          "change_pct": chg.get(code)}
+                         for code, r in df.iterrows() if code not in skip]
+            rows.sort(key=lambda x: x["net_bn"], reverse=True)
+            out[f"{key}_buy"] = [r for r in rows if r["net_bn"] > 0][:n]
+            out[f"{key}_sell"] = [r for r in reversed(rows) if r["net_bn"] < 0][:n]
+    except Exception as e:
+        out["error"] = str(e)[:150]
     return out
 
 
@@ -709,6 +760,7 @@ def main():
         data["kr_close"] = collect_kr_close(today_str)
     else:
         data["top_caps"] = collect_top_caps(today_str)      # 전일 시총 상위 15 등락률·수급
+        data["investor_ranks"] = collect_investor_ranks(today_str)  # 전일 외인·기관 순매수/순매도 상위 15
         data["platform"] = collect_platform(today_str)      # 전략실·섹터맵 요약
         try:
             data["night_futures"] = collect_night_futures_for_am(today_str)  # 코스피200 야간선물
