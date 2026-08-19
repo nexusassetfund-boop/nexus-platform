@@ -31,6 +31,28 @@ TAIL_STEP = 5             # tail 샘플 간격 (거래일) — 1주
 TAIL_POINTS = 8           # 화면에 표시할 궤적 점 수 (8주)
 MIN_DAYS = SMA_DAYS + ROC_DAYS + TAIL_STEP * TAIL_POINTS  # 산출에 필요한 최소 일봉 수
 
+# ── 회전형(cw) 좌표계 ────────────────────────────────────────────────────────
+# 현행 좌표는 y가 x의 후행 ROC라서 y가 x를 ROC_DAYS/2 만큼 "지연"한다. 그 결과
+# 주기 2*ROC_DAYS(=40거래일)보다 짧은 상대강도 사이클에서는 회전이 반시계로 뒤집힌다
+# (합성 사인파 검증: 45일↑ 100% 시계 / 40일 50% / 35~22일 0%).
+#
+# 회전형은 같은 창 p를 두 축에 나눠 쓴다:
+#   trailing SMA(p)  는 신호를 p/2 지연 추종하고,
+#   후행차분 z-z[t-p] 는 바로 그 p/2 시점의 기울기를 잰다.
+# 따라서 y는 x를 모든 주파수에서 정확히 90° 선행하고 시계방향이 강제된다.
+# 미래 데이터를 쓰지 않는다(인과적). 추가 스무딩은 양축에 '동일하게' 걸어야
+# 위상 관계가 보존되므로 CW_SMOOTH_DAYS를 한 상수로 공유한다.
+CW_ROC_DAYS = 20          # x의 추종 창 = y의 차분 창 (같아야 90°가 성립)
+CW_SMOOTH_DAYS = 30       # 양축 공통 스무딩 — 위상 불변, 노이즈만 감소
+CW_Z_WINDOW = 120         # z-score 정규화 창
+CW_Z_MIN = 60             # 정규화 최소 표본 (신설 ETF도 살리기 위한 하한)
+MIN_DAYS_CW = (SMA_DAYS + CW_ROC_DAYS + CW_SMOOTH_DAYS + CW_Z_MIN
+               + TAIL_STEP * TAIL_POINTS)   # ≈ 210봉
+# 회전 방향은 좌표 정의가 만드는 산술적 성질이지 시장 신호가 아니다 — 로테이션이
+# 전혀 없는 랜덤워크도 현행 파이프라인에서 62.1%가 시계방향으로 나온다(실데이터 60.5%).
+CW_NOTE = ("회전형 좌표 — y가 x를 90° 선행하도록 구성해 시계방향 회전을 만든다. "
+           "축 단위는 표준편차(σ), 100=자체 평균. 회전 방향 자체는 검증된 매매 신호가 아니다")
+
 QUADRANTS = {
     ("hi", "hi"): ("leading", "주도"),
     ("hi", "lo"): ("weakening", "약화"),
@@ -138,14 +160,48 @@ def _entry_gate(closes: pd.Series, quadrant: str, heading: str, y_only: bool) ->
     }
 
 
+def _xy_current(rs: pd.Series, sma_days: int, roc_days: int) -> pd.DataFrame:
+    """현행 좌표 — x=RS/SMA(비율), y=x의 후행 ROC."""
+    ratio = 100.0 * rs / rs.rolling(sma_days).mean()
+    mom = 100.0 + ratio.pct_change(roc_days) * 100.0
+    return pd.DataFrame({"x": ratio, "y": mom})
+
+
+def _zscore(s: pd.Series) -> pd.Series:
+    """섹터별 롤링 z-score → 100 중심. 반경을 섹터 간 비교 가능하게 만든다
+    (반도체와 홀딩스의 반경 차이는 정보가 아니라 변동성 차이라서)."""
+    m = s.rolling(CW_Z_WINDOW, min_periods=CW_Z_MIN).mean()
+    sd = s.rolling(CW_Z_WINDOW, min_periods=CW_Z_MIN).std(ddof=1)
+    return 100.0 + (s - m) / sd.where(sd > 0)
+
+
+def _xy_cw(rs: pd.Series) -> pd.DataFrame:
+    """회전형 좌표 — 시계방향이 모든 주파수에서 보장되는 구성.
+
+    z는 현행 x와 같은 식(디트렌드된 상대강도)이고, 두 축은 z에서 다시 파생한다.
+    x는 z를 CW_ROC_DAYS/2 지연 추종하고, y는 같은 지연 시점의 z 기울기를 재므로
+    y가 x를 정확히 90° 선행한다.
+    """
+    z = 100.0 * rs / rs.rolling(SMA_DAYS).mean()
+    x = z.rolling(CW_ROC_DAYS).mean().rolling(CW_SMOOTH_DAYS).mean()
+    y = (100.0 + (z - z.shift(CW_ROC_DAYS))).rolling(CW_SMOOTH_DAYS).mean()
+    return pd.DataFrame({"x": _zscore(x), "y": _zscore(y)})
+
+
 def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
-             sma_days: int = SMA_DAYS, roc_days: int = ROC_DAYS
+             sma_days: int = SMA_DAYS, roc_days: int = ROC_DAYS,
+             mode: str = "current"
              ) -> tuple[dict[str, pd.DataFrame], pd.Series, dict[str, list[str]]]:
     """이상치 정제 → cutoff까지의 일봉 → RS-Ratio(x)/RS-Momentum(y) 일간 시계열.
+
+    mode="current" 는 현행 좌표, mode="cw" 는 회전형 좌표(_xy_cw)를 만든다.
+    정제·정렬·동일가중 벤치마크는 두 모드가 공유하고 마지막 좌표 변환만 갈린다.
+    회전형은 정규화 창이 더 길어 필요 봉수가 늘어난다(MIN_DAYS_CW).
 
     반환: ({slug: DataFrame[x, y]}, 벤치마크(동일가중, 시작=1) 일간 시계열, data_flags)
     compute_rrg(운영 스냅샷)과 replay_rrg(Phase 4 검증)가 공유한다.
     """
+    min_days = MIN_DAYS_CW if mode == "cw" else MIN_DAYS
     cleaned_map: dict[str, pd.Series] = {}
     data_flags: dict[str, list[str]] = {}
     for slug, closes in daily_closes.items():
@@ -153,7 +209,7 @@ def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
         if flags:
             data_flags[slug] = flags
         cleaned = cleaned[cleaned.index.date <= cutoff]
-        if len(cleaned) >= MIN_DAYS:
+        if len(cleaned) >= min_days:
             cleaned_map[slug] = cleaned
 
     if len(cleaned_map) < 4:  # 섹터가 너무 적으면 상대강도 의미 없음
@@ -164,7 +220,7 @@ def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
     for s in cleaned_map.values():
         common = s.index if common is None else common.intersection(s.index)
     common = common.sort_values()
-    if len(common) < MIN_DAYS:
+    if len(common) < min_days:
         return {}, pd.Series(dtype=float), data_flags
 
     aligned = pd.DataFrame({slug: s.reindex(common) for slug, s in cleaned_map.items()})
@@ -175,26 +231,32 @@ def daily_xy(daily_closes: dict[str, pd.Series], cutoff: dt.date,
     for slug in aligned.columns:
         norm = aligned[slug] / aligned[slug].iloc[0]
         rs = 100.0 * norm / benchmark
-        ratio = 100.0 * rs / rs.rolling(sma_days).mean()
-        mom = 100.0 + ratio.pct_change(roc_days) * 100.0
-        xy = pd.DataFrame({"x": ratio, "y": mom}).dropna()
+        xy = (_xy_cw(rs) if mode == "cw" else _xy_current(rs, sma_days, roc_days)).dropna()
         if len(xy) >= TAIL_STEP * TAIL_POINTS:
             out[slug] = xy
     return out, benchmark, data_flags
 
 
-def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime) -> dict:
+def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime,
+                mode: str = "current") -> dict:
     """{slug: 일간 종가 Series} → RRG 결과.
+
+    mode="cw"(회전형)는 좌표만 다르고 tail 앵커·사분면·heading·streak·코멘트 로직은
+    현행과 동일하게 재사용한다(전부 스케일 무관). 다만 gate·y_only는 산출하지 않는다 —
+    임계값(Y_ONLY_X_MAX=95 등)이 현행 x 범위(89~117) 기준이라 σ 좌표(≈97~103)에서는
+    의미가 없기 때문. 프론트는 두 필드가 없으면 각각 '—'/미표시로 처리한다.
 
     반환: {
       "as_of": "YYYY-MM-DD",            # 마지막 확정 종가 날짜 (매 거래일 장마감 갱신)
       "benchmark": "sector-eq",         # 섹터 동일가중 합성지수
+      "mode": "current" | "cw",
       "sectors": {slug: {x, y, quadrant, quadrant_ko, heading, tail[], comment, ...}},
       "data_flags": {slug: [날짜, ...]},  # 이상치 봉 (좌표 계산에서 제외됨)
     }
     """
+    cw = mode == "cw"
     cutoff = last_confirmed_close(now)
-    xy_map, _benchmark, data_flags = daily_xy(daily_closes, cutoff)
+    xy_map, _benchmark, data_flags = daily_xy(daily_closes, cutoff, mode=mode)
 
     sectors: dict[str, dict] = {}
     as_of = cutoff.isoformat()
@@ -228,26 +290,30 @@ def compute_rrg(daily_closes: dict[str, pd.Series], now: dt.datetime) -> dict:
         prev_pt = ax[-2] if cur_d.date() == anchors.index[-1].date() else ax[-1]
         prev_q, prev_q_ko = _quadrant(prev_pt["x"], prev_pt["y"])
         x_move = round(ax[-1]["x"] - ax[0]["x"], 2)  # 앵커 구간(≈7주) X 순이동
-        y_only = _y_only(quadrant, heading, streak, x, x_move)
-        closes_g, _ = clean_daily(daily_closes[slug])
-        closes_g = closes_g[closes_g.index.date <= cutoff]
-        gate = _entry_gate(closes_g, quadrant, heading, y_only)
         comment = _comment(quadrant_ko, prev_q_ko, quadrant != prev_q, heading, streak)
-        if y_only:
-            comment += " · Y축 단독(상대 지위 개선 없는 낙폭 둔화)"
         sectors[slug] = {
             "x": x, "y": y,
             "quadrant": quadrant, "quadrant_ko": quadrant_ko,
             "prev_quadrant": prev_q,
             "heading": heading, "heading_weeks": streak,
-            "x_move": x_move, "y_only": y_only,
-            "gate": gate,
+            "x_move": x_move,
             "tail": tail,
             "comment": comment,
         }
+        if not cw:   # y_only·gate 임계값은 현행 x 스케일 전용 (위 docstring 참조)
+            y_only = _y_only(quadrant, heading, streak, x, x_move)
+            closes_g, _ = clean_daily(daily_closes[slug])
+            closes_g = closes_g[closes_g.index.date <= cutoff]
+            if y_only:
+                comment += " · Y축 단독(상대 지위 개선 없는 낙폭 둔화)"
+            sectors[slug].update({
+                "y_only": y_only,
+                "gate": _entry_gate(closes_g, quadrant, heading, y_only),
+                "comment": comment,
+            })
 
-    return {"as_of": as_of, "benchmark": "sector-eq",
-            "signal_lag": SIGNAL_LAG_NOTE,
+    return {"as_of": as_of, "benchmark": "sector-eq", "mode": mode,
+            "signal_lag": CW_NOTE if cw else SIGNAL_LAG_NOTE,
             "sectors": sectors, "data_flags": data_flags}
 
 
