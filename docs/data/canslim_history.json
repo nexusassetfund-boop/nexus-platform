@@ -211,5 +211,67 @@
     "last_rank": 15
    }
   ]
+ },
+ {
+  "date": "2026-08-19",
+  "added": [
+   {
+    "code": "098120",
+    "name": "마이크로컨텍솔",
+    "score": 7
+   },
+   {
+    "code": "126640",
+    "name": "화신정공",
+    "score": 5
+   },
+   {
+    "code": "093320",
+    "name": "케이아이엔엑스",
+    "score": 5
+   },
+   {
+    "code": "092230",
+    "name": "KPX홀딩스",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "days": 7,
+    "last_score": 5,
+    "last_rank": 8
+   },
+   {
+    "code": "011560",
+    "name": "세보엠이씨",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 21
+   },
+   {
+    "code": "144960",
+    "name": "뉴파워프라즈마",
+    "days": 9,
+    "last_score": 5,
+    "last_rank": 18
+   },
+   {
+    "code": "219130",
+    "name": "타이거일렉",
+    "days": 9,
+    "last_score": 5,
+    "last_rank": 12
+   },
+   {
+    "code": "377450",
+    "name": "리파인",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 22
+   }
+  ]
  }
 ]
