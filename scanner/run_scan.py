@@ -127,13 +127,19 @@ SECTOR_NAMES = {
 # robotics: 0148J0 상장 2026-01-06 — RS 산출에 필요한 m3(63일)만 넘으면 편입
 SECTOR_ETF_MIN_DAYS = {"robotics": 70}
 
+# 섹터 ETF 조회 창(달력일). 회전형 RRG가 요구하는 sector_rrg.MIN_DAYS_CW(210거래일)를
+# 넘겨야 한다 — 달력일 300은 최대 202거래일뿐이라 회전형이 예외 없이 0섹터로 나왔다
+# (2026-08-19, 최초 배포일). 한국장은 5거래일/7달력일에서 공휴일을 더 빼야 하므로
+# 여유를 크게 둔다: 500달력일 ≈ 333거래일.
+SECTOR_FETCH_DAYS = 500
+
 
 async def _fetch_sector_closes() -> dict:
     """섹터 대표 ETF 일간 종가 1회 조회 — 레거시 사분면과 RRG가 공유."""
     closes_map = {}
     for slug, (code, name) in SECTOR_ETFS.items():
         try:
-            df = await fetch_ohlcv(code, days=300)
+            df = await fetch_ohlcv(code, days=SECTOR_FETCH_DAYS)
             if df is not None and len(df) >= SECTOR_ETF_MIN_DAYS.get(slug, 150):
                 closes_map[slug] = (code, name, df["close"])
         except Exception:
@@ -1382,11 +1388,20 @@ async def main():
         # 정규화 창이 길어 히스토리가 짧은 신설 ETF는 여기서 빠진다(프론트가 개수로 안내).
         try:
             sector_rrg_cw_out = _compute_sector_rrg(sector_closes, mode="cw")
+            n_cw = len(sector_rrg_cw_out.get("sectors", {}))
             dropped = sorted(set(sector_closes) - set(sector_rrg_cw_out.get("sectors", {})))
-            logger.info("회전형 RRG 갱신: %d 섹터 (as_of %s)%s",
-                        len(sector_rrg_cw_out.get("sectors", {})),
-                        sector_rrg_cw_out.get("as_of"),
-                        f", 히스토리 부족 제외: {dropped}" if dropped else "")
+            if not n_cw:
+                # 조회 창이 MIN_DAYS_CW에 못 미치면 예외 없이 0섹터가 된다 — 프론트는
+                # 탭이 조용히 비활성화될 뿐이라 아무도 모른다. 실제로 한 번 당했다.
+                bars = min((len(c) for _c, _n, c in sector_closes.values()), default=0)
+                logger.warning(
+                    "회전형 RRG 0섹터 — 조회 창 부족 의심 (SECTOR_FETCH_DAYS=%d → 최소 %d봉, "
+                    "필요 %d봉). 프론트에서 회전형 탭이 비활성화된다.",
+                    SECTOR_FETCH_DAYS, bars, sector_rrg.MIN_DAYS_CW)
+            else:
+                logger.info("회전형 RRG 갱신: %d 섹터 (as_of %s)%s",
+                            n_cw, sector_rrg_cw_out.get("as_of"),
+                            f", 히스토리 부족 제외: {dropped}" if dropped else "")
         except Exception as e:
             logger.warning("회전형 RRG 계산 실패 — 직전 값 유지: %s", e)
             sector_rrg_cw_out = prev_rrg_cw

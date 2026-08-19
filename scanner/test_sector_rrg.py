@@ -313,6 +313,22 @@ def test_cw_omits_scale_specific_fields():
         assert s["tail"] and s["comment"] and s["heading"]
 
 
+def test_sector_fetch_window_covers_cw_requirement():
+    """회전형이 조용히 0섹터로 나갔던 회귀(2026-08-19 최초 배포).
+
+    _fetch_sector_closes 의 조회 창은 '달력일'인데 MIN_DAYS_CW 는 '거래일'이다.
+    달력일 300은 최대 202거래일뿐이라 필요치(210)에 미달했고, 예외 없이 빈 결과가
+    나가 프론트 탭만 조용히 비활성화됐다. 한국장 연 ~245거래일/365달력일이므로
+    거래일 1일 ≈ 달력일 1.49일, 공휴일 편차까지 보고 20% 여유를 요구한다.
+    """
+    import run_scan
+
+    need_calendar = sr.MIN_DAYS_CW * (365 / 245) * 1.2
+    assert run_scan.SECTOR_FETCH_DAYS >= need_calendar, (
+        f"조회 창 {run_scan.SECTOR_FETCH_DAYS}달력일로는 MIN_DAYS_CW="
+        f"{sr.MIN_DAYS_CW}거래일을 못 채운다 (필요 ≈{need_calendar:.0f}달력일)")
+
+
 def test_cw_requires_more_history():
     """회전형은 정규화 창이 길어 히스토리가 짧은 신설 ETF를 제외한다(현행엔 남는다)."""
     uni = _universe(noise=True)
