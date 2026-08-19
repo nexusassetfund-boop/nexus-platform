@@ -1,15 +1,15 @@
 {
- "updated": "2026-08-19T15:40:22+09:00",
+ "updated": "2026-08-19T16:24:07+09:00",
  "kospi": {
-  "price": 6494.29,
-  "ma200": 5901.12,
-  "ma50": 7362.64,
+  "price": 6467.77,
+  "ma200": 5900.99,
+  "ma50": 7362.11,
   "above_ma200": true,
   "above_ma50": false,
   "ma50_declining": true,
   "exit_signal": true,
   "entry_allowed": true,
-  "updated": "2026-08-19T15:40:22+09:00"
+  "updated": "2026-08-19T16:24:07+09:00"
  },
  "holdings": [
   {
@@ -488,15 +488,47 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": 0,
-   "confidence_now": 88,
+   "confidence_now": 45,
    "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.1x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승",
     "RS 85 — 상위 강세"
-   ]
+   ],
+   "stop_warning": true
   },
+  {
+   "ticker": "257720",
+   "name": "실리콘투",
+   "sector": "화장품",
+   "entry_stage": 1,
+   "entry_date": "2026-08-19",
+   "entry_price": 45300.0,
+   "entry_confidence": 83,
+   "init_stop_pct": -3.5,
+   "last_price": 45300.0,
+   "peak_price": 45300.0,
+   "return_pct": 0.0,
+   "total_return_pct": 0.0,
+   "qty_frac": 1.0,
+   "realized_pct": 0.0,
+   "partials": [],
+   "tp_3r_done": false,
+   "was_extended": false,
+   "days_held": 0,
+   "stage_now": null,
+   "confidence_now": 83,
+   "last_updated": "2026-08-19",
+   "signals_at_entry": [
+    "웨지 팝: 10·20 EMA 동시 탈환, 거래량 3.56x",
+    "불 스노트 — 거래량 폭증 3.56x",
+    "10-20 EMA 압착 (변동성 수축)",
+    "반전 확장 후 저점 상승"
+   ]
+  }
+ ],
+ "exited": [
   {
    "ticker": "403870",
    "name": "HPSP",
@@ -517,17 +549,19 @@
    "was_extended": false,
    "days_held": 0,
    "stage_now": null,
-   "confidence_now": 88,
+   "confidence_now": 15,
    "last_updated": "2026-08-19",
    "signals_at_entry": [
     "웨지 팝: 10·20 EMA 동시 탈환, 거래량 2.52x",
     "10-20 EMA 압착 (변동성 수축)",
     "반전 확장 후 저점 상승",
     "RS 84 — 상위 강세"
-   ]
-  }
- ],
- "exited": [
+   ],
+   "stop_warning": false,
+   "exit_date": "2026-08-19",
+   "exit_price": 45700.0,
+   "exit_reason": "추세 이탈 (MA60 하회)"
+  },
   {
    "ticker": "175330",
    "name": "JB금융지주",
@@ -899,7 +933,7 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -1.73
+    "cum": -1.63
    }
   ]
  },
@@ -1033,16 +1067,16 @@
    },
    {
     "date": "2026-08-19",
-    "cum": -2.68
+    "cum": -2.61
    }
   ]
  },
  "nav_base": "2026-07-28",
  "stats": {
   "holding_count": 16,
-  "exited_count": 7,
+  "exited_count": 8,
   "avg_return": 0.82,
-  "exited_avg_return": -5.59,
+  "exited_avg_return": -4.89,
   "win_rate": 0.0
  }
 }
