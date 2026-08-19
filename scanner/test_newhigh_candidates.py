@@ -38,6 +38,18 @@ def filler(n=10):
             for i in range(n)]
 
 
+# 이 파일은 아래 __main__ 자체 러너로도, pytest로도 돌아간다. pytest는 인자 tmp를
+# 픽스처로 찾으므로 여기서 이름을 맞춰 준다 — 없으면 pytest 수집 시 16건 전부 에러.
+try:
+    import pytest
+
+    @pytest.fixture(name="tmp")
+    def _tmp(tmp_path):
+        return tmp_path / "cand.json"
+except ImportError:                                # 러너 단독 실행 — pytest 불필요
+    pass
+
+
 def build(frames, tmp, pad=True):
     """OUT_CAND를 임시 경로로 돌려놓고 build_candidates 실행."""
     frames = list(frames) + (filler() if pad else [])
