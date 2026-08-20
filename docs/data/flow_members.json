@@ -1,0 +1,107 @@
+[
+ {
+  "date": "2026-08-20",
+  "added": [
+   {
+    "code": "079550",
+    "name": "LIG디펜스앤에어로스페이스",
+    "grade": "S"
+   },
+   {
+    "code": "003550",
+    "name": "LG",
+    "grade": "S"
+   },
+   {
+    "code": "281820",
+    "name": "케이씨텍",
+    "grade": "A"
+   },
+   {
+    "code": "089970",
+    "name": "브이엠",
+    "grade": "A"
+   },
+   {
+    "code": "004170",
+    "name": "신세계",
+    "grade": "A"
+   },
+   {
+    "code": "009540",
+    "name": "HD한국조선해양",
+    "grade": "A"
+   },
+   {
+    "code": "290650",
+    "name": "엘앤씨바이오",
+    "grade": "A"
+   }
+  ],
+  "removed": [
+   {
+    "code": "000210",
+    "name": "DL",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 21
+   },
+   {
+    "code": "002380",
+    "name": "KCC",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 18
+   },
+   {
+    "code": "007070",
+    "name": "GS리테일",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 22
+   },
+   {
+    "code": "007340",
+    "name": "DN오토모티브",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 10
+   },
+   {
+    "code": "008930",
+    "name": "한미사이언스",
+    "days": 1,
+    "last_grade": "A",
+    "last_rank": 31
+   },
+   {
+    "code": "083450",
+    "name": "GST",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 11
+   },
+   {
+    "code": "098460",
+    "name": "고영",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 19
+   },
+   {
+    "code": "241560",
+    "name": "두산밥캣",
+    "days": 1,
+    "last_grade": "A",
+    "last_rank": 29
+   },
+   {
+    "code": "298020",
+    "name": "효성티앤씨",
+    "days": 1,
+    "last_grade": "S",
+    "last_rank": 1
+   }
+  ]
+ }
+]
