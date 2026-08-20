@@ -273,5 +273,46 @@
     "last_rank": 22
    }
   ]
+ },
+ {
+  "date": "2026-08-20",
+  "added": [
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "score": 6
+   },
+   {
+    "code": "094840",
+    "name": "슈프리마에이치큐",
+    "score": 5
+   },
+   {
+    "code": "204610",
+    "name": "티쓰리",
+    "score": 5
+   },
+   {
+    "code": "377450",
+    "name": "리파인",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "092230",
+    "name": "KPX홀딩스",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 21
+   },
+   {
+    "code": "126640",
+    "name": "화신정공",
+    "days": 1,
+    "last_score": 5,
+    "last_rank": 9
+   }
+  ]
  }
 ]
