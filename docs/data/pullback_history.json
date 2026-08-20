@@ -764,5 +764,48 @@
     "last_price": 396500.0
    }
   ]
+ },
+ {
+  "date": "2026-08-20",
+  "added": [
+   {
+    "code": "034730",
+    "name": "SK",
+    "score": 7
+   },
+   {
+    "code": "278470",
+    "name": "에이피알",
+    "score": 7
+   },
+   {
+    "code": "005930",
+    "name": "삼성전자",
+    "score": 6
+   },
+   {
+    "code": "002990",
+    "name": "금호건설",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "375500",
+    "name": "DL이앤씨",
+    "first_seen": "2026-08-06",
+    "days": 14,
+    "last_score": 6,
+    "last_price": 71800.0
+   },
+   {
+    "code": "420770",
+    "name": "기가비스",
+    "first_seen": "2026-08-18",
+    "days": 2,
+    "last_score": 6,
+    "last_price": 128700.0
+   }
+  ]
  }
 ]
