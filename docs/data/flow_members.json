@@ -103,5 +103,129 @@
     "last_rank": 1
    }
   ]
+ },
+ {
+  "date": "2026-08-21",
+  "added": [
+   {
+    "code": "006040",
+    "name": "동원산업",
+    "grade": "S"
+   },
+   {
+    "code": "042700",
+    "name": "한미반도체",
+    "grade": "S"
+   },
+   {
+    "code": "018260",
+    "name": "삼성에스디에스",
+    "grade": "S"
+   },
+   {
+    "code": "081660",
+    "name": "미스토홀딩스",
+    "grade": "A"
+   },
+   {
+    "code": "329180",
+    "name": "HD현대중공업",
+    "grade": "A"
+   },
+   {
+    "code": "090710",
+    "name": "휴림로봇",
+    "grade": "A"
+   },
+   {
+    "code": "000990",
+    "name": "DB하이텍",
+    "grade": "A"
+   },
+   {
+    "code": "007070",
+    "name": "GS리테일",
+    "grade": "A"
+   }
+  ],
+  "removed": [
+   {
+    "code": "003230",
+    "name": "삼양식품",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 3
+   },
+   {
+    "code": "004170",
+    "name": "신세계",
+    "days": 1,
+    "last_grade": "A",
+    "last_rank": 26
+   },
+   {
+    "code": "004370",
+    "name": "농심",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 14
+   },
+   {
+    "code": "005070",
+    "name": "코스모신소재",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 11
+   },
+   {
+    "code": "011790",
+    "name": "SKC",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 2
+   },
+   {
+    "code": "036460",
+    "name": "한국가스공사",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 1
+   },
+   {
+    "code": "051900",
+    "name": "LG생활건강",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 17
+   },
+   {
+    "code": "068270",
+    "name": "셀트리온",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 7
+   },
+   {
+    "code": "089030",
+    "name": "테크윙",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 9
+   },
+   {
+    "code": "112610",
+    "name": "씨에스윈드",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 16
+   },
+   {
+    "code": "252990",
+    "name": "샘씨엔에스",
+    "days": 2,
+    "last_grade": "S",
+    "last_rank": 10
+   }
+  ]
  }
 ]
