@@ -116,6 +116,22 @@ def test_concentration_flags_one_day_event():
     assert side_metrics(rows, "frgn", window=5)["concentr"] > 0.9
 
 
+def test_quintile_picks_both_ends():
+    """상·하위 20%를 각각 집는지. 하위를 못 재면 '신호가 숏 쪽에만 있는' 경우를
+    구조적으로 못 본다 — 실제로 외국인 강도가 그랬다(flow_screener 3차 검증)."""
+    import flow_backtest as bt
+
+    vals = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    rets = [0.10, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01]  # 신호와 역상관
+    hi = bt._quintile(vals, rets, 0.0, top=True)
+    lo = bt._quintile(vals, rets, 0.0, top=False)
+    assert sorted(hi) == [0.01, 0.02], hi          # 값 9·10 → 수익률 0.02·0.01
+    assert sorted(lo) == [0.09, 0.10], lo          # 값 1·2  → 수익률 0.10·0.09
+    assert bt._top_quintile(vals, rets, 0.0) == hi  # 기존 호출부 호환
+    # 시장평균을 빼는지
+    assert bt._quintile(vals, rets, 0.05, top=True) == [h - 0.05 for h in hi]
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in sorted(globals().items()):

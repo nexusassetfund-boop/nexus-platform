@@ -186,6 +186,7 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
 
     per_date: dict[str, list[float]] = {}
     bins: dict[str, list[tuple[float, float]]] = {}     # 신호 → [(값, fwd)]
+    bins_lo: dict[str, list[float]] = {}               # 연속 신호 하위 20% 초과수익
     split: dict[str, list[float]] = {"trend": [], "contra": []}
     split_sig: dict[str, dict[str, list[tuple[float, float]]]] = {"trend": {}, "contra": {}}
     n_obs = 0
@@ -232,9 +233,12 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
             if ic is not None:
                 per_date.setdefault(k, []).append(ic)
             # 이산 신호: 초과수익 집계 / 연속 신호: 상위 20% 초과수익
-            hits = [r - mkt for v, r in zip(vals, krets) if v > 0] if set(vals) <= {0.0, 1.0} \
-                else _top_quintile(vals, krets, mkt)
+            binary = set(vals) <= {0.0, 1.0}
+            hits = [r - mkt for v, r in zip(vals, krets) if v > 0] if binary \
+                else _quintile(vals, krets, mkt, top=True)
             bins.setdefault(k, []).extend((1.0, h) for h in hits)
+            if not binary:   # 하위 20%도 같이 — 신호가 숏 쪽에만 있는 경우를 놓치지 않는다
+                bins_lo.setdefault(k, []).extend(_quintile(vals, krets, mkt, top=False))
             for reg in ("trend", "contra"):
                 sub = [(v, r - mkt) for v, r, g in triples if g == reg]
                 if sub:
@@ -242,14 +246,24 @@ def evaluate(cache: fh.FlowCache, codes: list[str], window: int) -> dict:
         for r, g in zip(rets, regimes):
             split[g].append(r - mkt)
 
-    return {"per_date": per_date, "bins": bins, "split": split,
+    return {"per_date": per_date, "bins": bins, "bins_lo": bins_lo, "split": split,
             "split_sig": split_sig, "n_obs": n_obs, "n_dates": len(next(iter(per_date.values()), []))}
 
 
-def _top_quintile(vals: list[float], rets: list[float], mkt: float) -> list[float]:
+def _quintile(vals: list[float], rets: list[float], mkt: float, top: bool = True) -> list[float]:
+    """연속 신호의 상위(또는 하위) 20% 초과수익.
+
+    하위도 재는 이유: 상위만 보면 '신호가 롱 쪽에 없고 숏 쪽에만 있는' 경우를
+    구조적으로 못 본다. 실제로 외국인 강도가 그랬다 — 상위 20%는 무효과인데
+    하위는 유의하게 (−)였다(flow_screener '3차 검증').
+    """
     k = max(1, len(vals) // 5)
-    idx = sorted(range(len(vals)), key=lambda i: vals[i], reverse=True)[:k]
+    idx = sorted(range(len(vals)), key=lambda i: vals[i], reverse=top)[:k]
     return [rets[i] - mkt for i in idx]
+
+
+def _top_quintile(vals: list[float], rets: list[float], mkt: float) -> list[float]:
+    return _quintile(vals, rets, mkt, top=True)
 
 
 def report(res: dict, window: int) -> str:
@@ -259,18 +273,24 @@ def report(res: dict, window: int) -> str:
         "",
         "IC = 횡단면 스피어만 상관(신호 vs 20거래일 수익률)의 신호일 평균. |t|>2 면 통계적으로 유의.",
         "초과수익 = 신호 종목(연속형은 상위 20%)의 시장평균 대비 20거래일 초과수익.",
+        "하위20% = 연속 신호의 반대편. IC가 유의해도 상위가 0이고 하위만 (−)면",
+        "         롱 전용 스크리너로는 못 쓰는 신호다 — 실제로 외국인 강도가 그렇다.",
         "rev·pension 같은 희소 이벤트는 IC가 아니라 초과수익%·초과t·건수로 판단할 것.",
         "",
-        f"{'신호':<24}{'평균IC':>9}{'t값':>8}{'초과수익%':>11}{'초과t':>8}{'건수':>9}",
-        "-" * 69,
+        f"{'신호':<24}{'평균IC':>9}{'t값':>8}{'초과수익%':>11}{'초과t':>8}"
+        f"{'하위20%':>10}{'하위t':>8}{'건수':>9}",
+        "-" * 87,
     ]
     rows = []
     for k, ics in res["per_date"].items():
         ex = [h for _, h in res["bins"].get(k, [])]
+        lo = res.get("bins_lo", {}).get(k, [])
         rows.append((k, statistics.fmean(ics), tstat(ics),
-                     statistics.fmean(ex) * 100 if ex else 0.0, tstat(ex), len(ex)))
-    for k, ic, t, ex, ext, n in sorted(rows, key=lambda r: -abs(r[1])):
-        lines.append(f"{k:<24}{ic:>9.4f}{t:>8.2f}{ex:>11.2f}{ext:>8.2f}{n:>9,}")
+                     statistics.fmean(ex) * 100 if ex else 0.0, tstat(ex),
+                     statistics.fmean(lo) * 100 if lo else 0.0, tstat(lo), len(ex)))
+    for k, ic, t, ex, ext, lo, lot, n in sorted(rows, key=lambda r: -abs(r[1])):
+        lines.append(f"{k:<24}{ic:>9.4f}{t:>8.2f}{ex:>11.2f}{ext:>8.2f}"
+                     f"{lo:>10.2f}{lot:>8.2f}{n:>9,}")
 
     lines += ["", "## 추세형(종가≥MA20) vs 역발상형(종가<MA20) — 초과수익%", "",
               f"{'신호':<24}{'추세형':>10}{'역발상형':>11}"]
