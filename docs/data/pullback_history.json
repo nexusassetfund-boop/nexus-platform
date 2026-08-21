@@ -807,5 +807,81 @@
     "last_price": 128700.0
    }
   ]
+ },
+ {
+  "date": "2026-08-21",
+  "added": [
+   {
+    "code": "032830",
+    "name": "삼성생명",
+    "score": 5
+   }
+  ],
+  "removed": [
+   {
+    "code": "005090",
+    "name": "SGC에너지",
+    "first_seen": "2026-08-18",
+    "days": 3,
+    "last_score": 1,
+    "last_price": 62500.0
+   },
+   {
+    "code": "028050",
+    "name": "삼성E&A",
+    "first_seen": "2026-07-24",
+    "days": 28,
+    "last_score": 6,
+    "last_price": 48050.0
+   },
+   {
+    "code": "031980",
+    "name": "피에스케이홀딩스",
+    "first_seen": "2026-08-19",
+    "days": 2,
+    "last_score": 5,
+    "last_price": 115400.0
+   },
+   {
+    "code": "083450",
+    "name": "GST",
+    "first_seen": "2026-07-27",
+    "days": 25,
+    "last_score": 5,
+    "last_price": 45850.0
+   },
+   {
+    "code": "095610",
+    "name": "테스",
+    "first_seen": "2026-08-10",
+    "days": 11,
+    "last_score": 6,
+    "last_price": 142200.0
+   },
+   {
+    "code": "222800",
+    "name": "심텍",
+    "first_seen": "2026-08-05",
+    "days": 16,
+    "last_score": 4,
+    "last_price": 114900.0
+   },
+   {
+    "code": "278470",
+    "name": "에이피알",
+    "first_seen": "2026-08-20",
+    "days": 1,
+    "last_score": 6,
+    "last_price": 386000.0
+   },
+   {
+    "code": "475150",
+    "name": "SK이터닉스",
+    "first_seen": "2026-08-12",
+    "days": 9,
+    "last_score": 4,
+    "last_price": 56000.0
+   }
+  ]
  }
 ]
