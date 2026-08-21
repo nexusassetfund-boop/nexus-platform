@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "probe(시세만) | warm(DART 수집) | controls(대조군) | grid(OFAT+강건성)"
+        description: "probe(시세만) | warm(DART 수집) | controls(대조군) | grid(OFAT+강건성) | iflow(I 스프레드 검증)"
         type: choice
         default: warm
-        options: [probe, warm, controls, grid]
+        options: [probe, warm, controls, grid, iflow, ivar]
       start:
         description: "백테스트 시작(YYYY-MM-DD) — 기간분할 검증 시 변경"
         default: "2021-07-01"
@@ -21,7 +21,8 @@ on:
         default: ""
 permissions:
   contents: read
-concurrency: { group: canslim-backtest, cancel-in-progress: false }
+# concurrency 없음 — 수동 리서치 잡이고, warm(DART 수집, 수 시간)이 점유하면 다른 모드가
+# 큐에 갇힌다. inputs 컨텍스트는 concurrency에서 못 쓴다(워크플로 파싱 실패).
 jobs:
   backtest:
     runs-on: ubuntu-latest
@@ -46,11 +47,20 @@ jobs:
       - name: 백테스트 실행
         env:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          # iflow는 KRX 투자자별 순매수(MDCSTAT024)를 쓰는데 로그인이 필요하다 — 로컬에선 못 돈다.
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
         run: |
           set -o pipefail
           mkdir -p tmp            # tee 대상 — 캐시 미스면 디렉터리가 없다
-          python scanner/canslim_backtest.py \
-            --${{ inputs.mode }} \
+          if [ "${{ inputs.mode }}" = "iflow" ]; then
+            SCRIPT=scanner/canslim_i_backtest.py; FLAG=--spread
+          elif [ "${{ inputs.mode }}" = "ivar" ]; then
+            SCRIPT=scanner/canslim_i_backtest.py; FLAG=--variants
+          else
+            SCRIPT=scanner/canslim_backtest.py; FLAG=--${{ inputs.mode }}
+          fi
+          python "$SCRIPT" "$FLAG" \
             --start "${{ inputs.start }}" --end "${{ inputs.end }}" \
             --tag "${{ inputs.tag }}" 2>&1 | tee tmp/run_${{ inputs.mode }}.log
 
