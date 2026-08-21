@@ -49,6 +49,7 @@ BAD_NAMES = ("기타", "기타의 것", "그 밖의 것", "총계")
 
 def build() -> dict | None:
     api_key = capi.require_key()
+    capi.preflight(api_key)          # 경로가 막혔으면 20초 안에 죽는다
     today = dt.datetime.now(tz=KST).date()
     month = latest_confirmed_month(today)
 

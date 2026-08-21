@@ -628,11 +628,19 @@ def collect_platform(today_str):
         # 브리핑 마지막 문단이 정보량 0이었다. 실제 신호(분기 급증·급감)만 넘긴다.
         td = _get_json("/data/trade.json")
         stocks = [s for s in (td.get("stocks") or []) if isinstance(s, dict)]
+        cov = td.get("coverage") or {}
+        # 빈 배열은 예외가 아니라 try/except가 못 잡는다 — surge·drop이 조용히 사라져도
+        # trade_export_error조차 안 찍혔다. 시군구 통계가 끊기면 여기가 첫 실종 지점이다.
+        if not stocks:
+            raise ValueError(f"trade.json stocks 비어 있음 (coverage={cov})")
         surge = sorted([s for s in stocks if s.get("q_sum_yoy") is not None],
                        key=lambda s: -s["q_sum_yoy"])[:5]
         out["trade_export"] = {
             "what": "관세청 시군구별 품목별 통관실적 기반 종목 수출 추적 — 월간 확정치, 매출 프록시",
             "data_month": td.get("data_month"), "universe_count": len(stocks),
+            # 매핑 대비 몇 개가 빠졌는지 — 조용한 결측을 프롬프트가 볼 수 있게 넘긴다
+            "coverage": {"mapped": cov.get("mapped"), "failed": cov.get("failed"),
+                         "failed_sido": cov.get("failed_sido")},
             "surge": [{"name": s.get("name"), "item": s.get("label"),
                        "q_yoy_pct": s.get("q_sum_yoy"), "flags": s.get("flags")} for s in surge],
             # 분기 -30% 급감은 백테스트에서 가장 신뢰도 높았던 신호 (6개월 초과수익 중앙 -16.1%)

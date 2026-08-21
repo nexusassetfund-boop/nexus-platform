@@ -104,15 +104,37 @@ def _quarter_months(yymm: str) -> list[str]:
     return [f"{y:04d}{q + i:02d}" for i in range(3)]
 
 
-def series_for(rows: list[dict], sgg: str) -> dict[str, dict]:
+def _keys_for(e: dict) -> list[tuple[str, str]]:
+    """이 항목을 채우는 데 필요한 (시도코드, HS) 조합.
+
+    sido_prev는 개편 전 시도코드다. 시도코드가 바뀌면(광주 29 → 전남광주통합특별시 12)
+    새 코드로는 개편 이전 달이 한 건도 안 온다 — sgg_prev 별칭은 이미 받아온 응답 안의
+    옛 지명만 이어 줄 뿐, 요청하지 않은 시도의 과거 행을 만들어내지는 못한다.
+    두 코드는 개편일을 경계로 서로 배타적이라(옛 코드는 개편 후 0행) 합쳐도 겹치지 않는다.
+    """
+    hs = e.get("hs_used")
+    keys = [(e.get("sido"), hs)] + [(p, hs) for p in (e.get("sido_prev") or [])]
+    return [k for k in keys if all(k)]
+
+
+def series_for(rows: list[dict], sgg: str, sgg_prev: list[str] | None = None) -> dict[str, dict]:
     """시도 응답에서 해당 시군구 행만 골라 {YYYYMM: {amt, qty}}.
 
     시군구 API는 시도 단위로 요청하면 그 안의 모든 시군구가 함께 온다. 골라내지
     않으면 같은 도의 타 지역이 섞여 프록시가 무너진다. 중량이 없어 qty는 건수다.
+
+    sgg_prev는 행정구역 개편 전의 옛 지명이다. 이름이 바뀌면 그 시점 이전 행이
+    한 건도 안 잡혀 60개월 시계열이 한 달로 잘리고 YoY·TTM·역대최고가 전부
+    무의미해진다 — 2026-07-01 개편(인천 서구→서해구, 중구·동구→제물포구·영종구)에서
+    실제로 그렇게 된다. 옛 이름도 같은 계열로 합쳐 시계열을 잇는다.
+
+    주의: 분할된 구(중구 → 제물포구 + 영종구)는 옛 물량이 신 물량보다 크다.
+    수준이 어긋나므로 해당 항목에는 region_changed 플래그를 붙여 비교를 경계한다.
     """
+    names = {sgg, *(sgg_prev or [])}
     out: dict[str, dict] = {}
     for r in rows:
-        if str(r.get("sgg", "")).strip() != sgg:
+        if str(r.get("sgg", "")).strip() not in names:
             continue
         p = "".join(c for c in str(r.get("period", "")) if c.isdigit())[:6]
         if len(p) != 6:
@@ -304,6 +326,8 @@ def build() -> dict | None:
         return None
 
     api_key = capi.require_key()
+    # 경로가 막혔으면 20초 안에 죽는다 — 막힌 채로 돌면 잡 타임아웃까지 태우고 취소된다.
+    capi.preflight(api_key)
     today = dt.datetime.now(tz=KST).date()
     month = latest_confirmed_month(today)
     # month는 아래에서 시군구 응답에 맞춰 뒤로 물러날 수 있다. 수입 워치는 다른 API를
@@ -316,19 +340,35 @@ def build() -> dict | None:
 
     # 같은 (시도, HS)를 쓰는 종목이 여럿이면 호출을 한 번만 한다.
     raw: dict[tuple[str, str], list[dict]] = {}
+    # 예외만 보면 시도 하나가 통째로 비는 사고를 놓친다. 2026-07 행정구역 개편 때
+    # 인천·광주가 정상 응답(200) 안에 0행으로 돌아와, 5종목이 경고 한 줄 없이 빠졌다.
+    fetch_failed: list[tuple[str, str]] = []
     entries = tmap["entries"]
+    # 시도코드가 바뀐 항목(광주 29 → 전남광주통합특별시 12)은 옛 시도도 함께 받아야
+    # 한다. sgg_prev 별칭은 같은 응답 안의 지명만 이어 주지, 요청하지 않은 시도의
+    # 과거 행을 만들어내지는 못한다 — 실제로 금호타이어 시계열이 1개월로 남았다.
     for e in entries:
-        key = (e.get("sido"), e.get("hs_used"))
-        if not all(key) or key in raw:
-            continue
-        rows: list[dict] = []
-        try:
-            for s, en in chunks:
-                rows.extend(capi.fetch_district(key[1], key[0], s, en, api_key, CACHE_PATH))
-        except capi.CustomsError as ex:
-            logger.warning("수집 실패 sido=%s hs=%s: %s", key[0], key[1], ex)
-            continue
-        raw[key] = rows
+        for key in _keys_for(e):
+            if key in raw:
+                continue
+            rows: list[dict] = []
+            try:
+                for s, en in chunks:
+                    rows.extend(capi.fetch_district(key[1], key[0], s, en, api_key, CACHE_PATH))
+            except capi.CustomsError as ex:
+                logger.warning("수집 실패 sido=%s hs=%s: %s", key[0], key[1], ex)
+                fetch_failed.append((key[0], key[1]))
+                continue
+            if not rows:
+                logger.warning("수집 0행 sido=%s hs=%s — 행정구역 개편으로 시도코드가 바뀌었거나 "
+                               "통계 제공범위가 바뀌었을 수 있습니다", key[0], key[1])
+                fetch_failed.append((key[0], key[1]))
+            raw[key] = rows
+
+    failed_sido = sorted({sd for sd, _ in fetch_failed})
+    if fetch_failed:
+        logger.warning("시군구 수집 실패 %d건 — 시도코드 %s. 해당 시도의 종목은 통째로 빠집니다.",
+                       len(fetch_failed), ", ".join(failed_sido))
 
     # 확정치 공개 직후에는 M-1이 아직 비어 있을 수 있다. 실제로 데이터가 들어온
     # 최신월을 기준월로 삼는다 — 이렇게 해야 15일 실행이 새 확정치를 바로 집는다.
@@ -359,15 +399,20 @@ def build() -> dict | None:
 
     out, failed = [], 0
     for e in entries:
-        rows = raw.get((e.get("sido"), e.get("hs_used")))
+        rows = [r for k in _keys_for(e) for r in (raw.get(k) or [])]
         if not rows:
             failed += 1
             continue
-        s = series_for(rows, e.get("sgg") or "")
+        s = series_for(rows, e.get("sgg") or "", e.get("sgg_prev"))
         m = compute_metrics(s, month)
         if not m:
             failed += 1
             continue
+
+        # 행정구역 개편으로 지명이 바뀐 항목은 개편 전후 수준이 어긋날 수 있다
+        # (중구 → 제물포구 + 영종구처럼 쪼개진 경우). 자동 보정하지 않고 표시만 한다.
+        if e.get("sgg_prev"):
+            m.setdefault("flags", []).append("region_changed")
 
         prev = _prev_yymm(month, 12)
         yoy_krw = None
@@ -551,7 +596,8 @@ def build() -> dict | None:
                     "잡히지 않고, 통관 시점과 매출 인식 시점에 시차가 있습니다. "
                     "금액 단위는 천USD입니다.",
         },
-        "coverage": {"stocks": len(out), "mapped": len(entries), "failed": failed},
+        "coverage": {"stocks": len(out), "mapped": len(entries), "failed": failed,
+                     "failed_sido": failed_sido},
     }
 
 
@@ -572,6 +618,10 @@ def main():
     logger.info("저장: %s (기준월 %s · 종목 %d/%d · 역대최고 %d · 매크로 %s)",
                 OUT_PATH, data["data_month"], cov["stocks"], cov["mapped"], ath,
                 "있음" if data.get("macro") else "없음")
+    if cov.get("failed"):
+        logger.warning("수집 실패 %d개%s — 화면 헤더에 경고 배지가 뜹니다",
+                       cov["failed"],
+                       f" (시도코드 {', '.join(cov['failed_sido'])})" if cov.get("failed_sido") else "")
 
 
 if __name__ == "__main__":

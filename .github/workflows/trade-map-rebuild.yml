@@ -30,11 +30,22 @@ jobs:
           path: docs/data/trade_raw_cache.json
           key: trade-cache-${{ github.run_id }}
           restore-keys: trade-cache-
-      - name: 매핑 검증
+      # tickers=diagnose 는 검증 대신 읽기 전용 진단만 돌린다. 파일도 커밋도 없다.
+      # 로컬에 CUSTOMS_API_KEY 가 없을 때 시도코드 사고를 확인하는 유일한 경로다.
+      - name: 시도코드 진단 (읽기 전용)
+        if: inputs.tickers == 'diagnose'
         env:
           CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
-        run: python -X utf8 scanner/verify_trade_map.py ${{ inputs.tickers }}
+        run: python -X utf8 scanner/trade_diagnose.py
+      - name: 매핑 검증
+        if: inputs.tickers != 'diagnose'
+        env:
+          CUSTOMS_API_KEY: ${{ secrets.CUSTOMS_API_KEY }}
+          # 입력을 run 안에 직접 보간하면 셸 메타문자가 그대로 실행된다. env 로 받는다.
+          TICKERS: ${{ inputs.tickers }}
+        run: python -X utf8 scanner/verify_trade_map.py $TICKERS
       - name: 결과 커밋
+        if: inputs.tickers != 'diagnose'
         run: |
           test -f scanner/data/trade_map.json || { echo "출력 없음 — 커밋 생략"; exit 0; }
           bash .github/scripts/commit-data.sh "trade-map: $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M KST')" scanner/data

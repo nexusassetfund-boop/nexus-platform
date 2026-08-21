@@ -63,6 +63,24 @@ def _match_sgg(hint: str, available: list[str]) -> str | None:
     return None
 
 
+def save_blocked(n_adopted: int, n_prev: int) -> str | None:
+    """전체 실행에서 저장을 막아야 하는가. 막아야 하면 그 사유 문구를 돌려준다.
+
+    전체 실행은 결과를 통째로 덮어쓴다. 빈 파일이 커밋되면 trade_stats.build()가
+    즉시 return None 해서 그다음 모든 실행이 죽는다. 부분 실행에만 병합 보호가
+    있었고 전체 실행에는 없었다.
+
+    실제 사고 경로: 2026-07-01 행정구역 개편으로 시도코드가 바뀌자 인천·광주
+    종목이 통째로 검증 실패했다. 그게 전부였다면 빈 파일이 그대로 저장됐다.
+    """
+    if not n_adopted:
+        return "채택 0개. 기존 파일을 보존합니다."
+    if n_prev and n_adopted < n_prev / 2:
+        return (f"채택 {n_adopted}개가 기존 {n_prev}개의 절반 미만입니다. "
+                "관세청 응답과 행정구역 코드를 먼저 확인하세요 (기존 파일 보존).")
+    return None
+
+
 def grade(share: float, rank: int, n_sgg: int) -> str:
     """귀속 신뢰도. 점유율만 보면 큰 시도에 있는 기업이 부당하게 탈락한다.
 
@@ -151,6 +169,7 @@ def verify_entry(e: dict, month: str, api_key: str) -> dict:
 def main():
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
     api_key = capi.require_key()
+    capi.preflight(api_key)          # 경로가 막혔으면 20초 안에 죽는다
     src = _load(SRC_PATH)
     if not src or not src.get("entries"):
         print(f"매핑 원본 없음: {SRC_PATH}")
@@ -220,6 +239,12 @@ def main():
                 merged.pop(t, None)
         adopted = list(merged.values())
         print(f"부분 실행 — 기존 {len(prev)}개에 {len(only)}개 반영 → {len(adopted)}개")
+    else:
+        prev = (_load(OUT_PATH) or {}).get("entries") or []
+        blocked = save_blocked(len(adopted), len(prev))
+        if blocked:
+            print("중단 — " + blocked)
+            sys.exit(1)
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps({

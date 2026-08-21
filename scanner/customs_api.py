@@ -283,6 +283,35 @@ def month_range(end_yymm: str, months: int) -> list[tuple[str, str]]:
     return chunks
 
 
+def preflight(api_key: str, timeout: int = 10, attempts: int = 2) -> None:
+    """호출 경로가 열려 있는지 한 번만 확인한다. 막혀 있으면 즉시 죽는다.
+
+    2026-08-18: GitHub Actions 러너에서 전 호출이 <urlopen error timed out>으로 죽었다.
+    같은 시각 국내 회선에서는 0.07초에 정상 응답했다 — 키 문제가 아니라 러너 IP가
+    도달하지 못하는 것이다(4xx가 아니라 timeout인 게 근거다). 본 호출은 재시도 3회 ×
+    30초라, 막힌 상태로 수십 조합을 돌면 잡 타임아웃(60~75분)까지 그대로 태우고
+    취소된다. 캐시 저장도 못 하고 다음 실행이 콜드로 떨어진다. 20초 안에 죽는 편이 낫다.
+
+    HTTP 오류는 통과시킨다 — 서버가 응답했다는 뜻이라 네트워크는 열려 있다.
+    """
+    url = (f"{EP_DISTRICT}?serviceKey={api_key}"
+           f"&strtYymm=202601&endYymm=202601&HsSgn=330499&sidoCd=41")
+    last = None
+    for _ in range(attempts):
+        try:
+            with urllib.request.urlopen(url, timeout=timeout) as resp:
+                resp.read(1)
+            return
+        except urllib.error.HTTPError:
+            return
+        except Exception as e:
+            last = e
+    raise CustomsError(
+        f"관세청 API 사전 점검 실패({last}) — 네트워크 경로가 막혀 있습니다. "
+        "GitHub Actions 러너 IP에서 전 호출이 타임아웃되는 사례가 있습니다"
+        "(같은 시각 국내 회선에서는 정상 응답). 반복되면 국내 경유 프록시나 로컬 실행이 필요합니다.")
+
+
 def require_key() -> str:
     key = os.environ.get("CUSTOMS_API_KEY", "").strip()
     if not key:
